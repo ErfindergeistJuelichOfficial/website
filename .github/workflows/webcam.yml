@@ -23,7 +23,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         protocol: ftps
-        local-dir: ./webcam
+        local-dir: ./webcam/
         state-name: .ftp-deploy-webcam-state.json
         exclude: |
           **/.git*
