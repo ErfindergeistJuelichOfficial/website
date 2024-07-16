@@ -50,7 +50,7 @@
 
       foreach (scanDirAndSortByDate($dir, $ignored_files) as $entry)) {
 
-        if (in_array($entry, $ignored_entries)) {
+        if (in_array($entry, $ignored_files)) {
           continue;
         }
 
@@ -62,7 +62,7 @@
           ?>
             <div class="container">
               <p><?PHP $entry ?></p>
-              <p><?PHP filemtime($dir . '/' . $file)?></p>
+              <p><?PHP filemtime($dir . '/' . $entry)?></p>
               <a href="<?PHP $entry?>" download>
                 <img src="<?PHP  $entry?>" height='200px' alt="<?PHP $entry ?>"/>
               </a>
