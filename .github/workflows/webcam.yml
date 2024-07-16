@@ -1,0 +1,39 @@
+name: 🚀 Deploy webcam
+
+on:
+  push:
+    branches:    
+      - main
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy at https://webcam.erfindergeist.org
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v4
+      with:
+        name: resume-artifact
+        path: resume.json
+        retention-days: 10
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftps
+        local-dir: ./webcam
+        state-name: .ftp-deploy-webcam-state.json
+        exclude: |
+          **/.git*
+          **/.git*/**
+
+       
