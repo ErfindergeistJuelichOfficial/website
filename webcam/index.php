@@ -1,80 +1,66 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <title>Erfindergeist - Webcam</title>
-    <style>
-      .main {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
 
-      .container {
-        width: 500px; /* adjust to container size as needed */
-        max-width: 90vw;
-        height: 500px; /* adjust to container size as needed */
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erfindergeist - Webcam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .item {
+      border: 2px solid black;
+      border-radius: 1rem;
+      padding: 1.4rem;
 
-      .container img {
-        max-width: 100%;
-        max-height: 100%;
-        display: block;
-      }
+    }
 
-    </style>
-  </head>
-  <body>
-    <div>
+    .item:nth-child(3n+2) {
+      margin: 0 0.7rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mx-auto">
+    <h3>Erfindergeist - Webcam</h3>
+    <div class="flex flex-row">
       <?PHP
 
-      $ignored_files = array('.', '..', 'ftp-deploy-webcam-state.json', '.htpasswd', '.htaccess', 'index.php');
-      $allowed_extensions = array("jpg", "png");
       $dir = ".";
-      $current_time = time();
+      $ignored_files = array($dir, "..", "ftp-deploy-webcam-state.json", ".htpasswd", ".htaccess", "index.php");
+      $allowed_extensions = array("jpg", "png");
 
-      function scanDirAndSortByDate($dir, $ignored_files) {
-        $files = array();
-        foreach (scandir($dir) as $file) {
-            if (in_array($file, $ignored_files)) {
-              continue;
-            }
-            $files[$file] = filemtime($dir . '/' . $file);
-        }
-    
-        arsort($files);
-        $files = array_keys($files);
-    
-        return $files;
+      function outDated($file) {
+        $days_ago = time() - (30*24*60*60*1000);
+        return filemtime($file) > $days_ago;
       }
 
+      $files = glob('*.png');
+      usort($files, function ($a, $b) {
+        return filemtime($b) - filemtime($a);
+      });
 
-      foreach (scanDirAndSortByDate($dir, $ignored_files) as $entry)) {
+      $files = array_filter($files, "outDated");
 
-        if (in_array($entry, $ignored_files)) {
-          continue;
-        }
+      foreach ($files as $file) {
+        $path_parts = pathinfo($file);
 
-        ## TODO: delete file is older than x days
-        
-        $path_parts = pathinfo($entry);
-        
         if (in_array($path_parts['extension'], $allowed_extensions)) {
-          ?>
-            <div class="container">
-              <p><?PHP $entry ?></p>
-              <p><?PHP filemtime($dir . '/' . $entry)?></p>
-              <a href="<?PHP $entry?>" download>
-                <img src="<?PHP  $entry?>" height='200px' alt="<?PHP $entry ?>"/>
-              </a>
-            </div>
-          <?PHP
+      ?>
+        <div class="basis-1/3 item">
+          <p><?PHP echo $file ?></p>
+          <p><?PHP echo date("d.m.Y - h:m", filemtime($dir . '/' . $file)); ?></p>
+          <a href="<?PHP echo $file ?>" download>
+            <img src="<?PHP echo $file ?>" height='200px' alt="<?PHP echo $file ?>" />
+          </a>
+        </div>
+      <?PHP
         }
-        
       }
-
-   
 
       ?>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
