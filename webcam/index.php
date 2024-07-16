@@ -48,9 +48,7 @@
       }
 
 
-      while (false !== ($entry = scanDirAndSortByDate($dir, $ignored_files))) {
-
-
+      foreach (scanDirAndSortByDate($dir, $ignored_files) as $entry)) {
 
         if (in_array($entry, $ignored_entries)) {
           continue;
