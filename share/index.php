@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <title>Erfindergeist - Corporate identity</title>
+    <title>Erfindergeist - Share</title>
   </head>
   <body>
     <ul>
