@@ -20,6 +20,6 @@ jobs:
         server: erfindergeist.org
         username: ${{ secrets.FTP_USERNAME_PRESENTATIONS }}
         password: ${{ secrets.FTP_PASSWORD_PRESENTATIONS }}
-        local-dir: ./presentations
+        local-dir: ./presentations/
         protocol: ftps
         state-name: .ftp-deploy-presentation-index.json
