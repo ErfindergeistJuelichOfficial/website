@@ -57,6 +57,16 @@
         <h1 class="h4 mb-1">Übersicht der Präsentationen</h1>
       </div>
       <ul class="list-group">
+        <li class="list-group-item bg-light">
+          <div class="row align-items-center">
+            <div class="col">
+              <span class="small text-uppercase fw-semibold text-body-secondary">Anzeigen</span>
+            </div>
+            <div class="col-auto text-end">
+              <span class="small text-uppercase fw-semibold text-body-secondary">Downloads</span>
+            </div>
+          </div>
+        </li>
     <?PHP
       $entries = array();
       $directoryCount = 0;
@@ -93,14 +103,16 @@
           closedir($entryHandle);
         }
 
-        echo "<li class='list-group-item'><div class='d-flex align-items-center gap-2'><button type='button' class='btn btn-primary btn-sm' onclick=\"window.location.href='" . $safeUrl . "/'\">" . $safeLabel . "</button>";
+        echo "<li class='list-group-item'><div class='row align-items-center g-2'><div class='col'><button type='button' class='btn btn-primary btn-sm' onclick=\"window.location.href='" . $safeUrl . "/'\">" . $safeLabel . "</button></div><div class='col-auto text-end'>";
 
         if ($hasPdf) {
           $safePdfUrl = $safeUrl . "/" . rawurlencode($pdfFile);
-          echo "<button type='button' class='btn btn-outline-secondary btn-sm ms-auto' onclick=\"window.open('" . $safePdfUrl . "', '_blank', 'noopener')\">PDF</button>";
+          echo "<button type='button' class='btn btn-outline-secondary btn-sm' onclick=\"window.open('" . $safePdfUrl . "', '_blank', 'noopener')\">PDF</button>";
+        } else {
+          echo "<span class='small text-body-secondary'>-</span>";
         }
 
-        echo "</div></li>";
+        echo "</div></div></li>";
       }
 
       ?>
