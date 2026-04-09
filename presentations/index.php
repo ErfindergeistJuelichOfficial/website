@@ -60,10 +60,10 @@
         <li class="list-group-item bg-light">
           <div class="row align-items-center">
             <div class="col">
-              <span class="small text-uppercase fw-semibold text-body-secondary">Anzeigen</span>
+              <span class="small fw-semibold text-body-secondary">Anzeigen</span>
             </div>
             <div class="col-auto text-end">
-              <span class="small text-uppercase fw-semibold text-body-secondary">Downloads</span>
+              <span class="small fw-semibold text-body-secondary">Download</span>
             </div>
           </div>
         </li>
@@ -103,7 +103,7 @@
           closedir($entryHandle);
         }
 
-        echo "<li class='list-group-item'><div class='row align-items-center g-2'><div class='col'><button type='button' class='btn btn-primary btn-sm' onclick=\"window.location.href='" . $safeUrl . "/'\">" . $safeLabel . "</button></div><div class='col-auto text-end'>";
+        echo "<li class='list-group-item'><div class='row align-items-center g-2'><div class='col'><button type='button' class='btn btn-primary btn-sm text-uppercase' onclick=\"window.location.href='" . $safeUrl . "/'\">" . $safeLabel . "</button></div><div class='col-auto text-end'>";
 
         if ($hasPdf) {
           $safePdfUrl = $safeUrl . "/" . rawurlencode($pdfFile);
@@ -130,9 +130,6 @@
           </div>
           <div class="col-12 col-md-auto">
             <a href="https://erfindergeist.org/" target="_blank" rel="noopener" class="btn btn-primary px-4">Zur Website</a>
-          </div>
-          <div class="col-12">
-            <p class="mb-0 small text-body-secondary">Mehr Infos auf <a href="https://erfindergeist.org/" target="_blank" rel="noopener" class="eg-footer-link">erfindergeist.org</a></p>
           </div>
         </div>
       </div>
