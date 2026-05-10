@@ -59,6 +59,7 @@ const translations = {
     'pdf.step2': 'Termine werden abgerufen',
     'pdf.step3': 'PDF wird erstellt',
     'pdf.step4': 'Auf Share hochgeladen',
+    'pdf.schedule': 'Die PDFs werden automatisch jeden Montag um 3:00 Uhr morgens neu generiert — so sind sie immer auf dem neuesten Stand.',
     'pdf.github.label': 'pdf-termine auf GitHub',
 
     'downloads.title': 'PDF Termine',
@@ -185,6 +186,7 @@ const translations = {
     'pdf.step2': 'Events are fetched',
     'pdf.step3': 'PDF is created',
     'pdf.step4': 'Uploaded to Share',
+    'pdf.schedule': 'PDFs are automatically regenerated every Monday at 3:00 AM — so they are always up to date.',
     'pdf.github.label': 'pdf-termine on GitHub',
 
     'downloads.title': 'PDF Schedule',
