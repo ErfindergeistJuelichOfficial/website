@@ -47,4 +47,25 @@ libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → luci
 Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann, ist diese zu verwenden — keine neue Abhängigkeit hinzufügen. Keine eigene Lösung bauen, wenn Bootstrap, GSAP, jQuery, Lucide o.ä. das Problem bereits lösen.
 
 ## Bugs
-Baue keine Bugs ein. halte dich an Code Qualitäts standards
+Baue keine Bugs ein. Halte dich an Code-Qualitätsstandards.
+
+## Bekannter Bug: Horizontaler Overflow / volle Breite
+
+**Symptom:** Seite wird schmaler als der Viewport oder ein horizontaler Scrollbalken erscheint.
+
+**Ursache:** GSAP-Animationen mit `x: ±N` (horizontale Translation) schieben Elemente temporär über den Viewport-Rand. `overflow-x: clip` auf `html` allein reicht nicht, weil `html` bei breiten Kindelementen mitwächst.
+
+**Fixe die NIEMALS entfernt werden dürfen:**
+
+```css
+html   { overflow-x: clip; }
+body   { max-width: 100%; }
+section { overflow-x: clip; }   /* clippt GSAP-Animations-Überlauf */
+```
+
+**Regeln:**
+
+- `overflow-x: clip` auf `body` NICHT setzen — bricht `position: fixed` Elemente (Scroll-Top-Button, A11y-Toolbar)
+- `overflow-x: hidden` auf `body` NICHT setzen — gleicher Grund
+- Beim Hinzufügen von CSS immer prüfen, ob `body { max-width: 100% }` und `section { overflow-x: clip }` noch vorhanden sind
+- GSAP horizontale `x`-Werte möglichst klein halten (max ±40px)

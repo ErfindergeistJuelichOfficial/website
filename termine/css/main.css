@@ -103,6 +103,11 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   transition: background-color .35s, color .35s;
+  max-width: 100%;
+}
+
+section {
+  overflow-x: clip;
 }
 
 h1, h2, h3 {
@@ -479,7 +484,7 @@ section { transition: background-color .35s; }
 }
 .arch-diagram {
   width: 100%;
-  max-width: 820px;
+  max-width: 960px;
   display: block;
   margin: 0 auto;
 }
@@ -510,9 +515,9 @@ section { transition: background-color .35s; }
 [data-theme="dark"] .arch-node-pdf    { fill: #2b1818; }
 [data-theme="dark"] .arch-node-share  { fill: #1a2630; }
 
-.arch-node-icon  { font-size: 14px; text-anchor: middle; dominant-baseline: middle; }
+.arch-node-icon  { font-size: 16px; text-anchor: middle; dominant-baseline: middle; }
 .arch-node-label {
-  font-size: 11.5px;
+  font-size: 13.5px;
   text-anchor: middle;
   dominant-baseline: middle;
   fill: var(--color-text);
@@ -522,12 +527,8 @@ section { transition: background-color .35s; }
 
 .arch-arrow {
   fill: none;
-  stroke: var(--color-primary);
-  stroke-width: 2.2;
-  marker-end: url(#arrow);
-}
-.arch-arrow-gold {
   stroke: var(--color-secondary);
+  stroke-width: 2.2;
   marker-end: url(#arrow-gold);
 }
 .arch-arrowhead       { fill: var(--color-primary); }
