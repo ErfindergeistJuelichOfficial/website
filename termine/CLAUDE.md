@@ -45,3 +45,6 @@ libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → luci
 
 ## Bibliotheken
 Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann, ist diese zu verwenden — keine neue Abhängigkeit hinzufügen. Keine eigene Lösung bauen, wenn Bootstrap, GSAP, jQuery, Lucide o.ä. das Problem bereits lösen.
+
+## Bugs
+Baue keine Bugs ein. halte dich an Code Qualitäts standards

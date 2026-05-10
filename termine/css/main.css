@@ -61,7 +61,7 @@
   --color-bg:             #ffffff;
   --color-surface:        #ffffff;
   --color-border:         #000000;
-  --color-text-muted:     #333333;
+  --color-text-muted:     #444444;
 }
 [data-theme="dark"].high-contrast {
   --color-text:   #ffffff;
@@ -69,6 +69,10 @@
   --color-surface:#111111;
   --color-border: #ffffff;
 }
+
+/* High-contrast: links inside dark sections stay white */
+.high-contrast .section-ha a { color: #fff; }
+.high-contrast .section-ha .btn-outline-primary { color: #fff; border-color: #fff; }
 
 /* Disable all animations */
 .reduce-motion *,

@@ -112,25 +112,35 @@ function initRoughNotation() {
 }
 
 function initAnimations() {
-  if (document.documentElement.classList.contains('reduce-motion')) {
-    // Still init Typed (it respects no-animation via CSS) and AOS (disabled)
+  const reduceMotion = document.documentElement.classList.contains('reduce-motion');
+
+  gsap.registerPlugin(ScrollTrigger);
+  initScrollTop();
+
+  AOS.init({
+    duration: reduceMotion ? 0 : 650,
+    easing: 'ease-out-cubic',
+    once: true,
+    offset: 60,
+    anchorPlacement: 'top-bottom',
+  });
+
+  if (reduceMotion) {
     window.initTyped();
     return;
   }
-
-  gsap.registerPlugin(ScrollTrigger);
 
   initHeroAnim();
   initArchDiagram();
   initSectionTitleAnims();
   initPdfCardHover();
-  initScrollTop();
 
   AOS.init({
     duration: 650,
     easing: 'ease-out-cubic',
     once: true,
     offset: 60,
+    anchorPlacement: 'top-bottom',
   });
 
   // Rough Notation after short delay (DOM settled)
