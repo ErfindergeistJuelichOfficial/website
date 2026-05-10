@@ -139,7 +139,8 @@ $(document).ready(function () {
 
     function parseTags(desc) {
       if (!desc) return [];
-      return desc.toLowerCase().split(/\s+/).filter(function (w) { return w.startsWith('#'); });
+      var matches = String(desc).toLowerCase().match(/#[a-zäöüß0-9]+/g);
+      return matches || [];
     }
     function resolveLocation(tags, fallback) {
       if (tagsConfig && tagsConfig.location_tags) {
@@ -155,6 +156,15 @@ $(document).ready(function () {
         for (var i = 0; i < tags.length; i++) {
           var t = tagsConfig.description_tags[tags[i]];
           if (t) return t.label || null;
+        }
+      }
+      return null;
+    }
+    function resolveTagDescription(tags) {
+      if (tagsConfig && tagsConfig.description_tags) {
+        for (var i = 0; i < tags.length; i++) {
+          var t = tagsConfig.description_tags[tags[i]];
+          if (t && t.description) return t.description;
         }
       }
       return null;
@@ -176,6 +186,7 @@ $(document).ready(function () {
         var title    = esc(ev.title || ev.summary || '—');
         var loc      = esc(resolveLocation(rawTags, ev.location || ''));
         var tagLabel = resolveTagLabel(rawTags);
+        var tagDesc  = resolveTagDescription(rawTags);
 
         var html = '<div class="event-card" role="listitem">'
           + '<div class="event-date-badge">'
@@ -187,9 +198,9 @@ $(document).ready(function () {
           + '</div>'
           + '<div class="event-info">'
           + '<p class="event-title">' + title + '</p>'
+          + (tagDesc ? '<p class="event-desc">' + esc(tagDesc) + '</p>' : '')
           + '<div class="event-meta">';
-        if (loc)      html += '<span><i data-lucide="map-pin"></i>' + loc + '</span>';
-        if (tagLabel) html += '<span class="event-tag-badge">' + esc(tagLabel) + '</span>';
+        if (loc) html += '<span><i data-lucide="map-pin"></i>' + loc + '</span>';
         html += '</div></div></div>';
         listEl.insertAdjacentHTML('beforeend', html);
       });
