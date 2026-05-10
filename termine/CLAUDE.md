@@ -42,3 +42,6 @@ Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Luci
 ## Ladesequenz im HTML
 libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → lucide → rough-notation)
 → i18n → theme → accessibility → animations → main
+
+## Bibliotheken
+Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann, ist diese zu verwenden — keine neue Abhängigkeit hinzufügen. Keine eigene Lösung bauen, wenn Bootstrap, GSAP, jQuery, Lucide o.ä. das Problem bereits lösen.

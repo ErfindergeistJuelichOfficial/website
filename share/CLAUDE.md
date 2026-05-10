@@ -55,7 +55,6 @@ share/
 ## CI / Design
 
 - Primary: `#159989` · Secondary: `#F9B338`
-- `img/logo.svg` — wird in der Navbar angezeigt, Textfallback wenn nicht vorhanden
 - Bootstrap 5.3 + Lucide Icons (beide aus `share/`)
 
 ---

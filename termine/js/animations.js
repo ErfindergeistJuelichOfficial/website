@@ -4,8 +4,8 @@ window.initTyped = function () {
   const el = document.getElementById('typed-text');
   if (!el || typeof Typed === 'undefined') return;
 
-  const de = ['ICS Kalender', 'WordPress Plugin', 'PDF Termine', 'REST API', 'Home Assistant', 'GitHub Actions'];
-  const en = ['ICS Calendar', 'WordPress Plugin', 'PDF Events', 'REST API', 'Home Assistant', 'GitHub Actions'];
+  const de = ['Termine', 'ICS Kalender', 'WordPress Plugin', 'PDF Termine', 'REST API', 'Home Assistant', 'GitHub Actions'];
+  const en = ['Events', 'ICS Calendar', 'WordPress Plugin', 'PDF Events', 'REST API', 'Home Assistant', 'GitHub Actions'];
 
   window.typedInstance = new Typed(el, {
     strings: currentLang === 'en' ? en : de,

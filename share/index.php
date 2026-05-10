@@ -421,6 +421,21 @@
       closedir($qrHandle);
     }
     natcasesort($qr_entries);
+
+    /* ── Configs: config/ folder ── */
+    $config_entries = [];
+    if (is_dir('config') && ($cfgHandle = opendir('config'))) {
+      while (false !== ($cfgEntry = readdir($cfgHandle))) {
+        if ($cfgEntry !== '.' && $cfgEntry !== '..') {
+          $ext = strtolower(pathinfo($cfgEntry, PATHINFO_EXTENSION));
+          if ($ext === 'json') {
+            $config_entries[] = $cfgEntry;
+          }
+        }
+      }
+      closedir($cfgHandle);
+    }
+    natcasesort($config_entries);
   ?>
 
   <!-- ── Tabs ── -->
@@ -441,6 +456,12 @@
       <a class="nav-link" id="tab-qr-trigger" data-bs-toggle="tab"
          href="#tab-qr" role="tab" aria-controls="tab-qr" aria-selected="false">
         QR Codes
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-configs-trigger" data-bs-toggle="tab"
+         href="#tab-configs" role="tab" aria-controls="tab-configs" aria-selected="false">
+        Configs
       </a>
     </li>
   </ul>
@@ -560,6 +581,30 @@
       <?php endif; ?>
     </div>
 
+    <!-- Tab: Configs -->
+    <div class="tab-pane fade" id="tab-configs" role="tabpanel" aria-labelledby="tab-configs-trigger">
+      <?php if (empty($config_entries)): ?>
+        <div class="empty-state text-center py-5">
+          <i data-lucide="file-code" aria-hidden="true"></i>
+          <p class="mt-3">Keine Konfigurationsdateien gefunden.</p>
+        </div>
+      <?php else: ?>
+        <div class="d-flex flex-column gap-2">
+          <?php foreach ($config_entries as $cfgEntry):
+            $safeLabel = htmlspecialchars($cfgEntry, ENT_QUOTES, 'UTF-8');
+            $safeUrl   = 'config/' . rawurlencode($cfgEntry);
+          ?>
+            <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item">
+              <i data-lucide="file-code" class="file-icon code" aria-hidden="true"></i>
+              <span class="file-name"><?= $safeLabel ?></span>
+              <span class="file-badge code">JSON</span>
+              <i data-lucide="external-link" class="file-dl-icon" aria-hidden="true"></i>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    </div>
+
   </div>
 
   <!-- ── Sponsoring ── -->
@@ -637,7 +682,7 @@
   });
 
   /* activate tab based on anchor */
-  var anchorTabMap = { '#logos': 'tab-logos-trigger', '#qr': 'tab-qr-trigger' };
+  var anchorTabMap = { '#logos': 'tab-logos-trigger', '#qr': 'tab-qr-trigger', '#configs': 'tab-configs-trigger' };
   var trigger = anchorTabMap[window.location.hash];
   if (trigger) {
     var el = document.getElementById(trigger);

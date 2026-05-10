@@ -32,10 +32,10 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto gap-1">
         <li class="nav-item"><a class="nav-link" href="#architektur"   data-i18n="nav.architecture">Technischer Aufbau</a></li>
+        <li class="nav-item"><a class="nav-link" href="#termine"       data-i18n="nav.events">Termine</a></li>
         <li class="nav-item"><a class="nav-link" href="#downloads"     data-i18n="nav.downloads">PDF</a></li>
         <li class="nav-item"><a class="nav-link" href="#ics"           data-i18n="nav.ics">ICS Kalender</a></li>
         <li class="nav-item"><a class="nav-link" href="#plugin"        data-i18n="nav.plugin">WordPress Plugin</a></li>
-        <li class="nav-item"><a class="nav-link" href="#api"           data-i18n="nav.api">REST API &amp; JSON</a></li>
         <li class="nav-item"><a class="nav-link" href="#homeassistant" data-i18n="nav.homeassistant">Home Assistant</a></li>
       </ul>
       <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
@@ -99,10 +99,38 @@
   <section id="architektur" class="section-arch py-5" aria-labelledby="arch-title">
     <div class="container">
       <div class="row">
-        <div class="col-12 text-center mb-4" data-aos="fade-up">
+        <div class="col-12 text-center mb-2" data-aos="fade-up">
           <h2 id="arch-title" class="section-title section-title-anim" data-i18n="arch.title">Technischer Aufbau</h2>
-          <p class="lead" data-i18n="arch.subtitle">So reisen deine Termine durch das Internet</p>
-          <p class="text-muted" data-i18n="arch.description">Alles beginnt in der Cloud und landet am Ende als PDF in deiner Hand oder als Erinnerung auf deinem Smartphone.</p>
+        </div>
+      </div>
+
+      <!-- One source, many consumers -->
+      <div class="row mb-4" data-aos="fade-up" data-aos-delay="80">
+        <div class="col-12 text-center mb-3">
+          <h3 class="h5 fw-semibold mb-1" data-i18n="arch.onesource.title">Eine Quelle — viele Empfänger</h3>
+          <p class="text-muted small mb-0" data-i18n="arch.onesource.text">Alle unsere Systeme nutzen dieselben Termine aus NextCloud — jedes bekommt die Daten in genau dem Format, das es braucht.</p>
+        </div>
+        <div class="col-12 d-flex flex-wrap justify-content-center gap-3">
+          <a href="#termine" class="onesource-chip">
+            <i data-lucide="book-open" aria-hidden="true"></i>
+            <span data-i18n="arch.onesource.site">Diese Erklär-Seite</span>
+          </a>
+          <a href="https://erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="onesource-chip">
+            <i data-lucide="globe" aria-hidden="true"></i>
+            <span data-i18n="arch.onesource.homepage">Unsere Homepage</span>
+          </a>
+          <a href="#downloads" class="onesource-chip">
+            <i data-lucide="file-text" aria-hidden="true"></i>
+            <span data-i18n="arch.onesource.pdf">PDF Erzeugung</span>
+          </a>
+          <a href="#ics" class="onesource-chip">
+            <i data-lucide="calendar-heart" aria-hidden="true"></i>
+            <span data-i18n="arch.onesource.cal">Persönliche Kalender</span>
+          </a>
+          <a href="#homeassistant" class="onesource-chip onesource-chip--muted">
+            <i data-lucide="circle-help" aria-hidden="true"></i>
+            <span data-i18n="arch.onesource.yours">Dein Projekt?</span>
+          </a>
         </div>
       </div>
 
@@ -195,6 +223,77 @@
           <span data-i18n="arch.legend.pdf">PDF Erzeugung</span>
         </span>
       </div>
+
+      <!-- Help hint -->
+      <div class="row mt-4">
+        <div class="col-12" data-aos="fade-up" data-aos-delay="350">
+          <div class="analogy-box">
+            <i data-lucide="handshake" aria-hidden="true"></i>
+            <div>
+              <p class="mb-2" data-i18n="arch.help.text">Wir unterstützen Privatpersonen und Vereine gerne bei technischen Lösungen — egal ob Website, Automatisierung oder eigene Softwareprojekte. Sprich uns einfach an!</p>
+              <a href="https://erfindergeist.org/kontakt/"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn btn-outline-primary btn-sm"
+                 data-i18n="arch.help.contact">Kontakt aufnehmen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2b. TERMINE ─────────────────────────── -->
+  <section id="termine" class="section-events py-5" aria-labelledby="events-title">
+    <div class="container">
+
+      <div class="col-12 text-center mb-4" data-aos="fade-up">
+        <h2 id="events-title" class="section-title section-title-anim" data-i18n="events.title">Kommende Termine</h2>
+        <p class="lead" data-i18n="events.subtitle">Die nächsten Veranstaltungen auf einen Blick</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8" data-aos="fade-up" data-aos-delay="100">
+
+          <!-- Loading -->
+          <div id="events-loading" class="text-center py-4" style="color:var(--color-text-muted)">
+            <i data-lucide="loader-circle" style="width:32px;height:32px;animation:events-spin 1s linear infinite" aria-hidden="true"></i>
+            <p class="mt-2 small mb-0" data-i18n="events.loading">Termine werden geladen…</p>
+          </div>
+
+          <!-- Error -->
+          <div id="events-error" class="d-none">
+            <div class="analogy-box">
+              <i data-lucide="wifi-off" aria-hidden="true"></i>
+              <p class="mb-0" data-i18n="events.error">Termine konnten nicht geladen werden.</p>
+            </div>
+          </div>
+
+          <!-- Empty -->
+          <div id="events-empty" class="text-center py-4 d-none" style="color:var(--color-text-muted)">
+            <i data-lucide="calendar-x" style="width:48px;height:48px;opacity:.35" aria-hidden="true"></i>
+            <p class="mt-2 mb-0" data-i18n="events.empty">Aktuell keine kommenden Termine gefunden.</p>
+          </div>
+
+          <!-- List -->
+          <div id="events-list" class="d-flex flex-column gap-2" role="list" aria-live="polite"></div>
+
+          <!-- Website hint -->
+          <div class="analogy-box mt-4" data-aos="fade-up" data-aos-delay="200">
+            <i data-lucide="globe" aria-hidden="true"></i>
+            <div>
+              <p class="mb-2" data-i18n="events.website.hint">Alle Termine findest du auch auf unserer Website:</p>
+              <a href="https://erfindergeist.org/veranstaltungen/"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn btn-outline-primary btn-sm"
+                 data-i18n="events.website.link">
+                erfindergeist.org/veranstaltungen
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -205,48 +304,11 @@
       <!-- Header -->
       <div class="col-12 text-center mb-5" data-aos="fade-up">
         <h2 id="downloads-title" class="section-title section-title-anim" data-i18n="downloads.title">PDF Termine</h2>
-        <p class="lead" data-i18n="downloads.subtitle">Automatisch erstellt und immer aktuell</p>
-        <p class="text-muted" data-i18n="downloads.description">Das GitHub-Repository pdf-termine erstellt automatisch Terminübersichten und lädt sie auf den Share-Server hoch.</p>
-        <a href="https://github.com/ErfindergeistJuelichOfficial/pdf-termine"
-           target="_blank" rel="noopener noreferrer"
-           class="btn btn-primary mt-1"
-           data-i18n="pdf.github.label">
-          pdf-termine auf GitHub
-        </a>
-      </div>
-
-      <!-- PDF Generator flow -->
-      <div class="pdf-steps mb-5" role="list" data-aos="fade-up" data-aos-delay="100">
-        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="100">
-          <div class="pdf-step-icon" aria-hidden="true">⚡</div>
-          <div class="pdf-step-label" data-i18n="pdf.step1">GitHub Actions startet automatisch</div>
-        </div>
-        <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
-        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="200">
-          <div class="pdf-step-icon" aria-hidden="true">📥</div>
-          <div class="pdf-step-label" data-i18n="pdf.step2">Termine werden abgerufen</div>
-        </div>
-        <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
-        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="300">
-          <div class="pdf-step-icon" aria-hidden="true">🖨️</div>
-          <div class="pdf-step-label" data-i18n="pdf.step3">PDF wird erstellt</div>
-        </div>
-        <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
-        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="400">
-          <div class="pdf-step-icon" aria-hidden="true">🚀</div>
-          <div class="pdf-step-label" data-i18n="pdf.step4">Auf Share hochgeladen</div>
-        </div>
-      </div>
-
-      <!-- Auto-schedule hint -->
-      <div class="analogy-box mb-5" data-aos="fade-up" data-aos-delay="150">
-        <i data-lucide="clock" aria-hidden="true"></i>
-        <p class="mb-0" data-i18n="pdf.schedule">Die PDFs werden automatisch jeden Montag um 3:00 Uhr morgens neu generiert — so sind sie immer auf dem neuesten Stand.</p>
       </div>
 
       <!-- Download cards -->
       <h3 class="text-center h5 mb-4" data-i18n="downloads.cards.title" data-aos="fade-up">Aktuelle PDFs herunterladen:</h3>
-      <div class="row g-4 justify-content-center">
+      <div class="row g-4 justify-content-center mb-5">
         <!-- Terminübersicht Hochformat -->
         <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
           <article class="pdf-card">
@@ -311,6 +373,72 @@
           </article>
         </div>
       </div>
+
+      <!-- Explain: version control + workflows -->
+      <div class="row g-3 mt-4 mb-2">
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="info-card h-100">
+            <div class="info-card-icon"><i data-lucide="git-branch" aria-hidden="true"></i></div>
+            <div>
+              <strong data-i18n="pdf.vc.title">Versionskontrolle mit GitHub</strong>
+              <p class="mb-0 mt-1 small" data-i18n="pdf.vc.text">GitHub speichert jede Änderung am Code mit Zeitstempel — so ist immer nachvollziehbar, was wann geändert wurde, und ältere Versionen lassen sich jederzeit wiederherstellen.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="info-card h-100">
+            <div class="info-card-icon"><i data-lucide="zap" aria-hidden="true"></i></div>
+            <div>
+              <strong data-i18n="pdf.workflow.title">Automatische Workflows mit GitHub Actions</strong>
+              <p class="mb-0 mt-1 small" data-i18n="pdf.workflow.text">GitHub Actions führt Aufgaben automatisch aus, sobald eine Änderung hochgeladen wird — zum Beispiel Termine abrufen, PDFs erstellen und auf den Share-Server hochladen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PDF Generator flow -->
+      <div class="pdf-steps mt-5 mb-4" role="list" data-aos="fade-up" data-aos-delay="100">
+        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="100">
+          <div class="pdf-step-icon" aria-hidden="true">⚡</div>
+          <div class="pdf-step-label" data-i18n="pdf.step1">GitHub Actions startet automatisch</div>
+        </div>
+        <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
+        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="200">
+          <div class="pdf-step-icon" aria-hidden="true">📥</div>
+          <div class="pdf-step-label" data-i18n="pdf.step2">Termine werden abgerufen</div>
+        </div>
+        <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
+        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="300">
+          <div class="pdf-step-icon" aria-hidden="true">🖨️</div>
+          <div class="pdf-step-label" data-i18n="pdf.step3">PDF wird erstellt</div>
+        </div>
+        <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
+        <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="400">
+          <div class="pdf-step-icon" aria-hidden="true">🚀</div>
+          <div class="pdf-step-label" data-i18n="pdf.step4">Auf Share hochgeladen</div>
+        </div>
+      </div>
+
+      <!-- Auto-schedule hint + GitHub -->
+      <div class="analogy-box mb-4" data-aos="fade-up" data-aos-delay="150">
+        <i data-lucide="clock" aria-hidden="true"></i>
+        <p class="mb-0" data-i18n="pdf.schedule">Die PDFs werden automatisch jeden Montag um 3:00 Uhr morgens neu generiert — so sind sie immer auf dem neuesten Stand.</p>
+      </div>
+      <div class="d-flex flex-wrap justify-content-center gap-3" data-aos="fade-up">
+        <a href="https://github.com/ErfindergeistJuelichOfficial/pdf-termine"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-outline-primary"
+           data-i18n="pdf.github.label">
+          pdf-termine auf GitHub
+        </a>
+        <a href="https://share.erfindergeist.org/"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-outline-primary"
+           data-i18n="pdf.share.label">
+          share.erfindergeist.org
+        </a>
+      </div>
+
     </div>
   </section>
 
@@ -340,13 +468,23 @@
             <i data-lucide="refresh-cw" aria-hidden="true"></i>
             <p class="mb-0" data-i18n="ics.autoupdate">Einmal abonnieren, immer aktuell: Wenn du unsere ICS-Datei in Google Kalender, Outlook oder Apple Kalender einbindest, werden neue und geänderte Termine automatisch übernommen — ganz ohne erneuten Import!</p>
           </div>
-          <div class="d-grid d-sm-block mt-3">
+          <div class="d-flex flex-wrap gap-2 mt-3">
             <a href="https://erfindergeist.org/wp-json/erfindergeist/v2/ics"
                target="_blank" rel="noopener noreferrer"
                class="btn btn-primary"
                data-i18n="ics.link.label">
               Unsere ICS-Datei ansehen
             </a>
+            <button type="button"
+                    id="ics-copy-btn"
+                    class="btn-icon"
+                    data-url="https://erfindergeist.org/wp-json/erfindergeist/v2/ics"
+                    aria-label="ICS-Link kopieren"
+                    data-i18n="ics.copy.label"
+                    data-i18n-attr="aria-label"
+                    title="ICS-Link kopieren">
+              <i data-lucide="clipboard" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -456,99 +594,23 @@ END:VCALENDAR</code></pre>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-
-  <!-- ── 7. REST API & JSON ────────────────────── -->
-  <section id="api" class="section-api py-5" aria-labelledby="api-title">
-    <div class="container">
-      <div class="col-12 text-center mb-5" data-aos="fade-up">
-        <h2 id="api-title" class="section-title section-title-anim" data-i18n="api.title">REST API &amp; JSON</h2>
-        <p class="lead" data-i18n="api.subtitle">Wie Computer miteinander reden</p>
-      </div>
-
-      <div class="row g-4">
-        <!-- JSON card -->
-        <div class="col-lg-6" data-aos="fade-right">
-          <div class="explain-card h-100">
-            <div class="explain-card-header">
-              <span class="explain-badge" aria-hidden="true">{ }</span>
-              <h3 class="explain-card-title" data-i18n="json.title">Was ist JSON?</h3>
-            </div>
-            <p data-i18n="json.description">
-              JSON ist eine Sprache, mit der Computer Daten austauschen. Wie eine <span class="rn-highlight" data-rn-type="highlight" data-rn-color="#F9B338">Zutatenliste beim Backen</span>: strukturiert, lesbar und von jedem Programm verstanden.
-            </p>
-            <p class="small fw-semibold" data-i18n="json.example.label">Beispiel /events Antwort:</p>
-            <div class="code-block">
-              <pre><code id="json-example-code">{
-  "events": [
-    {
-      "title": "Offener Abend",
-      "startDate": "15.05.2025 18:00",
-      "endDate": "15.05.2025 21:00",
-      "location": "Erfindergeist Jülich"
-    },
-    {
-      "title": "Repair Café",
-      "startDate": "17.05.2025 14:00",
-      "endDate": "17.05.2025 17:00",
-      "location": "Erfindergeist Jülich"
-    }
-  ]
-}</code></pre>
-            </div>
-          </div>
-        </div>
-
-        <!-- REST card -->
-        <div class="col-lg-6" data-aos="fade-left">
-          <div class="explain-card h-100">
-            <div class="explain-card-header">
-              <span class="explain-badge" aria-hidden="true">API</span>
-              <h3 class="explain-card-title" data-i18n="rest.title">Was ist REST?</h3>
-            </div>
-            <p data-i18n="rest.description">
-              REST ist eine Methode, um Daten über das Internet abzurufen. Wie ein <span class="rn-highlight" data-rn-type="underline" data-rn-color="#159989">Kellner im Restaurant</span>: du bestellst (Anfrage), der Kellner bringt das Essen (Antwort vom Server).
-            </p>
-
-            <!-- Waiter analogy -->
-            <div class="rest-analogy" role="img" aria-label="Analogie: REST wie ein Kellner im Restaurant">
-              <div class="rest-role">
-                <span class="rest-emoji" aria-hidden="true">👤</span>
-                <span class="rest-role-label" data-i18n="rest.analogy.client">Du (Client)</span>
-              </div>
-              <div class="rest-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
-              <div class="rest-role">
-                <span class="rest-emoji" aria-hidden="true">🧑‍🍳</span>
-                <span class="rest-role-label" data-i18n="rest.analogy.waiter">API (Kellner)</span>
-              </div>
-              <div class="rest-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
-              <div class="rest-role">
-                <span class="rest-emoji" aria-hidden="true">🍳</span>
-                <span class="rest-role-label" data-i18n="rest.analogy.kitchen">Server (Küche)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-12" data-aos="fade-up">
-          <div class="analogy-box">
-            <i data-lucide="graduation-cap" aria-hidden="true"></i>
+      <div class="row mt-3">
+        <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+          <div class="info-card">
+            <div class="info-card-icon"><i data-lucide="unlock" aria-hidden="true"></i></div>
             <div>
-              <p class="mb-2" data-i18n="api.teaching">Du möchtest mehr über REST APIs und JSON lernen? Beim Erfindergeist Jülich teilen wir unser Wissen gerne — komm einfach vorbei oder schreib uns an!</p>
-              <a href="https://erfindergeist.org/kontakt/"
-                 target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm"
-                 data-i18n="api.teaching.contact">Kontakt aufnehmen</a>
+              <strong data-i18n="plugin.open.label">Offen für alle</strong>
+              <p class="mb-0 mt-1 small" data-i18n="plugin.open.desc">
+                Alle Endpunkte sind öffentlich erreichbar und ohne Anmeldung nutzbar. Du darfst sie gerne für dein eigenes privates Projekt verwenden — ob Smart-Home, App oder Website.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
 
   <!-- ── 8. HOME ASSISTANT ─────────────────────── -->
   <section id="homeassistant" class="section-ha py-5" aria-labelledby="ha-title">
@@ -563,15 +625,25 @@ END:VCALENDAR</code></pre>
         </div>
         <!-- Text -->
         <div class="col-lg-8" data-aos="fade-left">
+          <span class="badge bg-secondary text-dark mb-2" style="font-size:.8rem" data-i18n="ha.badge">Beispielprojekt</span>
           <h2 id="ha-title" class="section-title section-title-anim" data-i18n="ha.title">Home Assistant</h2>
-          <p class="lead" data-i18n="ha.subtitle">Der /tomorrow Endpunkt</p>
+          <p class="lead" data-i18n="ha.subtitle">Automatisch informiert bleiben</p>
+          <p data-i18n="ha.what">
+            <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer">Home Assistant</a> ist eine quelloffene Smart-Home-Plattform, die du auf einem eigenen Gerät (z.B. Raspberry Pi) betreibst. Sie verbindet Lampen, Schalter, Sensoren und Dienste miteinander — und lässt sich frei automatisieren.
+          </p>
           <p data-i18n="ha.description">
-            Der /tomorrow Endpunkt gibt nur die Termine von morgen zurück — perfekt für Smart-Home-Automationen.
+            Unser /tomorrow-Endpunkt liefert nur die Termine von morgen — perfekt für Smart-Home-Automationen. Kein Filtern, kein Suchen: direkt die relevanten Daten.
           </p>
           <div class="analogy-box mb-3" data-aos="fade-up" data-aos-delay="100">
             <i data-lucide="lightbulb" aria-hidden="true"></i>
-            <p class="mb-0" data-i18n="ha.usecase">Beispiel: Lass deinen Smart Speaker jeden Abend ansagen, ob morgen ein Termin stattfindet.</p>
+            <p class="mb-0" data-i18n="ha.usecase">Beispiel: Lass deinen Smart Speaker jeden Abend ansagen, ob morgen ein Termin beim Erfindergeist stattfindet.</p>
           </div>
+          <a href="https://www.home-assistant.io/"
+             target="_blank" rel="noopener noreferrer"
+             class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-2">
+            <i data-lucide="home" style="width:16px;height:16px" aria-hidden="true"></i>
+            <span data-i18n="ha.link">Zur Home Assistant Website</span>
+          </a>
         </div>
       </div>
 
@@ -696,6 +768,12 @@ END:VCALENDAR</code></pre>
     </div>
   </div>
 </footer>
+
+<!-- ═══════════════════ TOAST ═══════════════════ -->
+<div id="ics-toast" role="status" aria-live="polite" aria-atomic="true">
+  <i data-lucide="clipboard-check" style="width:18px;height:18px;flex-shrink:0" aria-hidden="true"></i>
+  <span data-i18n="ics.toast.text">ICS-Link in Zwischenablage kopiert!</span>
+</div>
 
 <!-- ═══════════════════ FIXED WIDGETS ═══════════════════ -->
 

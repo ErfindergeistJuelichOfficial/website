@@ -141,6 +141,14 @@
     .sponsor-item-icon { width: 26px; height: 26px; color: var(--color-secondary); flex-shrink: 0; margin-top: .1rem; }
     .sponsor-item-title { font-weight: 600; color: var(--color-text); display: block; }
 
+    /* ── Alert overrides ── */
+    .alert-info {
+      --bs-alert-color:        var(--color-text);
+      --bs-alert-bg:           var(--color-primary-light);
+      --bs-alert-border-color: var(--color-primary);
+      --bs-alert-link-color:   var(--color-primary-dark);
+    }
+
     /* ── Bootstrap btn overrides ── */
     .btn-primary   { background: var(--color-primary); border-color: var(--color-primary); }
     .btn-primary:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
@@ -276,6 +284,16 @@
       <?php endforeach; ?>
     </div>
   <?php endif; ?>
+
+  <!-- ── Source Code ── -->
+  <div class="alert alert-info d-flex align-items-center gap-2 mt-3" role="alert" style="font-size:.85rem">
+    <i data-lucide="git-branch" style="width:16px;height:16px;flex-shrink:0" aria-hidden="true"></i>
+    <span>Quellcode der Präsentationen:
+      <a href="https://github.com/ErfindergeistJuelichOfficial" target="_blank" rel="noopener noreferrer" class="alert-link">
+        ErfindergeistJuelichOfficial
+      </a>
+    </span>
+  </div>
 
   <!-- ── Sponsoring ── -->
   <section class="sponsor-section p-4 mt-5" aria-labelledby="sponsor-title">

@@ -1,0 +1,27 @@
+{
+  "version": "1",
+  "location_tags": {
+    "#awo": {
+      "label": "EG Werkstatt",
+      "location": "Erfindergeist Werkstatt, Jülich"
+    },
+    "#stadtbücherei": {
+      "label": "Stadtbücherei",
+      "location": "Stadtbücherei Jülich"
+    }
+  },
+  "description_tags": {
+    "#offenewerkstatt": {
+      "label": "Offene Werkstatt",
+      "description": "Wir bieten der Öffentlichkeit eine offene Werkstatt mit Raum, Maschinen und Werkzeug zur erfolgreichen Umsetzung eigener Projekte."
+    },
+    "#stammtisch": {
+      "label": "Stammtisch",
+      "description": "Lockerer Austausch für Mitglieder, bringt eure aktuellen Ideen oder Prototypen mit und lasst uns in entspannter Runde fachsimpeln."
+    },
+    "#repaircafe": {
+      "label": "Repair Café",
+      "description": "Möchtest du etwas reparieren lassen oder reparierst selber gerne kaputte Dinge? Dann bist du im Repair Café genau richtig. Komm einfach unangemeldet vorbei und bring deinen defekten Gebrauchsgegenstand mit."
+    }
+  }
+}
