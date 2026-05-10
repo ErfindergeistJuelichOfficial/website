@@ -2,7 +2,6 @@
 
 const translations = {
   de: {
-    'page.title': 'Wie funktioniert das? — Erfindergeist Jülich',
     'skip.link': 'Zum Hauptinhalt springen',
 
     'nav.architecture': 'Technischer Aufbau',
@@ -159,7 +158,6 @@ const translations = {
   },
 
   en: {
-    'page.title': 'How does it work? — Erfindergeist Jülich',
     'skip.link': 'Skip to main content',
 
     'nav.architecture': 'Architecture',
@@ -325,8 +323,6 @@ window.t = function (key) {
 function applyTranslations(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
-  document.title = window.t('page.title');
-
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     const attr = el.getAttribute('data-i18n-attr');
