@@ -1,13 +1,15 @@
-name: 🚀 Deploy Presentation index
+name: 🚀 Deploy Presentation Index
 
 on:
   push:
-    branches:    
-      - 'main' 
+    branches:
+      - 'main'
+    paths:
+      - 'presentations/**'
 
 jobs:
   web-deploy:
-    name: 🎉 Deploy at https://erfindergeist.org/
+    name: 🎉 Deploy Presentation index at https://presentations.erfindergeist.org/
     runs-on: ubuntu-latest
 
     steps:
@@ -15,9 +17,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      uses: SamKirkland/FTP-Deploy-Action@v4.4.0
       with:
-        server: ${{ secrets.FTP_SERVER_PRESENTATIONS }}
+        server: erfindergeist.org
         username: ${{ secrets.FTP_USERNAME_PRESENTATIONS }}
         password: ${{ secrets.FTP_PASSWORD_PRESENTATIONS }}
         local-dir: ./presentations/
