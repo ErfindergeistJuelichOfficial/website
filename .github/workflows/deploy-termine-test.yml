@@ -1,4 +1,5 @@
 name: 🚀 Deploy Termine TEST
+
 on:
   push:
     branches:
@@ -7,20 +8,12 @@ on:
       - 'termine/**'
 
 jobs:
-  web-deploy:
-    name: 🎉 Deploy Termine TEST at https://spielwiese-termine.erfindergeist.org/
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v4
-
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-      with:
-        server: erfindergeist.org
-        username: ${{ secrets.FTP_USERNAME_TERMINE_TEST }}
-        password: ${{ secrets.FTP_PASSWORD_TERMINE_TEST }}
-        local-dir: ./termine/
-        protocol: ftps
-        state-name: .ftp-deploy-termine-test.json
+  deploy:
+    uses: ./.github/workflows/ftp-deploy.yml
+    with:
+      local-dir: ./termine/
+      state-name: .ftp-deploy-termine-test.json
+      job-name: 🎉 Deploy Termine TEST at https://spielwiese-termine.erfindergeist.org/
+    secrets:
+      ftp-username: ${{ secrets.FTP_USERNAME_TERMINE_TEST }}
+      ftp-password: ${{ secrets.FTP_PASSWORD_TERMINE_TEST }}

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="dark light">
   <title>Downloads — Erfindergeist Jülich</title>
   <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
   <style>
@@ -26,6 +26,45 @@
       --bs-link-color:        #159989;
       --bs-link-hover-color:  #107c6f;
     }
+
+    [data-theme="dark"] {
+      --color-bg:              #0f1a19;
+      --color-surface:         #1a2e2c;
+      --color-text:            #e8f5f3;
+      --color-text-muted:      #7fb8b2;
+      --color-border:          #2a4a46;
+      --color-shadow:          rgba(0,0,0,.35);
+      --color-primary-light:   #0d3530;
+      --color-secondary-light: #2a1f08;
+      /* Bootstrap variable overrides */
+      --bs-body-bg:            #0f1a19;
+      --bs-body-color:         #e8f5f3;
+      --bs-secondary-color:    #7fb8b2;
+      --bs-tertiary-bg:        #1a2e2c;
+      --bs-border-color:       #2a4a46;
+      color-scheme: dark;
+    }
+    [data-theme="dark"] body { background: var(--color-bg); color: var(--color-text); }
+    [data-theme="dark"] .text-muted { color: var(--color-text-muted) !important; }
+    [data-theme="dark"] .small.text-muted { color: var(--color-text-muted) !important; }
+    [data-theme="dark"] .form-control {
+      background: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+    [data-theme="dark"] .form-control::placeholder { color: var(--color-text-muted); }
+    [data-theme="dark"] .form-control:focus {
+      background: var(--color-surface);
+      color: var(--color-text);
+    }
+    [data-theme="dark"] .nav-tabs { border-color: var(--color-border); }
+    [data-theme="dark"] .nav-tabs .nav-link { color: var(--color-text-muted); }
+    [data-theme="dark"] .nav-tabs .nav-link.active {
+      color: var(--color-primary);
+      background: var(--color-bg);
+      border-color: var(--color-border) var(--color-border) var(--color-bg);
+    }
+    [data-theme="dark"] .nav-tabs .nav-link:hover { color: var(--color-primary); }
 
     body {
       background: var(--color-bg);
@@ -118,6 +157,80 @@
     .empty-state { color: var(--color-text-muted); }
     .empty-state svg { width: 48px; height: 48px; opacity: .4; }
 
+    /* ── Nav tabs ── */
+    .nav-tabs { border-color: var(--color-border); }
+    .nav-tabs .nav-link {
+      color: var(--color-text-muted);
+      border-color: transparent;
+      font-weight: 500;
+    }
+    .nav-tabs .nav-link:hover {
+      color: var(--color-primary);
+      border-color: var(--color-border) var(--color-border) transparent;
+    }
+    .nav-tabs .nav-link.active {
+      color: var(--color-primary);
+      border-color: var(--color-border) var(--color-border) var(--color-bg);
+      background: var(--color-bg);
+      font-weight: 600;
+    }
+
+    /* ── Logo cards ── */
+    .logo-card {
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      border-radius: 10px;
+      overflow: hidden;
+      color: var(--color-text);
+      transition: border-color .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .logo-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 3px 12px var(--color-shadow);
+    }
+    .logo-card-preview {
+      background: repeating-conic-gradient(#d8d8d8 0% 25%, #f8f8f8 0% 50%) 0 0 / 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      padding: .75rem;
+      flex-shrink: 0;
+    }
+    .logo-card-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .logo-card-name {
+      padding: .45rem .75rem;
+      font-size: .8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .logo-card-actions {
+      display: flex;
+      gap: .35rem;
+      padding: .5rem .6rem;
+      justify-content: flex-end;
+    }
+    .logo-card-actions .btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-card-actions .btn svg { width: 15px; height: 15px; }
+
     /* ── Sponsoring ── */
     .sponsor-section {
       background: linear-gradient(160deg, var(--color-secondary-light) 0%, var(--color-bg) 100%);
@@ -125,7 +238,25 @@
       border-radius: 16px;
     }
     .sponsor-section h2 { color: var(--color-text); }
-    .sponsor-item { display: flex; align-items: flex-start; gap: .75rem; }
+    .sponsor-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      border-radius: 12px;
+      padding: .9rem 1rem;
+      height: 100%;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      transition: box-shadow .2s, border-color .2s;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    a.sponsor-item:hover {
+      box-shadow: 0 4px 14px rgba(0,0,0,.12);
+      border-color: var(--color-secondary);
+    }
     .sponsor-item-icon { width: 26px; height: 26px; color: var(--color-secondary); flex-shrink: 0; margin-top: .1rem; }
     .sponsor-item-title {
       font-weight: 600;
@@ -140,7 +271,62 @@
     .btn-primary:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
     .btn-secondary { background: var(--color-secondary); border-color: var(--color-secondary); color: #1a2e2c; }
     .btn-secondary:hover { background: #e8a020; border-color: #e8a020; color: #1a2e2c; }
+
+    /* ── Scroll-to-top ── */
+    #scroll-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      border: 2px solid #fff;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px var(--color-shadow);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, background .2s, transform .2s;
+      z-index: 1100;
+    }
+    #scroll-top.visible { opacity: 1; pointer-events: auto; }
+    #scroll-top:hover { background: var(--color-primary-dark); transform: scale(1.1); }
+    #scroll-top svg { width: 22px; height: 22px; }
+
+    /* ── Theme toggle ── */
+    .btn-icon {
+      background: none;
+      border: 1.5px solid var(--color-border);
+      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: background .2s, color .2s, border-color .2s;
+      flex-shrink: 0;
+      margin-left: auto;
+      padding: 0;
+    }
+    .btn-icon:hover { background: var(--color-primary-light); color: var(--color-primary); border-color: var(--color-primary); }
+    .btn-icon svg { width: 18px; height: 18px; }
+    .icon-dark-only  { display: none; }
+    .icon-light-only { display: block; }
+    [data-theme="dark"] .icon-dark-only  { display: block; }
+    [data-theme="dark"] .icon-light-only { display: none; }
+
+    /* ── Dark mode: checkerboard ── */
+    [data-theme="dark"] .logo-card-preview {
+      background: repeating-conic-gradient(#1e3330 0% 25%, #162825 0% 50%) 0 0 / 16px 16px;
+    }
   </style>
+  <script>(function(){var t=localStorage.getItem('eg-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
@@ -156,18 +342,18 @@
         Erfindergeist Jülich
       </a>
     <?php endif; ?>
+    <button class="btn-icon" id="theme-toggle" aria-label="Dark/Light Mode umschalten">
+      <i data-lucide="sun"  class="icon-dark-only"  aria-hidden="true"></i>
+      <i data-lucide="moon" class="icon-light-only" aria-hidden="true"></i>
+    </button>
   </div>
 </nav>
 
 <!-- ── Main ── -->
 <main class="container py-4 pb-5">
 
-  <h1 class="page-title mb-3">Downloads</h1>
-
-  <input type="search" id="file-search" class="form-control mb-3"
-         placeholder="Dateien suchen…" aria-label="Dateien suchen">
-
   <?php
+    /* ── Downloads: root files ── */
     $entries = [];
     $allowed_extensions = ['pdf', 'docx', 'md', 'yml', 'yaml', 'svg', 'png', 'jpg', 'jpeg'];
     $icon_map = [
@@ -192,7 +378,6 @@
       'jpg'  => 'img',
       'jpeg' => 'img',
     ];
-
     if ($handle = opendir('.')) {
       while (false !== ($entry = readdir($handle))) {
         if ($entry !== '.' && $entry !== '..') {
@@ -204,33 +389,178 @@
       }
       closedir($handle);
     }
-
     natcasesort($entries);
 
-    if (empty($entries)):
+    /* ── Logos: img/ folder ── */
+    $img_entries = [];
+    $img_extensions = ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp'];
+    if (is_dir('img') && ($imgHandle = opendir('img'))) {
+      while (false !== ($imgEntry = readdir($imgHandle))) {
+        if ($imgEntry !== '.' && $imgEntry !== '..') {
+          $ext = strtolower(pathinfo($imgEntry, PATHINFO_EXTENSION));
+          if (in_array($ext, $img_extensions)) {
+            $img_entries[] = $imgEntry;
+          }
+        }
+      }
+      closedir($imgHandle);
+    }
+    natcasesort($img_entries);
+
+    /* ── QR Codes: qr/ folder ── */
+    $qr_entries = [];
+    if (is_dir('qr') && ($qrHandle = opendir('qr'))) {
+      while (false !== ($qrEntry = readdir($qrHandle))) {
+        if ($qrEntry !== '.' && $qrEntry !== '..') {
+          $ext = strtolower(pathinfo($qrEntry, PATHINFO_EXTENSION));
+          if (in_array($ext, $img_extensions)) {
+            $qr_entries[] = $qrEntry;
+          }
+        }
+      }
+      closedir($qrHandle);
+    }
+    natcasesort($qr_entries);
   ?>
-    <div class="empty-state text-center py-5">
-      <i data-lucide="folder-open" aria-hidden="true"></i>
-      <p class="mt-3">Noch keine Dateien vorhanden.</p>
+
+  <!-- ── Tabs ── -->
+  <ul class="nav nav-tabs mb-3" id="main-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="tab-downloads-trigger" data-bs-toggle="tab"
+         href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="true">
+        Downloads
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-logos-trigger" data-bs-toggle="tab"
+         href="#tab-logos" role="tab" aria-controls="tab-logos" aria-selected="false">
+        Logos
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-qr-trigger" data-bs-toggle="tab"
+         href="#tab-qr" role="tab" aria-controls="tab-qr" aria-selected="false">
+        QR Codes
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+
+    <!-- Tab: Downloads -->
+    <div class="tab-pane fade show active" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-trigger">
+      <input type="search" id="file-search" class="form-control mb-3"
+             placeholder="Dateien suchen…" aria-label="Dateien suchen">
+      <?php if (empty($entries)): ?>
+        <div class="empty-state text-center py-5">
+          <i data-lucide="folder-open" aria-hidden="true"></i>
+          <p class="mt-3">Noch keine Dateien vorhanden.</p>
+        </div>
+      <?php else: ?>
+        <div class="d-flex flex-column gap-2">
+          <?php foreach ($entries as $entry):
+            $ext       = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
+            $safeLabel = htmlspecialchars($entry, ENT_QUOTES, 'UTF-8');
+            $safeUrl   = rawurlencode($entry);
+            $iconName  = $icon_map[$ext]  ?? 'file';
+            $extClass  = $class_map[$ext] ?? 'default';
+          ?>
+            <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item">
+              <i data-lucide="<?= $iconName ?>" class="file-icon <?= $extClass ?>" aria-hidden="true"></i>
+              <span class="file-name"><?= $safeLabel ?></span>
+              <span class="file-badge <?= $extClass ?>"><?= strtoupper($ext) ?></span>
+              <i data-lucide="download" class="file-dl-icon" aria-hidden="true"></i>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
     </div>
-  <?php else: ?>
-    <div class="d-flex flex-column gap-2">
-      <?php foreach ($entries as $entry):
-        $ext        = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
-        $safeLabel  = htmlspecialchars($entry, ENT_QUOTES, 'UTF-8');
-        $safeUrl    = rawurlencode($entry);
-        $iconName   = $icon_map[$ext]  ?? 'file';
-        $extClass   = $class_map[$ext] ?? 'default';
-      ?>
-        <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item">
-          <i data-lucide="<?= $iconName ?>" class="file-icon <?= $extClass ?>" aria-hidden="true"></i>
-          <span class="file-name"><?= $safeLabel ?></span>
-          <span class="file-badge <?= $extClass ?>"><?= strtoupper($ext) ?></span>
-          <i data-lucide="download" class="file-dl-icon" aria-hidden="true"></i>
-        </a>
-      <?php endforeach; ?>
+
+    <!-- Tab: Logos -->
+    <div class="tab-pane fade" id="tab-logos" role="tabpanel" aria-labelledby="tab-logos-trigger">
+      <?php if (empty($img_entries)): ?>
+        <div class="empty-state text-center py-5">
+          <i data-lucide="image" aria-hidden="true"></i>
+          <p class="mt-3">Keine Logos gefunden.</p>
+        </div>
+      <?php else: ?>
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+          <?php foreach ($img_entries as $imgEntry):
+            $safeLabel = htmlspecialchars($imgEntry, ENT_QUOTES, 'UTF-8');
+            $safeUrl   = 'img/' . rawurlencode($imgEntry);
+          ?>
+            <div class="col">
+              <div class="logo-card">
+                <div class="logo-card-preview">
+                  <img src="<?= $safeUrl ?>" alt="<?= $safeLabel ?>" loading="lazy">
+                </div>
+                <div class="logo-card-name" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
+                <div class="logo-card-actions">
+                  <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer"
+                     class="btn btn-outline-secondary btn-sm" title="Anzeigen" aria-label="Anzeigen">
+                    <i data-lucide="eye" aria-hidden="true"></i>
+                  </a>
+                  <a href="<?= $safeUrl ?>" download="<?= $safeLabel ?>"
+                     class="btn btn-primary btn-sm" title="Download" aria-label="Download">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-outline-secondary btn-sm btn-copy"
+                          data-url="https://share.erfindergeist.org/<?= $safeUrl ?>"
+                          aria-label="URL kopieren" title="URL kopieren">
+                    <i data-lucide="clipboard" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
     </div>
-  <?php endif; ?>
+
+    <!-- Tab: QR Codes -->
+    <div class="tab-pane fade" id="tab-qr" role="tabpanel" aria-labelledby="tab-qr-trigger">
+      <?php if (empty($qr_entries)): ?>
+        <div class="empty-state text-center py-5">
+          <i data-lucide="qr-code" aria-hidden="true"></i>
+          <p class="mt-3">Keine QR Codes gefunden.</p>
+        </div>
+      <?php else: ?>
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+          <?php foreach ($qr_entries as $qrEntry):
+            $safeLabel = htmlspecialchars($qrEntry, ENT_QUOTES, 'UTF-8');
+            $safeUrl   = 'qr/' . rawurlencode($qrEntry);
+          ?>
+            <div class="col">
+              <div class="logo-card">
+                <div class="logo-card-preview">
+                  <img src="<?= $safeUrl ?>" alt="<?= $safeLabel ?>" loading="lazy">
+                </div>
+                <div class="logo-card-name" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
+                <div class="logo-card-actions">
+                  <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer"
+                     class="btn btn-outline-secondary btn-sm" title="Anzeigen" aria-label="Anzeigen">
+                    <i data-lucide="eye" aria-hidden="true"></i>
+                  </a>
+                  <a href="<?= $safeUrl ?>" download="<?= $safeLabel ?>"
+                     class="btn btn-primary btn-sm" title="Download" aria-label="Download">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-outline-secondary btn-sm btn-copy"
+                          data-url="https://share.erfindergeist.org/<?= $safeUrl ?>"
+                          aria-label="URL kopieren" title="URL kopieren">
+                    <i data-lucide="clipboard" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    </div>
+
+  </div>
 
   <!-- ── Sponsoring ── -->
   <section class="sponsor-section p-4 mt-5" aria-labelledby="sponsor-title">
@@ -244,13 +574,13 @@
 
     <div class="row g-3 mb-4">
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="sponsor-item">
+        <a href="https://erfindergeist.org/mitglied-werden/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="user-plus" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
-            <a href="https://erfindergeist.org/mitglied-werden/" target="_blank" rel="noopener noreferrer" class="sponsor-item-title">Fördermitglied werden</a>
-            <span class="small text-muted">Regelmäßige Unterstützung</span>
+            <span class="sponsor-item-title">Fördermitglied werden</span>
+            <span class="small text-muted d-block">Regelmäßige Unterstützung</span>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
         <div class="sponsor-item">
@@ -262,36 +592,57 @@
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="sponsor-item">
+        <a href="http://konto.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="landmark" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
-            <a href="http://konto.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item-title">Überweisung</a>
-            <span class="small text-muted">Auf unser Vereinskonto</span>
+            <span class="sponsor-item-title">Überweisung</span>
+            <span class="small text-muted d-block">Auf unser Vereinskonto</span>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="sponsor-item">
+        <a href="http://paypal.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="credit-card" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
-            <a href="http://paypal.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item-title">PayPal</a>
-            <span class="small text-muted">Online spenden</span>
+            <span class="sponsor-item-title">PayPal</span>
+            <span class="small text-muted d-block">Online spenden</span>
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
-    <a href="https://linktree.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-      Alle Wege zur Unterstützung
-    </a>
+    <div class="d-grid d-sm-block">
+      <a href="https://linktree.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+        Alle Wege zur Unterstützung
+      </a>
+    </div>
   </section>
 
 </main>
+
+<button id="scroll-top" aria-label="Nach oben scrollen">
+  <i data-lucide="arrow-up" aria-hidden="true"></i>
+</button>
 
 <script src="https://share.erfindergeist.org/js/lib/bootstrap.bundle.min.js"></script>
 <script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
 <script>
   if (window.lucide) lucide.createIcons();
+
+  /* theme toggle */
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('eg-theme', next);
+  });
+
+  /* activate tab based on anchor */
+  var anchorTabMap = { '#logos': 'tab-logos-trigger', '#qr': 'tab-qr-trigger' };
+  var trigger = anchorTabMap[window.location.hash];
+  if (trigger) {
+    var el = document.getElementById(trigger);
+    if (el) bootstrap.Tab.getOrCreateInstance(el).show();
+  }
 
   document.getElementById('file-search').addEventListener('input', function () {
     var q = this.value.toLowerCase();
@@ -299,6 +650,29 @@
       var name = item.querySelector('.file-name').textContent.toLowerCase();
       item.style.display = name.includes(q) ? '' : 'none';
     });
+  });
+
+  document.querySelectorAll('.btn-copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var url = btn.dataset.url;
+      navigator.clipboard.writeText(url).then(function () {
+        var icon = btn.querySelector('i[data-lucide]');
+        icon.setAttribute('data-lucide', 'clipboard-check');
+        lucide.createIcons({ nodes: [icon] });
+        setTimeout(function () {
+          icon.setAttribute('data-lucide', 'clipboard');
+          lucide.createIcons({ nodes: [icon] });
+        }, 2000);
+      });
+    });
+  });
+
+  var scrollBtn = document.getElementById('scroll-top');
+  window.addEventListener('scroll', function () {
+    scrollBtn.classList.toggle('visible', window.scrollY > 300);
+  });
+  scrollBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 </body>

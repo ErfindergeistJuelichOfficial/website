@@ -1,0 +1,47 @@
+name: 📂 FTP Deploy (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      local-dir:
+        description: Local directory to sync
+        required: true
+        type: string
+      state-name:
+        description: FTP deploy state file name
+        required: true
+        type: string
+      job-name:
+        description: Display name shown in the Actions UI
+        required: false
+        type: string
+        default: Deploy via FTP
+      exclude:
+        description: Newline-separated glob patterns to exclude from upload
+        required: false
+        type: string
+        default: ''
+    secrets:
+      ftp-username:
+        required: true
+      ftp-password:
+        required: true
+
+jobs:
+  ftp-deploy:
+    name: ${{ inputs.job-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v5
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: erfindergeist.org
+          username: ${{ secrets.ftp-username }}
+          password: ${{ secrets.ftp-password }}
+          local-dir: ${{ inputs.local-dir }}
+          protocol: ftps
+          state-name: ${{ inputs.state-name }}
+          exclude: ${{ inputs.exclude }}

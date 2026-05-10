@@ -207,6 +207,16 @@ a:hover { color: var(--color-primary-dark); }
   color: var(--color-primary);
 }
 .btn-icon svg { width: 18px; height: 18px; display: block; }
+.btn-icon-sponsor {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+  text-decoration: none;
+}
+.btn-icon-sponsor:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #fff;
+}
 
 /* Language dropdown */
 .dropdown-menu {
