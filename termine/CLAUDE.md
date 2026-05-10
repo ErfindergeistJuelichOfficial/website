@@ -46,6 +46,16 @@ libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → luci
 ## Bibliotheken
 Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann, ist diese zu verwenden — keine neue Abhängigkeit hinzufügen. Keine eigene Lösung bauen, wenn Bootstrap, GSAP, jQuery, Lucide o.ä. das Problem bereits lösen.
 
+## CSS-Regeln
+
+**Bootstrap zuerst:** Bevor eigenes CSS geschrieben wird, prüfen ob Bootstrap das bereits über CSS-Variablen abdeckt.
+
+- Button-Farben über `--bs-btn-bg`, `--bs-btn-hover-bg` etc. auf der Klasse setzen (nicht `background-color` überschreiben)
+- Dropdown-Styling über `--bs-dropdown-*` vars in `:root` (nicht `.dropdown-menu` / `.dropdown-item` manuell überschreiben)
+- Farben, Body, Links über `--bs-primary`, `--bs-body-bg`, `--bs-link-color` etc. in `:root`
+
+**Totes CSS sofort entfernen:** Wenn HTML-Elemente entfernt werden, muss das zugehörige CSS ebenfalls entfernt werden. Niemals CSS für nicht mehr existierende Klassen oder IDs im Stylesheet lassen.
+
 ## Bugs
 Baue keine Bugs ein. Halte dich an Code-Qualitätsstandards.
 

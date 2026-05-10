@@ -32,7 +32,7 @@
   --font-scale:           1;
   --navbar-height:        70px;
 
-  /* Bootstrap overrides */
+  /* Bootstrap theme */
   --bs-primary:           #159989;
   --bs-primary-rgb:       21,153,137;
   --bs-secondary:         #F9B338;
@@ -42,6 +42,21 @@
   --bs-body-font-size:    calc(1rem * var(--font-scale));
   --bs-body-color:        var(--color-text);
   --bs-body-bg:           var(--color-bg);
+
+  /* Bootstrap dropdown */
+  --bs-dropdown-bg:               var(--color-surface);
+  --bs-dropdown-border-color:     var(--color-border);
+  --bs-dropdown-border-radius:    10px;
+  --bs-dropdown-padding-y:        .35rem;
+  --bs-dropdown-min-width:        140px;
+  --bs-dropdown-box-shadow:       0 6px 20px var(--color-shadow);
+  --bs-dropdown-link-color:       var(--color-text);
+  --bs-dropdown-link-hover-color: var(--color-primary);
+  --bs-dropdown-link-hover-bg:    var(--color-primary-light);
+  --bs-dropdown-item-padding-x:   .75rem;
+  --bs-dropdown-item-padding-y:   .45rem;
+  --bs-dropdown-font-size:        .9rem;
+  --bs-dropdown-item-border-radius: 7px;
 }
 
 [data-theme="dark"] {
@@ -227,69 +242,38 @@ a:hover { color: var(--color-primary-dark); }
   color: #fff;
 }
 
-/* Language dropdown */
-.dropdown-menu {
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: 10px;
-  box-shadow: 0 6px 20px var(--color-shadow);
-  min-width: 140px;
-  padding: .35rem;
-}
-.dropdown-item {
-  color: var(--color-text);
-  border-radius: 7px;
-  padding: .45rem .75rem;
-  font-size: .9rem;
-  background: transparent;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  transition: background .15s;
-}
-.dropdown-item:hover,
-.dropdown-item:focus {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-}
+/* Dropdown — styled via Bootstrap vars in :root */
 
-/* Offcanvas mobile */
-.offcanvas { background: var(--color-surface); color: var(--color-text); }
-.offcanvas .nav-link { display: block; margin: .2rem 0; }
-.btn-close { filter: invert(0); }
-[data-theme="dark"] .btn-close { filter: invert(1); }
-
-/* --- Buttons --------------------------------------------- */
+/* --- Buttons — Bootstrap component vars ------------------ */
 .btn-primary {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
-}
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
-  color: #fff;
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-dark);
+  --bs-btn-hover-border-color: var(--color-primary-dark);
+  --bs-btn-active-bg: var(--color-primary-dark);
+  --bs-btn-active-border-color: var(--color-primary-dark);
+  --bs-btn-focus-shadow-rgb: 21, 153, 137;
 }
 .btn-outline-primary {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-.btn-outline-primary:hover {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
+  --bs-btn-color: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary);
+  --bs-btn-hover-border-color: var(--color-primary);
+  --bs-btn-active-bg: var(--color-primary);
+  --bs-btn-active-border-color: var(--color-primary);
+  --bs-btn-focus-shadow-rgb: 21, 153, 137;
 }
 .btn-secondary {
-  background-color: var(--color-secondary);
-  border-color: var(--color-secondary);
-  color: #1a2e2c;
-}
-.btn-secondary:hover {
-  background-color: #e09c28;
-  border-color: #e09c28;
-  color: #1a2e2c;
+  --bs-btn-bg: var(--color-secondary);
+  --bs-btn-border-color: var(--color-secondary);
+  --bs-btn-color: #1a2e2c;
+  --bs-btn-hover-bg: #e09c28;
+  --bs-btn-hover-border-color: #e09c28;
+  --bs-btn-hover-color: #1a2e2c;
+  --bs-btn-active-bg: #e09c28;
+  --bs-btn-active-border-color: #e09c28;
+  --bs-btn-active-color: #1a2e2c;
+  --bs-btn-focus-shadow-rgb: 249, 179, 56;
 }
 
 /* --- Hero ------------------------------------------------- */
@@ -372,7 +356,6 @@ section { transition: background-color .35s; }
 .section-plugin   { background: var(--color-surface); }
 .section-pdf      { background: var(--color-secondary-light); }
 .section-downloads{ background: var(--color-secondary-light); }
-.section-api      { background: var(--color-primary-light); }
 .section-ha       { background: linear-gradient(135deg, #0d7060 0%, #0a5a4c 100%); color: #fff; }
 .section-ha .section-title,
 .section-ha h3,
@@ -461,16 +444,6 @@ section { transition: background-color .35s; }
 }
 .event-meta > span { display: flex; align-items: center; gap: .2rem; }
 .event-meta svg    { width: 12px; height: 12px; flex-shrink: 0; }
-.event-tag-badge {
-  font-size: .68rem;
-  font-weight: 600;
-  padding: .1rem .45rem;
-  border-radius: 5px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
 @keyframes events-spin { to { transform: rotate(360deg); } }
 
 /* --- Architecture Diagram --------------------------------- */
@@ -531,19 +504,7 @@ section { transition: background-color .35s; }
   stroke-width: 2.2;
   marker-end: url(#arrow-gold);
 }
-.arch-arrowhead       { fill: var(--color-primary); }
 .arch-arrowhead-gold  { fill: var(--color-secondary); }
-
-/* Legend */
-.arch-legend-item { display: flex; align-items: center; gap: .5rem; font-size: .88rem; }
-.arch-legend-line {
-  display: inline-block;
-  width: 36px;
-  height: 3px;
-  border-radius: 2px;
-}
-.arch-legend-primary .arch-legend-line { background: var(--color-primary); }
-.arch-legend-gold    .arch-legend-line { background: var(--color-secondary); }
 
 /* --- Analogy box ----------------------------------------- */
 .analogy-box {
