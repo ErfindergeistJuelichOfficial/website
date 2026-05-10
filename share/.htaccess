@@ -1,0 +1,6 @@
+<IfModule mod_headers.c>
+  <FilesMatch "\.(ttf|otf|woff|woff2|eot)$">
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, OPTIONS"
+  </FilesMatch>
+</IfModule>

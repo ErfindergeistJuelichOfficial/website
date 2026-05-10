@@ -493,6 +493,8 @@ section { transition: background-color .35s; }
   transition: filter .2s;
 }
 .arch-node:hover .arch-node-rect { filter: drop-shadow(0 4px 12px var(--color-shadow)); }
+.arch-diagram a { cursor: pointer; text-decoration: none; }
+.arch-diagram a:focus-visible .arch-node-rect { filter: drop-shadow(0 0 8px var(--color-primary)); outline: none; }
 .arch-node-cloud  { fill: #e6f5f3; }
 .arch-node-wp     { fill: #d4edda; }
 .arch-node-github { fill: #fef6e4; }
