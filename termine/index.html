@@ -733,6 +733,7 @@ END:VCALENDAR</code></pre>
         <!-- Fördermitglied -->
         <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
           <a href="https://erfindergeist.org/mitglied-werden/"
+             data-link-title="Fördermitglied werden"
              target="_blank" rel="noopener noreferrer"
              class="sponsor-card">
             <i data-lucide="user-plus" class="sponsor-card-icon" aria-hidden="true"></i>
@@ -751,6 +752,7 @@ END:VCALENDAR</code></pre>
         <!-- Konto -->
         <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
           <a href="http://konto.erfindergeist.org/"
+             data-link-title="Bankverbindung"
              target="_blank" rel="noopener noreferrer"
              class="sponsor-card">
             <i data-lucide="landmark" class="sponsor-card-icon" aria-hidden="true"></i>
@@ -761,6 +763,7 @@ END:VCALENDAR</code></pre>
         <!-- PayPal -->
         <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
           <a href="http://paypal.erfindergeist.org/"
+             data-link-title="Spende via PayPal"
              target="_blank" rel="noopener noreferrer"
              class="sponsor-card">
             <i data-lucide="credit-card" class="sponsor-card-icon" aria-hidden="true"></i>
@@ -772,6 +775,7 @@ END:VCALENDAR</code></pre>
 
       <div class="text-center" data-aos="fade-up">
         <a href="https://linktree.erfindergeist.org/"
+           data-link-title="Linktree"
            target="_blank" rel="noopener noreferrer"
            class="btn btn-secondary btn-lg"
            data-i18n="sponsor.linktree">
@@ -795,14 +799,17 @@ END:VCALENDAR</code></pre>
       </div>
       <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 gap-sm-3">
         <a href="https://github.com/ErfindergeistJuelichOfficial/calendar-wp-plugin"
+           data-link-title="GitHub – WordPress Plugin"
            target="_blank" rel="noopener noreferrer"
            class="footer-link"
            data-i18n="footer.plugin">WordPress Plugin</a>
         <a href="https://github.com/ErfindergeistJuelichOfficial/pdf-termine"
+           data-link-title="GitHub – pdf-termine"
            target="_blank" rel="noopener noreferrer"
            class="footer-link"
            data-i18n="footer.pdf">PDF Generator</a>
         <a href="https://github.com/ErfindergeistJuelichOfficial"
+           data-link-title="GitHub Organisation"
            target="_blank" rel="noopener noreferrer"
            class="footer-link"
            data-i18n="footer.source">Quelltext auf GitHub</a>
@@ -885,6 +892,19 @@ END:VCALENDAR</code></pre>
 <script src="js/accessibility.js"></script>
 <script src="js/animations.js"></script>
 <script src="js/main.js"></script>
+<script>
+  fetch('https://share.erfindergeist.org/config/links.json')
+    .then(function(r) { return r.json(); })
+    .then(function(links) {
+      var map = {};
+      links.forEach(function(l) { map[l.title] = l.url; });
+      document.querySelectorAll('[data-link-title]').forEach(function(el) {
+        var url = map[el.dataset.linkTitle];
+        if (url) el.href = url;
+      });
+    })
+    .catch(function() {});
+</script>
 
 </body>
 </html>

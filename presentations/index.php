@@ -225,6 +225,15 @@
 <main class="container py-4 pb-5">
 
   <?php
+    /* ── Load links.json ── */
+    $links = [];
+    $linksRaw = @file_get_contents('https://share.erfindergeist.org/config/links.json');
+    if ($linksRaw !== false) {
+      foreach (json_decode($linksRaw, true) ?: [] as $l) {
+        $links[$l['title']] = htmlspecialchars($l['url'], ENT_QUOTES, 'UTF-8');
+      }
+    }
+
     $entries = [];
     if ($handle = opendir('.')) {
       while (false !== ($entry = readdir($handle))) {
@@ -306,7 +315,7 @@
 
     <div class="row g-3 mb-4">
       <div class="col-12 col-sm-6 col-lg-3">
-        <a href="https://erfindergeist.org/mitglied-werden/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
+        <a href="<?= $links['Fördermitglied werden'] ?? 'https://erfindergeist.org/mitglied-werden/' ?>" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="user-plus" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
             <span class="sponsor-item-title">Fördermitglied werden</span>
@@ -324,7 +333,7 @@
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <a href="http://konto.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
+        <a href="<?= $links['Bankverbindung'] ?? 'http://konto.erfindergeist.org/' ?>" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="landmark" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
             <span class="sponsor-item-title">Überweisung</span>
@@ -333,7 +342,7 @@
         </a>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <a href="http://paypal.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
+        <a href="<?= $links['Spende via PayPal'] ?? 'http://paypal.erfindergeist.org/' ?>" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="credit-card" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
             <span class="sponsor-item-title">PayPal</span>
@@ -344,7 +353,7 @@
     </div>
 
     <div class="d-grid d-sm-block">
-      <a href="https://linktree.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+      <a href="<?= $links['Linktree'] ?? 'https://linktree.erfindergeist.org/' ?>" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
         Alle Wege zur Unterstützung
       </a>
     </div>

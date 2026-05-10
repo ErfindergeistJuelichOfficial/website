@@ -1,0 +1,128 @@
+[
+  {
+    "url": "https://erfindergeist.org/",
+    "title": "Homepage",
+    "description": "Offizielle Website des Erfindergeist Jülich e.V. mit allen Infos zum Verein, Projekten und Terminen.",
+    "category": "website"
+  },
+  {
+    "url": "https://erfindergeist.org/veranstaltungen/",
+    "title": "Veranstaltungen",
+    "description": "Kalenderansicht aller kommenden Veranstaltungen auf der Vereinswebsite.",
+    "category": "website"
+  },
+  {
+    "url": "https://erfindergeist.org/mitglied-werden/",
+    "title": "Fördermitglied werden",
+    "description": "Unterstütze den Erfindergeist Jülich e.V. als Fördermitglied und halte die Werkstatt offen.",
+    "category": "website"
+  },
+  {
+    "url": "https://erfindergeist.org/kontakt/",
+    "title": "Kontakt",
+    "description": "Kontaktformular und Ansprechpartner des Erfindergeist Jülich e.V.",
+    "category": "website"
+  },
+  {
+    "url": "https://termine.erfindergeist.org/",
+    "title": "Termine – Technischer Aufbau",
+    "description": "Erklärt wie die Termine technisch von NextCloud über WordPress bis zu PDF, ICS und Home Assistant fließen.",
+    "category": "service"
+  },
+  {
+    "url": "https://share.erfindergeist.org/",
+    "title": "Share Server",
+    "description": "Zentraler Asset-Server für Logos, QR-Codes, PDFs und gemeinsam genutzte Bibliotheken.",
+    "category": "service"
+  },
+  {
+    "url": "https://presentations.erfindergeist.org/",
+    "title": "Präsentationen",
+    "description": "Übersicht aller interaktiven Präsentationen des Erfindergeist Jülich e.V.",
+    "category": "service"
+  },
+  {
+    "url": "https://docs.erfindergeist.org/",
+    "title": "Dokumentation",
+    "description": "Interne Dokumentation zu Systemen, Prozessen und Infrastruktur des Vereins.",
+    "category": "service"
+  },
+  {
+    "url": "https://linktree.erfindergeist.org/",
+    "title": "Linktree",
+    "description": "Alle wichtigen Links des Erfindergeist Jülich e.V. auf einen Blick.",
+    "category": "service"
+  },
+  {
+    "url": "https://www.instagram.com/erfindergeistjuelich/",
+    "title": "Instagram",
+    "description": "Folge uns auf Instagram für Einblicke in Projekte, Veranstaltungen und den Vereinsalltag.",
+    "category": "social"
+  },
+  {
+    "url": "https://social.erfindergeist.org/@verein",
+    "title": "Mastodon",
+    "description": "Folge uns im Fediverse auf unserer eigenen Mastodon-Instanz.",
+    "category": "social"
+  },
+  {
+    "url": "https://www.linkedin.com/company/erfindergeist-j%C3%BClich-e-v/",
+    "title": "LinkedIn",
+    "description": "Erfindergeist Jülich e.V. auf LinkedIn — Neuigkeiten und Vereinsinfos.",
+    "category": "social"
+  },
+  {
+    "url": "https://www.facebook.com/erfindergeistjuelich",
+    "title": "Facebook",
+    "description": "Erfindergeist Jülich e.V. auf Facebook — Veranstaltungen und Community.",
+    "category": "social"
+  },
+  {
+    "url": "https://github.com/ErfindergeistJuelichOfficial",
+    "title": "GitHub Organisation",
+    "description": "Alle Open-Source-Projekte des Erfindergeist Jülich e.V. auf GitHub.",
+    "category": "github"
+  },
+  {
+    "url": "https://github.com/ErfindergeistJuelichOfficial/calendar-wp-plugin",
+    "title": "GitHub – WordPress Plugin",
+    "description": "Quellcode des WordPress-Plugins zur Bereitstellung der Termin-REST-API.",
+    "category": "github"
+  },
+  {
+    "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-termine",
+    "title": "GitHub – pdf-termine",
+    "description": "GitHub Actions Workflow der automatisch PDF-Terminübersichten aus der API generiert.",
+    "category": "github"
+  },
+  {
+    "url": "https://erfindergeist.org/wp-json/erfindergeist/v2/events",
+    "title": "API – /events",
+    "description": "REST-Endpunkt: Alle kommenden Termine als JSON. Offen für eigene Projekte.",
+    "category": "api"
+  },
+  {
+    "url": "https://erfindergeist.org/wp-json/erfindergeist/v2/ics",
+    "title": "API – /ics",
+    "description": "ICS-Kalender-Feed zum Abonnieren in Apple Kalender, Google Calendar, Outlook u.v.m.",
+    "category": "api"
+  },
+  {
+    "url": "https://erfindergeist.org/wp-json/erfindergeist/v2/tomorrow",
+    "title": "API – /tomorrow",
+    "description": "REST-Endpunkt: Nur die Termine von morgen als JSON. Ideal für Smart-Home-Automationen.",
+    "category": "api"
+  },
+  {
+    "url": "http://konto.erfindergeist.org/",
+    "title": "Bankverbindung",
+    "description": "Direkte Weiterleitung zu den Bankdaten für Überweisungen an den Verein.",
+    "category": "sponsoring"
+  },
+  {
+    "url": "http://paypal.erfindergeist.org/",
+    "title": "Spende via PayPal",
+    "description": "Schnell und unkompliziert per PayPal an den Erfindergeist Jülich e.V. spenden.",
+    "category": "sponsoring"
+  }
+]
