@@ -288,10 +288,9 @@
   <!-- ── Source Code ── -->
   <div class="alert alert-info d-flex align-items-center gap-2 mt-3" role="alert" style="font-size:.85rem">
     <i data-lucide="git-branch" style="width:16px;height:16px;flex-shrink:0" aria-hidden="true"></i>
-    <span>Quellcode der Präsentationen:
-      <a href="https://github.com/ErfindergeistJuelichOfficial" target="_blank" rel="noopener noreferrer" class="alert-link">
-        ErfindergeistJuelichOfficial
-      </a>
+    <span>Die Präsentationen sind als Repository auf
+      <a href="https://github.com/ErfindergeistJuelichOfficial" target="_blank" rel="noopener noreferrer" class="alert-link">unserem GitHub</a>
+      verfügbar.
     </span>
   </div>
 

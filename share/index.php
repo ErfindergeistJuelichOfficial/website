@@ -230,6 +230,7 @@
       flex-shrink: 0;
     }
     .logo-card-actions .btn svg { width: 15px; height: 15px; }
+    .logo-card-actions .file-badge { align-self: center; }
 
     /* ── Sponsoring ── */
     .sponsor-section {
@@ -509,6 +510,7 @@
           <?php foreach ($img_entries as $imgEntry):
             $safeLabel = htmlspecialchars($imgEntry, ENT_QUOTES, 'UTF-8');
             $safeUrl   = 'img/' . rawurlencode($imgEntry);
+            $ext       = strtolower(pathinfo($imgEntry, PATHINFO_EXTENSION));
           ?>
             <div class="col">
               <div class="logo-card">
@@ -517,6 +519,7 @@
                 </div>
                 <div class="logo-card-name" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
                 <div class="logo-card-actions">
+                  <span class="file-badge img me-auto"><?= strtoupper($ext) ?></span>
                   <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer"
                      class="btn btn-outline-secondary btn-sm" title="Anzeigen" aria-label="Anzeigen">
                     <i data-lucide="eye" aria-hidden="true"></i>
@@ -551,6 +554,7 @@
           <?php foreach ($qr_entries as $qrEntry):
             $safeLabel = htmlspecialchars($qrEntry, ENT_QUOTES, 'UTF-8');
             $safeUrl   = 'qr/' . rawurlencode($qrEntry);
+            $ext       = strtolower(pathinfo($qrEntry, PATHINFO_EXTENSION));
           ?>
             <div class="col">
               <div class="logo-card">
@@ -559,6 +563,7 @@
                 </div>
                 <div class="logo-card-name" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
                 <div class="logo-card-actions">
+                  <span class="file-badge img me-auto"><?= strtoupper($ext) ?></span>
                   <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer"
                      class="btn btn-outline-secondary btn-sm" title="Anzeigen" aria-label="Anzeigen">
                     <i data-lucide="eye" aria-hidden="true"></i>
