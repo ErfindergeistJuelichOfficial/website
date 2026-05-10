@@ -56,6 +56,13 @@ Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann,
 
 **Totes CSS sofort entfernen:** Wenn HTML-Elemente entfernt werden, muss das zugehörige CSS ebenfalls entfernt werden. Niemals CSS für nicht mehr existierende Klassen oder IDs im Stylesheet lassen.
 
+**Kein Inline-CSS im HTML:** Styles gehören in `main.css`, nicht als `style="…"` Attribut. Ausnahmen nur für GSAP-Initialzustände (z.B. `opacity:0; pointer-events:none` am Scroll-Top-Button), die GSAP selbst überschreibt. Für alles andere:
+
+- Zustandsklassen verwenden (z.B. `text-muted`, `d-none`)
+- Wiederholende Styles in eine CSS-Klasse auslagern (z.B. `.events-loading-icon`)
+- Einmalige kontextabhängige Styles per spezifischem CSS-Selektor setzen (z.B. `.section-ha .badge { font-size: .8rem }`)
+- Bootstrap-Utilities (`mt-3`, `mx-auto`, `text-muted`) bevorzugen wenn passend
+
 ## Bugs
 Baue keine Bugs ein. Halte dich an Code-Qualitätsstandards.
 

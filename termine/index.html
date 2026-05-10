@@ -297,8 +297,8 @@
         <div class="col-12 col-lg-8" data-aos="fade-up" data-aos-delay="100">
 
           <!-- Loading -->
-          <div id="events-loading" class="text-center py-4" style="color:var(--color-text-muted)">
-            <i data-lucide="loader-circle" style="width:32px;height:32px;animation:events-spin 1s linear infinite" aria-hidden="true"></i>
+          <div id="events-loading" class="text-center py-4 text-muted">
+            <i data-lucide="loader-circle" class="events-loading-icon" aria-hidden="true"></i>
             <p class="mt-2 small mb-0" data-i18n="events.loading">Termine werden geladen…</p>
           </div>
 
@@ -311,8 +311,8 @@
           </div>
 
           <!-- Empty -->
-          <div id="events-empty" class="text-center py-4 d-none" style="color:var(--color-text-muted)">
-            <i data-lucide="calendar-x" style="width:48px;height:48px;opacity:.35" aria-hidden="true"></i>
+          <div id="events-empty" class="text-center py-4 d-none text-muted">
+            <i data-lucide="calendar-x" class="events-empty-icon" aria-hidden="true"></i>
             <p class="mt-2 mb-0" data-i18n="events.empty">Aktuell keine kommenden Termine gefunden.</p>
           </div>
 
@@ -361,7 +361,7 @@
               <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_hoch">Terminübersicht Hochformat</h3>
               <a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
                  target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm w-100" style="margin-top:1rem"
+                 class="btn btn-outline-primary btn-sm w-100"
                  data-i18n="downloads.btn">Herunterladen</a>
             </div>
           </article>
@@ -377,7 +377,7 @@
               <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_quer">Terminübersicht Querformat</h3>
               <a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
                  target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm w-100" style="margin-top:1rem"
+                 class="btn btn-outline-primary btn-sm w-100"
                  data-i18n="downloads.btn">Herunterladen</a>
             </div>
           </article>
@@ -393,7 +393,7 @@
               <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</h3>
               <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
                  target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm w-100" style="margin-top:1rem"
+                 class="btn btn-outline-primary btn-sm w-100"
                  data-i18n="downloads.btn">Herunterladen</a>
             </div>
           </article>
@@ -409,7 +409,7 @@
               <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</h3>
               <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
                  target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm w-100" style="margin-top:1rem"
+                 class="btn btn-outline-primary btn-sm w-100"
                  data-i18n="downloads.btn">Herunterladen</a>
             </div>
           </article>
@@ -667,7 +667,7 @@ END:VCALENDAR</code></pre>
         </div>
         <!-- Text -->
         <div class="col-lg-8" data-aos="fade-left">
-          <span class="badge bg-secondary text-dark mb-2" style="font-size:.8rem" data-i18n="ha.badge">Beispielprojekt</span>
+          <span class="badge bg-secondary text-dark mb-2" data-i18n="ha.badge">Beispielprojekt</span>
           <h2 id="ha-title" class="section-title section-title-anim" data-i18n="ha.title">Home Assistant</h2>
           <p class="lead" data-i18n="ha.subtitle">Automatisch informiert bleiben</p>
           <p data-i18n="ha.what">
@@ -683,7 +683,7 @@ END:VCALENDAR</code></pre>
           <a href="https://www.home-assistant.io/"
              target="_blank" rel="noopener noreferrer"
              class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-2">
-            <i data-lucide="home" style="width:16px;height:16px" aria-hidden="true"></i>
+            <i data-lucide="home" aria-hidden="true"></i>
             <span data-i18n="ha.link">Zur Home Assistant Website</span>
           </a>
         </div>
@@ -724,7 +724,7 @@ END:VCALENDAR</code></pre>
         <i data-lucide="heart" class="sponsor-hero-icon mb-3" aria-hidden="true"></i>
         <h2 id="sponsor-title" class="section-title section-title-anim" data-i18n="sponsor.title">Unterstütze uns!</h2>
         <p class="lead" data-i18n="sponsor.subtitle">Gemeinnützig — und auf deine Hilfe angewiesen</p>
-        <p class="text-muted mx-auto" style="max-width:640px" data-i18n="sponsor.description">
+        <p class="text-muted mx-auto sponsor-intro" data-i18n="sponsor.description">
           Der Erfindergeist Jülich e.V. ist ein eingetragener gemeinnütziger Verein. Wir finanzieren uns ausschließlich durch Mitgliedsbeiträge, Förderungen und Spenden. Jeder Beitrag hilft uns, unsere Werkstatt offen zu halten und Projekte für alle anzubieten.
         </p>
       </div>
@@ -813,7 +813,7 @@ END:VCALENDAR</code></pre>
 
 <!-- ═══════════════════ TOAST ═══════════════════ -->
 <div id="ics-toast" role="status" aria-live="polite" aria-atomic="true">
-  <i data-lucide="clipboard-check" style="width:18px;height:18px;flex-shrink:0" aria-hidden="true"></i>
+  <i data-lucide="clipboard-check" aria-hidden="true"></i>
   <span data-i18n="ics.toast.text">ICS-Link in Zwischenablage kopiert!</span>
 </div>
 
