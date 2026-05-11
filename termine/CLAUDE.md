@@ -1,18 +1,22 @@
-# CLAUDE.md — termine/index.html
+# CLAUDE.md — termine/
 
 ## Ziel
+
 Single-Page-Erklärer zur technischen Infrastruktur von Erfindergeist Jülich.
 Zielgruppe: Kinder + Erwachsene. Erklärt den Weg von NextCloud über das WordPress-Plugin
 zu REST-API, ICS-Kalender, GitHub PDF-Generator und Share-Server.
 
 ## CI
+
 - Primary: #159989 · Secondary: #F9B338
 - Logo: Querformat/landscape (~200×60px), User liefert `img/logo.svg`
 
 ## Technologien (alle lokal in js/lib/ und fonts/)
+
 Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Lucide Icons · Rough Notation · Caveat Font
 
 ## Pflicht-Features
+
 - Responsive (Mobile / Tablet / Desktop)
 - WCAG 2.1 AA Barrierefreiheit + Accessibility-Toolbar (bottom-left, fixed)
 - Dark / Light Mode Toggle (`data-theme` auf `<html>`, localStorage)
@@ -21,11 +25,13 @@ Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Luci
 - Sticky Navbar mit Smooth Scroll
 
 ## Sprache
+
 - Alle sichtbaren Texte tragen `data-i18n="key"` Attribut
 - Translations-Objekt in `js/i18n.js`: `translations.de` / `translations.en`
 - Deutsch ist Default
 
 ## Stil & Animationen
+
 - `h1`–`h3`: Caveat (handschriftlich), Rest: System-Font-Stack
 - GSAP: Hero cascade-in, Architektur-SVG Pfeil-Animation (stroke-dashoffset), Card stagger
 - AOS: Scroll-reveal für alle Explain-Cards
@@ -33,6 +39,7 @@ Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Luci
 - `prefers-reduced-motion` deaktiviert alle Animationen
 
 ## JS-Module
+
 - `js/i18n.js` — Translations + Toggle
 - `js/theme.js` — Dark/Light + localStorage
 - `js/accessibility.js` — Toolbar, font-scale, high-contrast, reduce-motion
@@ -40,11 +47,31 @@ Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Luci
 - `js/main.js` — App-Init, scroll-to-top, Event-Listener
 
 ## Ladesequenz im HTML
+
 libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → lucide → rough-notation)
 → i18n → theme → accessibility → animations → main
 
 ## Bibliotheken
+
 Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann, ist diese zu verwenden — keine neue Abhängigkeit hinzufügen. Keine eigene Lösung bauen, wenn Bootstrap, GSAP, jQuery, Lucide o.ä. das Problem bereits lösen.
+
+## CSS-Struktur
+
+```text
+css/
+├── main.css                      # Globale Styles (Vars, Dark Mode, Navbar, Buttons, Analogy-Box, Code-Block …)
+└── sections/
+    ├── section-hero.css          # Nur Hero-Section
+    ├── section-termine.css       # Nur Termine/Events-Section
+    ├── section-architektur.css   # Nur Architektur-Section (Chips, Constellation, Linien)
+    ├── section-ics.css           # Nur ICS-Section + Toast
+    ├── section-plugin.css        # Nur Plugin-Section (Endpoint-Cards, Explain-Cards, REST-Analogy)
+    ├── section-downloads.css     # Nur Downloads-Section (PDF-Steps, PDF-Cards)
+    ├── section-homeassistant.css # Nur Home-Assistant-Section
+    └── section-sponsoring.css    # Nur Sponsoring-Section
+```
+
+**Regel:** CSS, das ausschließlich in einer Section verwendet wird, gehört in deren Datei unter `css/sections/`. Globale Styles (Navbar, Buttons, Layout-Utilities, Komponenten die in mehreren Sections vorkommen wie `.analogy-box` oder `.code-block`) gehören in `main.css`.
 
 ## CSS-Regeln
 
@@ -63,7 +90,17 @@ Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann,
 - Einmalige kontextabhängige Styles per spezifischem CSS-Selektor setzen (z.B. `.section-ha .badge { font-size: .8rem }`)
 - Bootstrap-Utilities (`mt-3`, `mx-auto`, `text-muted`) bevorzugen wenn passend
 
+## Pflichtprüfungen
+
+**Neue Dateien:** Immer prüfen, ob die neue Datei in den Deploy-Workflows (`deploy-termine-prod.yml`, `deploy-termine-test.yml`) unter `exclude` aufgenommen werden muss (z.B. lokale Hilfsdateien, Mocks, Doku).
+
+**HTML-Änderungen:** Wenn Elemente entfernt oder umgebaut werden, immer prüfen:
+
+- Gibt es CSS-Klassen in `css/main.css`, die jetzt tot sind? → sofort entfernen.
+- Gibt es `data-i18n`-Keys in `js/i18n.js`, die nicht mehr referenziert werden? → sofort entfernen.
+
 ## Bugs
+
 Baue keine Bugs ein. Halte dich an Code-Qualitätsstandards.
 
 ## Bekannter Bug: Horizontaler Overflow / volle Breite
@@ -75,8 +112,8 @@ Baue keine Bugs ein. Halte dich an Code-Qualitätsstandards.
 **Fixe die NIEMALS entfernt werden dürfen:**
 
 ```css
-html   { overflow-x: clip; }
-body   { max-width: 100%; }
+html    { overflow-x: clip; }
+body    { max-width: 100%; }
 section { overflow-x: clip; }   /* clippt GSAP-Animations-Überlauf */
 ```
 

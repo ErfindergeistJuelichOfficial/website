@@ -18,6 +18,8 @@ jobs:
         **/compose.yaml
         **/README.md
         **/CLAUDE.md
+        **/.gitkeep
+        presentations/hallo-welt/**
     secrets:
       ftp-username: ${{ secrets.FTP_USERNAME_SHARE }}
       ftp-password: ${{ secrets.FTP_PASSWORD_SHARE }}

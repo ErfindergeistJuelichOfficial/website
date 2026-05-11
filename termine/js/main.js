@@ -27,7 +27,7 @@ $(document).ready(function () {
   if (icsCopyBtn) {
     icsCopyBtn.addEventListener('click', function () {
       var url     = icsCopyBtn.dataset.url;
-      var icon    = icsCopyBtn.querySelector('i[data-lucide]');
+      var icon    = icsCopyBtn.querySelector('[data-lucide]');
       var toastEl = document.getElementById('ics-toast');
 
       function onCopied() {
@@ -109,12 +109,99 @@ $(document).ready(function () {
     $('#main-nav').toggleClass('scrolled', $(this).scrollTop() > 30);
   });
 
+  // Load and render /tomorrow preview inside the endpoint card
+  (function loadTomorrow() {
+    var preview = document.getElementById('tomorrow-preview');
+    if (!preview) return;
+
+    fetch('https://erfindergeist.org/wp-json/erfindergeist/v2/tomorrow')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        var isEmpty = !data || (Array.isArray(data) ? !data.length : !data.title && !data.summary);
+        var key     = isEmpty ? 'plugin.tomorrow.empty' : 'plugin.tomorrow.found';
+
+        var state = document.createElement('span');
+        state.className = 'tomorrow-state';
+        state.setAttribute('data-i18n', key);
+        state.textContent = window.t(key);
+        preview.appendChild(state);
+
+        if (!isEmpty) {
+          var item  = Array.isArray(data) ? data[0] : data;
+          var title = item.title || item.summary || '';
+          if (title) {
+            var titleEl = document.createElement('div');
+            titleEl.className = 'tomorrow-title';
+            titleEl.textContent = title;
+            preview.appendChild(titleEl);
+          }
+        }
+      })
+      .catch(function () {});
+  }());
+
+  // Load /events preview inside the endpoint card
+  (function loadEventsPreview() {
+    var preview = document.getElementById('events-endpoint-preview');
+    if (!preview) return;
+
+    fetch('https://erfindergeist.org/wp-json/erfindergeist/v2/events')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data) return;
+        var list  = Array.isArray(data) ? data : (data.events || data.items || []);
+        var count = list.length;
+
+        var hint = document.createElement('div');
+        hint.className = 'tomorrow-state';
+        hint.setAttribute('data-i18n', 'plugin.events.hint');
+        hint.textContent = window.t('plugin.events.hint');
+        preview.appendChild(hint);
+
+        if (count > 0) {
+          var countEl = document.createElement('div');
+          countEl.className = 'tomorrow-title mt-1';
+          var countLabel = document.createElement('span');
+          countLabel.setAttribute('data-i18n', 'plugin.events.count.label');
+          countLabel.textContent = window.t('plugin.events.count.label');
+          countEl.textContent = count + ' ';
+          countEl.appendChild(countLabel);
+          preview.appendChild(countEl);
+        }
+
+        if (count >= 3) {
+          var third      = list[2];
+          var thirdTitle = third.title || third.summary || '?';
+
+          var details  = document.createElement('details');
+          details.className = 'events-challenge';
+
+          var summary  = document.createElement('summary');
+          summary.setAttribute('data-i18n', 'plugin.events.challenge');
+          summary.textContent = window.t('plugin.events.challenge');
+          details.appendChild(summary);
+
+          var solution = document.createElement('div');
+          solution.className = 'events-challenge-solution';
+          solution.textContent = thirdTitle;
+          details.appendChild(solution);
+
+          preview.appendChild(details);
+        }
+      })
+      .catch(function () {});
+  }());
+
   // Load and render events section (max 7)
   (function loadEvents() {
-    var listEl  = document.getElementById('events-list');
-    var loadEl  = document.getElementById('events-loading');
-    var errorEl = document.getElementById('events-error');
-    var emptyEl = document.getElementById('events-empty');
+    var listEl       = document.getElementById('events-list');
+    var loadEl       = document.getElementById('events-loading');
+    var errorEl      = document.getElementById('events-error');
+    var emptyEl      = document.getElementById('events-empty');
+    var jsonPanel    = document.getElementById('events-json-panel');
+    var jsonEditor   = document.getElementById('events-json-editor');
+    var jsonErrorEl  = document.getElementById('events-json-error');
+    var jsonResetBtn = document.getElementById('events-json-reset');
     if (!listEl) return;
 
     var WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -170,23 +257,29 @@ $(document).ready(function () {
       return null;
     }
 
-    function renderEvents(list) {
-      list = list.slice(0, 7);
-      if (loadEl) loadEl.remove();
-      if (!list.length) { if (emptyEl) emptyEl.classList.remove('d-none'); return; }
+    function toEditorEvent(ev) {
+      var rawTags = parseTags(ev.description || '');
+      return {
+        titel:        ev.title || ev.summary || '',
+        start:        ev.dtstart || '',
+        ort:          resolveLocation(rawTags, ev.location || ''),
+        beschreibung: resolveTagDescription(rawTags) || '',
+      };
+    }
 
-      list.forEach(function (ev) {
-        var s       = parseDate(ev.dtstart);
+    function renderEventCards(list) {
+      listEl.innerHTML = '';
+      list.slice(0, 3).forEach(function (ev) {
+        var s       = parseDate(ev.start || ev.dtstart);
         var ok      = !isNaN(s);
         var weekday = ok ? WEEKDAYS[s.getDay()] : '—';
         var dateStr = ok ? pad(s.getDate()) + '.' + pad(s.getMonth() + 1) + '.' + String(s.getFullYear()).slice(2) : '';
         var timeStr = ok ? pad(s.getHours()) + ':' + pad(s.getMinutes()) : '';
 
         var rawTags  = parseTags(ev.description || '');
-        var title    = esc(ev.title || ev.summary || '—');
-        var loc      = esc(resolveLocation(rawTags, ev.location || ''));
-        var tagLabel = resolveTagLabel(rawTags);
-        var tagDesc  = resolveTagDescription(rawTags);
+        var title    = esc(ev.titel || ev.title || ev.summary || '—');
+        var loc      = esc(ev.ort || resolveLocation(rawTags, ev.location || ''));
+        var tagDesc  = ev.beschreibung || resolveTagDescription(rawTags) || null;
 
         var html = '<div class="event-card" role="listitem">'
           + '<div class="event-date-badge">'
@@ -204,7 +297,13 @@ $(document).ready(function () {
         html += '</div></div></div>';
         listEl.insertAdjacentHTML('beforeend', html);
       });
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) lucide.createIcons({ nodes: [listEl] });
+    }
+
+    function renderEvents(list) {
+      if (loadEl) loadEl.remove();
+      if (!list.length) { if (emptyEl) emptyEl.classList.remove('d-none'); return; }
+      renderEventCards(list);
     }
 
     Promise.all([
@@ -218,6 +317,38 @@ $(document).ready(function () {
       var data   = results[1];
       var list   = Array.isArray(data) ? data : (data.events || data.items || []);
       renderEvents(list);
+
+      if (jsonPanel && jsonEditor) {
+        var editorList   = list.slice(0, 3).map(toEditorEvent);
+        var originalJson = JSON.stringify(editorList, null, 2);
+        jsonEditor.value = originalJson;
+        jsonPanel.classList.remove('d-none');
+
+        jsonEditor.addEventListener('input', function () {
+          try {
+            var parsed  = JSON.parse(jsonEditor.value);
+            var newList = Array.isArray(parsed) ? parsed : (parsed.events || parsed.items || []);
+            jsonEditor.classList.remove('is-invalid');
+            jsonErrorEl.textContent = '';
+            jsonErrorEl.classList.add('d-none');
+            renderEventCards(newList);
+          } catch (e) {
+            jsonEditor.classList.add('is-invalid');
+            jsonErrorEl.textContent = e.message;
+            jsonErrorEl.classList.remove('d-none');
+          }
+        });
+
+        if (jsonResetBtn) {
+          jsonResetBtn.addEventListener('click', function () {
+            jsonEditor.value = originalJson;
+            jsonEditor.classList.remove('is-invalid');
+            jsonErrorEl.textContent = '';
+            jsonErrorEl.classList.add('d-none');
+            renderEventCards(list);
+          });
+        }
+      }
     }).catch(function () {
       if (loadEl) loadEl.remove();
       if (errorEl) errorEl.classList.remove('d-none');

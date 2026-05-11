@@ -14,6 +14,9 @@ jobs:
       local-dir: ./termine/
       state-name: .ftp-deploy-termine-prod.json
       job-name: 🎉 Deploy Termine PROD at https://termine.erfindergeist.org/
+      exclude: |
+        **/CLAUDE.md
+        **/PLAN.md
     secrets:
       ftp-username: ${{ secrets.FTP_USERNAME_TERMINE_PROD }}
       ftp-password: ${{ secrets.FTP_PASSWORD_TERMINE_PROD }}

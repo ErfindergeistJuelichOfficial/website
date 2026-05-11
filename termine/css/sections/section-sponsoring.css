@@ -1,0 +1,38 @@
+.section-sponsor .sponsor-intro { max-width: 640px; }
+
+.sponsor-hero-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+.sponsor-hero-icon { width: 48px; height: 48px; color: var(--color-secondary); position: relative; z-index: 1; }
+.sponsor-pulse-ring {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  opacity: 0;
+}
+.sponsor-card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  box-shadow: 0 2px 12px var(--color-shadow);
+  transition: border-color .25s, box-shadow .25s;
+}
+.sponsor-card:hover { border-color: var(--color-secondary); box-shadow: 0 8px 24px var(--color-shadow); }
+a.sponsor-card { text-decoration: none; color: inherit; cursor: pointer; }
+.sponsor-card-icon  { width: 36px; height: 36px; color: var(--color-secondary); flex-shrink: 0; }
+.sponsor-card-title { margin: 0; font-family: system-ui, sans-serif; font-weight: 700; font-size: 1rem; color: var(--color-text); }

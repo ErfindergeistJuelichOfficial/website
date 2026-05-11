@@ -1,0 +1,67 @@
+.pdf-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: .75rem;
+}
+.pdf-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  min-width: 130px;
+  flex: 1 1 130px;
+  max-width: 160px;
+  box-shadow: 0 2px 12px var(--color-shadow);
+}
+.pdf-step-icon  { font-size: 2rem; margin-bottom: .5rem; }
+.pdf-step-label { font-size: .82rem; font-weight: 600; color: var(--color-text); }
+.pdf-step-arrow { color: var(--color-secondary); flex-shrink: 0; align-self: center; }
+.pdf-step-arrow svg { width: 28px; height: 28px; }
+@media (max-width: 767px) {
+  .pdf-steps { flex-direction: column; align-items: center; }
+  .pdf-step   { width: 100%; max-width: 300px; }
+  .pdf-step-arrow { transform: rotate(90deg); }
+}
+
+.pdf-card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: box-shadow .25s, border-color .25s;
+  box-shadow: 0 2px 14px var(--color-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.pdf-card:hover { border-color: var(--color-primary); box-shadow: 0 8px 28px var(--color-shadow); }
+.pdf-card-thumb {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(160deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+}
+.pdf-card-thumb svg { width: 48px; height: 48px; color: var(--color-primary); }
+.pdf-card-body {
+  padding: .85rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.pdf-card-title        { margin: 0 0 .2rem; font-family: system-ui, sans-serif; font-weight: 600; color: var(--color-text); }
+.pdf-card-body .btn    { margin-top: 1rem; }
+
+.section-downloads .analogy-box {
+  background: var(--color-surface);
+  border-left-color: var(--color-secondary);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}

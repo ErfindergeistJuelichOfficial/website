@@ -1,0 +1,146 @@
+<!-- ── PDF & DOWNLOADS ────────────────────────── -->
+<section id="downloads" class="section-downloads py-5" aria-labelledby="downloads-title">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="col-12 text-center mb-5" data-aos="fade-up">
+      <h2 id="downloads-title" class="section-title section-title-anim" data-i18n="downloads.title">PDF Termine</h2>
+      <p class="lead" data-i18n="downloads.subtitle">Aktuelle PDFs — immer einen Klick entfernt</p>
+    </div>
+    <div class="row g-4 justify-content-center mb-5">
+
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+        <article class="pdf-card">
+          <div class="pdf-card-thumb pdf-card-hoch" aria-hidden="true">
+            <i data-lucide="file-text"></i>
+          </div>
+          <div class="pdf-card-body">
+            <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_hoch">Terminübersicht Hochformat</h3>
+            <a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn-outline-primary btn-sm w-100"
+               data-i18n="downloads.btn">Herunterladen</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
+        <article class="pdf-card">
+          <div class="pdf-card-thumb pdf-card-quer" aria-hidden="true">
+            <i data-lucide="file-text"></i>
+          </div>
+          <div class="pdf-card-body">
+            <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_quer">Terminübersicht Querformat</h3>
+            <a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn-outline-primary btn-sm w-100"
+               data-i18n="downloads.btn">Herunterladen</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+        <article class="pdf-card">
+          <div class="pdf-card-thumb pdf-card-hoch" aria-hidden="true">
+            <i data-lucide="wrench"></i>
+          </div>
+          <div class="pdf-card-body">
+            <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</h3>
+            <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn-outline-primary btn-sm w-100"
+               data-i18n="downloads.btn">Herunterladen</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
+        <article class="pdf-card">
+          <div class="pdf-card-thumb pdf-card-quer" aria-hidden="true">
+            <i data-lucide="wrench"></i>
+          </div>
+          <div class="pdf-card-body">
+            <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</h3>
+            <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn-outline-primary btn-sm w-100"
+               data-i18n="downloads.btn">Herunterladen</a>
+          </div>
+        </article>
+      </div>
+
+    </div>
+
+    <!-- Auto-schedule hint -->
+    <div class="analogy-box mb-4" data-aos="fade-up" data-aos-delay="150">
+      <i data-lucide="clock" aria-hidden="true"></i>
+      <p class="mb-0" data-i18n="pdf.schedule">Die PDFs werden automatisch jeden Montag um 3:00 Uhr morgens neu generiert — so sind sie immer auf dem neuesten Stand.</p>
+    </div>
+
+    <!-- Explain: version control + workflows -->
+    <div class="row g-3 mt-4 mb-2">
+      <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card h-100">
+          <div class="info-card-icon"><i data-lucide="git-branch" aria-hidden="true"></i></div>
+          <div>
+            <strong data-i18n="pdf.vc.title">Versionskontrolle mit GitHub</strong>
+            <p class="mb-0 mt-1 small" data-i18n="pdf.vc.text">GitHub speichert jede Änderung am Code mit Zeitstempel — so ist immer nachvollziehbar, was wann geändert wurde, und ältere Versionen lassen sich jederzeit wiederherstellen.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card h-100">
+          <div class="info-card-icon"><i data-lucide="zap" aria-hidden="true"></i></div>
+          <div>
+            <strong data-i18n="pdf.workflow.title">Automatische Workflows mit GitHub Actions</strong>
+            <p class="mb-0 mt-1 small" data-i18n="pdf.workflow.text">GitHub Actions führt Aufgaben automatisch aus, sobald eine Änderung hochgeladen wird — zum Beispiel Termine abrufen, PDFs erstellen und auf den Share-Server hochladen.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF Generator flow -->
+    <div class="pdf-steps mt-5 mb-4" role="list" data-aos="fade-up" data-aos-delay="100">
+      <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="100">
+        <div class="pdf-step-icon" aria-hidden="true">⚡</div>
+        <div class="pdf-step-label" data-i18n="pdf.step1">GitHub Actions startet automatisch</div>
+      </div>
+      <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
+      <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="200">
+        <div class="pdf-step-icon" aria-hidden="true">📥</div>
+        <div class="pdf-step-label" data-i18n="pdf.step2">Termine werden abgerufen</div>
+      </div>
+      <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
+      <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="300">
+        <div class="pdf-step-icon" aria-hidden="true">🖨️</div>
+        <div class="pdf-step-label" data-i18n="pdf.step3">PDF wird erstellt</div>
+      </div>
+      <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
+      <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="400">
+        <div class="pdf-step-icon" aria-hidden="true">🚀</div>
+        <div class="pdf-step-label" data-i18n="pdf.step4">Auf Share hochgeladen</div>
+      </div>
+    </div>
+
+    <div class="analogy-box mb-4" data-aos="fade-up">
+      <i data-lucide="server" aria-hidden="true"></i>
+      <p class="mb-0" data-i18n="pdf.share.hint">share.erfindergeist.org ist unser öffentlicher Bereich, auf dem wir Dateien zum Download bereitstellen — PDFs, Terminübersichten und alles, was wir gerne mit euch teilen möchten.</p>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center gap-3" data-aos="fade-up">
+      <a href="https://github.com/ErfindergeistJuelichOfficial/pdf-termine"
+         target="_blank" rel="noopener noreferrer"
+         class="btn btn-outline-primary"
+         data-i18n="pdf.github.label">
+        pdf-termine auf GitHub
+      </a>
+      <a href="https://share.erfindergeist.org/"
+         target="_blank" rel="noopener noreferrer"
+         class="btn btn-outline-primary"
+         data-i18n="pdf.share.label">
+        share.erfindergeist.org
+      </a>
+    </div>
+
+  </div>
+</section>

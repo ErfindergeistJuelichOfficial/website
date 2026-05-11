@@ -1,0 +1,34 @@
+.high-contrast .section-ha a { color: #fff; }
+.high-contrast .section-ha .btn-outline-primary { color: #fff; border-color: #fff; }
+
+.section-ha .section-title,
+.section-ha h3,
+.section-ha p,
+.section-ha .lead { color: #fff; }
+.section-ha .section-title + p.lead { color: rgba(255,255,255,.75); }
+.section-ha .text-muted { color: rgba(255,255,255,.7) !important; }
+
+.section-ha .analogy-box {
+  background: rgba(255,255,255,.12);
+  border-left-color: var(--color-secondary);
+}
+.section-ha .analogy-box svg { color: var(--color-secondary); }
+.section-ha .analogy-box p   { color: #fff; }
+.section-ha .badge           { font-size: .8rem; }
+.section-ha .btn i[data-lucide] { width: 16px; height: 16px; }
+
+.ha-icon-wrap { position: relative; display: inline-block; }
+.ha-home-icon { color: rgba(255,255,255,.85); }
+.ha-zap-icon  {
+  position: absolute;
+  bottom: 0;
+  right: -10px;
+  width: 36px;
+  height: 36px;
+  color: var(--color-secondary);
+  animation: zap-pulse 2s ease-in-out infinite;
+}
+@keyframes zap-pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .6; transform: scale(1.2) rotate(5deg); }
+}
