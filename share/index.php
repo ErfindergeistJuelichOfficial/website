@@ -6,9 +6,9 @@
   <meta name="color-scheme" content="dark light">
   <title>Share — Erfindergeist Jülich e.V.</title>
   <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/share.css">
-  <link rel="stylesheet" href="assets/css/tab-presentations.css">
-  <link rel="stylesheet" href="assets/css/section-sponsoring.css">
+  <link rel="stylesheet" href="assets/css/share.css?v=<?= filemtime('assets/css/share.css') ?>">
+  <link rel="stylesheet" href="assets/css/tab-presentations.css?v=<?= filemtime('assets/css/tab-presentations.css') ?>">
+  <link rel="stylesheet" href="assets/css/section-sponsoring.css?v=<?= filemtime('assets/css/section-sponsoring.css') ?>">
   <script>(function(){var t=localStorage.getItem('eg-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
@@ -36,15 +36,6 @@
 <main class="container py-4 pb-5">
 
   <?php
-    /* ── Links ── */
-    $links = [];
-    $linksRaw = file_get_contents(__DIR__ . '/config/links.json');
-    if ($linksRaw !== false) {
-      foreach (json_decode($linksRaw, true) ?: [] as $l) {
-        $links[$l['title']] = htmlspecialchars($l['url'], ENT_QUOTES, 'UTF-8');
-      }
-    }
-
     /* ── Downloads: Dateien im Root ── */
     $entries = [];
     $allowed_extensions = ['pdf', 'docx', 'md', 'yml', 'yaml', 'svg', 'png', 'jpg', 'jpeg'];
@@ -189,7 +180,7 @@
     </p>
     <div class="row g-3 mb-4">
       <div class="col-12 col-sm-6 col-lg-3">
-        <a href="<?= $links['Fördermitglied werden'] ?? 'https://erfindergeist.org/mitglied-werden/' ?>" target="_blank" rel="noopener noreferrer" class="sponsor-item">
+        <a href="https://erfindergeist.org/mitglied-werden/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="user-plus" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
             <span class="sponsor-item-title">Fördermitglied werden</span>
@@ -207,7 +198,7 @@
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <a href="<?= $links['Bankverbindung'] ?? 'http://konto.erfindergeist.org/' ?>" target="_blank" rel="noopener noreferrer" class="sponsor-item">
+        <a href="http://konto.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="landmark" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
             <span class="sponsor-item-title">Überweisung</span>
@@ -216,7 +207,7 @@
         </a>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <a href="<?= $links['Spende via PayPal'] ?? 'http://paypal.erfindergeist.org/' ?>" target="_blank" rel="noopener noreferrer" class="sponsor-item">
+        <a href="http://paypal.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="sponsor-item">
           <i data-lucide="credit-card" class="sponsor-item-icon" aria-hidden="true"></i>
           <div>
             <span class="sponsor-item-title">PayPal</span>
@@ -226,7 +217,7 @@
       </div>
     </div>
     <div class="d-grid d-sm-block">
-      <a href="<?= $links['Linktree'] ?? 'https://linktree.erfindergeist.org/' ?>" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+      <a href="https://linktree.erfindergeist.org/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
         Alle Wege zur Unterstützung
       </a>
     </div>
@@ -240,6 +231,6 @@
 
 <script src="https://share.erfindergeist.org/js/lib/bootstrap.bundle.min.js"></script>
 <script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
-<script src="assets/js/share.js"></script>
+<script src="assets/js/share.js?v=<?= filemtime('assets/js/share.js') ?>"></script>
 </body>
 </html>

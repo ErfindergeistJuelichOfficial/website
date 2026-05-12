@@ -30,7 +30,8 @@ document.querySelectorAll('.btn-copy').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var url = btn.dataset.url;
     navigator.clipboard.writeText(url).then(function () {
-      var icon = btn.querySelector('i[data-lucide]');
+      var icon = btn.querySelector('[data-lucide]');
+      if (!icon) return;
       icon.setAttribute('data-lucide', 'clipboard-check');
       lucide.createIcons({ nodes: [icon] });
       setTimeout(function () {

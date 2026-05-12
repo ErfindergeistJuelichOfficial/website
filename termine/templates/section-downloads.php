@@ -16,10 +16,20 @@
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_hoch">Terminübersicht Hochformat</h3>
-            <a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-outline-primary btn-sm w-100"
-               data-i18n="downloads.btn">Herunterladen</a>
+            <div class="d-flex align-items-center gap-2 pdf-card-actions">
+              <a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn btn-outline-primary btn-sm flex-grow-1"
+                 data-i18n="downloads.btn">Herunterladen</a>
+              <button class="btn-icon pdf-copy-btn"
+                      data-url="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
+                      data-i18n="downloads.copy.label"
+                      data-i18n-attr="aria-label"
+                      aria-label="Link kopieren"
+                      title="Link kopieren">
+                <i data-lucide="clipboard" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </article>
       </div>
@@ -31,10 +41,20 @@
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_quer">Terminübersicht Querformat</h3>
-            <a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-outline-primary btn-sm w-100"
-               data-i18n="downloads.btn">Herunterladen</a>
+            <div class="d-flex align-items-center gap-2 pdf-card-actions">
+              <a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn btn-outline-primary btn-sm flex-grow-1"
+                 data-i18n="downloads.btn">Herunterladen</a>
+              <button class="btn-icon pdf-copy-btn"
+                      data-url="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
+                      data-i18n="downloads.copy.label"
+                      data-i18n-attr="aria-label"
+                      aria-label="Link kopieren"
+                      title="Link kopieren">
+                <i data-lucide="clipboard" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </article>
       </div>
@@ -46,10 +66,20 @@
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</h3>
-            <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-outline-primary btn-sm w-100"
-               data-i18n="downloads.btn">Herunterladen</a>
+            <div class="d-flex align-items-center gap-2 pdf-card-actions">
+              <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn btn-outline-primary btn-sm flex-grow-1"
+                 data-i18n="downloads.btn">Herunterladen</a>
+              <button class="btn-icon pdf-copy-btn"
+                      data-url="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+                      data-i18n="downloads.copy.label"
+                      data-i18n-attr="aria-label"
+                      aria-label="Link kopieren"
+                      title="Link kopieren">
+                <i data-lucide="clipboard" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </article>
       </div>
@@ -61,10 +91,20 @@
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</h3>
-            <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-outline-primary btn-sm w-100"
-               data-i18n="downloads.btn">Herunterladen</a>
+            <div class="d-flex align-items-center gap-2 pdf-card-actions">
+              <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn btn-outline-primary btn-sm flex-grow-1"
+                 data-i18n="downloads.btn">Herunterladen</a>
+              <button class="btn-icon pdf-copy-btn"
+                      data-url="https://share.erfindergeist.org/repaircafe_quer.pdf"
+                      data-i18n="downloads.copy.label"
+                      data-i18n-attr="aria-label"
+                      aria-label="Link kopieren"
+                      title="Link kopieren">
+                <i data-lucide="clipboard" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </article>
       </div>
@@ -72,9 +112,61 @@
     </div>
 
     <!-- Auto-schedule hint -->
-    <div class="analogy-box mb-4" data-aos="fade-up" data-aos-delay="150">
+    <div class="analogy-box mb-3" data-aos="fade-up" data-aos-delay="150">
       <i data-lucide="clock" aria-hidden="true"></i>
       <p class="mb-0" data-i18n="pdf.schedule">Die PDFs werden automatisch jeden Montag um 3:00 Uhr morgens neu generiert — so sind sie immer auf dem neuesten Stand.</p>
+    </div>
+
+    <!-- Flip clock countdown -->
+    <div class="pdf-countdown-wrap mb-4" data-aos="fade-up" data-aos-delay="200">
+      <p class="pdf-countdown-label small" data-i18n="pdf.countdown.label">Nächste Aktualisierung in</p>
+      <div class="flip-clock" id="pdf-countdown" role="timer" aria-live="off">
+
+        <div class="flip-unit">
+          <div class="flip-card" id="flip-d">
+            <div class="flip-upper"><div class="flip-digit">0</div></div>
+            <div class="flip-lower"><div class="flip-digit">0</div></div>
+            <div class="flip-top"><div class="flip-digit">0</div></div>
+            <div class="flip-btm"><div class="flip-digit">0</div></div>
+            <div class="flip-divider" aria-hidden="true"></div>
+          </div>
+          <div class="flip-label" data-i18n="pdf.countdown.d">T</div>
+        </div>
+
+        <div class="flip-unit">
+          <div class="flip-card" id="flip-h">
+            <div class="flip-upper"><div class="flip-digit">0</div></div>
+            <div class="flip-lower"><div class="flip-digit">0</div></div>
+            <div class="flip-top"><div class="flip-digit">0</div></div>
+            <div class="flip-btm"><div class="flip-digit">0</div></div>
+            <div class="flip-divider" aria-hidden="true"></div>
+          </div>
+          <div class="flip-label" data-i18n="pdf.countdown.h">h</div>
+        </div>
+
+        <div class="flip-unit">
+          <div class="flip-card" id="flip-m">
+            <div class="flip-upper"><div class="flip-digit">0</div></div>
+            <div class="flip-lower"><div class="flip-digit">0</div></div>
+            <div class="flip-top"><div class="flip-digit">0</div></div>
+            <div class="flip-btm"><div class="flip-digit">0</div></div>
+            <div class="flip-divider" aria-hidden="true"></div>
+          </div>
+          <div class="flip-label" data-i18n="pdf.countdown.m">m</div>
+        </div>
+
+        <div class="flip-unit">
+          <div class="flip-card" id="flip-s">
+            <div class="flip-upper"><div class="flip-digit">0</div></div>
+            <div class="flip-lower"><div class="flip-digit">0</div></div>
+            <div class="flip-top"><div class="flip-digit">0</div></div>
+            <div class="flip-btm"><div class="flip-digit">0</div></div>
+            <div class="flip-divider" aria-hidden="true"></div>
+          </div>
+          <div class="flip-label" data-i18n="pdf.countdown.s">s</div>
+        </div>
+
+      </div>
     </div>
 
     <!-- Explain: version control + workflows -->

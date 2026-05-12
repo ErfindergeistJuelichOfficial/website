@@ -8,15 +8,15 @@
   <title>Erfindergeist Jülich e.V. Termine</title>
   <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://share.erfindergeist.org/css/aos.min.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/sections/section-hero.css">
-  <link rel="stylesheet" href="css/sections/section-termine.css">
-  <link rel="stylesheet" href="css/sections/section-architektur.css">
-  <link rel="stylesheet" href="css/sections/section-ics.css">
-  <link rel="stylesheet" href="css/sections/section-plugin.css">
-  <link rel="stylesheet" href="css/sections/section-downloads.css">
-  <link rel="stylesheet" href="css/sections/section-homeassistant.css">
-  <link rel="stylesheet" href="css/sections/section-sponsoring.css">
+  <link rel="stylesheet" href="css/main.css?v=<?= filemtime('css/main.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-hero.css?v=<?= filemtime('css/sections/section-hero.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-termine.css?v=<?= filemtime('css/sections/section-termine.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-architektur.css?v=<?= filemtime('css/sections/section-architektur.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-ics.css?v=<?= filemtime('css/sections/section-ics.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-plugin.css?v=<?= filemtime('css/sections/section-plugin.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-downloads.css?v=<?= filemtime('css/sections/section-downloads.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-homeassistant.css?v=<?= filemtime('css/sections/section-homeassistant.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-sponsoring.css?v=<?= filemtime('css/sections/section-sponsoring.css') ?>">
 </head>
 <body>
 
@@ -103,17 +103,14 @@
       </div>
       <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 gap-sm-3">
         <a href="https://github.com/ErfindergeistJuelichOfficial/calendar-wp-plugin"
-           data-link-title="GitHub – WordPress Plugin"
            target="_blank" rel="noopener noreferrer"
            class="footer-link"
            data-i18n="footer.plugin">WordPress Plugin</a>
         <a href="https://github.com/ErfindergeistJuelichOfficial/pdf-termine"
-           data-link-title="GitHub – pdf-termine"
            target="_blank" rel="noopener noreferrer"
            class="footer-link"
            data-i18n="footer.pdf">PDF Generator</a>
         <a href="https://github.com/ErfindergeistJuelichOfficial"
-           data-link-title="GitHub Organisation"
            target="_blank" rel="noopener noreferrer"
            class="footer-link"
            data-i18n="footer.source">Quelltext auf GitHub</a>
@@ -123,9 +120,9 @@
 </footer>
 
 <!-- ═══════════════════ TOAST ═══════════════════ -->
-<div id="ics-toast" role="status" aria-live="polite" aria-atomic="true">
+<div id="copy-toast" role="status" aria-live="polite" aria-atomic="true">
   <i data-lucide="clipboard-check" aria-hidden="true"></i>
-  <span data-i18n="ics.toast.text">ICS-Link in Zwischenablage kopiert!</span>
+  <span id="copy-toast-text"></span>
 </div>
 
 <!-- ═══════════════════ FIXED WIDGETS ═══════════════════ -->
@@ -191,24 +188,11 @@
 <script src="https://share.erfindergeist.org/js/lib/typed.min.js"></script>
 <script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
 <script src="https://share.erfindergeist.org/js/lib/rough-notation.min.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/theme.js"></script>
-<script src="js/accessibility.js"></script>
-<script src="js/animations.js"></script>
-<script src="js/main.js"></script>
-<script>
-  fetch('https://share.erfindergeist.org/config/links.json')
-    .then(function(r) { return r.json(); })
-    .then(function(links) {
-      var map = {};
-      links.forEach(function(l) { map[l.title] = l.url; });
-      document.querySelectorAll('[data-link-title]').forEach(function(el) {
-        var url = map[el.dataset.linkTitle];
-        if (url) el.href = url;
-      });
-    })
-    .catch(function() {});
-</script>
+<script src="js/i18n.js?v=<?= filemtime('js/i18n.js') ?>"></script>
+<script src="js/theme.js?v=<?= filemtime('js/theme.js') ?>"></script>
+<script src="js/accessibility.js?v=<?= filemtime('js/accessibility.js') ?>"></script>
+<script src="js/animations.js?v=<?= filemtime('js/animations.js') ?>"></script>
+<script src="js/main.js?v=<?= filemtime('js/main.js') ?>"></script>
 
 </body>
 </html>

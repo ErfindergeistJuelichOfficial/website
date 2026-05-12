@@ -43,15 +43,28 @@ a.endpoint-ext:hover { color: var(--color-primary); }
 
 .events-challenge { font-size: .78rem; margin-top: .4rem; width: 100%; }
 .events-challenge summary {
-  color: var(--color-primary);
-  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: .2rem;
   cursor: pointer;
   list-style: none;
   user-select: none;
 }
 .events-challenge summary::-webkit-details-marker { display: none; }
-.events-challenge summary::before { content: '▸ '; }
+.events-challenge summary::before { content: '▸ '; color: var(--color-secondary); font-style: normal; }
 .events-challenge[open] summary::before { content: '▾ '; }
+.events-challenge-q {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+.events-challenge-qmark {
+  display: inline-block;
+  color: var(--color-secondary);
+  font-weight: 700;
+  animation: puzzlePop 3s ease-in-out infinite;
+  transform-origin: bottom center;
+  line-height: 1;
+}
 .events-challenge-solution {
   margin-top: .35rem;
   padding: .3rem .55rem;

@@ -457,3 +457,18 @@ section { transition: background-color .35s; }
 
 /* Rough Notation — ensure inline for highlights */
 .rn-highlight { display: inline; }
+
+/* ── Shared animations ────────────────────────────────── */
+@keyframes puzzlePop {
+  0%, 55%, 100%  { transform: translateY(0)     scaleX(1)    scaleY(1)    rotate(0deg);   }
+  62%            { transform: translateY(-14px)  scaleX(0.88) scaleY(1.2)  rotate(-12deg); }
+  72%            { transform: translateY(-10px)  scaleX(1.1)  scaleY(0.9)  rotate(8deg);  }
+  82%            { transform: translateY(-3px)   scaleX(0.97) scaleY(1.05) rotate(-3deg); }
+  91%            { transform: translateY(0)      scaleX(1.05) scaleY(0.95) rotate(0deg);   }
+}
+html.reduce-motion .puzzle-question-mark,
+html.reduce-motion .event-challenge-qmark { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .puzzle-question-mark,
+  .event-challenge-qmark { animation: none; }
+}

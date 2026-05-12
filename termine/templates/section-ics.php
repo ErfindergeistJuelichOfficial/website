@@ -44,13 +44,49 @@
             <i data-lucide="clipboard" aria-hidden="true"></i>
           </button>
         </div>
+
+        <!-- Direct calendar subscription buttons -->
+        <div class="ics-cal-wrap">
+          <div class="ics-cal-bell" aria-hidden="true">
+            <i data-lucide="bell"></i>
+          </div>
+          <span class="ics-cal-label" data-i18n="ics.cal.label">Abonnieren in:</span>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="https://calendar.google.com/calendar/r/settings/addbyurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
+               class="ics-cal-btn ics-cal-google" target="_blank" rel="noopener noreferrer"
+               aria-label="In Google Calendar abonnieren">
+              <i data-lucide="calendar-plus" aria-hidden="true"></i>Google
+            </a>
+            <a href="https://outlook.live.com/calendar/0/addfromurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
+               class="ics-cal-btn ics-cal-outlook" target="_blank" rel="noopener noreferrer"
+               aria-label="In Outlook abonnieren">
+              <i data-lucide="calendar-plus" aria-hidden="true"></i>Outlook
+            </a>
+            <a href="webcal://erfindergeist.org/wp-json/erfindergeist/v2/ics"
+               class="ics-cal-btn ics-cal-apple"
+               aria-label="In Apple Calendar abonnieren">
+              <i data-lucide="calendar-plus" aria-hidden="true"></i>Apple
+            </a>
+            <a href="https://calendar.yahoo.com/?v=60&amp;type=26&amp;title=Erfindergeist+J%C3%BClich&amp;url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
+               class="ics-cal-btn ics-cal-yahoo" target="_blank" rel="noopener noreferrer"
+               aria-label="In Yahoo Calendar abonnieren">
+              <i data-lucide="calendar-plus" aria-hidden="true"></i>Yahoo
+            </a>
+            <a href="webcal://erfindergeist.org/wp-json/erfindergeist/v2/ics"
+               class="ics-cal-btn ics-cal-thunderbird"
+               aria-label="In Thunderbird abonnieren">
+              <i data-lucide="calendar-plus" aria-hidden="true"></i>Thunderbird
+            </a>
+          </div>
+        </div>
       </div>
 
     </div>
 
-    <!-- Code example -->
-    <div class="row mt-5">
-      <div class="col-12" data-aos="fade-up">
+    <!-- Code example + puzzle -->
+    <div class="row mt-5 g-4 align-items-start">
+
+      <div class="col-lg-6" data-aos="fade-up">
         <p class="fw-semibold mb-2" data-i18n="ics.example.title">So sieht eine ICS-Datei aus:</p>
         <div class="code-block">
           <div class="code-block-label">beispiel.ics</div>
@@ -69,6 +105,78 @@ END:VEVENT
 END:VCALENDAR</code></pre>
         </div>
       </div>
+
+      <!-- ICS puzzle -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <p class="fw-semibold mb-3 puzzle-heading">
+          <span data-i18n="ics.puzzle.question">Welches Datum und welche Uhrzeit steht bei DTSTART</span><span class="puzzle-question-mark" aria-hidden="true">?</span>
+        </p>
+        <div class="ics-puzzle" id="ics-puzzle" role="group">
+
+          <div class="ics-spinner-row">
+
+            <!-- Day -->
+            <div class="spinner-group">
+              <div class="spinner" data-field="day" data-min="1" data-max="31">
+                <button class="spinner-btn spinner-up" aria-label="Tag erhöhen"><i data-lucide="chevron-up" aria-hidden="true"></i></button>
+                <div class="spinner-val">01</div>
+                <button class="spinner-btn spinner-down" aria-label="Tag verringern"><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+              </div>
+              <span class="spinner-label" data-i18n="ics.puzzle.lbl.day">Tag</span>
+            </div>
+
+            <!-- Month -->
+            <div class="spinner-group">
+              <div class="spinner" data-field="month" data-min="1" data-max="12">
+                <button class="spinner-btn spinner-up" aria-label="Monat erhöhen"><i data-lucide="chevron-up" aria-hidden="true"></i></button>
+                <div class="spinner-val">01</div>
+                <button class="spinner-btn spinner-down" aria-label="Monat verringern"><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+              </div>
+              <span class="spinner-label" data-i18n="ics.puzzle.lbl.month">Mo</span>
+            </div>
+
+            <!-- Year -->
+            <div class="spinner-group">
+              <div class="spinner" data-field="year" data-min="2020" data-max="2030">
+                <button class="spinner-btn spinner-up" aria-label="Jahr erhöhen"><i data-lucide="chevron-up" aria-hidden="true"></i></button>
+                <div class="spinner-val">2024</div>
+                <button class="spinner-btn spinner-down" aria-label="Jahr verringern"><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+              </div>
+              <span class="spinner-label" data-i18n="ics.puzzle.lbl.year">Jahr</span>
+            </div>
+
+            <!-- Hour -->
+            <div class="spinner-group">
+              <div class="spinner" data-field="hour" data-min="0" data-max="23">
+                <button class="spinner-btn spinner-up" aria-label="Stunde erhöhen"><i data-lucide="chevron-up" aria-hidden="true"></i></button>
+                <div class="spinner-val">00</div>
+                <button class="spinner-btn spinner-down" aria-label="Stunde verringern"><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+              </div>
+              <span class="spinner-label" data-i18n="ics.puzzle.lbl.hour">Std</span>
+            </div>
+
+            <!-- Minute -->
+            <div class="spinner-group">
+              <div class="spinner" data-field="minute" data-min="0" data-max="59">
+                <button class="spinner-btn spinner-up" aria-label="Minute erhöhen"><i data-lucide="chevron-up" aria-hidden="true"></i></button>
+                <div class="spinner-val">00</div>
+                <button class="spinner-btn spinner-down" aria-label="Minute verringern"><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+              </div>
+              <span class="spinner-label" data-i18n="ics.puzzle.lbl.minute">Min</span>
+            </div>
+
+          </div>
+
+          <!-- Success -->
+          <div class="ics-puzzle-success d-none" id="ics-puzzle-success" role="alert" aria-live="polite">
+            <i data-lucide="check-circle" aria-hidden="true"></i>
+            <span data-i18n="ics.puzzle.success">Perfekt! Du hast DTSTART korrekt gelesen.</span>
+          </div>
+          <button class="btn btn-sm btn-outline-secondary mt-2 d-none" id="ics-puzzle-reset" data-i18n="ics.puzzle.reset">Zurücksetzen</button>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

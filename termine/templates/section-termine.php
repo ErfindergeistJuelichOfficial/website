@@ -44,20 +44,6 @@
         <!-- List -->
         <div id="events-list" class="d-flex flex-column gap-2" role="list" aria-live="polite"></div>
 
-        <!-- Website hint -->
-        <div class="analogy-box mt-4" data-aos="fade-up" data-aos-delay="200">
-          <i data-lucide="globe" aria-hidden="true"></i>
-          <div>
-            <p class="mb-2" data-i18n="events.website.hint">Alle Termine findest du auch auf unserer Website:</p>
-            <a href="https://erfindergeist.org/veranstaltungen/"
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-outline-primary btn-sm"
-               data-i18n="events.website.link">
-              erfindergeist.org/veranstaltungen
-            </a>
-          </div>
-        </div>
-
       </div>
 
       <!-- JSON Editor -->
@@ -72,6 +58,20 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- Website hint — below both columns so mobile order is correct -->
+    <div class="analogy-box mt-4" data-aos="fade-up" data-aos-delay="200">
+      <i data-lucide="globe" aria-hidden="true"></i>
+      <div>
+        <p class="mb-2" data-i18n="events.website.hint">Alle Termine findest du auch auf unserer Website:</p>
+        <a href="https://erfindergeist.org/veranstaltungen/"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-outline-primary btn-sm"
+           data-i18n="events.website.link">
+          erfindergeist.org/veranstaltungen
+        </a>
+      </div>
     </div>
 
   </div>

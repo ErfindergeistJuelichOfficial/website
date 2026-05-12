@@ -22,47 +22,64 @@ $(document).ready(function () {
     applyTranslations($(this).data('lang'));
   });
 
+  // Shared copy-to-clipboard helper
+  var copyToastEl  = document.getElementById('copy-toast');
+  var copyToastTxt = document.getElementById('copy-toast-text');
+
+  function showCopyToast(textKey) {
+    if (!copyToastEl || !copyToastTxt) return;
+    copyToastTxt.textContent = window.t(textKey);
+    copyToastEl.classList.add('show');
+    clearTimeout(copyToastEl._t);
+    copyToastEl._t = setTimeout(function () { copyToastEl.classList.remove('show'); }, 3000);
+  }
+
+  function copyToClipboard(url, textKey, btn) {
+    function onCopied() {
+      if (btn) {
+        var icon = btn.querySelector('[data-lucide]');
+        if (icon) {
+          icon.setAttribute('data-lucide', 'clipboard-check');
+          if (window.lucide) lucide.createIcons({ nodes: [icon] });
+          setTimeout(function () {
+            icon.setAttribute('data-lucide', 'clipboard');
+            if (window.lucide) lucide.createIcons({ nodes: [icon] });
+          }, 2000);
+        }
+      }
+      showCopyToast(textKey);
+    }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      onCopied();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(onCopied).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
   // ICS copy-to-clipboard button
   var icsCopyBtn = document.getElementById('ics-copy-btn');
   if (icsCopyBtn) {
     icsCopyBtn.addEventListener('click', function () {
-      var url     = icsCopyBtn.dataset.url;
-      var icon    = icsCopyBtn.querySelector('[data-lucide]');
-      var toastEl = document.getElementById('ics-toast');
-
-      function onCopied() {
-        icon.setAttribute('data-lucide', 'clipboard-check');
-        if (window.lucide) lucide.createIcons({ nodes: [icon] });
-        setTimeout(function () {
-          icon.setAttribute('data-lucide', 'clipboard');
-          if (window.lucide) lucide.createIcons({ nodes: [icon] });
-        }, 2000);
-        if (toastEl) {
-          toastEl.classList.add('show');
-          clearTimeout(toastEl._t);
-          toastEl._t = setTimeout(function () { toastEl.classList.remove('show'); }, 3000);
-        }
-      }
-
-      function fallbackCopy() {
-        var ta = document.createElement('textarea');
-        ta.value = url;
-        ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px';
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        try { document.execCommand('copy'); } catch (e) {}
-        document.body.removeChild(ta);
-        onCopied();
-      }
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(onCopied).catch(fallbackCopy);
-      } else {
-        fallbackCopy();
-      }
+      copyToClipboard(icsCopyBtn.dataset.url, 'ics.toast.text', icsCopyBtn);
     });
   }
+
+  // PDF copy-to-clipboard buttons
+  document.querySelectorAll('.pdf-copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      copyToClipboard(btn.dataset.url, 'downloads.copy.text', btn);
+    });
+  });
 
   // Scroll-to-top button
   $('#scroll-top').on('click', function () {
@@ -108,6 +125,185 @@ $(document).ready(function () {
   $(window).on('scroll.navbar', function () {
     $('#main-nav').toggleClass('scrolled', $(this).scrollTop() > 30);
   });
+
+  // PDF countdown flip clock — next Monday 03:00 UTC (GitHub Actions schedule)
+  (function initPdfCountdown() {
+    if (!document.getElementById('flip-d')) return;
+
+    function nextRun() {
+      var now  = new Date();
+      var day  = now.getUTCDay();
+      var diff = (1 - day + 7) % 7;
+      if (diff === 0 && (now.getUTCHours() > 3 || (now.getUTCHours() === 3 && now.getUTCMinutes() > 0))) {
+        diff = 7;
+      }
+      return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diff, 3, 0, 0, 0));
+    }
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function makeUnit(id) {
+      var card  = document.getElementById(id);
+      if (!card) return function() {};
+      var upper = card.querySelector('.flip-upper .flip-digit');
+      var lower = card.querySelector('.flip-lower .flip-digit');
+      var top   = card.querySelector('.flip-top .flip-digit');
+      var btm   = card.querySelector('.flip-btm .flip-digit');
+      var prev  = null;
+
+      return function set(val) {
+        if (val === prev) return;
+        if (prev === null) {
+          upper.textContent = lower.textContent = val;
+          prev = val;
+          return;
+        }
+        var noAnim = document.documentElement.classList.contains('reduce-motion') ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (noAnim) {
+          upper.textContent = lower.textContent = val;
+          prev = val;
+          return;
+        }
+        top.textContent = prev;
+        btm.textContent = val;
+        upper.textContent = val; // hidden by flip-top during animation, reveals in sync when it folds away
+        card.classList.remove('flipping');
+        void card.offsetWidth;
+        card.classList.add('flipping');
+        setTimeout(function () {
+          lower.textContent = val; // update just before flip-btm snaps back to hidden
+          card.classList.remove('flipping');
+        }, 560); // 270ms + 270ms animations + tiny buffer
+        prev = val;
+      };
+    }
+
+    var setD = makeUnit('flip-d');
+    var setH = makeUnit('flip-h');
+    var setM = makeUnit('flip-m');
+    var setS = makeUnit('flip-s');
+
+    function tick() {
+      var ms = nextRun() - new Date();
+      if (ms <= 0) return;
+      var s = Math.floor(ms / 1000);
+      var m = Math.floor(s / 60); s %= 60;
+      var h = Math.floor(m / 60); m %= 60;
+      var d = Math.floor(h / 24); h %= 24;
+      setD(String(d));
+      setH(pad(h));
+      setM(pad(m));
+      setS(pad(s));
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  }());
+
+  // ICS puzzle — read DTSTART:20250515T180000Z
+  (function initIcsPuzzle() {
+    var puzzle = document.getElementById('ics-puzzle');
+    if (!puzzle) return;
+
+    var ANSWER  = { year: 2025, month: 5, day: 15, hour: 18, minute: 0 };
+    var INITIAL = { year: 2024, month: 1,  day: 1,  hour: 0,  minute: 0 };
+    var state   = Object.assign({}, INITIAL);
+    var solved  = false;
+
+    var successEl = document.getElementById('ics-puzzle-success');
+    var resetBtn  = document.getElementById('ics-puzzle-reset');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function render() {
+      puzzle.querySelector('[data-field="year"] .spinner-val').textContent   = String(state.year);
+      puzzle.querySelector('[data-field="month"] .spinner-val').textContent  = pad(state.month);
+      puzzle.querySelector('[data-field="day"] .spinner-val').textContent    = pad(state.day);
+      puzzle.querySelector('[data-field="hour"] .spinner-val').textContent   = pad(state.hour);
+      puzzle.querySelector('[data-field="minute"] .spinner-val').textContent = pad(state.minute);
+    }
+
+    function wrap(val, min, max) {
+      if (val < min) return max;
+      if (val > max) return min;
+      return val;
+    }
+
+    function step(field, dir) {
+      if (solved) return;
+      var el  = puzzle.querySelector('[data-field="' + field + '"]');
+      state[field] = wrap(state[field] + dir, +el.dataset.min, +el.dataset.max);
+      render();
+      check();
+    }
+
+    function check() {
+      if (solved) return;
+      var ok = Object.keys(ANSWER).every(function(k) { return state[k] === ANSWER[k]; });
+      if (!ok) return;
+      solved = true;
+      puzzle.classList.add('solved');
+      successEl.classList.remove('d-none');
+      resetBtn.classList.remove('d-none');
+      if (window.lucide) lucide.createIcons({ nodes: [successEl] });
+      var noAnim = document.documentElement.classList.contains('reduce-motion') ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (window.gsap && !noAnim) {
+        gsap.fromTo(puzzle, { scale: 1 }, { scale: 1.018, repeat: 1, yoyo: true, duration: .2, ease: 'power2.inOut' });
+        gsap.from(successEl, { opacity: 0, y: 10, duration: .4, ease: 'power2.out' });
+        gsap.from(resetBtn,  { opacity: 0, duration: .3, delay: .25 });
+      }
+    }
+
+    function reset() {
+      solved  = false;
+      state   = Object.assign({}, INITIAL);
+      puzzle.classList.remove('solved');
+      successEl.classList.add('d-none');
+      resetBtn.classList.add('d-none');
+      render();
+    }
+
+    // Spinner interaction with long-press acceleration
+    puzzle.querySelectorAll('.spinner-btn').forEach(function(btn) {
+      var holdTimeout = null;
+      var holdInterval = null;
+
+      function doStep() {
+        var field = btn.closest('[data-field]').dataset.field;
+        step(field, btn.classList.contains('spinner-up') ? 1 : -1);
+      }
+      function stopHold() {
+        clearTimeout(holdTimeout);
+        clearInterval(holdInterval);
+        holdTimeout = holdInterval = null;
+      }
+
+      btn.addEventListener('pointerdown', function(e) {
+        e.preventDefault();
+        doStep();
+        holdTimeout = setTimeout(function() {
+          holdInterval = setInterval(doStep, 90);
+        }, 380);
+      });
+      btn.addEventListener('pointerup',     stopHold);
+      btn.addEventListener('pointerleave',  stopHold);
+      btn.addEventListener('pointercancel', stopHold);
+    });
+
+    // Mouse wheel on spinner
+    puzzle.querySelectorAll('[data-field]').forEach(function(el) {
+      el.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        step(el.dataset.field, e.deltaY < 0 ? 1 : -1);
+      }, { passive: false });
+    });
+
+    if (resetBtn) resetBtn.addEventListener('click', reset);
+
+    render();
+  }());
 
   // Load and render /tomorrow preview inside the endpoint card
   (function loadTomorrow() {
@@ -173,12 +369,23 @@ $(document).ready(function () {
           var third      = list[2];
           var thirdTitle = third.title || third.summary || '?';
 
-          var details  = document.createElement('details');
+          var details = document.createElement('details');
           details.className = 'events-challenge';
 
-          var summary  = document.createElement('summary');
-          summary.setAttribute('data-i18n', 'plugin.events.challenge');
-          summary.textContent = window.t('plugin.events.challenge');
+          var summary = document.createElement('summary');
+
+          var qText = document.createElement('span');
+          qText.className = 'events-challenge-q';
+          qText.setAttribute('data-i18n', 'plugin.events.challenge');
+          qText.textContent = window.t('plugin.events.challenge');
+
+          var qMark = document.createElement('span');
+          qMark.className = 'events-challenge-qmark';
+          qMark.setAttribute('aria-hidden', 'true');
+          qMark.textContent = '?';
+
+          summary.appendChild(qText);
+          summary.appendChild(qMark);
           details.appendChild(summary);
 
           var solution = document.createElement('div');
@@ -276,10 +483,10 @@ $(document).ready(function () {
         var dateStr = ok ? pad(s.getDate()) + '.' + pad(s.getMonth() + 1) + '.' + String(s.getFullYear()).slice(2) : '';
         var timeStr = ok ? pad(s.getHours()) + ':' + pad(s.getMinutes()) : '';
 
-        var rawTags  = parseTags(ev.description || '');
-        var title    = esc(ev.titel || ev.title || ev.summary || '—');
-        var loc      = esc(ev.ort || resolveLocation(rawTags, ev.location || ''));
-        var tagDesc  = ev.beschreibung || resolveTagDescription(rawTags) || null;
+        var rawTags = parseTags(ev.description || '');
+        var title   = esc(ev.titel || ev.title || ev.summary || '—');
+        var loc     = esc(ev.ort || resolveLocation(rawTags, ev.location || ''));
+        var tagDesc = ev.beschreibung || resolveTagDescription(rawTags) || null;
 
         var html = '<div class="event-card" role="listitem">'
           + '<div class="event-date-badge">'

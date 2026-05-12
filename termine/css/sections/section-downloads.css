@@ -58,10 +58,145 @@
   flex-grow: 1;
 }
 .pdf-card-title        { margin: 0 0 .2rem; font-family: system-ui, sans-serif; font-weight: 600; color: var(--color-text); }
-.pdf-card-body .btn    { margin-top: 1rem; }
+.pdf-card-body .pdf-card-actions { margin-top: auto; padding-top: 1rem; }
 
 .section-downloads .analogy-box {
   background: var(--color-surface);
   border-left-color: var(--color-secondary);
   box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+/* ── Flip Clock ──────────────────────────────────────── */
+.pdf-countdown-wrap {
+  text-align: center;
+}
+.pdf-countdown-label {
+  font-weight: 500;
+  color: var(--color-text);
+  opacity: .7;
+  margin-bottom: .75rem;
+}
+.flip-clock {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: .85rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.flip-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+}
+.flip-card {
+  position: relative;
+  width: 72px;
+  height: 90px;
+  perspective: 320px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3);
+}
+.flip-upper, .flip-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #2e2e46 0%, #252540 100%);
+  border-radius: 10px 10px 0 0;
+}
+.flip-lower, .flip-btm {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 45px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #1c1c30 0%, #1e1e34 100%);
+  border-radius: 0 0 10px 10px;
+}
+.flip-divider {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 1px;
+  background: rgba(0,0,0,.8);
+  z-index: 4;
+  pointer-events: none;
+}
+.flip-upper .flip-digit,
+.flip-top .flip-digit {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Courier New', Courier, monospace;
+  color: #f4e8c2;
+  text-shadow: 0 0 18px rgba(244,232,194,.2);
+  letter-spacing: -.02em;
+}
+.flip-lower .flip-digit,
+.flip-btm .flip-digit {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Courier New', Courier, monospace;
+  color: #f4e8c2;
+  text-shadow: 0 0 18px rgba(244,232,194,.2);
+  letter-spacing: -.02em;
+}
+.flip-top {
+  z-index: 2;
+  transform-origin: center bottom;
+  transform: rotateX(-90deg);
+  backface-visibility: hidden;
+}
+.flip-btm {
+  z-index: 2;
+  transform-origin: center top;
+  transform: rotateX(90deg);
+  backface-visibility: hidden;
+}
+@keyframes flipTop {
+  from { transform: rotateX(0deg); }
+  to   { transform: rotateX(-90deg); }
+}
+@keyframes flipBtm {
+  from { transform: rotateX(90deg); }
+  to   { transform: rotateX(0deg); }
+}
+.flip-card.flipping .flip-top {
+  animation: flipTop .27s ease-in forwards;
+}
+.flip-card.flipping .flip-btm {
+  animation: flipBtm .27s ease-out .27s forwards;
+}
+.flip-label {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--color-secondary);
+}
+@media (max-width: 400px) {
+  .flip-card            { width: 58px; height: 74px; }
+  .flip-upper,.flip-top { height: 37px; }
+  .flip-lower,.flip-btm { height: 37px; }
+  .flip-upper .flip-digit, .flip-top .flip-digit,
+  .flip-lower .flip-digit, .flip-btm .flip-digit { height: 74px; font-size: 2rem; }
+}
+html.reduce-motion .flip-card.flipping .flip-top,
+html.reduce-motion .flip-card.flipping .flip-btm { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .flip-card.flipping .flip-top,
+  .flip-card.flipping .flip-btm { animation: none; }
 }
