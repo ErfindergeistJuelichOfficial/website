@@ -235,5 +235,6 @@
 <script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
 <script src="assets/js/share.js?v=<?= filemtime('assets/js/share.js') ?>"></script>
 <script src="https://share.erfindergeist.org/js/components/eg-footer.js"></script>
+
 </body>
 </html>

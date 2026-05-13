@@ -61,7 +61,10 @@ body {
   color: var(--color-text);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+main { flex: 1; }
 
 /* ── Navbar ── */
 .eg-nav {
