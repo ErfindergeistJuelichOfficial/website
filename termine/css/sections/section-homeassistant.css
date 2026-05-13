@@ -17,7 +17,7 @@
 .section-ha .badge           { font-size: .8rem; }
 .section-ha .btn i[data-lucide] { width: 16px; height: 16px; }
 
-.ha-icon-wrap { position: relative; display: inline-block; }
+.ha-icon-wrap { position: relative; display: inline-block; cursor: pointer; }
 .ha-home-icon { color: rgba(255,255,255,.85); }
 .ha-zap-icon  {
   position: absolute;
@@ -27,8 +27,26 @@
   height: 36px;
   color: var(--color-secondary);
   animation: zap-pulse 2s ease-in-out infinite;
+  transform-origin: bottom right;
 }
 @keyframes zap-pulse {
   0%,100% { opacity: 1; transform: scale(1); }
   50%      { opacity: .6; transform: scale(1.2) rotate(5deg); }
+}
+
+.ha-icon-wrap:hover .ha-zap-icon,
+.ha-icon-wrap.ha-zap-active .ha-zap-icon {
+  animation: zap-big 0.4s ease-out forwards;
+}
+@keyframes zap-big {
+  0%   { transform: scale(1); }
+  60%  { transform: scale(4.5) rotate(-8deg); }
+  80%  { transform: scale(4.2) rotate(6deg); }
+  100% { transform: scale(4) rotate(0deg); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ha-zap-icon { animation: none; }
+  .ha-icon-wrap:hover .ha-zap-icon,
+  .ha-icon-wrap.ha-zap-active .ha-zap-icon { animation: none; transform: scale(4); }
 }

@@ -62,8 +62,12 @@
   color: #F9B338;
   transform-origin: center top;
   animation: bellSwing 5s ease-in-out infinite;
+  cursor: pointer;
 }
 .ics-cal-bell svg { width: 54px; height: 54px; pointer-events: none; }
+
+/* GSAP takes over rotation — suppress idle CSS animation */
+.ics-cal-bell.bell-js-active { animation: none; }
 
 .bell-wave {
   position: absolute;
@@ -76,6 +80,17 @@
 }
 .bell-wave-2 { animation-delay: 0.25s; }
 .bell-wave-3 { animation-delay: 0.5s; }
+
+/* Immediate wave burst on click/touch */
+.ics-cal-bell.bell-ringing .bell-wave   { animation: bellWaveHit 0.95s ease-out forwards; }
+.ics-cal-bell.bell-ringing .bell-wave-2 { animation-delay: 0.15s; }
+.ics-cal-bell.bell-ringing .bell-wave-3 { animation-delay: 0.30s; }
+
+@keyframes bellWaveHit {
+  0%   { transform: scale(0.3); opacity: 0; }
+  10%  { opacity: 0.75; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
 
 @keyframes bellWave {
   0%, 57%  { transform: scale(0.4); opacity: 0; }

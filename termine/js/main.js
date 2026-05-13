@@ -612,4 +612,94 @@ $(document).ready(function () {
     });
   }());
 
+  // Bell — click/touch swings; fast clicks increase amplitude; rapid clicking → 360° spin
+  (function initBell() {
+    var bell = document.querySelector('.ics-cal-bell');
+    if (!bell || !window.gsap) return;
+
+    var noAnim = document.documentElement.classList.contains('reduce-motion') ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (noAnim) return;
+
+    gsap.set(bell, { transformOrigin: '50% 0%' });
+
+    var hitTimes   = [];
+    var activeTween = null;
+    var isSpinning  = false;
+
+    function recentHits() {
+      var cutoff = Date.now() - 1500;
+      hitTimes = hitTimes.filter(function(t) { return t > cutoff; });
+      return hitTimes.length;
+    }
+
+    function fireWaves() {
+      bell.classList.remove('bell-ringing');
+      void bell.offsetWidth;
+      bell.classList.add('bell-ringing');
+      clearTimeout(bell._wt);
+      bell._wt = setTimeout(function() { bell.classList.remove('bell-ringing'); }, 1000);
+    }
+
+    function done() {
+      gsap.set(bell, { clearProps: 'transform' });
+      bell.classList.remove('bell-js-active');
+      activeTween = null;
+    }
+
+    function onHit() {
+      if (isSpinning) return;
+
+      hitTimes.push(Date.now());
+      var n = recentHits();
+
+      fireWaves();
+      bell.classList.add('bell-js-active');
+      if (activeTween) { activeTween.kill(); activeTween = null; }
+
+      if (n >= 5) {
+        isSpinning = true;
+        var numRot = n >= 8 ? 3 : n >= 6 ? 2 : 1;
+        var rotDur = Math.max(0.22, 0.50 - (n - 5) * 0.04);
+
+        activeTween = gsap.to(bell, {
+          rotation: 360 * numRot,
+          duration: rotDur * numRot,
+          ease: 'power1.inOut',
+          onComplete: function() {
+            isSpinning = false;
+            done();
+          }
+        });
+
+      } else {
+        var amp = Math.min(42, 10 + n * 7);
+        var dur = Math.max(0.11, 0.42 - n * 0.05);
+
+        activeTween = gsap.timeline({ onComplete: done })
+          .to(bell, { rotation:  amp, duration: dur,       ease: 'power2.out'         })
+          .to(bell, { rotation:  0,   duration: dur * 2.4, ease: 'elastic.out(1,.45)' });
+      }
+    }
+
+    bell.setAttribute('tabindex', '0');
+    bell.addEventListener('click', onHit);
+    bell.addEventListener('touchstart', function(e) { e.preventDefault(); onHit(); }, { passive: false });
+    bell.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onHit(); }
+    });
+  }());
+
+  // HA zap — touch/click activates the big-zap state briefly
+  (function initHaZap() {
+    var wrap = document.querySelector('.ha-icon-wrap');
+    if (!wrap) return;
+    var timer = null;
+    wrap.addEventListener('click', function () {
+      wrap.classList.add('ha-zap-active');
+      clearTimeout(timer);
+      timer = setTimeout(function () { wrap.classList.remove('ha-zap-active'); }, 1800);
+    });
+  }());
+
 });
