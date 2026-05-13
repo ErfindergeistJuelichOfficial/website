@@ -28,7 +28,12 @@ function initArchLines() {
 
   let triggered = false;
 
-  function buildPath(sx, sy, tx, ty, i) {
+  function buildPath(sx, sy, tx, ty, i, isMobile) {
+    if (isMobile) {
+      // S-curve from source center to each staggered chip
+      const midY = (sy + ty) / 2;
+      return `M ${sx},${sy} C ${sx},${sy + 35} ${tx},${midY} ${tx},${ty}`;
+    }
     switch (i) {
       case 0: // far-left — wide left sweep
         return `M ${sx},${sy} C ${sx - 120},${sy + 80} ${tx + 60},${ty - 80} ${tx},${ty}`;
@@ -47,23 +52,31 @@ function initArchLines() {
 
   function draw() {
     svg.innerHTML = '';
+    const isMobile = window.innerWidth < 768;
     const cRect = container.getBoundingClientRect();
     const sRect = source.getBoundingClientRect();
     const sx = sRect.left - cRect.left + sRect.width  / 2;
-    const sy = sRect.top  - cRect.top  + sRect.height / 2;
+    const sy = sRect.top  - cRect.top  + sRect.height; // bottom of source
 
     chips.forEach((chip, i) => {
       const tRect = chip.getBoundingClientRect();
       const tx = tRect.left - cRect.left + tRect.width  / 2;
-      const ty = tRect.top  - cRect.top  + tRect.height / 2;
+      const ty = tRect.top  - cRect.top; // top of chip
 
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', buildPath(sx, sy, tx, ty, i));
+      path.setAttribute('d', buildPath(sx, sy, tx, ty, i, isMobile));
       path.setAttribute('class', 'arch-line');
       svg.appendChild(path);
 
       const len = path.getTotalLength();
       gsap.set(path, { strokeDasharray: len, strokeDashoffset: triggered ? 0 : len });
+
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', String(tx));
+      dot.setAttribute('cy', String(ty));
+      dot.setAttribute('class', 'arch-dot');
+      svg.appendChild(dot);
+      gsap.set(dot, { attr: { r: triggered ? 4.5 : 0 } });
     });
   }
 
@@ -81,6 +94,14 @@ function initArchLines() {
           duration: 1.5,
           delay: i * 0.3,
           ease: 'power2.inOut',
+        });
+      });
+      [...svg.querySelectorAll('.arch-dot')].forEach((dot, i) => {
+        gsap.to(dot, {
+          attr: { r: 4.5 },
+          duration: 0.35,
+          delay: i * 0.3 + 1.3,
+          ease: 'back.out(2)',
         });
       });
     },

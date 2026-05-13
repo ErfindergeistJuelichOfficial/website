@@ -30,9 +30,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .75rem;
+  gap: 1.25rem;
   padding-top: 3.5rem;
   position: relative;
+  isolation: isolate;
 }
 
 .arch-source-btn {
@@ -60,13 +61,14 @@
 .arch-source-btn i[data-lucide] { width: 18px; height: 18px; flex-shrink: 0; }
 
 .arch-lines-svg {
-  display: none;
+  display: block;
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
   overflow: visible;
+  z-index: -1;
 }
 .arch-line {
   fill: none;
@@ -74,6 +76,24 @@
   stroke-width: 2.2;
   stroke-linecap: round;
   opacity: .8;
+}
+.arch-dot {
+  fill: var(--color-secondary);
+  opacity: .9;
+}
+
+@media (max-width: 767px) {
+  .arch-chip { opacity: 0.82; }
+  .arch-chip:hover { opacity: 1; }
+
+  #arch-chip-0 { transform: translateX(-55px); }
+  #arch-chip-1 { transform: translateX(-28px); }
+  #arch-chip-3 { transform: translateX(28px); }
+  #arch-chip-4 { transform: translateX(55px); }
+  #arch-chip-0:hover { transform: translateX(-55px) translateY(-2px); }
+  #arch-chip-1:hover { transform: translateX(-28px) translateY(-2px); }
+  #arch-chip-3:hover { transform: translateX(28px)  translateY(-2px); }
+  #arch-chip-4:hover { transform: translateX(55px)  translateY(-2px); }
 }
 
 @media (min-width: 768px) {
@@ -83,7 +103,6 @@
     max-width: 900px;
     margin: 0 auto;
   }
-  .arch-lines-svg { display: block; }
   .arch-source-btn {
     position: absolute;
     left: 50%;
