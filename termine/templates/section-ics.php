@@ -49,6 +49,9 @@
         <div class="ics-cal-wrap">
           <div class="ics-cal-bell" aria-hidden="true">
             <i data-lucide="bell"></i>
+            <span class="bell-wave bell-wave-1"></span>
+            <span class="bell-wave bell-wave-2"></span>
+            <span class="bell-wave bell-wave-3"></span>
           </div>
           <span class="ics-cal-label" data-i18n="ics.cal.label">Abonnieren in:</span>
           <div class="d-flex flex-wrap gap-2">

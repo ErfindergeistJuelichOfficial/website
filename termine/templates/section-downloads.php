@@ -12,23 +12,33 @@
       <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
         <article class="pdf-card">
           <div class="pdf-card-thumb pdf-card-hoch" aria-hidden="true">
-            <i data-lucide="file-text"></i>
+            <span class="pdf-badge-lg">
+              <i data-lucide="file-text"></i>
+              PDF
+            </span>
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_hoch">Terminübersicht Hochformat</h3>
-            <div class="d-flex align-items-center gap-2 pdf-card-actions">
-              <a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
-                 target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm flex-grow-1"
-                 data-i18n="downloads.btn">Herunterladen</a>
-              <button class="btn-icon pdf-copy-btn"
-                      data-url="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
-                      data-i18n="downloads.copy.label"
-                      data-i18n-attr="aria-label"
-                      aria-label="Link kopieren"
-                      title="Link kopieren">
-                <i data-lucide="clipboard" aria-hidden="true"></i>
-              </button>
+            <div class="d-flex align-items-center justify-content-end pdf-card-actions">
+              <div class="d-flex gap-2">
+                <a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
+                   target="_blank" rel="noopener noreferrer"
+                   class="btn-icon"
+                   data-i18n="downloads.btn"
+                   data-i18n-attr="aria-label"
+                   aria-label="Herunterladen"
+                   title="Herunterladen">
+                  <i data-lucide="download" aria-hidden="true"></i>
+                </a>
+                <button class="btn-icon pdf-copy-btn"
+                        data-url="https://share.erfindergeist.org/terminuebersicht_hoch.pdf"
+                        data-i18n="downloads.copy.label"
+                        data-i18n-attr="aria-label"
+                        aria-label="Link kopieren"
+                        title="Link kopieren">
+                  <i data-lucide="clipboard" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
           </div>
         </article>
@@ -37,23 +47,33 @@
       <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
         <article class="pdf-card">
           <div class="pdf-card-thumb pdf-card-quer" aria-hidden="true">
-            <i data-lucide="file-text"></i>
+            <span class="pdf-badge-lg">
+              <i data-lucide="file-text"></i>
+              PDF
+            </span>
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.terminuebersicht_quer">Terminübersicht Querformat</h3>
-            <div class="d-flex align-items-center gap-2 pdf-card-actions">
-              <a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
-                 target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm flex-grow-1"
-                 data-i18n="downloads.btn">Herunterladen</a>
-              <button class="btn-icon pdf-copy-btn"
-                      data-url="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
-                      data-i18n="downloads.copy.label"
-                      data-i18n-attr="aria-label"
-                      aria-label="Link kopieren"
-                      title="Link kopieren">
-                <i data-lucide="clipboard" aria-hidden="true"></i>
-              </button>
+            <div class="d-flex align-items-center justify-content-end pdf-card-actions">
+              <div class="d-flex gap-2">
+                <a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
+                   target="_blank" rel="noopener noreferrer"
+                   class="btn-icon"
+                   data-i18n="downloads.btn"
+                   data-i18n-attr="aria-label"
+                   aria-label="Herunterladen"
+                   title="Herunterladen">
+                  <i data-lucide="download" aria-hidden="true"></i>
+                </a>
+                <button class="btn-icon pdf-copy-btn"
+                        data-url="https://share.erfindergeist.org/terminuebersicht_quer.pdf"
+                        data-i18n="downloads.copy.label"
+                        data-i18n-attr="aria-label"
+                        aria-label="Link kopieren"
+                        title="Link kopieren">
+                  <i data-lucide="clipboard" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
           </div>
         </article>
@@ -62,23 +82,33 @@
       <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
         <article class="pdf-card">
           <div class="pdf-card-thumb pdf-card-hoch" aria-hidden="true">
-            <i data-lucide="wrench"></i>
+            <span class="pdf-badge-lg">
+              <i data-lucide="file-text"></i>
+              PDF
+            </span>
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</h3>
-            <div class="d-flex align-items-center gap-2 pdf-card-actions">
-              <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
-                 target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm flex-grow-1"
-                 data-i18n="downloads.btn">Herunterladen</a>
-              <button class="btn-icon pdf-copy-btn"
-                      data-url="https://share.erfindergeist.org/repaircafe_hoch.pdf"
-                      data-i18n="downloads.copy.label"
-                      data-i18n-attr="aria-label"
-                      aria-label="Link kopieren"
-                      title="Link kopieren">
-                <i data-lucide="clipboard" aria-hidden="true"></i>
-              </button>
+            <div class="d-flex align-items-center justify-content-end pdf-card-actions">
+              <div class="d-flex gap-2">
+                <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+                   target="_blank" rel="noopener noreferrer"
+                   class="btn-icon"
+                   data-i18n="downloads.btn"
+                   data-i18n-attr="aria-label"
+                   aria-label="Herunterladen"
+                   title="Herunterladen">
+                  <i data-lucide="download" aria-hidden="true"></i>
+                </a>
+                <button class="btn-icon pdf-copy-btn"
+                        data-url="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+                        data-i18n="downloads.copy.label"
+                        data-i18n-attr="aria-label"
+                        aria-label="Link kopieren"
+                        title="Link kopieren">
+                  <i data-lucide="clipboard" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
           </div>
         </article>
@@ -87,23 +117,33 @@
       <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
         <article class="pdf-card">
           <div class="pdf-card-thumb pdf-card-quer" aria-hidden="true">
-            <i data-lucide="wrench"></i>
+            <span class="pdf-badge-lg">
+              <i data-lucide="file-text"></i>
+              PDF
+            </span>
           </div>
           <div class="pdf-card-body">
             <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</h3>
-            <div class="d-flex align-items-center gap-2 pdf-card-actions">
-              <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
-                 target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-primary btn-sm flex-grow-1"
-                 data-i18n="downloads.btn">Herunterladen</a>
-              <button class="btn-icon pdf-copy-btn"
-                      data-url="https://share.erfindergeist.org/repaircafe_quer.pdf"
-                      data-i18n="downloads.copy.label"
-                      data-i18n-attr="aria-label"
-                      aria-label="Link kopieren"
-                      title="Link kopieren">
-                <i data-lucide="clipboard" aria-hidden="true"></i>
-              </button>
+            <div class="d-flex align-items-center justify-content-end pdf-card-actions">
+              <div class="d-flex gap-2">
+                <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
+                   target="_blank" rel="noopener noreferrer"
+                   class="btn-icon"
+                   data-i18n="downloads.btn"
+                   data-i18n-attr="aria-label"
+                   aria-label="Herunterladen"
+                   title="Herunterladen">
+                  <i data-lucide="download" aria-hidden="true"></i>
+                </a>
+                <button class="btn-icon pdf-copy-btn"
+                        data-url="https://share.erfindergeist.org/repaircafe_quer.pdf"
+                        data-i18n="downloads.copy.label"
+                        data-i18n-attr="aria-label"
+                        aria-label="Link kopieren"
+                        title="Link kopieren">
+                  <i data-lucide="clipboard" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
           </div>
         </article>
@@ -208,7 +248,7 @@
         <div class="pdf-step-label" data-i18n="pdf.step3">PDF wird erstellt</div>
       </div>
       <div class="pdf-step-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></div>
-      <div class="pdf-step" role="listitem" data-aos="zoom-in" data-aos-delay="400">
+      <div class="pdf-step" id="pdf-step-upload" role="listitem" data-aos="zoom-in" data-aos-delay="400">
         <div class="pdf-step-icon" aria-hidden="true">🚀</div>
         <div class="pdf-step-label" data-i18n="pdf.step4">Auf Share hochgeladen</div>
       </div>

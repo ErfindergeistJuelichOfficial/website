@@ -562,5 +562,54 @@ $(document).ready(function () {
     });
   }());
 
+  // Rocket upload card: pulse + arc animation on click
+  (function initRocketCard() {
+    var card = document.getElementById('pdf-step-upload');
+    if (!card) return;
+
+    var noAnim = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+                 document.documentElement.classList.contains('reduce-motion');
+    var active = false;
+
+    if (!noAnim) card.classList.add('pdf-step--pulsing');
+
+    card.addEventListener('click', function () {
+      if (active || noAnim) return;
+      active = true;
+      card.classList.remove('pdf-step--pulsing');
+
+      var iconEl = card.querySelector('.pdf-step-icon');
+      var rect   = iconEl.getBoundingClientRect();
+      var cx     = rect.left + rect.width  / 2;
+      var cy     = rect.top  + rect.height / 2;
+
+      iconEl.style.visibility = 'hidden';
+
+      var rocket = document.createElement('div');
+      rocket.className = 'pdf-rocket-fly';
+      rocket.setAttribute('aria-hidden', 'true');
+      rocket.textContent = '🚀';
+      document.body.appendChild(rocket);
+
+      gsap.set(rocket, { x: cx, y: cy, xPercent: -50, yPercent: -50 });
+      // 🚀 emoji default orientation: ~45° upper-right → rotation -45 = straight up
+      gsap.to(rocket, {
+        keyframes: [
+          { x: cx + 35, y: cy - 150, rotation:  -5, scale: 1.15, duration: 0.7, ease: 'power1.out' },
+          { x: cx + 75, y: cy - 330, rotation:   5, scale: 1.30, duration: 0.9, ease: 'none' },
+          { x: cx + 85, y: cy - 530, rotation: -15, scale: 1.20, duration: 0.9, ease: 'none' },
+          { x: cx + 65, y: cy - 730, rotation: -35, scale: 1.00, duration: 1.0, ease: 'none' },
+          { x: cx + 30, y: cy - 980, rotation: -45, scale: 0.55, opacity: 0, duration: 1.5, ease: 'power1.in' }
+        ],
+        onComplete: function () { rocket.remove(); }
+      });
+
+      setTimeout(function () {
+        iconEl.style.visibility = '';
+        active = false;
+        if (!noAnim) card.classList.add('pdf-step--pulsing');
+      }, 7000);
+    });
+  }());
 
 });

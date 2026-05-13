@@ -115,6 +115,25 @@
 }
 
 .events-source-hint code { font-size: .8rem; margin: 0 2px; }
+
+.json-anatomy { display: flex; flex-direction: column; align-items: center; }
+.json-anatomy-example code { font-size: .85rem; }
+.json-anatomy-rows {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  align-items: flex-start;
+}
+.json-anatomy-row {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.json-anatomy-row code { font-size: .78rem; }
+.json-arrow { color: var(--color-text-muted); flex-shrink: 0; }
+.json-key-sample { color: var(--color-primary); }
+.json-val-sample { color: #b45309; }
+[data-theme="dark"] .json-val-sample { color: #fbbf24; }
 .events-source-badge {
   display: inline-flex;
   align-items: center;

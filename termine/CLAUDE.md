@@ -11,7 +11,7 @@ zu REST-API, ICS-Kalender, GitHub PDF-Generator und Share-Server.
 - Primary: #159989 · Secondary: #F9B338
 - Logo: Querformat/landscape (~200×60px), User liefert `img/logo.svg`
 
-## Technologien (alle lokal in js/lib/ und fonts/)
+## Technologien
 
 Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Lucide Icons · Rough Notation · Caveat Font
 
@@ -29,6 +29,11 @@ Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Luci
 - Alle sichtbaren Texte tragen `data-i18n="key"` Attribut
 - Translations-Objekt in `js/i18n.js`: `translations.de` / `translations.en`
 - Deutsch ist Default
+- `data-i18n-attr="aria-label"` setzt statt `textContent` ein Attribut (z.B. für aria-labels)
+- `data-i18n-html` als Attribut erlaubt HTML in der Übersetzung (wird per `innerHTML` gesetzt)
+- `window.t(key)` — JS-Helper für Translations in dynamisch erzeugtem Code
+- Jeder neue Key muss in **beiden** Sprachen eingetragen werden (DE + EN)
+- Entfernte HTML-Elemente → zugehörige i18n-Keys sofort aus `js/i18n.js` löschen
 
 ## Stil & Animationen
 
@@ -50,6 +55,31 @@ Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Luci
 
 libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → lucide → rough-notation)
 → i18n → theme → accessibility → animations → main
+
+## Assets & Bibliotheken auf Share
+
+**Alle externen Abhängigkeiten kommen von `https://share.erfindergeist.org/` — kein CDN, kein npm.**
+
+| Typ | Pfad auf Share |
+|-----|---------------|
+| CSS | `/css/bootstrap.min.css`, `/css/aos.min.css` |
+| JS  | `/js/lib/jquery.min.js`, `bootstrap.bundle.min.js`, `gsap.min.js`, `ScrollTrigger.min.js`, `aos.min.js`, `typed.min.js`, `lucide.min.js`, `rough-notation.min.js` |
+| Fonts | `/fonts/Caveat-Regular.ttf`, `/fonts/Caveat-Bold.ttf` |
+| Logo | `/img/logo.svg` |
+
+Eigene JS/CSS-Dateien liegen lokal im Projekt (`js/`, `css/`).  
+Neue externe Libs müssen auf Share abgelegt werden — keine externen CDN-URLs einbauen.
+
+## Lucide Icons
+
+Lucide wird über `lucide.min.js` von Share geladen und mit `lucide.createIcons()` initialisiert.
+
+**Wichtig: Lucide-Version auf Share ist älter — folgende Icons existieren NICHT:**
+`facebook`, `instagram`, `linkedin`, `github`, `mastodon` und andere Brand-Icons.
+
+Für Social-Icons immer **Inline-SVG** verwenden (Lucide-Stroke-Stil: `fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`). Mastodon-Icon ist fill-basiert (Sonderfall).
+
+**Dynamische Icons:** Wenn `data-lucide`-Elemente per JS ins DOM eingefügt werden, muss danach `lucide.createIcons()` erneut aufgerufen werden.
 
 ## Bibliotheken
 

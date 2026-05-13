@@ -57,8 +57,46 @@
   flex-direction: column;
   flex-grow: 1;
 }
-.pdf-card-title        { margin: 0 0 .2rem; font-family: system-ui, sans-serif; font-weight: 600; color: var(--color-text); }
+.pdf-card-title        { margin: 0 0 .2rem; font-family: system-ui, sans-serif; font-weight: 600; color: var(--color-text); overflow-wrap: break-word; }
 .pdf-card-body .pdf-card-actions { margin-top: auto; padding-top: 1rem; }
+.pdf-badge-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  background: rgba(220, 38, 38, .12);
+  color: #dc2626;
+  border: 2px solid rgba(220, 38, 38, .3);
+  border-radius: 12px;
+  padding: .65rem 1.1rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  line-height: 1;
+}
+.pdf-badge-lg svg { width: 40px; height: 40px; }
+
+
+#pdf-step-upload { cursor: pointer; }
+
+@keyframes pdf-pulse {
+  0%, 100% { box-shadow: 0 2px 12px var(--color-shadow); border-color: var(--color-border); }
+  50% {
+    box-shadow: 0 0 0 3px rgba(249, 179, 56, .3), 0 4px 20px rgba(249, 179, 56, .2);
+    border-color: #F9B338;
+  }
+}
+.pdf-step--pulsing { animation: pdf-pulse 2.5s ease-in-out infinite; }
+html.reduce-motion .pdf-step--pulsing { animation: none; }
+@media (prefers-reduced-motion: reduce) { .pdf-step--pulsing { animation: none; } }
+
+.pdf-rocket-fly {
+  position: fixed;
+  top: 0; left: 0;
+  font-size: 2rem;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 9999;
+}
 
 .section-downloads .analogy-box {
   background: var(--color-surface);

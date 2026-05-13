@@ -52,21 +52,40 @@
 
 .ics-cal-bell {
   position: absolute;
-  top: -18px;
+  top: -24px;
   right: 1.25rem;
-  width: 36px;
-  height: 36px;
-  background: var(--color-primary);
-  border-radius: 50%;
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  box-shadow: 0 3px 10px var(--color-shadow);
+  color: #F9B338;
   transform-origin: center top;
   animation: bellSwing 5s ease-in-out infinite;
 }
-.ics-cal-bell svg { width: 18px; height: 18px; pointer-events: none; }
+.ics-cal-bell svg { width: 54px; height: 54px; pointer-events: none; }
+
+.bell-wave {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2.5px solid #F9B338;
+  opacity: 0;
+  pointer-events: none;
+  animation: bellWave 5s ease-out infinite;
+}
+.bell-wave-2 { animation-delay: 0.25s; }
+.bell-wave-3 { animation-delay: 0.5s; }
+
+@keyframes bellWave {
+  0%, 57%  { transform: scale(0.4); opacity: 0; }
+  63%      { opacity: 0.65; }
+  82%      { transform: scale(2.1); opacity: 0; }
+  100%     { opacity: 0; }
+}
+
+html.reduce-motion .bell-wave { animation: none; }
+@media (prefers-reduced-motion: reduce) { .bell-wave { animation: none; } }
 
 @keyframes bellSwing {
   0%, 58%, 100% { transform: rotate(0deg); }

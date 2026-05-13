@@ -93,31 +93,50 @@
 </main>
 
 <!-- ═══════════════════ FOOTER ═══════════════════ -->
-<footer class="eg-footer py-4" role="contentinfo">
-  <div class="container">
-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-      <div class="d-flex align-items-center gap-3">
-        <img src="https://share.erfindergeist.org/img/logo.svg" alt="Erfindergeist Jülich" class="footer-logo">
-        <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer"
-           class="footer-link small" data-i18n="footer.text">Erfindergeist Jülich e.V.</a>
-      </div>
-      <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 gap-sm-3">
-        <a href="https://github.com/ErfindergeistJuelichOfficial/calendar-wp-plugin"
-           target="_blank" rel="noopener noreferrer"
-           class="footer-link"
-           data-i18n="footer.plugin">WordPress Plugin</a>
-        <a href="https://github.com/ErfindergeistJuelichOfficial/pdf-termine"
-           target="_blank" rel="noopener noreferrer"
-           class="footer-link"
-           data-i18n="footer.pdf">PDF Generator</a>
-        <a href="https://github.com/ErfindergeistJuelichOfficial"
-           target="_blank" rel="noopener noreferrer"
-           class="footer-link"
-           data-i18n="footer.source">Quelltext auf GitHub</a>
-      </div>
-    </div>
+<eg-footer>
+
+  <div class="col-6 col-md-3">
+    <p class="footer-col-title" data-i18n="footer.section.nav">Navigation</p>
+    <ul class="footer-col-links">
+      <li><a href="#termine"       data-i18n="nav.events">Termine</a></li>
+      <li><a href="#downloads"     data-i18n="nav.downloads">PDF</a></li>
+      <li><a href="#ics"           data-i18n="nav.ics">ICS Kalender</a></li>
+      <li><a href="#plugin"        data-i18n="nav.plugin">WordPress Plugin</a></li>
+      <li><a href="#homeassistant" data-i18n="nav.homeassistant">Home Assistant</a></li>
+    </ul>
   </div>
-</footer>
+
+  <div class="col-6 col-md-3">
+    <p class="footer-col-title" data-i18n="footer.section.pdf">PDF Downloads</p>
+    <ul class="footer-col-links">
+      <li><a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf" target="_blank" rel="noopener noreferrer" data-i18n="downloads.terminuebersicht_hoch">Terminübersicht Hochformat</a></li>
+      <li><a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf" target="_blank" rel="noopener noreferrer" data-i18n="downloads.terminuebersicht_quer">Terminübersicht Querformat</a></li>
+      <li><a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"       target="_blank" rel="noopener noreferrer" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</a></li>
+      <li><a href="https://share.erfindergeist.org/repaircafe_quer.pdf"       target="_blank" rel="noopener noreferrer" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</a></li>
+    </ul>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <p class="footer-col-title" data-i18n="footer.section.endpoints">Endpunkte</p>
+    <ul class="footer-col-links">
+      <li><a href="https://erfindergeist.org/wp-json/erfindergeist/v2/events"   target="_blank" rel="noopener noreferrer"><code>/events</code></a></li>
+      <li><a href="https://erfindergeist.org/wp-json/erfindergeist/v2/ics"      target="_blank" rel="noopener noreferrer"><code>/ics</code></a></li>
+      <li><a href="https://erfindergeist.org/wp-json/erfindergeist/v2/tomorrow" target="_blank" rel="noopener noreferrer"><code>/tomorrow</code></a></li>
+    </ul>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <p class="footer-col-title" data-i18n="footer.section.subscribe">Abonnieren</p>
+    <ul class="footer-col-links">
+      <li><a href="https://calendar.google.com/calendar/r/settings/addbyurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics" target="_blank" rel="noopener noreferrer">Google Calendar</a></li>
+      <li><a href="https://outlook.live.com/calendar/0/addfromurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics" target="_blank" rel="noopener noreferrer">Outlook</a></li>
+      <li><a href="webcal://erfindergeist.org/wp-json/erfindergeist/v2/ics">Apple Calendar</a></li>
+      <li><a href="https://calendar.yahoo.com/?v=60&amp;type=26&amp;title=Erfindergeist+J%C3%BClich&amp;url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics" target="_blank" rel="noopener noreferrer">Yahoo Calendar</a></li>
+      <li><a href="webcal://erfindergeist.org/wp-json/erfindergeist/v2/ics">Thunderbird</a></li>
+    </ul>
+  </div>
+
+</eg-footer>
 
 <!-- ═══════════════════ TOAST ═══════════════════ -->
 <div id="copy-toast" role="status" aria-live="polite" aria-atomic="true">
@@ -193,6 +212,7 @@
 <script src="js/accessibility.js?v=<?= filemtime('js/accessibility.js') ?>"></script>
 <script src="js/animations.js?v=<?= filemtime('js/animations.js') ?>"></script>
 <script src="js/main.js?v=<?= filemtime('js/main.js') ?>"></script>
+<script src="https://share.erfindergeist.org/js/components/eg-footer.js"></script>
 
 </body>
 </html>

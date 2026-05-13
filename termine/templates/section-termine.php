@@ -11,7 +11,7 @@
       <div class="col-12 col-xl-6">
 
         <!-- Source hint -->
-        <p class="events-source-hint text-center small text-muted mb-3" data-aos="fade-up" data-aos-delay="80">
+        <p class="events-source-hint text-center small text-muted mb-2" data-aos="fade-up" data-aos-delay="80">
           <span data-i18n="events.source.pre">Was du hier siehst, kommt live vom</span>
           <a href="#plugin" class="events-source-badge">
             <i data-lucide="plug" aria-hidden="true"></i>
@@ -20,6 +20,31 @@
           <code>/events</code>
           <span data-i18n="events.source.post">Endpunkt — direkt aus der Datenbank, ohne Zwischenspeicherung.</span>
         </p>
+
+        <!-- JSON anatomy hint -->
+        <div class="json-anatomy mb-3" data-aos="fade-up" data-aos-delay="100">
+          <p class="small text-muted mb-2" data-i18n="events.json.explain.intro">Ein JSON-Objekt ist wie eine Box mit beschrifteten Fächern:</p>
+          <div class="json-anatomy-example mb-2">
+            <code>{ <span class="json-key-sample">"name"</span>: <span class="json-val-sample">"Basteln"</span> }</code>
+          </div>
+          <div class="json-anatomy-rows">
+            <div class="json-anatomy-row">
+              <code>{ }</code>
+              <span class="json-arrow" aria-hidden="true">→</span>
+              <span class="small text-muted" data-i18n="events.json.explain.obj">Objekt — die Box selbst</span>
+            </div>
+            <div class="json-anatomy-row">
+              <code class="json-key-sample">"name"</code>
+              <span class="json-arrow" aria-hidden="true">→</span>
+              <span class="small text-muted" data-i18n="events.json.explain.key">Schlüssel — das Etikett des Fachs</span>
+            </div>
+            <div class="json-anatomy-row">
+              <code class="json-val-sample">"Basteln"</code>
+              <span class="json-arrow" aria-hidden="true">→</span>
+              <span class="small text-muted" data-i18n="events.json.explain.val">Wert — was drin steckt</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Loading -->
         <div id="events-loading" class="text-center py-4 text-muted">
