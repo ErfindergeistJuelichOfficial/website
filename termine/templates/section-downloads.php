@@ -91,7 +91,7 @@
             <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</h3>
             <div class="d-flex align-items-center justify-content-end pdf-card-actions">
               <div class="d-flex gap-2">
-                <a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+                <a href="https://share.erfindergeist.org/termine_repaircafe_hoch.pdf"
                    target="_blank" rel="noopener noreferrer"
                    class="btn-icon"
                    data-i18n="downloads.btn"
@@ -101,7 +101,7 @@
                   <i data-lucide="download" aria-hidden="true"></i>
                 </a>
                 <button class="btn-icon pdf-copy-btn"
-                        data-url="https://share.erfindergeist.org/repaircafe_hoch.pdf"
+                        data-url="https://share.erfindergeist.org/termine_repaircafe_hoch.pdf"
                         data-i18n="downloads.copy.label"
                         data-i18n-attr="aria-label"
                         aria-label="Link kopieren"
@@ -126,7 +126,7 @@
             <h3 class="pdf-card-title" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</h3>
             <div class="d-flex align-items-center justify-content-end pdf-card-actions">
               <div class="d-flex gap-2">
-                <a href="https://share.erfindergeist.org/repaircafe_quer.pdf"
+                <a href="https://share.erfindergeist.org/termine_repaircafe_quer.pdf"
                    target="_blank" rel="noopener noreferrer"
                    class="btn-icon"
                    data-i18n="downloads.btn"
@@ -136,7 +136,7 @@
                   <i data-lucide="download" aria-hidden="true"></i>
                 </a>
                 <button class="btn-icon pdf-copy-btn"
-                        data-url="https://share.erfindergeist.org/repaircafe_quer.pdf"
+                        data-url="https://share.erfindergeist.org/termine_repaircafe_quer.pdf"
                         data-i18n="downloads.copy.label"
                         data-i18n-attr="aria-label"
                         aria-label="Link kopieren"

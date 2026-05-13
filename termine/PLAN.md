@@ -141,8 +141,8 @@ termine/
 - 4 Download-Cards mit PDF-Icon (Lucide `file-text`):
   - terminuebersicht_hoch.pdf → https://share.erfindergeist.org/terminuebersicht_hoch.pdf
   - terminuebersicht_quer.pdf → https://share.erfindergeist.org/terminuebersicht_quer.pdf
-  - repaircafe_hoch.pdf → https://share.erfindergeist.org/repaircafe_hoch.pdf
-  - repaircafe_quer.pdf → https://share.erfindergeist.org/repaircafe_quer.pdf
+  - termine_repaircafe_hoch.pdf → https://share.erfindergeist.org/termine_repaircafe_hoch.pdf
+  - termine_repaircafe_quer.pdf → https://share.erfindergeist.org/termine_repaircafe_quer.pdf
 
 ### Card: Was ist JSON?
 - Kinder-Analogie: "Wie eine Zutatenliste beim Backen"

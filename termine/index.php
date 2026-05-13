@@ -111,8 +111,8 @@
     <ul class="footer-col-links">
       <li><a href="https://share.erfindergeist.org/terminuebersicht_hoch.pdf" target="_blank" rel="noopener noreferrer" data-i18n="downloads.terminuebersicht_hoch">Terminübersicht Hochformat</a></li>
       <li><a href="https://share.erfindergeist.org/terminuebersicht_quer.pdf" target="_blank" rel="noopener noreferrer" data-i18n="downloads.terminuebersicht_quer">Terminübersicht Querformat</a></li>
-      <li><a href="https://share.erfindergeist.org/repaircafe_hoch.pdf"       target="_blank" rel="noopener noreferrer" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</a></li>
-      <li><a href="https://share.erfindergeist.org/repaircafe_quer.pdf"       target="_blank" rel="noopener noreferrer" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</a></li>
+      <li><a href="https://share.erfindergeist.org/termine_repaircafe_hoch.pdf"       target="_blank" rel="noopener noreferrer" data-i18n="downloads.repaircafe_hoch">Repair Café Hochformat</a></li>
+      <li><a href="https://share.erfindergeist.org/termine_repaircafe_quer.pdf"       target="_blank" rel="noopener noreferrer" data-i18n="downloads.repaircafe_quer">Repair Café Querformat</a></li>
     </ul>
   </div>
 
