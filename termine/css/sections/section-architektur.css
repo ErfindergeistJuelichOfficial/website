@@ -1,0 +1,103 @@
+.onesource-chip {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary);
+  border-radius: 50px;
+  padding: .5rem 1.1rem;
+  font-weight: 600;
+  font-size: .92rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: background .18s, box-shadow .18s, transform .18s;
+}
+.onesource-chip:hover {
+  background: var(--color-primary-light);
+  box-shadow: 0 4px 14px var(--color-shadow);
+  transform: translateY(-2px);
+  color: var(--color-primary);
+}
+.onesource-chip i[data-lucide] { width: 18px; height: 18px; flex-shrink: 0; }
+.onesource-chip--muted {
+  border-style: dashed;
+  opacity: .7;
+  font-style: italic;
+}
+.onesource-chip--muted:hover { opacity: 1; }
+
+.arch-constellation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  padding-top: 3.5rem;
+  position: relative;
+}
+
+.arch-source-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid var(--color-primary-dark);
+  border-radius: 50rem;
+  padding: .55rem 1.3rem;
+  font-size: .95rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px var(--color-shadow);
+  transition: background .18s, box-shadow .18s, transform .18s;
+}
+.arch-source-btn:hover {
+  background: var(--color-primary-dark);
+  color: #fff;
+  box-shadow: 0 6px 20px var(--color-shadow);
+  transform: translateY(-2px);
+}
+.arch-source-btn i[data-lucide] { width: 18px; height: 18px; flex-shrink: 0; }
+
+.arch-lines-svg {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.arch-line {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  opacity: .8;
+}
+
+@media (min-width: 768px) {
+  .arch-constellation {
+    display: block;
+    min-height: 340px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .arch-lines-svg { display: block; }
+  .arch-source-btn {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+  .arch-source-btn:hover { transform: translateX(-50%) translateY(-2px); }
+  .arch-chip {
+    position: absolute;
+    white-space: nowrap;
+  }
+  #arch-chip-0 { left:  0%;  top: 46%; }
+  #arch-chip-1 { left: 10%;  top: 77%; }
+  #arch-chip-2 { left: 37%;  top: 83%; }
+  #arch-chip-3 { left: 57%;  top: 70%; }
+  #arch-chip-4 { left: 76%;  top: 40%; }
+}

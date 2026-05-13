@@ -1,0 +1,26 @@
+/* ── Presentation item ── */
+.pres-item {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  padding: .63rem .77rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.pres-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 3px 12px var(--color-shadow);
+}
+.pres-icon { width: 26px; height: 26px; flex-shrink: 0; color: var(--color-primary); }
+.pres-name { flex-grow: 1; font-weight: 500; font-size: .88rem; word-break: break-word; }
+.pres-actions { display: flex; gap: .4rem; flex-shrink: 0; }
+
+/* ── Alert override (GitHub-Hinweis im Präsentationen-Tab) ── */
+.alert-info {
+  --bs-alert-color:        var(--color-text);
+  --bs-alert-bg:           var(--color-primary-light);
+  --bs-alert-border-color: var(--color-primary);
+  --bs-alert-link-color:   var(--color-primary-dark);
+}

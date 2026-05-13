@@ -14,6 +14,9 @@ jobs:
       local-dir: ./termine/
       state-name: .ftp-deploy-termine-test.json
       job-name: 🎉 Deploy Termine TEST at https://spielwiese-termine.erfindergeist.org/
+      exclude: |
+        **/CLAUDE.md
+        **/PLAN.md
     secrets:
       ftp-username: ${{ secrets.FTP_USERNAME_TERMINE_TEST }}
       ftp-password: ${{ secrets.FTP_PASSWORD_TERMINE_TEST }}
