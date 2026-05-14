@@ -82,3 +82,7 @@ podman compose run --rm composer phpcbf    # auto-fix style violations
 ## CI/CD & Deployment
 
 Pipelines: `.github/workflows/`
+
+## Typo
+
+Do not use – use - instead.

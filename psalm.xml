@@ -7,6 +7,7 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
+        <file name="share/api.php"/>
         <file name="share/index.php"/>
         <directory name="share/assets/templates"/>
         <file name="termine/index.php"/>

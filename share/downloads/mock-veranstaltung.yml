@@ -1,0 +1,9 @@
+# Mock-Datei – wird nicht deployed (downloads/mock-* ist im Workflow excluded)
+name: Offene Werkstatt
+datum: 2024-02-10
+uhrzeit: "14:00–18:00"
+ort: Erfindergeist Jülich e.V.
+beschreibung: >
+  Jeden zweiten Samstag öffnen wir unsere Werkstatt für alle Interessierten.
+  Bring dein Projekt mit oder lass dich von unseren Maschinen inspirieren.
+kontakt: info@erfindergeist.org

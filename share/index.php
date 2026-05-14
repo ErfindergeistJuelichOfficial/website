@@ -1,10 +1,60 @@
+<?php
+define('EG_API_INCLUDED', true);
+require_once __DIR__ . '/api.php';
+$__api = eg_assets_data();
+
+$icon_map = [
+  'pdf'  => 'file-text',  'docx' => 'file-type-2',
+  'md'   => 'book-open',  'yml'  => 'file-code',
+  'yaml' => 'file-code',  'svg'  => 'image',
+  'png'  => 'image',      'jpg'  => 'image',
+  'jpeg' => 'image',
+];
+$class_map = [
+  'pdf'  => 'pdf',   'docx' => 'docx',
+  'md'   => 'md',    'yml'  => 'code',
+  'yaml' => 'code',  'svg'  => 'img',
+  'png'  => 'img',   'jpg'  => 'img',
+  'jpeg' => 'img',
+];
+
+$entries        = array_column($__api['assets']['downloads']['files'], 'name');
+$img_entries    = array_column($__api['assets']['img']['files'], 'name');
+$qr_entries     = array_column($__api['assets']['qr']['files'], 'name');
+$config_entries = array_column($__api['assets']['config']['files'], 'name');
+
+$pres_entries = [];
+foreach ($__api['assets']['presentations']['items'] as $__item) {
+  $__pdf = null;
+  foreach ($__item['hasPart'] as $__part) {
+    if (strtolower(pathinfo($__part['name'], PATHINFO_EXTENSION)) === 'pdf') {
+      $__pdf = $__part['name'];
+      break;
+    }
+  }
+  $pres_entries[$__item['name']] = $__pdf;
+}
+unset($__api, $__item, $__part, $__pdf);
+
+$api_entries = [
+  [
+    'method'      => 'GET',
+    'path'        => '/api/v1/assets/',
+    'url'         => 'api/v1/assets/',
+    'name'        => 'Asset Catalog',
+    'description' => 'Vollstandiger Asset-Katalog als JSON-LD (Schema.org DataCatalog) - Dateien, Bibliotheken und Config-Inhalte.',
+    'format'      => 'JSON-LD',
+    'version'     => 'v1',
+  ],
+];
+?>
 <!DOCTYPE html>
 <html lang="de" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark light">
-  <title>Share — Erfindergeist Jülich e.V.</title>
+  <title>Share - Erfindergeist Jülich e.V.</title>
   <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/share.css?v=<?= filemtime('assets/css/share.css') ?>">
   <link rel="stylesheet" href="assets/css/tab-presentations.css?v=<?= filemtime('assets/css/tab-presentations.css') ?>">
@@ -34,98 +84,6 @@
 
 <!-- ── Main ── -->
 <main class="container py-4 pb-5">
-
-  <?php
-    /* ── Downloads: Dateien im Root ── */
-    $entries = [];
-    $allowed_extensions = ['pdf', 'docx', 'md', 'yml', 'yaml', 'svg', 'png', 'jpg', 'jpeg'];
-    $icon_map = [
-      'pdf'  => 'file-text',  'docx' => 'file-type-2',
-      'md'   => 'book-open',  'yml'  => 'file-code',
-      'yaml' => 'file-code',  'svg'  => 'image',
-      'png'  => 'image',      'jpg'  => 'image',
-      'jpeg' => 'image',
-    ];
-    $class_map = [
-      'pdf'  => 'pdf',   'docx' => 'docx',
-      'md'   => 'md',    'yml'  => 'code',
-      'yaml' => 'code',  'svg'  => 'img',
-      'png'  => 'img',   'jpg'  => 'img',
-      'jpeg' => 'img',
-    ];
-    if ($handle = opendir('.')) {
-      while (false !== ($entry = readdir($handle))) {
-        $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
-        if ($entry !== '.' && $entry !== '..' && in_array($ext, $allowed_extensions)) {
-          $entries[] = $entry;
-        }
-      }
-      closedir($handle);
-    }
-    natcasesort($entries);
-
-    /* ── Logos: img/ ── */
-    $img_entries    = [];
-    $img_extensions = ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp'];
-    if (is_dir('img') && ($imgHandle = opendir('img'))) {
-      while (false !== ($imgEntry = readdir($imgHandle))) {
-        $ext = strtolower(pathinfo($imgEntry, PATHINFO_EXTENSION));
-        if ($imgEntry !== '.' && $imgEntry !== '..' && in_array($ext, $img_extensions)) {
-          $img_entries[] = $imgEntry;
-        }
-      }
-      closedir($imgHandle);
-    }
-    natcasesort($img_entries);
-
-    /* ── QR Codes: qr/ ── */
-    $qr_entries = [];
-    if (is_dir('qr') && ($qrHandle = opendir('qr'))) {
-      while (false !== ($qrEntry = readdir($qrHandle))) {
-        $ext = strtolower(pathinfo($qrEntry, PATHINFO_EXTENSION));
-        if ($qrEntry !== '.' && $qrEntry !== '..' && in_array($ext, $img_extensions)) {
-          $qr_entries[] = $qrEntry;
-        }
-      }
-      closedir($qrHandle);
-    }
-    natcasesort($qr_entries);
-
-    /* ── Configs: config/ ── */
-    $config_entries = [];
-    if (is_dir('config') && ($cfgHandle = opendir('config'))) {
-      while (false !== ($cfgEntry = readdir($cfgHandle))) {
-        $ext = strtolower(pathinfo($cfgEntry, PATHINFO_EXTENSION));
-        if ($cfgEntry !== '.' && $cfgEntry !== '..' && $ext === 'json') {
-          $config_entries[] = $cfgEntry;
-        }
-      }
-      closedir($cfgHandle);
-    }
-    natcasesort($config_entries);
-
-    /* ── Präsentationen: presentations/ ── */
-    $pres_entries = [];
-    if (is_dir('presentations') && ($presHandle = opendir('presentations'))) {
-      while (false !== ($presEntry = readdir($presHandle))) {
-        if ($presEntry !== '.' && $presEntry !== '..' && is_dir('presentations/' . $presEntry)) {
-          $pdfFile = null;
-          if ($pdh = opendir('presentations/' . $presEntry)) {
-            while (false !== ($pf = readdir($pdh))) {
-              if (is_file('presentations/' . $presEntry . DIRECTORY_SEPARATOR . $pf) && preg_match('/\.pdf$/i', $pf)) {
-                $pdfFile = $pf;
-                break;
-              }
-            }
-            closedir($pdh);
-          }
-          $pres_entries[$presEntry] = $pdfFile;
-        }
-      }
-      closedir($presHandle);
-    }
-    uksort($pres_entries, 'strnatcasecmp');
-  ?>
 
   <!-- ── Tabs ── -->
   <ul class="nav nav-tabs mb-3" id="main-tabs" role="tablist">
@@ -159,6 +117,12 @@
         Configs
       </a>
     </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-apis-trigger" data-bs-toggle="tab"
+         href="#tab-apis" role="tab" aria-controls="tab-apis" aria-selected="false">
+        APIs
+      </a>
+    </li>
   </ul>
 
   <div class="tab-content">
@@ -167,6 +131,7 @@
     <?php include __DIR__ . '/assets/templates/tab-logos.php'; ?>
     <?php include __DIR__ . '/assets/templates/tab-qr.php'; ?>
     <?php include __DIR__ . '/assets/templates/tab-configs.php'; ?>
+    <?php include __DIR__ . '/assets/templates/tab-apis.php'; ?>
   </div>
 
   <!-- ── Sponsoring ── -->

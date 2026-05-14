@@ -1,4 +1,4 @@
-# CLAUDE.md — share/
+# CLAUDE.md - share/
 
 ## Purpose
 
@@ -11,14 +11,59 @@ Deployed at: <https://share.erfindergeist.org/>
 
 ---
 
+## Production Environment
+
+**Target: shared hosting** via FTP - no Docker, no containers, no SSH access.
+
+- Apache with PHP 8.x (PHP version set in `compose.yaml` for local parity)
+- No `mod_rewrite` dependency - all routes use real directory/file structure
+- No server-side config files beyond `.htaccess` (CORS headers, directory listing off)
+- Deployment via `FTP-Deploy-Action` in `.github/workflows/deploy-share.yml`
+
+---
+
+## API
+
+`GET https://share.erfindergeist.org/api/v1/assets`
+
+Returns a single JSON-LD (`application/ld+json`) document with Schema.org types:
+
+- `DataCatalog` at the root
+- `MediaObject` per file (name, path, contentUrl, encodingFormat, contentSize)
+- `PresentationDigitalDocument` per presentation subfolder
+
+Sections: `css`, `fonts`, `img`, `js` (recursive), `qr`, `downloads`, `presentations`, `config`.
+`config.content` includes the parsed JSON of every file in `config/`.
+
+**JSON-LD rule:** Every file in `config/` must be valid JSON-LD - always include `@context`, `@type`, and `@id` at the root level. The API exposes their raw content directly; structured metadata makes it machine-readable without additional documentation.
+
+| File | `@type` | Entry `@type` |
+| --- | --- | --- |
+| `links.json` | `ItemList` | `ListItem` → `WebPage` / `EntryPoint` / `SoftwareSourceCode` |
+| `tags.json` | `DefinedTermSet` | `Place` (location tags), `DefinedTerm` (description tags) |
+
+Note: `links.json` changed from a plain array to a JSON-LD object (`itemListElement` array, `name` instead of `title`). Update any consumers accordingly.
+
+**Routing without mod_rewrite:** `api/v1/assets/index.php` includes `api.php` directly.
+Apache serves `index.php` via standard directory index; `api/v1/assets` redirects 301 to `api/v1/assets/`.
+
+`index.php` (the page) defines `EG_API_INCLUDED` before requiring `api.php` so the HTTP handler is suppressed and only `eg_assets_data()` runs.
+
+---
+
 ## Folder Structure
 
 ```text
 share/
-├── index.php                        # Entry point: loads data, includes templates
-├── compose.yaml                     # Podman Compose (local only)
-├── README.md                        # Test instructions (local only)
-├── CLAUDE.md                        # This file (local only)
+├── api.php                          # JSON-LD API logic (functions + HTTP handler)
+├── api/
+│   └── v1/
+│       └── assets/
+│           └── index.php            # Route entry point: require_once api.php
+├── index.php                        # Download page: loads data via api.php, includes templates
+├── compose.yaml                     # Podman Compose (local dev only - not deployed)
+├── README.md                        # Local dev instructions (not deployed)
+├── CLAUDE.md                        # This file (not deployed)
 ├── assets/
 │   ├── css/
 │   │   ├── share.css               # Global styles (vars, navbar, tabs, file items, logo cards …)
@@ -27,7 +72,7 @@ share/
 │   ├── js/
 │   │   └── share.js                # All custom scripts for the page
 │   └── templates/
-│       ├── tab-downloads.php       # Tab: Downloads (files in root)
+│       ├── tab-downloads.php       # Tab: Downloads (files in downloads/)
 │       ├── tab-presentations.php   # Tab: Presentations (presentations/)
 │       ├── tab-logos.php           # Tab: Logos (img/)
 │       ├── tab-qr.php              # Tab: QR Codes (qr/)
@@ -45,12 +90,14 @@ share/
 │   ├── lucide.min.js
 │   └── rough-notation.min.js
 ├── fonts/
-│   ├── Caveat-Regular.ttf          # Handwriting font for h1–h3
+│   ├── Caveat-Regular.ttf          # Handwriting font for h1-h3
 │   └── Caveat-Bold.ttf
 ├── img/
 │   └── logo.svg                    # Club logo (navbar + hero)
+├── downloads/                       # Downloadable files for the Downloads tab
+│   └── *.pdf, *.docx, *.md …      # mock-* files are excluded from deployment
 ├── qr/                             # QR code files
-├── config/                         # JSON config files
+├── config/                         # JSON config files (content exposed via API)
 └── presentations/                  # Presentation subfolders (one folder per presentation)
     └── <name>/
         ├── index.html
@@ -61,14 +108,15 @@ share/
 
 ## Tab Order
 
-1. Downloads — files directly in root (PDF, DOCX, SVG …)
-2. Presentations — subfolders in `presentations/`, linked via `presentations/<name>/`
-3. Logos — image files from `img/`
-4. QR Codes — image files from `qr/`
-5. Configs — JSON files from `config/`
+1. Downloads - files in `downloads/` (PDF, DOCX, MD, YAML …)
+2. Presentations - subfolders in `presentations/`, linked via `presentations/<name>/`
+3. Logos - image files from `img/`
+4. QR Codes - image files from `qr/`
+5. Configs - JSON files from `config/`
+6. APIs - static list from `$api_entries` in `index.php`
 
 Anchor links activate the corresponding tab directly:
-`#presentations`, `#logos`, `#qr`, `#configs`
+`#presentations`, `#logos`, `#qr`, `#configs`, `#apis`
 
 ---
 
@@ -78,13 +126,14 @@ Each tab is a standalone PHP file in `assets/templates/`.
 Templates share variable scope with `index.php` (PHP `include`).
 Available variables per template:
 
-| Template                  | Variables                              |
-| ------------------------- | -------------------------------------- |
-| `tab-downloads.php`       | `$entries`, `$icon_map`, `$class_map`  |
-| `tab-presentations.php`   | `$pres_entries` (assoc: name → pdf)    |
-| `tab-logos.php`           | `$img_entries`                         |
-| `tab-qr.php`              | `$qr_entries`                          |
-| `tab-configs.php`         | `$config_entries`                      |
+| Template                  | Variables                                      |
+| ------------------------- | ---------------------------------------------- |
+| `tab-downloads.php`       | `$entries`, `$icon_map`, `$class_map`          |
+| `tab-presentations.php`   | `$pres_entries` (assoc: name -> pdf)           |
+| `tab-logos.php`           | `$img_entries`                                 |
+| `tab-qr.php`              | `$qr_entries`                                  |
+| `tab-configs.php`         | `$config_entries`                              |
+| `tab-apis.php`            | `$api_entries` (static array in `index.php`)   |
 
 ---
 
@@ -106,7 +155,8 @@ Presentation subfolders live on the server under `share/presentations/`.
 
 ## Local Development
 
-Run Podman Compose from the `share/` folder:
+Podman Compose mirrors the production environment (Apache + PHP, same version).
+Run from the `share/` folder:
 
 ```powershell
 podman compose up
@@ -114,7 +164,8 @@ podman compose up
 
 Then open <http://localhost:8080>.
 
-> Note: External domains are not resolved locally. `index.php` works fully, but assets from `share.erfindergeist.org` (Bootstrap, Lucide …) require an internet connection.
+> Assets from `share.erfindergeist.org` (Bootstrap, Lucide …) load from the internet.
+> The API is available at <http://localhost:8080/api/v1/assets/> (trailing slash, or without - Apache redirects).
 
 ---
 
@@ -138,6 +189,7 @@ See root [CLAUDE.md](../CLAUDE.md) for the full rules. Summary for this module:
 ## Do Not Deploy to Server
 
 `compose.yaml`, `README.md`, `CLAUDE.md` → excluded via `exclude` in the workflow.
+`downloads/mock-*` → mock files for local dev testing, excluded via `downloads/mock-*` pattern.
 
 ---
 

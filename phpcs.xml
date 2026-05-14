@@ -2,6 +2,7 @@
 <ruleset name="Erfindergeist">
 
     <!-- ── PHP ── -->
+    <file>share/api.php</file>
     <file>share/index.php</file>
     <file>share/assets/templates</file>
     <file>termine/index.php</file>

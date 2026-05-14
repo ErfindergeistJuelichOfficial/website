@@ -10,7 +10,8 @@ var anchorTabMap = {
   '#presentations': 'tab-presentations-trigger',
   '#logos':         'tab-logos-trigger',
   '#qr':            'tab-qr-trigger',
-  '#configs':       'tab-configs-trigger'
+  '#configs':       'tab-configs-trigger',
+  '#apis':          'tab-apis-trigger'
 };
 var trigger = anchorTabMap[window.location.hash];
 if (trigger) {

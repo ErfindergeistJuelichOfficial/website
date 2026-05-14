@@ -11,7 +11,7 @@
       <?php foreach ($entries as $entry) :
         $ext       = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
         $safeLabel = htmlspecialchars($entry, ENT_QUOTES, 'UTF-8');
-        $safeUrl   = rawurlencode($entry);
+        $safeUrl   = 'downloads/' . rawurlencode($entry);
         $iconName  = $icon_map[$ext]  ?? 'file';
         $extClass  = $class_map[$ext] ?? 'default';
       ?>

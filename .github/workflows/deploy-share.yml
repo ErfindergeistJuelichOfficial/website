@@ -15,42 +15,6 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v5
 
-      - name: 📋 Generate directory index JSONs
-        run: |
-          python3 - <<'EOF'
-          import os, json, mimetypes
-
-          BASE_URL  = "https://share.erfindergeist.org"
-          SHARE_DIR = "share"
-          DIRS      = ["css", "fonts", "img", "js", "qr"]
-
-          for dir_name in DIRS:
-              dir_path = os.path.join(SHARE_DIR, dir_name)
-              entries  = []
-
-              for root, _, files in os.walk(dir_path):
-                  for filename in sorted(files):
-                      if filename.startswith('.'):
-                          continue
-                      filepath  = os.path.join(root, filename)
-                      relpath   = os.path.relpath(filepath, SHARE_DIR).replace("\\", "/")
-                      mime, _   = mimetypes.guess_type(filename)
-                      extension = os.path.splitext(filename)[1].lstrip('.').lower()
-                      entries.append({
-                          "filename":  filename,
-                          "extension": extension,
-                          "path":      relpath,
-                          "url":       f"{BASE_URL}/{relpath}",
-                          "size":      os.path.getsize(filepath),
-                          "mime":      mime or "application/octet-stream",
-                      })
-
-              out = os.path.join(SHARE_DIR, "config", f"{dir_name}.json")
-              with open(out, "w", encoding="utf-8") as f:
-                  json.dump(entries, f, indent=2, ensure_ascii=False)
-              print(f"✓ {out}: {len(entries)} files")
-          EOF
-
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -66,3 +30,4 @@ jobs:
             **/CLAUDE.md
             **/.gitkeep
             presentations/hallo-welt/**
+            downloads/mock-*
