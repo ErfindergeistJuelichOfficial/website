@@ -1,12 +1,12 @@
 <div class="tab-pane fade" id="tab-qr" role="tabpanel" aria-labelledby="tab-qr-trigger">
-  <?php if (empty($qr_entries)): ?>
+  <?php if (empty($qr_entries)) : ?>
     <div class="empty-state text-center py-5">
       <i data-lucide="qr-code" aria-hidden="true"></i>
       <p class="mt-3">Keine QR Codes gefunden.</p>
     </div>
-  <?php else: ?>
+  <?php else : ?>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
-      <?php foreach ($qr_entries as $qrEntry):
+      <?php foreach ($qr_entries as $qrEntry) :
         $safeLabel = htmlspecialchars($qrEntry, ENT_QUOTES, 'UTF-8');
         $safeUrl   = 'qr/' . rawurlencode($qrEntry);
         $ext       = strtolower(pathinfo($qrEntry, PATHINFO_EXTENSION));

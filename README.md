@@ -5,8 +5,8 @@ Mono-repo for the three web properties of [Erfindergeist Jülich e.V.](https://e
 | Site | URL | Stack |
 | ---- | --- | ----- |
 | **termine** | <https://termine.erfindergeist.org/> | Static HTML · Bootstrap · GSAP · jQuery |
-| **share** | <https://share.erfindergeist.org/> | PHP 8.2 · Bootstrap · file download portal |
-| **presentations** | <https://presentations.erfindergeist.org/> | PHP 8.2 · Bootstrap · presentation index |
+| **share** | <https://share.erfindergeist.org/> | PHP 8.3 · Bootstrap · file download portal |
+| **presentations** | <https://presentations.erfindergeist.org/> | PHP 8.3 · Bootstrap · presentation index |
 
 ---
 
@@ -51,16 +51,42 @@ podman compose down   # stop and remove container
 
 ### presentations — Podman
 
+Redirects to `share.erfindergeist.org/#presentations` — no local server needed.
+
+---
+
+## Code Analysis
+
+PHP quality checks run from the root via Podman Compose using the PHP 8.3 CLI container.
+
+**Install dependencies** (once, or after changes to `composer.json`):
+
 ```powershell
-cd presentations
-podman compose up
+podman compose run --rm composer install
 ```
 
-Access at **<http://localhost:8081>**. Same live-mount setup as share/.
+**Run all tools at once** (PHPCS · PHPStan · Psalm · PHPMD):
 
 ```powershell
-podman compose down   # stop and remove container
+podman compose run --rm composer analyse
 ```
+
+**Individual tools:**
+
+```powershell
+podman compose run --rm composer phpcs      # Coding standards (PSR-12)
+podman compose run --rm composer phpstan    # Static type analysis
+podman compose run --rm composer psalm      # Taint analysis
+podman compose run --rm composer phpmd      # Code quality metrics
+```
+
+**Auto-fix** coding standard violations (PHPCS):
+
+```powershell
+podman compose run --rm composer phpcbf
+```
+
+Configuration lives in [phpcs.xml](phpcs.xml), [phpstan.neon](phpstan.neon), [psalm.xml](psalm.xml) and [.phpmd.xml](.phpmd.xml). Only PHP files inside `share/`, `termine/` and `presentations/` are analysed.
 
 ---
 

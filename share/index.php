@@ -16,11 +16,11 @@
 <!-- ── Navbar ── -->
 <nav class="eg-nav py-3 sticky-top">
   <div class="container d-flex align-items-center gap-3">
-    <?php if (file_exists('img/logo.svg')): ?>
+    <?php if (file_exists('img/logo.svg')) : ?>
       <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer">
         <img src="img/logo.svg" alt="Erfindergeist Jülich" class="eg-nav-logo">
       </a>
-    <?php else: ?>
+    <?php else : ?>
       <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer" class="eg-nav-name">
         Erfindergeist Jülich
       </a>
@@ -176,7 +176,8 @@
       <h2 id="sponsor-title" class="h5 mb-0">Unterstütze uns!</h2>
     </div>
     <p class="text-muted mb-4" style="max-width:560px">
-      Der Erfindergeist Jülich e.V. ist ein gemeinnütziger Verein und auf Spenden und Förderungen angewiesen. Jeder Beitrag hilft uns, unsere Werkstatt offen zu halten und Projekte für alle anzubieten.
+      Der Erfindergeist Jülich e.V. ist ein gemeinnütziger Verein und auf Spenden und Förderungen angewiesen.
+      Jeder Beitrag hilft uns, unsere Werkstatt offen zu halten und Projekte für alle anzubieten.
     </p>
     <div class="row g-3 mb-4">
       <div class="col-12 col-sm-6 col-lg-3">

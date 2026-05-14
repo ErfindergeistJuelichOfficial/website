@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  if (customElements.get('eg-footer')) return;
+  if (customElements.get('eg-footer')) { return; }
 
   var SOCIAL = [
     {

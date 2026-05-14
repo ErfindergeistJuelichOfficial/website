@@ -1,12 +1,12 @@
 <div class="tab-pane fade" id="tab-logos" role="tabpanel" aria-labelledby="tab-logos-trigger">
-  <?php if (empty($img_entries)): ?>
+  <?php if (empty($img_entries)) : ?>
     <div class="empty-state text-center py-5">
       <i data-lucide="image" aria-hidden="true"></i>
       <p class="mt-3">Keine Logos gefunden.</p>
     </div>
-  <?php else: ?>
+  <?php else : ?>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
-      <?php foreach ($img_entries as $imgEntry):
+      <?php foreach ($img_entries as $imgEntry) :
         $safeLabel = htmlspecialchars($imgEntry, ENT_QUOTES, 'UTF-8');
         $safeUrl   = 'img/' . rawurlencode($imgEntry);
         $ext       = strtolower(pathinfo($imgEntry, PATHINFO_EXTENSION));

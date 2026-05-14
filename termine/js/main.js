@@ -9,12 +9,12 @@ $(document).ready(function () {
   initAnimations();
 
   // Init Lucide icons
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide) { lucide.createIcons(); }
 
   // Theme toggle
   $('#theme-toggle').on('click', function () {
     toggleTheme();
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide) { lucide.createIcons(); }
   });
 
   // Language dropdown
@@ -27,7 +27,7 @@ $(document).ready(function () {
   var copyToastTxt = document.getElementById('copy-toast-text');
 
   function showCopyToast(textKey) {
-    if (!copyToastEl || !copyToastTxt) return;
+    if (!copyToastEl || !copyToastTxt) { return; }
     copyToastTxt.textContent = window.t(textKey);
     copyToastEl.classList.add('show');
     clearTimeout(copyToastEl._t);
@@ -40,10 +40,10 @@ $(document).ready(function () {
         var icon = btn.querySelector('[data-lucide]');
         if (icon) {
           icon.setAttribute('data-lucide', 'clipboard-check');
-          if (window.lucide) lucide.createIcons({ nodes: [icon] });
+          if (window.lucide) { lucide.createIcons({ nodes: [icon] }); }
           setTimeout(function () {
             icon.setAttribute('data-lucide', 'clipboard');
-            if (window.lucide) lucide.createIcons({ nodes: [icon] });
+            if (window.lucide) { lucide.createIcons({ nodes: [icon] }); }
           }, 2000);
         }
       }
@@ -90,9 +90,9 @@ $(document).ready(function () {
   // Smooth scroll for all anchor links (offset for sticky navbar)
   $(document).on('click', 'a[href^="#"]', function (e) {
     const id = this.getAttribute('href');
-    if (id === '#') return;
+    if (id === '#') { return; }
     const target = $(id);
-    if (!target.length) return;
+    if (!target.length) { return; }
     e.preventDefault();
     const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 72;
     $('html, body').animate({ scrollTop: target.offset().top - offset }, 550, 'swing');
@@ -100,7 +100,7 @@ $(document).ready(function () {
     const nc = document.getElementById('navbarCollapse');
     if (nc) {
       const instance = bootstrap.Collapse.getInstance(nc);
-      if (instance) instance.hide();
+      if (instance) { instance.hide(); }
     }
   });
 
@@ -128,7 +128,7 @@ $(document).ready(function () {
 
   // PDF countdown flip clock — next Monday 03:00 UTC (GitHub Actions schedule)
   (function initPdfCountdown() {
-    if (!document.getElementById('flip-d')) return;
+    if (!document.getElementById('flip-d')) { return; }
 
     function nextRun() {
       var now  = new Date();
@@ -144,7 +144,7 @@ $(document).ready(function () {
 
     function makeUnit(id) {
       var card  = document.getElementById(id);
-      if (!card) return function() {};
+      if (!card) { return function() {}; }
       var upper = card.querySelector('.flip-upper .flip-digit');
       var lower = card.querySelector('.flip-lower .flip-digit');
       var top   = card.querySelector('.flip-top .flip-digit');
@@ -152,7 +152,7 @@ $(document).ready(function () {
       var prev  = null;
 
       return function set(val) {
-        if (val === prev) return;
+        if (val === prev) { return; }
         if (prev === null) {
           upper.textContent = lower.textContent = val;
           prev = val;
@@ -186,7 +186,7 @@ $(document).ready(function () {
 
     function tick() {
       var ms = nextRun() - new Date();
-      if (ms <= 0) return;
+      if (ms <= 0) { return; }
       var s = Math.floor(ms / 1000);
       var m = Math.floor(s / 60); s %= 60;
       var h = Math.floor(m / 60); m %= 60;
@@ -204,7 +204,7 @@ $(document).ready(function () {
   // ICS puzzle — read DTSTART:20250515T180000Z
   (function initIcsPuzzle() {
     var puzzle = document.getElementById('ics-puzzle');
-    if (!puzzle) return;
+    if (!puzzle) { return; }
 
     var ANSWER  = { year: 2025, month: 5, day: 15, hour: 18, minute: 0 };
     var INITIAL = { year: 2024, month: 1,  day: 1,  hour: 0,  minute: 0 };
@@ -225,13 +225,13 @@ $(document).ready(function () {
     }
 
     function wrap(val, min, max) {
-      if (val < min) return max;
-      if (val > max) return min;
+      if (val < min) { return max; }
+      if (val > max) { return min; }
       return val;
     }
 
     function step(field, dir) {
-      if (solved) return;
+      if (solved) { return; }
       var el  = puzzle.querySelector('[data-field="' + field + '"]');
       state[field] = wrap(state[field] + dir, +el.dataset.min, +el.dataset.max);
       render();
@@ -239,14 +239,14 @@ $(document).ready(function () {
     }
 
     function check() {
-      if (solved) return;
+      if (solved) { return; }
       var ok = Object.keys(ANSWER).every(function(k) { return state[k] === ANSWER[k]; });
-      if (!ok) return;
+      if (!ok) { return; }
       solved = true;
       puzzle.classList.add('solved');
       successEl.classList.remove('d-none');
       resetBtn.classList.remove('d-none');
-      if (window.lucide) lucide.createIcons({ nodes: [successEl] });
+      if (window.lucide) { lucide.createIcons({ nodes: [successEl] }); }
       var noAnim = document.documentElement.classList.contains('reduce-motion') ||
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (window.gsap && !noAnim) {
@@ -300,7 +300,7 @@ $(document).ready(function () {
       }, { passive: false });
     });
 
-    if (resetBtn) resetBtn.addEventListener('click', reset);
+    if (resetBtn) { resetBtn.addEventListener('click', reset); }
 
     render();
   }());
@@ -308,7 +308,7 @@ $(document).ready(function () {
   // Load and render /tomorrow preview inside the endpoint card
   (function loadTomorrow() {
     var preview = document.getElementById('tomorrow-preview');
-    if (!preview) return;
+    if (!preview) { return; }
 
     fetch('https://erfindergeist.org/wp-json/erfindergeist/v2/tomorrow')
       .then(function (r) { return r.ok ? r.json() : null; })
@@ -339,12 +339,12 @@ $(document).ready(function () {
   // Load /events preview inside the endpoint card
   (function loadEventsPreview() {
     var preview = document.getElementById('events-endpoint-preview');
-    if (!preview) return;
+    if (!preview) { return; }
 
     fetch('https://erfindergeist.org/wp-json/erfindergeist/v2/events')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (data) {
-        if (!data) return;
+        if (!data) { return; }
         var list  = Array.isArray(data) ? data : (data.events || data.items || []);
         var count = list.length;
 
@@ -409,7 +409,7 @@ $(document).ready(function () {
     var jsonEditor   = document.getElementById('events-json-editor');
     var jsonErrorEl  = document.getElementById('events-json-error');
     var jsonResetBtn = document.getElementById('events-json-reset');
-    if (!listEl) return;
+    if (!listEl) { return; }
 
     var WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
     var tagsConfig = null;
@@ -423,16 +423,16 @@ $(document).ready(function () {
 
     // Handles both ISO-8601 ("2025-05-15T18:00:00") and ICS compact ("20250515T180000[Z]")
     function parseDate(raw) {
-      if (!raw) return new Date(NaN);
+      if (!raw) { return new Date(NaN); }
       var d = new Date(raw);
-      if (!isNaN(d)) return d;
+      if (!isNaN(d)) { return d; }
       var m = String(raw).match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/);
-      if (m) return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]);
+      if (m) { return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]); }
       return new Date(NaN);
     }
 
     function parseTags(desc) {
-      if (!desc) return [];
+      if (!desc) { return []; }
       var matches = String(desc).toLowerCase().match(/#[a-zäöüß0-9]+/g);
       return matches || [];
     }
@@ -440,7 +440,7 @@ $(document).ready(function () {
       if (tagsConfig && tagsConfig.location_tags) {
         for (var i = 0; i < tags.length; i++) {
           var t = tagsConfig.location_tags[tags[i]];
-          if (t) return t.location || t;
+          if (t) { return t.location || t; }
         }
       }
       return fallback || '';
@@ -449,7 +449,7 @@ $(document).ready(function () {
       if (tagsConfig && tagsConfig.description_tags) {
         for (var i = 0; i < tags.length; i++) {
           var t = tagsConfig.description_tags[tags[i]];
-          if (t) return t.label || null;
+          if (t) { return t.label || null; }
         }
       }
       return null;
@@ -458,7 +458,7 @@ $(document).ready(function () {
       if (tagsConfig && tagsConfig.description_tags) {
         for (var i = 0; i < tags.length; i++) {
           var t = tagsConfig.description_tags[tags[i]];
-          if (t && t.description) return t.description;
+          if (t && t.description) { return t.description; }
         }
       }
       return null;
@@ -500,16 +500,19 @@ $(document).ready(function () {
           + '<p class="event-title">' + title + '</p>'
           + (tagDesc ? '<p class="event-desc">' + esc(tagDesc) + '</p>' : '')
           + '<div class="event-meta">';
-        if (loc) html += '<span><i data-lucide="map-pin"></i>' + loc + '</span>';
+        if (loc) { html += '<span><i data-lucide="map-pin"></i>' + loc + '</span>'; }
         html += '</div></div></div>';
         listEl.insertAdjacentHTML('beforeend', html);
       });
-      if (window.lucide) lucide.createIcons({ nodes: [listEl] });
+      if (window.lucide) { lucide.createIcons({ nodes: [listEl] }); }
     }
 
     function renderEvents(list) {
-      if (loadEl) loadEl.remove();
-      if (!list.length) { if (emptyEl) emptyEl.classList.remove('d-none'); return; }
+      if (loadEl) { loadEl.remove(); }
+      if (!list.length) {
+        if (emptyEl) { emptyEl.classList.remove('d-none'); }
+        return;
+      }
       renderEventCards(list);
     }
 
@@ -518,7 +521,7 @@ $(document).ready(function () {
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; }),
       fetch('https://erfindergeist.org/wp-json/erfindergeist/v2/events')
-        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
+        .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); }),
     ]).then(function (results) {
       tagsConfig = results[0];
       var data   = results[1];
@@ -557,24 +560,24 @@ $(document).ready(function () {
         }
       }
     }).catch(function () {
-      if (loadEl) loadEl.remove();
-      if (errorEl) errorEl.classList.remove('d-none');
+      if (loadEl) { loadEl.remove(); }
+      if (errorEl) { errorEl.classList.remove('d-none'); }
     });
   }());
 
   // Rocket upload card: pulse + arc animation on click
   (function initRocketCard() {
     var card = document.getElementById('pdf-step-upload');
-    if (!card) return;
+    if (!card) { return; }
 
     var noAnim = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
                  document.documentElement.classList.contains('reduce-motion');
     var active = false;
 
-    if (!noAnim) card.classList.add('pdf-step--pulsing');
+    if (!noAnim) { card.classList.add('pdf-step--pulsing'); }
 
     card.addEventListener('click', function () {
-      if (active || noAnim) return;
+      if (active || noAnim) { return; }
       active = true;
       card.classList.remove('pdf-step--pulsing');
 
@@ -607,7 +610,7 @@ $(document).ready(function () {
       setTimeout(function () {
         iconEl.style.visibility = '';
         active = false;
-        if (!noAnim) card.classList.add('pdf-step--pulsing');
+        if (!noAnim) { card.classList.add('pdf-step--pulsing'); }
       }, 7000);
     });
   }());
@@ -615,11 +618,11 @@ $(document).ready(function () {
   // Bell — click/touch swings; fast clicks increase amplitude; rapid clicking → 360° spin
   (function initBell() {
     var bell = document.querySelector('.ics-cal-bell');
-    if (!bell || !window.gsap) return;
+    if (!bell || !window.gsap) { return; }
 
     var noAnim = document.documentElement.classList.contains('reduce-motion') ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (noAnim) return;
+    if (noAnim) { return; }
 
     gsap.set(bell, { transformOrigin: '50% 0%' });
 
@@ -648,7 +651,7 @@ $(document).ready(function () {
     }
 
     function onHit() {
-      if (isSpinning) return;
+      if (isSpinning) { return; }
 
       hitTimes.push(Date.now());
       var n = recentHits();
@@ -693,7 +696,7 @@ $(document).ready(function () {
   // HA zap — touch/click activates the big-zap state briefly
   (function initHaZap() {
     var wrap = document.querySelector('.ha-icon-wrap');
-    if (!wrap) return;
+    if (!wrap) { return; }
     var timer = null;
     wrap.addEventListener('click', function () {
       wrap.classList.add('ha-zap-active');

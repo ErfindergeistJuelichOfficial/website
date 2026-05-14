@@ -1,4 +1,4 @@
-if (window.lucide) lucide.createIcons();
+if (window.lucide) { lucide.createIcons(); }
 
 document.getElementById('theme-toggle').addEventListener('click', function () {
   var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -15,7 +15,7 @@ var anchorTabMap = {
 var trigger = anchorTabMap[window.location.hash];
 if (trigger) {
   var el = document.getElementById(trigger);
-  if (el) bootstrap.Tab.getOrCreateInstance(el).show();
+  if (el) { bootstrap.Tab.getOrCreateInstance(el).show(); }
 }
 
 document.getElementById('file-search').addEventListener('input', function () {
@@ -31,7 +31,7 @@ document.querySelectorAll('.btn-copy').forEach(function (btn) {
     var url = btn.dataset.url;
     navigator.clipboard.writeText(url).then(function () {
       var icon = btn.querySelector('[data-lucide]');
-      if (!icon) return;
+      if (!icon) { return; }
       icon.setAttribute('data-lucide', 'clipboard-check');
       lucide.createIcons({ nodes: [icon] });
       setTimeout(function () {

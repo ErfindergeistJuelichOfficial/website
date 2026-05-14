@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset name="Erfindergeist">
+
+    <!-- ── PHP ── -->
+    <file>share/index.php</file>
+    <file>share/assets/templates</file>
+    <file>termine/index.php</file>
+    <file>termine/templates</file>
+    <file>presentations/index.php</file>
+
+    <!-- ── JS (custom only) ── -->
+    <file>share/assets/js</file>
+    <file>share/js/components</file>
+    <file>termine/js</file>
+
+    <!-- Exclude third-party and minified files -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/js/lib/*</exclude-pattern>
+    <exclude-pattern>*.min.js</exclude-pattern>
+    <exclude-pattern>*.min.css</exclude-pattern>
+
+    <config name="php_version" value="80300"/>
+
+    <!-- ── PHP: PSR-12 ── -->
+    <rule ref="PSR12">
+        <include-pattern>*.php</include-pattern>
+        <exclude name="PSR1.Files.SideEffects"/>
+        <!-- Line endings enforced via .gitattributes, not PHPCS -->
+        <exclude name="Generic.Files.LineEndings"/>
+        <!-- Template files mix HTML (2-space) and PHP; indentation checked separately below -->
+        <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+    </rule>
+
+    <!-- ── JS: require braces for all control structures ── -->
+    <rule ref="Generic.ControlStructures.InlineControlStructure">
+        <include-pattern>*.js</include-pattern>
+    </rule>
+
+    <!-- ── All: 2-space indentation ── -->
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="2"/>
+            <property name="exact" value="false"/>
+        </properties>
+    </rule>
+
+    <!-- ── All: line length ── -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="200"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+
+
+</ruleset>

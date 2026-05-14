@@ -1,52 +1,40 @@
 # CLAUDE.md — share/
 
-## Zweck
+## Purpose
 
-Der `share/`-Ordner hat zwei Aufgaben:
+The `share/` folder serves two purposes:
 
-1. **Asset-Host**: Alle geteilten Bibliotheken (Bootstrap, GSAP, Lucide, AOS, Typed.js, Rough Notation, Caveat-Font, Logo) liegen hier und werden von `https://share.erfindergeist.org/` ausgeliefert.
-2. **Download-Seite**: `index.php` listet Tabs für Downloads, Präsentationen, Logos, QR-Codes und Configs.
+1. **Asset host**: All shared libraries (Bootstrap, GSAP, Lucide, AOS, Typed.js, Rough Notation, Caveat font, logo) live here and are served from `https://share.erfindergeist.org/`.
+2. **Download page**: `index.php` lists tabs for downloads, presentations, logos, QR codes and configs.
 
-Deployed unter: <https://share.erfindergeist.org/>
-
----
-
-## Wichtigste Regel: Keine externen CDNs
-
-**Alle externen Bibliotheken müssen im `share/`-Ordner liegen und über `https://share.erfindergeist.org/` eingebunden werden.**
-Niemals `cdn.jsdelivr.net`, `cdnjs.cloudflare.com`, `unpkg.com` o.ä. verwenden.
-
-Neue Bibliothek hinzufügen:
-
-1. Datei herunterladen und in den passenden Unterordner in `share/` ablegen
-2. In HTML/PHP auf `https://share.erfindergeist.org/js/lib/datei.min.js` verweisen
+Deployed at: <https://share.erfindergeist.org/>
 
 ---
 
-## Ordnerstruktur
+## Folder Structure
 
 ```text
 share/
-├── index.php                        # Einstiegspunkt: lädt Daten, bindet Templates ein
-├── compose.yaml                     # Podman Compose (nur lokal)
-├── README.md                        # Testanleitung (nur lokal)
-├── CLAUDE.md                        # Diese Datei (nur lokal)
+├── index.php                        # Entry point: loads data, includes templates
+├── compose.yaml                     # Podman Compose (local only)
+├── README.md                        # Test instructions (local only)
+├── CLAUDE.md                        # This file (local only)
 ├── assets/
 │   ├── css/
-│   │   ├── share.css               # Globale Styles (Vars, Navbar, Tabs, File-Items, Logo-Cards …)
-│   │   ├── tab-presentations.css   # Nur für den Präsentationen-Tab (.pres-*, .alert-info)
-│   │   └── section-sponsoring.css  # Nur für die Sponsoring-Section (.sponsor-*)
+│   │   ├── share.css               # Global styles (vars, navbar, tabs, file items, logo cards …)
+│   │   ├── tab-presentations.css   # Presentations tab only (.pres-*, .alert-info)
+│   │   └── section-sponsoring.css  # Sponsoring section only (.sponsor-*)
 │   ├── js/
-│   │   └── share.js                # Alle Custom-Scripts der Seite
+│   │   └── share.js                # All custom scripts for the page
 │   └── templates/
-│       ├── tab-downloads.php       # Tab: Downloads (Dateien im Root)
-│       ├── tab-presentations.php   # Tab: Präsentationen (presentations/)
+│       ├── tab-downloads.php       # Tab: Downloads (files in root)
+│       ├── tab-presentations.php   # Tab: Presentations (presentations/)
 │       ├── tab-logos.php           # Tab: Logos (img/)
 │       ├── tab-qr.php              # Tab: QR Codes (qr/)
 │       └── tab-configs.php         # Tab: Configs (config/)
 ├── css/
 │   ├── bootstrap.min.css           # Bootstrap 5.3
-│   └── aos.min.css                 # AOS Scroll-Reveal
+│   └── aos.min.css                 # AOS scroll-reveal
 ├── js/lib/
 │   ├── jquery.min.js
 │   ├── bootstrap.bundle.min.js
@@ -57,41 +45,41 @@ share/
 │   ├── lucide.min.js
 │   └── rough-notation.min.js
 ├── fonts/
-│   ├── Caveat-Regular.ttf          # Handschrift-Font für h1–h3
+│   ├── Caveat-Regular.ttf          # Handwriting font for h1–h3
 │   └── Caveat-Bold.ttf
 ├── img/
-│   └── logo.svg                    # Vereinslogo (Navbar + Hero)
-├── qr/                             # QR-Code-Dateien
-├── config/                         # JSON-Konfigurationsdateien
-└── presentations/                  # Präsentations-Unterordner (je ein Ordner pro Präsentation)
+│   └── logo.svg                    # Club logo (navbar + hero)
+├── qr/                             # QR code files
+├── config/                         # JSON config files
+└── presentations/                  # Presentation subfolders (one folder per presentation)
     └── <name>/
         ├── index.html
-        └── *.pdf                   # Optional: PDF-Version
+        └── *.pdf                   # Optional: PDF version
 ```
 
 ---
 
-## Tab-Reihenfolge
+## Tab Order
 
-1. Downloads — Dateien direkt im Root (PDF, DOCX, SVG …)
-2. Präsentationen — Unterordner in `presentations/`, verlinkt via `presentations/<name>/`
-3. Logos — Bilddateien aus `img/`
-4. QR Codes — Bilddateien aus `qr/`
-5. Configs — JSON-Dateien aus `config/`
+1. Downloads — files directly in root (PDF, DOCX, SVG …)
+2. Presentations — subfolders in `presentations/`, linked via `presentations/<name>/`
+3. Logos — image files from `img/`
+4. QR Codes — image files from `qr/`
+5. Configs — JSON files from `config/`
 
-Anchor-Links aktivieren den passenden Tab direkt:
+Anchor links activate the corresponding tab directly:
 `#presentations`, `#logos`, `#qr`, `#configs`
 
 ---
 
-## Tab-Templates bearbeiten
+## Editing Tab Templates
 
-Jeder Tab ist eine eigenständige PHP-Datei in `assets/templates/`.
-Die Templates teilen den Variablen-Scope mit `index.php` (PHP `include`).
-Verfügbare Variablen je Template:
+Each tab is a standalone PHP file in `assets/templates/`.
+Templates share variable scope with `index.php` (PHP `include`).
+Available variables per template:
 
-| Template                  | Variablen                              |
-|---------------------------|----------------------------------------|
+| Template                  | Variables                              |
+| ------------------------- | -------------------------------------- |
 | `tab-downloads.php`       | `$entries`, `$icon_map`, `$class_map`  |
 | `tab-presentations.php`   | `$pres_entries` (assoc: name → pdf)    |
 | `tab-logos.php`           | `$img_entries`                         |
@@ -100,52 +88,62 @@ Verfügbare Variablen je Template:
 
 ---
 
-## CI / Design
+## Design
 
-- Primary: `#159989` · Secondary: `#F9B338`
-- Bootstrap 5.3 + Lucide Icons (beide aus `share/`)
-- Custom-Styles in `assets/css/share.css`, Custom-Scripts in `assets/js/share.js`
+See [root CLAUDE.md](../CLAUDE.md) for design tokens and the no-CDN rule.
 
----
-
-## Präsentationen (umgezogen)
-
-`presentations.erfindergeist.org` leitet per 301 auf `share.erfindergeist.org/#presentations` weiter.
-Die Präsentations-Unterordner liegen auf dem Server in `share/presentations/`.
+- Custom styles: `assets/css/share.css`
+- Custom scripts: `assets/js/share.js`
 
 ---
 
-## Lokales Testen
+## Presentations (relocated)
 
-Mit Podman Compose aus dem `share/`-Ordner:
+`presentations.erfindergeist.org` redirects via 301 to `share.erfindergeist.org/#presentations`.
+Presentation subfolders live on the server under `share/presentations/`.
+
+---
+
+## Local Development
+
+Run Podman Compose from the `share/` folder:
 
 ```powershell
 podman compose up
 ```
 
-Dann <http://localhost:8080> öffnen.
+Then open <http://localhost:8080>.
 
-> Hinweis: Lokal werden keine externen Domains aufgelöst. `index.php` funktioniert vollständig, aber Assets von `share.erfindergeist.org` (Bootstrap, Lucide …) benötigen eine Internetverbindung.
-
----
-
-## Pflichtprüfungen
-
-**Neue Dateien:** Immer prüfen, ob die neue Datei in `deploy-share.yml` unter `exclude` aufgenommen werden muss (z.B. lokale Hilfsdateien, Mocks, Doku, `.gitkeep`).
-
-**HTML-Änderungen in Templates:** Wenn Elemente in `assets/templates/` entfernt oder umgebaut werden, immer prüfen:
-
-- Gibt es CSS-Klassen in `assets/css/share.css`, die jetzt tot sind? → sofort entfernen.
-
-## Nicht auf Server deployen
-
-`compose.yaml`, `README.md`, `CLAUDE.md` → via `exclude` im Workflow ausgeschlossen.
+> Note: External domains are not resolved locally. `index.php` works fully, but assets from `share.erfindergeist.org` (Bootstrap, Lucide …) require an internet connection.
 
 ---
 
-## Sponsoring-Links
+## Required Checks
 
-- Fördermitglied: <https://erfindergeist.org/mitglied-werden/>
-- Konto: <http://konto.erfindergeist.org/>
+**New files:** Always check whether the new file needs to be added to `deploy-share.yml` under `exclude` (e.g. local helpers, mocks, docs, `.gitkeep`).
+
+**HTML changes in templates:** When elements in `assets/templates/` are removed or restructured, always check:
+
+- Are there CSS classes in `assets/css/share.css` that are now dead? → remove immediately.
+
+## Code Quality & Security
+
+See root [CLAUDE.md](../CLAUDE.md) for the full rules. Summary for this module:
+
+- All PHP output into HTML **must** use `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')`
+- All values interpolated into URLs **must** use `rawurlencode($var)`
+- Run `podman compose run --rm composer analyse` from the project root before committing
+- `composer analyse` must pass with zero errors
+
+## Do Not Deploy to Server
+
+`compose.yaml`, `README.md`, `CLAUDE.md` → excluded via `exclude` in the workflow.
+
+---
+
+## Sponsoring Links
+
+- Membership: <https://erfindergeist.org/mitglied-werden/>
+- Bank transfer: <http://konto.erfindergeist.org/>
 - PayPal: <http://paypal.erfindergeist.org/>
 - Linktree: <https://linktree.erfindergeist.org/>

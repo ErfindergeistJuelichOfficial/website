@@ -27,18 +27,18 @@ function setReduceMotion(reduce) {
 function openA11yPanel() {
   const panel = document.getElementById('a11y-panel');
   const btn = document.getElementById('a11y-btn');
-  if (!panel) return;
+  if (!panel) { return; }
   panel.removeAttribute('hidden');
   panel.classList.add('open');
   btn.setAttribute('aria-expanded', 'true');
   const first = panel.querySelector('button:not([disabled]), [tabindex="0"]');
-  if (first) first.focus();
+  if (first) { first.focus(); }
 }
 
 function closeA11yPanel() {
   const panel = document.getElementById('a11y-panel');
   const btn = document.getElementById('a11y-btn');
-  if (!panel) return;
+  if (!panel) { return; }
   panel.classList.remove('open');
   panel.setAttribute('hidden', '');
   btn.setAttribute('aria-expanded', 'false');
@@ -51,13 +51,13 @@ function initAccessibility() {
   setFontScale(scale);
 
   // Restore high contrast
-  if (localStorage.getItem('highContrast') === '1') setHighContrast(true);
+  if (localStorage.getItem('highContrast') === '1') { setHighContrast(true); }
 
   // Restore reduce motion (also respect OS setting)
   const systemReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const savedReduce = localStorage.getItem('reduceMotion');
   const reduce = savedReduce !== null ? savedReduce === '1' : systemReduce;
-  if (reduce) setReduceMotion(true);
+  if (reduce) { setReduceMotion(true); }
 
   // Panel toggle
   document.getElementById('a11y-btn')?.addEventListener('click', () => {

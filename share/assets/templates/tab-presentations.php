@@ -1,10 +1,10 @@
 <div class="tab-pane fade" id="tab-presentations" role="tabpanel" aria-labelledby="tab-presentations-trigger">
-  <?php if (empty($pres_entries)): ?>
+  <?php if (empty($pres_entries)) : ?>
     <div class="empty-state text-center py-5">
       <i data-lucide="monitor" aria-hidden="true"></i>
       <p class="mt-3">Keine Präsentationen gefunden.</p>
     </div>
-  <?php else: ?>
+  <?php else : ?>
     <div class="alert alert-info d-flex align-items-center gap-2 mb-3" role="alert" style="font-size:.85rem">
       <i data-lucide="git-branch" style="width:16px;height:16px;flex-shrink:0" aria-hidden="true"></i>
       <span>Die Präsentationen sind als Repository auf
@@ -13,7 +13,7 @@
       </span>
     </div>
     <div class="d-flex flex-column gap-2">
-      <?php foreach ($pres_entries as $name => $pdfFile):
+      <?php foreach ($pres_entries as $name => $pdfFile) :
         $safeLabel = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
         $safeUrl   = rawurlencode($name);
       ?>
@@ -25,7 +25,7 @@
               <i data-lucide="play" style="width:13px;height:13px" aria-hidden="true"></i>
               Anzeigen
             </a>
-            <?php if ($pdfFile !== null): ?>
+            <?php if ($pdfFile !== null) : ?>
               <a href="presentations/<?= $safeUrl ?>/<?= rawurlencode($pdfFile) ?>" target="_blank"
                  rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">
                 <i data-lucide="file-text" style="width:13px;height:13px" aria-hidden="true"></i>

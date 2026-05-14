@@ -1,0 +1,19 @@
+# Composer dependencies
+vendor/
+
+# Environment / secrets
+.env
+.env.*
+
+# Logs
+*.log
+error_log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# PhpStorm
+.idea/

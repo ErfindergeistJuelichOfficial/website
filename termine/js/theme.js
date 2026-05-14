@@ -5,12 +5,12 @@ function setTheme(theme) {
   localStorage.setItem('theme', theme);
 
   const btn = document.getElementById('theme-toggle');
-  if (!btn) return;
+  if (!btn) { return; }
 
   const icon = btn.querySelector('[data-lucide]');
   if (icon) {
     icon.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
-    if (window.lucide) lucide.createIcons({ nodes: [icon] });
+    if (window.lucide) { lucide.createIcons({ nodes: [icon] }); }
   }
 
   const isDark = theme === 'dark';

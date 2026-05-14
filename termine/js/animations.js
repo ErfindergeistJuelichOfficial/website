@@ -2,7 +2,7 @@
 
 window.initTyped = function () {
   const el = document.getElementById('typed-text');
-  if (!el || typeof Typed === 'undefined') return;
+  if (!el || typeof Typed === 'undefined') { return; }
 
   const de = ['Termine', 'ICS Kalender', 'WordPress Plugin', 'PDF Termine', 'REST API', 'Home Assistant', 'GitHub Actions'];
   const en = ['Events', 'ICS Calendar', 'WordPress Plugin', 'PDF Events', 'REST API', 'Home Assistant', 'GitHub Actions'];
@@ -24,7 +24,7 @@ function initArchLines() {
   const source    = document.getElementById('arch-source');
   const chips     = [...document.querySelectorAll('.arch-chip')];
 
-  if (!container || !svg || !source || !chips.length) return;
+  if (!container || !svg || !source || !chips.length) { return; }
 
   let triggered = false;
 
@@ -153,7 +153,7 @@ function initPdfCardHover() {
 
 function initSponsorPulse() {
   const rings = document.querySelectorAll('.sponsor-pulse-ring');
-  if (!rings.length) return;
+  if (!rings.length) { return; }
   gsap.fromTo(rings,
     { scale: 1, opacity: 0.5 },
     { scale: 2.2, opacity: 0, duration: 1.8, stagger: { each: 0.6, repeat: -1 }, ease: 'power1.out' }
@@ -161,7 +161,7 @@ function initSponsorPulse() {
 }
 
 function initRoughNotation() {
-  if (typeof RoughNotation === 'undefined') return;
+  if (typeof RoughNotation === 'undefined') { return; }
   document.querySelectorAll('.rn-highlight').forEach((el, i) => {
     const annotation = RoughNotation.annotate(el, {
       type:              el.dataset.rnType  || 'highlight',

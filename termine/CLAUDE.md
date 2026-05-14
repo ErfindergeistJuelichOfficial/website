@@ -1,155 +1,141 @@
 # CLAUDE.md — termine/
 
-## Ziel
+## Purpose
 
-Single-Page-Erklärer zur technischen Infrastruktur von Erfindergeist Jülich.
-Zielgruppe: Kinder + Erwachsene. Erklärt den Weg von NextCloud über das WordPress-Plugin
-zu REST-API, ICS-Kalender, GitHub PDF-Generator und Share-Server.
+Single-page explainer for the technical infrastructure of Erfindergeist Jülich.
+Audience: children and adults. Explains the flow from NextCloud through the WordPress plugin
+to REST API, ICS calendar, GitHub PDF generator and share server.
 
-## CI
+## Design
 
-- Primary: #159989 · Secondary: #F9B338
-- Logo: Querformat/landscape (~200×60px), User liefert `img/logo.svg`
+See [root CLAUDE.md](../CLAUDE.md) for design tokens and the no-CDN rule.
+Logo: landscape format (~200×60px), user provides `img/logo.svg`.
 
-## Technologien
+## Technologies
 
 Bootstrap 5.3 · jQuery 3.7 · GSAP 3 + ScrollTrigger · AOS · Typed.js · Lucide Icons · Rough Notation · Caveat Font
 
-## Pflicht-Features
+## Required Features
 
-- Responsive (Mobile / Tablet / Desktop)
-- WCAG 2.1 AA Barrierefreiheit + Accessibility-Toolbar (bottom-left, fixed)
-- Dark / Light Mode Toggle (`data-theme` auf `<html>`, localStorage)
-- Sprach-Toggle DE/EN (`data-i18n` System, localStorage, `lang`-Attribut wechselt)
-- Scroll-to-Top Button (bottom-right, ab 300px Scroll)
-- Sticky Navbar mit Smooth Scroll
+- Responsive (mobile / tablet / desktop)
+- WCAG 2.1 AA accessibility + accessibility toolbar (bottom-left, fixed)
+- Dark / light mode toggle (`data-theme` on `<html>`, localStorage)
+- Language toggle DE/EN (`data-i18n` system, localStorage, `lang` attribute switches)
+- Scroll-to-top button (bottom-right, shown after 300px scroll)
+- Sticky navbar with smooth scroll
 
-## Sprache
+## Language
 
-- Alle sichtbaren Texte tragen `data-i18n="key"` Attribut
-- Translations-Objekt in `js/i18n.js`: `translations.de` / `translations.en`
-- Deutsch ist Default
-- `data-i18n-attr="aria-label"` setzt statt `textContent` ein Attribut (z.B. für aria-labels)
-- `data-i18n-html` als Attribut erlaubt HTML in der Übersetzung (wird per `innerHTML` gesetzt)
-- `window.t(key)` — JS-Helper für Translations in dynamisch erzeugtem Code
-- Jeder neue Key muss in **beiden** Sprachen eingetragen werden (DE + EN)
-- Entfernte HTML-Elemente → zugehörige i18n-Keys sofort aus `js/i18n.js` löschen
+- All visible texts carry a `data-i18n="key"` attribute
+- Translations object in `js/i18n.js`: `translations.de` / `translations.en`
+- German is default
+- `data-i18n-attr="aria-label"` sets an attribute instead of `textContent` (e.g. for aria-labels)
+- `data-i18n-html` attribute allows HTML in the translation (set via `innerHTML`)
+- `window.t(key)` — JS helper for translations in dynamically generated code
+- Every new key must be added in **both** languages (DE + EN)
+- Removed HTML elements → delete the corresponding i18n keys from `js/i18n.js` immediately
 
-## Stil & Animationen
+## Style & Animations
 
-- `h1`–`h3`: Caveat (handschriftlich), Rest: System-Font-Stack
-- GSAP: Hero cascade-in, Architektur-SVG Pfeil-Animation (stroke-dashoffset), Card stagger
-- AOS: Scroll-reveal für alle Explain-Cards
-- Rough Notation: Highlights um Schlüsselbegriffe in Card-Texten
-- `prefers-reduced-motion` deaktiviert alle Animationen
+- `h1`–`h3`: Caveat (handwriting), rest: system font stack
+- GSAP: hero cascade-in, architecture SVG arrow animation (stroke-dashoffset), card stagger
+- AOS: scroll-reveal for all explain cards
+- Rough Notation: highlights around key terms in card texts
+- `prefers-reduced-motion` disables all animations
 
-## JS-Module
+## JS Modules
 
-- `js/i18n.js` — Translations + Toggle
-- `js/theme.js` — Dark/Light + localStorage
-- `js/accessibility.js` — Toolbar, font-scale, high-contrast, reduce-motion
+- `js/i18n.js` — translations + toggle
+- `js/theme.js` — dark/light + localStorage
+- `js/accessibility.js` — toolbar, font scale, high contrast, reduce motion
 - `js/animations.js` — GSAP, AOS, Typed.js, Rough Notation
-- `js/main.js` — App-Init, scroll-to-top, Event-Listener
+- `js/main.js` — app init, scroll-to-top, event listeners
 
-## Ladesequenz im HTML
+## HTML Load Order
 
 libs (jquery → bootstrap → gsap → ScrollTrigger → aos → typed → lucide → rough-notation)
 → i18n → theme → accessibility → animations → main
 
-## Assets & Bibliotheken auf Share
+## Assets & Libraries on Share
 
-**Alle externen Abhängigkeiten kommen von `https://share.erfindergeist.org/` — kein CDN, kein npm.**
+See [root CLAUDE.md](../CLAUDE.md) for the full list of available libraries, the no-CDN rule, and Lucide icon constraints.
 
-| Typ | Pfad auf Share |
-|-----|---------------|
-| CSS | `/css/bootstrap.min.css`, `/css/aos.min.css` |
-| JS  | `/js/lib/jquery.min.js`, `bootstrap.bundle.min.js`, `gsap.min.js`, `ScrollTrigger.min.js`, `aos.min.js`, `typed.min.js`, `lucide.min.js`, `rough-notation.min.js` |
-| Fonts | `/fonts/Caveat-Regular.ttf`, `/fonts/Caveat-Bold.ttf` |
-| Logo | `/img/logo.svg` |
+Custom JS/CSS files live locally in the project (`js/`, `css/`).
 
-Eigene JS/CSS-Dateien liegen lokal im Projekt (`js/`, `css/`).  
-Neue externe Libs müssen auf Share abgelegt werden — keine externen CDN-URLs einbauen.
-
-## Lucide Icons
-
-Lucide wird über `lucide.min.js` von Share geladen und mit `lucide.createIcons()` initialisiert.
-
-**Wichtig: Lucide-Version auf Share ist älter — folgende Icons existieren NICHT:**
-`facebook`, `instagram`, `linkedin`, `github`, `mastodon` und andere Brand-Icons.
-
-Für Social-Icons immer **Inline-SVG** verwenden (Lucide-Stroke-Stil: `fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`). Mastodon-Icon ist fill-basiert (Sonderfall).
-
-**Dynamische Icons:** Wenn `data-lucide`-Elemente per JS ins DOM eingefügt werden, muss danach `lucide.createIcons()` erneut aufgerufen werden.
-
-## Bibliotheken
-
-Wenn eine Funktion durch eine bereits geladene Bibliothek abgedeckt werden kann, ist diese zu verwenden — keine neue Abhängigkeit hinzufügen. Keine eigene Lösung bauen, wenn Bootstrap, GSAP, jQuery, Lucide o.ä. das Problem bereits lösen.
-
-## CSS-Struktur
+## CSS Structure
 
 ```text
 css/
-├── main.css                      # Globale Styles (Vars, Dark Mode, Navbar, Buttons, Analogy-Box, Code-Block …)
+├── main.css                      # Global styles (vars, dark mode, navbar, buttons, analogy box, code block …)
 └── sections/
-    ├── section-hero.css          # Nur Hero-Section
-    ├── section-termine.css       # Nur Termine/Events-Section
-    ├── section-architektur.css   # Nur Architektur-Section (Chips, Constellation, Linien)
-    ├── section-ics.css           # Nur ICS-Section + Toast
-    ├── section-plugin.css        # Nur Plugin-Section (Endpoint-Cards, Explain-Cards, REST-Analogy)
-    ├── section-downloads.css     # Nur Downloads-Section (PDF-Steps, PDF-Cards)
-    ├── section-homeassistant.css # Nur Home-Assistant-Section
-    └── section-sponsoring.css    # Nur Sponsoring-Section
+    ├── section-hero.css          # Hero section only
+    ├── section-termine.css       # Events section only
+    ├── section-architektur.css   # Architecture section only (chips, constellation, lines)
+    ├── section-ics.css           # ICS section + toast only
+    ├── section-plugin.css        # Plugin section only (endpoint cards, explain cards, REST analogy)
+    ├── section-downloads.css     # Downloads section only (PDF steps, PDF cards)
+    ├── section-homeassistant.css # Home Assistant section only
+    └── section-sponsoring.css    # Sponsoring section only
 ```
 
-**Regel:** CSS, das ausschließlich in einer Section verwendet wird, gehört in deren Datei unter `css/sections/`. Globale Styles (Navbar, Buttons, Layout-Utilities, Komponenten die in mehreren Sections vorkommen wie `.analogy-box` oder `.code-block`) gehören in `main.css`.
+**Rule:** CSS used exclusively in one section belongs in its file under `css/sections/`. Global styles (navbar, buttons, layout utilities, components used in multiple sections like `.analogy-box` or `.code-block`) belong in `main.css`.
 
-## CSS-Regeln
+## CSS Rules
 
-**Bootstrap zuerst:** Bevor eigenes CSS geschrieben wird, prüfen ob Bootstrap das bereits über CSS-Variablen abdeckt.
+**Bootstrap first:** Before writing custom CSS, check whether Bootstrap already covers it via CSS variables.
 
-- Button-Farben über `--bs-btn-bg`, `--bs-btn-hover-bg` etc. auf der Klasse setzen (nicht `background-color` überschreiben)
-- Dropdown-Styling über `--bs-dropdown-*` vars in `:root` (nicht `.dropdown-menu` / `.dropdown-item` manuell überschreiben)
-- Farben, Body, Links über `--bs-primary`, `--bs-body-bg`, `--bs-link-color` etc. in `:root`
+- Button colours via `--bs-btn-bg`, `--bs-btn-hover-bg` etc. set on the class (do not override `background-color`)
+- Dropdown styling via `--bs-dropdown-*` vars in `:root` (do not override `.dropdown-menu` / `.dropdown-item` manually)
+- Colours, body, links via `--bs-primary`, `--bs-body-bg`, `--bs-link-color` etc. in `:root`
 
-**Totes CSS sofort entfernen:** Wenn HTML-Elemente entfernt werden, muss das zugehörige CSS ebenfalls entfernt werden. Niemals CSS für nicht mehr existierende Klassen oder IDs im Stylesheet lassen.
+**Remove dead CSS immediately:** When HTML elements are removed, the corresponding CSS must also be removed. Never leave CSS for non-existent classes or IDs in the stylesheet.
 
-**Kein Inline-CSS im HTML:** Styles gehören in `main.css`, nicht als `style="…"` Attribut. Ausnahmen nur für GSAP-Initialzustände (z.B. `opacity:0; pointer-events:none` am Scroll-Top-Button), die GSAP selbst überschreibt. Für alles andere:
+**No inline CSS in HTML:** Styles belong in `main.css`, not as `style="…"` attributes. Exceptions only for GSAP initial states (e.g. `opacity:0; pointer-events:none` on the scroll-to-top button) that GSAP itself overrides. For everything else:
 
-- Zustandsklassen verwenden (z.B. `text-muted`, `d-none`)
-- Wiederholende Styles in eine CSS-Klasse auslagern (z.B. `.events-loading-icon`)
-- Einmalige kontextabhängige Styles per spezifischem CSS-Selektor setzen (z.B. `.section-ha .badge { font-size: .8rem }`)
-- Bootstrap-Utilities (`mt-3`, `mx-auto`, `text-muted`) bevorzugen wenn passend
+- Use state classes (e.g. `text-muted`, `d-none`)
+- Extract repeated styles into a CSS class (e.g. `.events-loading-icon`)
+- Set one-off context-specific styles via specific CSS selector (e.g. `.section-ha .badge { font-size: .8rem }`)
+- Prefer Bootstrap utilities (`mt-3`, `mx-auto`, `text-muted`) where appropriate
 
-## Pflichtprüfungen
+## Required Checks
 
-**Neue Dateien:** Immer prüfen, ob die neue Datei in den Deploy-Workflows (`deploy-termine-prod.yml`, `deploy-termine-test.yml`) unter `exclude` aufgenommen werden muss (z.B. lokale Hilfsdateien, Mocks, Doku).
+**New files:** Always check whether the new file needs to be added to the deploy workflows (`deploy-termine-prod.yml`, `deploy-termine-test.yml`) under `exclude` (e.g. local helpers, mocks, docs).
 
-**HTML-Änderungen:** Wenn Elemente entfernt oder umgebaut werden, immer prüfen:
+**HTML changes:** When elements are removed or restructured, always check:
 
-- Gibt es CSS-Klassen in `css/main.css`, die jetzt tot sind? → sofort entfernen.
-- Gibt es `data-i18n`-Keys in `js/i18n.js`, die nicht mehr referenziert werden? → sofort entfernen.
+- Are there CSS classes in `css/main.css` that are now dead? → remove immediately.
+- Are there `data-i18n` keys in `js/i18n.js` that are no longer referenced? → remove immediately.
+
+## Code Quality & Security
+
+See root [CLAUDE.md](../CLAUDE.md) for the full rules. Summary for this module:
+
+- All PHP output into HTML **must** use `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')`
+- All values interpolated into URLs **must** use `rawurlencode($var)`
+- Run `podman compose run --rm composer analyse` from the project root before committing
+- `composer analyse` must pass with zero errors
 
 ## Bugs
 
-Baue keine Bugs ein. Halte dich an Code-Qualitätsstandards.
+Do not introduce bugs. Follow code quality standards.
 
-## Bekannter Bug: Horizontaler Overflow / volle Breite
+## Known Bug: Horizontal Overflow / Full Width
 
-**Symptom:** Seite wird schmaler als der Viewport oder ein horizontaler Scrollbalken erscheint.
+**Symptom:** Page becomes narrower than the viewport or a horizontal scrollbar appears.
 
-**Ursache:** GSAP-Animationen mit `x: ±N` (horizontale Translation) schieben Elemente temporär über den Viewport-Rand. `overflow-x: clip` auf `html` allein reicht nicht, weil `html` bei breiten Kindelementen mitwächst.
+**Cause:** GSAP animations with `x: ±N` (horizontal translation) temporarily push elements beyond the viewport edge. `overflow-x: clip` on `html` alone is not enough because `html` grows with wide child elements.
 
-**Fixe die NIEMALS entfernt werden dürfen:**
+**Fixes that must NEVER be removed:**
 
 ```css
 html    { overflow-x: clip; }
 body    { max-width: 100%; }
-section { overflow-x: clip; }   /* clippt GSAP-Animations-Überlauf */
+section { overflow-x: clip; }   /* clips GSAP animation overflow */
 ```
 
-**Regeln:**
+**Rules:**
 
-- `overflow-x: clip` auf `body` NICHT setzen — bricht `position: fixed` Elemente (Scroll-Top-Button, A11y-Toolbar)
-- `overflow-x: hidden` auf `body` NICHT setzen — gleicher Grund
-- Beim Hinzufügen von CSS immer prüfen, ob `body { max-width: 100% }` und `section { overflow-x: clip }` noch vorhanden sind
-- GSAP horizontale `x`-Werte möglichst klein halten (max ±40px)
+- Do NOT set `overflow-x: clip` on `body` — breaks `position: fixed` elements (scroll-to-top button, a11y toolbar)
+- Do NOT set `overflow-x: hidden` on `body` — same reason
+- When adding CSS always verify that `body { max-width: 100% }` and `section { overflow-x: clip }` are still present
+- Keep GSAP horizontal `x` values as small as possible (max ±40px)

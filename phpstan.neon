@@ -1,0 +1,11 @@
+parameters:
+    phpVersion: 80300
+    level: 5
+    paths:
+        - share/index.php
+        - share/assets/templates
+        - termine/index.php
+        - termine/templates
+        - presentations/index.php
+    excludePaths:
+        - vendor
