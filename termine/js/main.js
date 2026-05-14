@@ -247,6 +247,7 @@ $(document).ready(function () {
       successEl.classList.remove('d-none');
       resetBtn.classList.remove('d-none');
       if (window.lucide) { lucide.createIcons({ nodes: [successEl] }); }
+      if (window.achievements) { achievements.unlock('ics-solved'); }
       var noAnim = document.documentElement.classList.contains('reduce-motion') ||
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (window.gsap && !noAnim) {
@@ -535,6 +536,7 @@ $(document).ready(function () {
         jsonPanel.classList.remove('d-none');
 
         jsonEditor.addEventListener('input', function () {
+          if (window.achievements) { achievements.unlock('json-edit'); }
           try {
             var parsed  = JSON.parse(jsonEditor.value);
             var newList = Array.isArray(parsed) ? parsed : (parsed.events || parsed.items || []);
@@ -580,6 +582,7 @@ $(document).ready(function () {
       if (active || noAnim) { return; }
       active = true;
       card.classList.remove('pdf-step--pulsing');
+      if (window.achievements) { achievements.unlock('rocket'); }
 
       var iconEl = card.querySelector('.pdf-step-icon');
       var rect   = iconEl.getBoundingClientRect();
@@ -655,6 +658,7 @@ $(document).ready(function () {
 
       hitTimes.push(Date.now());
       var n = recentHits();
+      if (window.achievements) { achievements.unlock('bell-click'); }
 
       fireWaves();
       bell.classList.add('bell-js-active');
@@ -662,6 +666,7 @@ $(document).ready(function () {
 
       if (n >= 5) {
         isSpinning = true;
+        if (window.achievements) { achievements.unlock('bell-spin'); }
         var numRot = n >= 8 ? 3 : n >= 6 ? 2 : 1;
         var rotDur = Math.max(0.22, 0.50 - (n - 5) * 0.04);
 
@@ -702,6 +707,7 @@ $(document).ready(function () {
       wrap.classList.add('ha-zap-active');
       clearTimeout(timer);
       timer = setTimeout(function () { wrap.classList.remove('ha-zap-active'); }, 1800);
+      if (window.achievements) { achievements.unlock('zap'); }
     });
   }());
 

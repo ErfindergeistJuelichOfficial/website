@@ -132,6 +132,39 @@ const translations = {
     'ha.usecase': 'Beispiel: Lass deinen Smart Speaker jeden Abend ansagen, ob morgen ein Termin beim Erfindergeist stattfindet.',
     'ha.yaml.intro': 'Das folgende Beispiel zeigt für Entwickler, wie eine solche Automation technisch aussehen kann:',
 
+    'achievements.title':    'Errungenschaften',
+    'achievements.subtitle': 'Jede Entdeckung hinterlässt eine Spur',
+    'achievements.counter':  'freigeschaltet',
+    'achievements.reset':    'Zurücksetzen',
+
+    'achievement.bell_click.name': 'Erstes Läuten',
+    'achievement.bell_click.desc': 'Du hast die Glocke zum ersten Mal zum Klingen gebracht.',
+    'achievement.bell_click.hint': 'Klingt nach etwas...',
+
+    'achievement.bell_spin.name': 'Volldreher',
+    'achievement.bell_spin.desc': '360° - die Glocke hat sich komplett um die eigene Achse gedreht!',
+    'achievement.bell_spin.hint': 'Mehr Klicks, mehr Schwung...',
+
+    'achievement.ics_solved.name': 'Zeitdetektiv',
+    'achievement.ics_solved.desc': 'Das ICS-Datums-Rätsel geknackt!',
+    'achievement.ics_solved.hint': 'Drehe an den richtigen Rädern...',
+
+    'achievement.rocket.name': 'Abgehoben!',
+    'achievement.rocket.desc': 'Die Rakete ist gestartet - Ziel: Share-Server!',
+    'achievement.rocket.hint': 'Irgendetwas wartet auf den richtigen Moment...',
+
+    'achievement.show_me.name': 'Verbindungssucher',
+    'achievement.show_me.desc': 'Du hast die Brücke zwischen Termin und JSON sichtbar gemacht.',
+    'achievement.show_me.hint': 'Siehst du die Verbindung?',
+
+    'achievement.zap.name': 'Blitzeinschlag',
+    'achievement.zap.desc': 'Der Blitz hat voll eingeschlagen!',
+    'achievement.zap.hint': 'Energie liegt in der Luft...',
+
+    'achievement.json_edit.name': 'Daten-Hacker',
+    'achievement.json_edit.desc': 'Du hast die Live-Daten eigenhändig verändert!',
+    'achievement.json_edit.hint': 'Die Daten sind formbar...',
+
     'sponsor.title':       'Unterstütze uns!',
     'sponsor.subtitle':    'Gemeinnützig — und auf deine Hilfe angewiesen',
     'sponsor.description': 'Der Erfindergeist Jülich e.V. ist ein eingetragener gemeinnütziger Verein. Wir finanzieren uns ausschließlich durch Mitgliedsbeiträge, Förderungen und Spenden. Jeder Beitrag hilft uns, unsere Werkstatt offen zu halten und Projekte für alle anzubieten.',
@@ -302,6 +335,39 @@ const translations = {
     'ha.description': "Our /tomorrow endpoint returns only tomorrow's events — perfect for smart home automations. No filtering, no searching: directly the relevant data.",
     'ha.usecase': "Example: Have your smart speaker announce each evening whether there's an Erfindergeist event tomorrow.",
     'ha.yaml.intro': 'The following example shows developers how such an automation can be built technically:',
+
+    'achievements.title':    'Achievements',
+    'achievements.subtitle': 'Every discovery leaves a trace',
+    'achievements.counter':  'unlocked',
+    'achievements.reset':    'Reset',
+
+    'achievement.bell_click.name': 'First Ring',
+    'achievement.bell_click.desc': 'You rang the bell for the very first time.',
+    'achievement.bell_click.hint': 'Sounds like something...',
+
+    'achievement.bell_spin.name': 'Full Spin',
+    'achievement.bell_spin.desc': '360° — the bell did a complete rotation!',
+    'achievement.bell_spin.hint': 'More clicks, more momentum...',
+
+    'achievement.ics_solved.name': 'Time Detective',
+    'achievement.ics_solved.desc': 'You cracked the ICS date puzzle!',
+    'achievement.ics_solved.hint': 'Turn the right wheels...',
+
+    'achievement.rocket.name': 'Lift-off!',
+    'achievement.rocket.desc': 'The rocket has launched — destination: share server!',
+    'achievement.rocket.hint': 'Something is waiting for the right moment...',
+
+    'achievement.show_me.name': 'Connection Found',
+    'achievement.show_me.desc': 'You revealed the bridge between event and JSON.',
+    'achievement.show_me.hint': 'Can you see the connection?',
+
+    'achievement.zap.name': 'Lightning Strike',
+    'achievement.zap.desc': 'The lightning struck with full force!',
+    'achievement.zap.hint': 'Energy is in the air...',
+
+    'achievement.json_edit.name': 'Data Hacker',
+    'achievement.json_edit.desc': 'You modified the live data with your own hands!',
+    'achievement.json_edit.hint': 'Data is malleable...',
 
     'sponsor.title':       'Support Us!',
     'sponsor.subtitle':    'Non-profit — and relying on your help',

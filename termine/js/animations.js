@@ -193,6 +193,7 @@ function initShowMeAnimation() {
     if (!srcEl || !tgtEl) { return; }
 
     btn.classList.add('animating');
+    if (window.achievements) { achievements.unlock('show-me'); }
 
     // Live JSON value highlight
     var jsonPanel  = document.getElementById('events-json-panel');

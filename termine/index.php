@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/sections/section-plugin.css?v=<?= filemtime('css/sections/section-plugin.css') ?>">
   <link rel="stylesheet" href="css/sections/section-downloads.css?v=<?= filemtime('css/sections/section-downloads.css') ?>">
   <link rel="stylesheet" href="css/sections/section-homeassistant.css?v=<?= filemtime('css/sections/section-homeassistant.css') ?>">
+  <link rel="stylesheet" href="css/sections/section-archivments.css?v=<?= filemtime('css/sections/section-archivments.css') ?>">
   <link rel="stylesheet" href="css/sections/section-sponsoring.css?v=<?= filemtime('css/sections/section-sponsoring.css') ?>">
 </head>
 <body>
@@ -88,6 +89,7 @@
   <?php include __DIR__ . '/templates/section-ics.php'; ?>
   <?php include __DIR__ . '/templates/section-plugin.php'; ?>
   <?php include __DIR__ . '/templates/section-homeassistant.php'; ?>
+  <?php include __DIR__ . '/templates/section-archivments.php'; ?>
   <?php include __DIR__ . '/templates/section-sponsoring.php'; ?>
 
 </main>
@@ -213,6 +215,7 @@
 <script src="js/theme.js?v=<?= filemtime('js/theme.js') ?>"></script>
 <script src="js/accessibility.js?v=<?= filemtime('js/accessibility.js') ?>"></script>
 <script src="js/animations.js?v=<?= filemtime('js/animations.js') ?>"></script>
+<script src="js/achievements.js?v=<?= filemtime('js/achievements.js') ?>"></script>
 <script src="js/main.js?v=<?= filemtime('js/main.js') ?>"></script>
 <script src="https://share.erfindergeist.org/js/components/eg-footer.js"></script>
 
