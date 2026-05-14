@@ -130,7 +130,7 @@
   <div class="col-6 col-md-3">
     <p class="footer-col-title" data-i18n="footer.section.subscribe">Abonnieren</p>
     <ul class="footer-col-links">
-      <li><a href="https://calendar.google.com/calendar/r/settings/addbyurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
+      <li><a href="https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
              target="_blank" rel="noopener noreferrer">Google Calendar</a></li>
       <li><a href="https://outlook.live.com/calendar/0/addfromurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics" target="_blank" rel="noopener noreferrer">Outlook</a></li>
       <li><a href="webcals://erfindergeist.org/wp-json/erfindergeist/v2/ics">Apple Calendar</a></li>

@@ -55,7 +55,7 @@
           </div>
           <span class="ics-cal-label" data-i18n="ics.cal.label">Abonnieren in:</span>
           <div class="d-flex flex-wrap gap-2">
-            <a href="https://calendar.google.com/calendar/r/settings/addbyurl?url=https%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
+            <a href="https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Ferfindergeist.org%2Fwp-json%2Ferfindergeist%2Fv2%2Fics"
                class="ics-cal-btn ics-cal-google" target="_blank" rel="noopener noreferrer"
                aria-label="In Google Calendar abonnieren">
               <i data-lucide="calendar-plus" aria-hidden="true"></i>Google
