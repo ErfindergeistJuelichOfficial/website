@@ -96,9 +96,8 @@ function eg_scan_recursive(string $base, string $rel, array $allowed_ext = []): 
   }
   $files = [];
   try {
-    $it = new RecursiveIteratorIterator(
-      new RecursiveDirectoryIterator($abs, RecursiveDirectoryIterator::SKIP_DOTS)
-    );
+    $dir = new RecursiveDirectoryIterator($abs, RecursiveDirectoryIterator::SKIP_DOTS);
+    $it  = new RecursiveIteratorIterator($dir);
     foreach ($it as $file) {
       if (!$file->isFile()) {
         continue;
