@@ -14,7 +14,7 @@
   position: absolute;
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  clip-path: path('M4 19a11 11 0 0 1 19.182-7.352 1.12 1.12 0 0 0 1.636 0A10.98 10.98 0 0 1 44 19c0 4.58-3 8-6 11l-10.984 10.626a4 4 0 0 1-6 .038L10 30c-3-3-6-6.4-6-11');
   background: var(--color-secondary);
   opacity: 0;
 }
