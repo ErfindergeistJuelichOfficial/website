@@ -65,7 +65,7 @@
                aria-label="In Outlook abonnieren">
               <i data-lucide="calendar-plus" aria-hidden="true"></i>Outlook
             </a>
-            <a href="webcal://erfindergeist.org/wp-json/erfindergeist/v2/ics"
+            <a href="webcals://erfindergeist.org/wp-json/erfindergeist/v2/ics"
                class="ics-cal-btn ics-cal-apple"
                aria-label="In Apple Calendar abonnieren">
               <i data-lucide="calendar-plus" aria-hidden="true"></i>Apple
@@ -75,7 +75,7 @@
                aria-label="In Yahoo Calendar abonnieren">
               <i data-lucide="calendar-plus" aria-hidden="true"></i>Yahoo
             </a>
-            <a href="webcal://erfindergeist.org/wp-json/erfindergeist/v2/ics"
+            <a href="webcals://erfindergeist.org/wp-json/erfindergeist/v2/ics"
                class="ics-cal-btn ics-cal-thunderbird"
                aria-label="In Thunderbird abonnieren">
               <i data-lucide="calendar-plus" aria-hidden="true"></i>Thunderbird
