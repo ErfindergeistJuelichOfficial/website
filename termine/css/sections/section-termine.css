@@ -116,24 +116,53 @@
 
 .events-source-hint code { font-size: .8rem; margin: 0 2px; }
 
+#events-show-me {
+  background: var(--color-secondary);
+  border: 1.5px solid var(--color-secondary);
+  color: #1a2e2c;
+  font-weight: 600;
+  animation: show-me-pulse 1.8s ease-in-out infinite;
+}
+#events-show-me:hover   { background: #e8a020; border-color: #e8a020; color: #1a2e2c; }
+#events-show-me.animating { animation: none; }
+@keyframes show-me-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249,179,56,.55); }
+  50%       { box-shadow: 0 0 0 8px rgba(249,179,56,0); }
+}
+
 .json-anatomy { display: flex; flex-direction: column; align-items: center; }
-.json-anatomy-example code { font-size: .85rem; }
-.json-anatomy-rows {
-  display: flex;
-  flex-direction: column;
-  gap: .2rem;
-  align-items: flex-start;
-}
-.json-anatomy-row {
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-}
-.json-anatomy-row code { font-size: .78rem; }
-.json-arrow { color: var(--color-text-muted); flex-shrink: 0; }
 .json-key-sample { color: var(--color-primary); }
 .json-val-sample { color: #b45309; }
 [data-theme="dark"] .json-val-sample { color: #fbbf24; }
+.json-brace { color: var(--color-primary); font-weight: 700; }
+.json-specimen {
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 8px;
+  padding: .7rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  width: 100%;
+}
+.json-specimen-line {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.json-specimen-line code { font-size: .8rem; }
+.json-specimen-dim code { opacity: .4; }
+.json-callout { font-size: .72rem; color: var(--color-text-muted); }
+.json-callout-accent { color: var(--color-primary); font-weight: 600; }
+.json-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  font-size: .75rem;
+  justify-content: center;
+}
 .events-source-badge {
   display: inline-flex;
   align-items: center;
@@ -152,3 +181,16 @@
 }
 .events-source-badge:hover { background: var(--color-primary-dark); color: #fff; }
 .events-source-badge [data-lucide] { width: 12px; height: 12px; }
+
+.json-val-hl {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: .76rem;
+  background: rgba(249,179,56,.12);
+  border: 1.5px solid #F9B338;
+  border-radius: 6px;
+  padding: .35rem .75rem;
+  margin-bottom: .4rem;
+}
+.json-val-hl-pre { color: var(--color-text-muted); }
+.json-val-hl-val { color: #b45309; font-weight: 600; }
+[data-theme="dark"] .json-val-hl-val { color: #F9B338; }
