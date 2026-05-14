@@ -22,7 +22,7 @@
         </p>
 
         <div class="json-anatomy mb-3" data-aos="fade-up" data-aos-delay="100">
-          <p class="small text-muted mb-3 text-center" data-i18n="events.json.explain.intro">Hinter jeder Veranstaltung steckt ein JSON-Objekt — und Objekte erkennst du immer an { }. Schau, was drin steckt:</p>
+          
           <div class="json-specimen">
             <div class="json-specimen-line">
               <code><span class="json-brace">{</span></code>
