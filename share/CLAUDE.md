@@ -120,8 +120,19 @@ share/
 5. Configs - JSON files from `config/`
 6. APIs - static list from `$api_entries` in `index.php`
 
-Anchor links activate the corresponding tab directly:
-`#presentations`, `#logos`, `#qr`, `#configs`, `#apis`
+The client-side router (`share.js`) reads and writes URL state via `history.replaceState` — no page reload.
+
+| State | URL parameter |
+| --- | --- |
+| Active tab | hash: `#presentations`, `#logos`, `#qr`, `#configs`, `#apis` (downloads = default, no hash) |
+| Search text | `?q=bierdeckel` |
+| Bereich filter | `?bereich=marketing` |
+| Thema filter | `?thema=Bierdeckel` |
+| Gruppe filter | `?gruppe=spezifisch` |
+
+Parameters can be combined: `?q=flyer&bereich=marketing#downloads`
+
+All filter state is preserved in the URL across tab switches so links can be shared directly.
 
 ---
 

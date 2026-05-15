@@ -6,29 +6,88 @@ document.getElementById('theme-toggle').addEventListener('click', function () {
   localStorage.setItem('eg-theme', next);
 });
 
-var anchorTabMap = {
-  '#presentations': 'tab-presentations-trigger',
-  '#logos':         'tab-logos-trigger',
-  '#qr':            'tab-qr-trigger',
-  '#configs':       'tab-configs-trigger',
-  '#apis':          'tab-apis-trigger'
+// ── Router ────────────────────────────────────────────────────────────────────
+var TAB_DEFAULT = 'downloads';
+var TAB_HASHES = {
+  'downloads':     'tab-downloads-trigger',
+  'presentations': 'tab-presentations-trigger',
+  'logos':         'tab-logos-trigger',
+  'qr':            'tab-qr-trigger',
+  'configs':       'tab-configs-trigger',
+  'apis':          'tab-apis-trigger',
 };
-var trigger = anchorTabMap[window.location.hash];
-if (trigger) {
-  var el = document.getElementById(trigger);
-  if (el) { bootstrap.Tab.getOrCreateInstance(el).show(); }
+var TRIGGER_TO_HASH = {};
+Object.keys(TAB_HASHES).forEach(function (h) { TRIGGER_TO_HASH[TAB_HASHES[h]] = h; });
+
+function routeRead() {
+  var params = new URLSearchParams(window.location.search);
+  var hash   = window.location.hash.slice(1);
+  return {
+    tab:     TAB_HASHES[hash] ? hash : TAB_DEFAULT,
+    q:       params.get('q')       || '',
+    bereich: params.get('bereich') || '',
+    thema:   params.get('thema')   || '',
+    gruppe:  params.get('gruppe')  || '',
+  };
 }
 
-var activeBereich = '';
-var activeThema   = '';
-var activeGruppe  = '';
+function routeWrite(tab, q, bereich, thema, gruppe) {
+  var params = new URLSearchParams();
+  if (q)       { params.set('q',       q); }
+  if (bereich) { params.set('bereich', bereich); }
+  if (thema)   { params.set('thema',   thema); }
+  if (gruppe)  { params.set('gruppe',  gruppe); }
+  var search = params.toString() ? '?' + params.toString() : '';
+  var hash   = tab !== TAB_DEFAULT ? '#' + tab : '';
+  history.replaceState(null, '', (search + hash) || window.location.pathname);
+}
 
-document.getElementById('file-search').addEventListener('input', applyDownloadFilters);
+// ── Apply initial tab from route ──────────────────────────────────────────────
+var route = routeRead();
+var tabTriggerEl = document.getElementById(TAB_HASHES[route.tab]);
+if (tabTriggerEl) { bootstrap.Tab.getOrCreateInstance(tabTriggerEl).show(); }
+
+var activeTab = route.tab;
+document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (trigger) {
+  trigger.addEventListener('shown.bs.tab', function () {
+    activeTab = TRIGGER_TO_HASH[this.id] || TAB_DEFAULT;
+    routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+  });
+});
+
+// ── Downloads filters ─────────────────────────────────────────────────────────
+var activeQ       = route.q;
+var activeBereich = route.bereich;
+var activeThema   = route.thema;
+var activeGruppe  = route.gruppe;
+
+var searchEl = document.getElementById('file-search');
+if (searchEl && route.q) { searchEl.value = route.q; }
+
+function setSelectValue(id, val) {
+  var el = document.getElementById(id);
+  if (el && val) { el.value = val; }
+}
+setSelectValue('bereich-filter', route.bereich);
+setSelectValue('thema-filter',   route.thema);
+setSelectValue('gruppe-filter',  route.gruppe);
+
+if (searchEl) {
+  searchEl.addEventListener('input', function () {
+    activeQ = this.value;
+    routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+    applyDownloadFilters();
+  });
+}
 
 function bindDlFilter(id, setter) {
   var el = document.getElementById(id);
   if (el) {
-    el.addEventListener('change', function () { setter(this.value); applyDownloadFilters(); });
+    el.addEventListener('change', function () {
+      setter(this.value);
+      routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+      applyDownloadFilters();
+    });
   }
 }
 bindDlFilter('bereich-filter', function (v) { activeBereich = v; });
@@ -36,7 +95,7 @@ bindDlFilter('thema-filter',   function (v) { activeThema   = v; });
 bindDlFilter('gruppe-filter',  function (v) { activeGruppe  = v; });
 
 function applyDownloadFilters() {
-  var q = document.getElementById('file-search').value.toLowerCase();
+  var q = activeQ.toLowerCase();
   document.querySelectorAll('#downloads-table tbody tr').forEach(function (row) {
     var parts        = row.dataset.folder ? row.dataset.folder.split('/') : [];
     var nameMatch    = !q || row.dataset.name.toLowerCase().includes(q)
@@ -48,6 +107,11 @@ function applyDownloadFilters() {
   });
 }
 
+if (route.q || route.bereich || route.thema || route.gruppe) {
+  applyDownloadFilters();
+}
+
+// ── Copy-to-clipboard ─────────────────────────────────────────────────────────
 document.querySelectorAll('.btn-copy').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var url = btn.dataset.url;
@@ -64,6 +128,7 @@ document.querySelectorAll('.btn-copy').forEach(function (btn) {
   });
 });
 
+// ── Scroll-to-top ─────────────────────────────────────────────────────────────
 var scrollBtn = document.getElementById('scroll-top');
 window.addEventListener('scroll', function () {
   scrollBtn.classList.toggle('visible', window.scrollY > 300);

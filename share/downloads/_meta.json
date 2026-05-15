@@ -8,7 +8,7 @@
     {
       "@type": "MediaObject",
       "name": "datenschutz.pdf",
-      "description": "Datenschutzinformationen Auslegen bei Veranstaltungen, Jeder Besucher muss trotzdem eine Datenschutzerklärung unterschreiben",
+      "description": "Datenschutzinformationen Auslegen bei Veranstaltungen, Jeder Besucher muss trotzdem eine Individuelle Datenschutzerklärung unterschreiben",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/datenschutz.html"
     },
     {
@@ -62,7 +62,7 @@
     {
       "@type": "MediaObject",
       "name": "repaircafe_haftungsbegrenzung.pdf",
-      "description": "Laufzettel für das Repair Café, Vorderseite des Laufzettel",
+      "description": "Laufzettel für das Repair Café, Vorderseite des Laufzettel. Datenschutzerklärung muss ausgelegt werden.",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_haftungsbegrenzung.html"
     }
   ]

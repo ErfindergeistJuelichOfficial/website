@@ -94,6 +94,45 @@ Validierungsfehler werden im Downloads-Tab als Alert angezeigt.
 
 ---
 
+## Deep-Links
+
+Die Seite unterstützt Links, die direkt einen bestimmten Tab, eine Suche oder einen Filter öffnen. Der Zustand wird per `history.replaceState` in die URL geschrieben - kein Seitenneuladen.
+
+### Tab öffnen
+
+| Tab | URL |
+| --- | --- |
+| Downloads (Standard) | `https://share.erfindergeist.org/` |
+| Präsentationen | `https://share.erfindergeist.org/#presentations` |
+| Logos | `https://share.erfindergeist.org/#logos` |
+| QR Codes | `https://share.erfindergeist.org/#qr` |
+| Configs | `https://share.erfindergeist.org/#configs` |
+| APIs | `https://share.erfindergeist.org/#apis` |
+
+### Suche und Filter vorbelegen
+
+```text
+# Suche nach "bierdeckel"
+https://share.erfindergeist.org/?q=bierdeckel
+
+# Nur Bereich "marketing" anzeigen
+https://share.erfindergeist.org/?bereich=marketing
+
+# Bereich + Thema kombiniert
+https://share.erfindergeist.org/?bereich=marketing&thema=Bierdeckel
+
+# Suche + Filter + Tab explizit
+https://share.erfindergeist.org/?q=flyer&bereich=marketing#downloads
+```
+
+Lokal (ersetze Host):
+
+```text
+http://localhost:8080/?bereich=marketing&thema=Bierdeckel
+```
+
+---
+
 ## Hinweis
 
 `compose.yaml`, `README.md` und `CLAUDE.md` werden vom Deploy-Workflow **nicht**
