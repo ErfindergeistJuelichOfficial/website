@@ -85,10 +85,12 @@ $__hasGruppe  = !empty($gruppen);
                 <span class="file-badge <?= $extClass ?>"><?= strtoupper($ext) ?></span>
               </td>
               <td class="dl-name-cell">
-                <span class="fw-semibold"><?= $safeLabel ?></span>
-                <?php if ($entry['description'] !== '') : ?>
-                  <small class="text-muted d-block"><?= htmlspecialchars($entry['description'], ENT_QUOTES, 'UTF-8') ?></small>
-                <?php endif; ?>
+                <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="dl-name-link">
+                  <span class="fw-semibold"><?= $safeLabel ?></span>
+                  <?php if ($entry['description'] !== '') : ?>
+                    <small class="text-muted d-block"><?= htmlspecialchars($entry['description'], ENT_QUOTES, 'UTF-8') ?></small>
+                  <?php endif; ?>
+                </a>
               </td>
               <?php if ($__hasBereich) : ?>
                 <td class="text-muted small"><?= htmlspecialchars($parts[0] ?? '', ENT_QUOTES, 'UTF-8') ?></td>

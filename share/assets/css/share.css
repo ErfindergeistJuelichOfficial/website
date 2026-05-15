@@ -144,6 +144,14 @@ main { flex: 1; }
 .file-badge.default { background: var(--color-primary-light); color: var(--color-primary); }
 .file-dl-icon { width: 14px; height: 14px; color: var(--color-text-muted); flex-shrink: 0; }
 
+/* ── Downloads name link ── */
+.dl-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+.dl-name-link:hover { color: var(--color-primary); }
+.dl-name-link:hover .text-muted { color: var(--color-primary) !important; opacity: .75; }
+
 /* ── Downloads table ── */
 #downloads-table td              { white-space: nowrap; }
 #downloads-table .dl-name-cell   { white-space: normal; min-width: 200px; }
