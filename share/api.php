@@ -305,6 +305,139 @@ function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): 
 }
 
 /**
+ * Flatten a DataCatalog downloads tree into a list of file entries and collect errors.
+ *
+ * @param array<string,mixed> $node
+ * @return array{entries: array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,encodingFormat:string}>, errors: string[]}
+ */
+function eg_flatten_downloads(array $node, string $folderRel = ''): array
+{
+  $entries = [];
+  $errors  = array_values((array) ($node['errors'] ?? []));
+
+  foreach ((array) ($node['files'] ?? []) as $file) {
+    if (!is_array($file)) {
+      continue;
+    }
+    $entries[] = [
+      'name'           => (string) ($file['name']           ?? ''),
+      'path'           => (string) ($file['path']           ?? ''),
+      'folder'         => $folderRel,
+      'description'    => (string) ($file['description']    ?? ''),
+      'wikiUrl'        => (string) ($file['wikiUrl']        ?? ''),
+      'rawUrl'         => (string) ($file['rawUrl']         ?? ''),
+      'encodingFormat' => (string) ($file['encodingFormat'] ?? ''),
+    ];
+  }
+
+  foreach ((array) ($node['folders'] ?? []) as $sub) {
+    if (!is_array($sub)) {
+      continue;
+    }
+    $subName = (string) ($sub['name'] ?? '');
+    $subRel  = $folderRel !== '' ? "$folderRel/$subName" : $subName;
+    $child   = eg_flatten_downloads($sub, $subRel);
+    $entries = array_merge($entries, $child['entries']);
+    $errors  = array_merge($errors, $child['errors']);
+  }
+
+  return ['entries' => $entries, 'errors' => $errors];
+}
+
+/**
+ * Extract sorted unique Bereich/Thema/Gruppe values from a flat entries list.
+ *
+ * @param array<array{folder:string}> $entries
+ * @return array{bereiche:string[],themen:string[],gruppen:string[]}
+ */
+function eg_extract_filter_values(array $entries): array
+{
+  $bereiche = [];
+  $themen   = [];
+  $gruppen  = [];
+  foreach ($entries as $e) {
+    if ($e['folder'] === '') {
+      continue;
+    }
+    $parts = explode('/', $e['folder']);
+    if (($parts[0] ?? '') !== '') {
+      $bereiche[] = $parts[0];
+    }
+    if (($parts[1] ?? '') !== '') {
+      $themen[] = $parts[1];
+    }
+    if (($parts[2] ?? '') !== '') {
+      $gruppen[] = $parts[2];
+    }
+  }
+  foreach ([&$bereiche, &$themen, &$gruppen] as &$arr) {
+    $arr = array_values(array_unique($arr));
+    sort($arr);
+  }
+  unset($arr);
+  return ['bereiche' => $bereiche, 'themen' => $themen, 'gruppen' => $gruppen];
+}
+
+/**
+ * Build a name => pdf-filename map from presentations items.
+ *
+ * @param array<array<string,mixed>> $items
+ * @return array<string,string|null>
+ */
+function eg_build_pres_entries(array $items): array
+{
+  $result = [];
+  foreach ($items as $item) {
+    $pdf = null;
+    foreach ((array) ($item['hasPart'] ?? []) as $part) {
+      if (
+          is_array($part)
+          && strtolower(pathinfo((string) ($part['name'] ?? ''), PATHINFO_EXTENSION)) === 'pdf'
+      ) {
+        $pdf = (string) $part['name'];
+        break;
+      }
+    }
+    $result[(string) ($item['name'] ?? '')] = $pdf;
+  }
+  return $result;
+}
+
+/**
+ * Build all view data needed by index.php in a single call.
+ *
+ * @return array{
+ *   entries:        array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,encodingFormat:string}>,
+ *   dl_errors:      string[],
+ *   bereiche:       string[],
+ *   themen:         string[],
+ *   gruppen:        string[],
+ *   img_entries:    string[],
+ *   qr_entries:     string[],
+ *   config_entries: string[],
+ *   pres_entries:   array<string,string|null>,
+ * }
+ */
+function eg_page_data(): array
+{
+  $api       = eg_assets_data();
+  $downloads = eg_flatten_downloads($api['assets']['downloads']);
+  $filters   = eg_extract_filter_values($downloads['entries']);
+
+  return [
+    'entries'        => $downloads['entries'],
+    'dl_errors'      => $downloads['errors'],
+    'bereiche'       => $filters['bereiche'],
+    'themen'         => $filters['themen'],
+    'gruppen'        => $filters['gruppen'],
+    'img_entries'    => array_column($api['assets']['img']['files'], 'name'),
+    'qr_entries'     => array_column($api['assets']['qr']['files'], 'name'),
+    'config_entries' => array_column($api['assets']['config']['files'], 'name'),
+    'pres_entries'   => eg_build_pres_entries($api['assets']['presentations']['items']),
+  ];
+}
+
+/**
  * Scan config/ and return files list plus parsed JSON content of each file.
  *
  * @return array{files: array<array<string,mixed>>, content: array<string,mixed>}
