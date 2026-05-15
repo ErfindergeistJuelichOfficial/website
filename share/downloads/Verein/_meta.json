@@ -10,7 +10,8 @@
       "@type": "MediaObject",
       "name": "vereinssatzung.pdf",
       "description": "Vereinssatzung des Vereins Erfindergeist Jülich e.V.",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/vereinssatzung.html"
+      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/vereinssatzung.html",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/vereinssatzung-mYcVAwWpu4"
     },
     {
       "@type": "MediaObject",

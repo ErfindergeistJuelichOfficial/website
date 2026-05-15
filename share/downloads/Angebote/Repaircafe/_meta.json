@@ -9,24 +9,28 @@
       "@type": "MediaObject",
       "name": "termine_repaircafe_quer.pdf",
       "description": "Terminübersicht Repair Café im Querformat",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine_repaircafe.html"
     },
     {
       "@type": "MediaObject",
       "name": "termine_repaircafe_hoch.pdf",
       "description": "Terminübersicht Repair Café im Hochformat",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine_repaircafe.html"
     },
     {
       "@type": "MediaObject",
       "name": "repaircafe_laufzettel.pdf",
       "description": "Laufzettel für das Repair Café, Rückseite der Haftungsbegrenzung",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_laufzettel.html"
     },
     {
       "@type": "MediaObject",
       "name": "repaircafe_haftungsbegrenzung.pdf",
       "description": "Laufzettel für das Repair Café, Vorderseite des Laufzettel. Datenschutzerklärung muss ausgelegt werden.",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_haftungsbegrenzung.html"
     }
   ]

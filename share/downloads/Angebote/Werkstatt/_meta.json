@@ -9,12 +9,14 @@
       "@type": "MediaObject",
       "name": "verhaltensregeln.pdf",
       "description": "Verhaltensregeln unserer Werkstatt",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/verhaltensregeln-eokwcOmpCE",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/verhaltensregeln.html"
     },
     {
       "@type": "MediaObject",
       "name": "einweisung_werkstatt.pdf",
       "description": "Einweisungsbestätigung und Haftungsausschluss für die Werkstatt",
+      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/haftungsausschluss-wlka6EnP4C",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/einweisung_werkstatt.html"
     }
   ]
