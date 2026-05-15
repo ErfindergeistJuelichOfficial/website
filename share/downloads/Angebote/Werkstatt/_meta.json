@@ -1,0 +1,21 @@
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "@id": "https://share.erfindergeist.org/downloads/",
+  "name": "Werkstatt Downloads",
+  "description": "Downloads für die Werkstatt des Vereins Erfindergeist Jülich e.V.",
+  "hasPart": [
+    {
+      "@type": "MediaObject",
+      "name": "verhaltensregeln.pdf",
+      "description": "Verhaltensregeln unserer Werkstatt",
+      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/verhaltensregeln.html"
+    },
+    {
+      "@type": "MediaObject",
+      "name": "einweisung_werkstatt.pdf",
+      "description": "Einweisungsbestätigung und Haftungsausschluss für die Werkstatt",
+      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/einweisung_werkstatt.html"
+    }
+  ]
+}

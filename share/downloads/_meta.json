@@ -7,12 +7,6 @@
   "hasPart": [
     {
       "@type": "MediaObject",
-      "name": "datenschutz.pdf",
-      "description": "Datenschutzinformationen Auslegen bei Veranstaltungen, Jeder Besucher muss trotzdem eine Individuelle Datenschutzerklärung unterschreiben",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/datenschutz.html"
-    },
-    {
-      "@type": "MediaObject",
       "name": "verhaltensregeln.pdf",
       "description": "Verhaltensregeln unserer Werkstatt",
       "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/verhaltensregeln.html"
