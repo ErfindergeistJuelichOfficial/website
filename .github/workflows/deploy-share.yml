@@ -28,6 +28,7 @@ jobs:
             **/compose.yaml
             **/README.md
             **/CLAUDE.md
+            **/galerie-plan.md
             **/.gitkeep
             presentations/hallo-welt/**
             downloads/mock-*

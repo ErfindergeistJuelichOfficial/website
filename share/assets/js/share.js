@@ -1,8 +1,9 @@
 if (window.lucide) { lucide.createIcons(); }
 
-document.getElementById('theme-toggle').addEventListener('click', function () {
-  var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
+// ── Theme toggle ──────────────────────────────────────────────────────────────
+$('#theme-toggle').on('click', function () {
+  var next = $('html').attr('data-theme') === 'dark' ? 'light' : 'dark';
+  $('html').attr('data-theme', next);
   localStorage.setItem('eg-theme', next);
 });
 
@@ -17,7 +18,7 @@ var TAB_HASHES = {
   'apis':          'tab-apis-trigger',
 };
 var TRIGGER_TO_HASH = {};
-Object.keys(TAB_HASHES).forEach(function (h) { TRIGGER_TO_HASH[TAB_HASHES[h]] = h; });
+$.each(TAB_HASHES, function (h, id) { TRIGGER_TO_HASH[id] = h; });
 
 function routeRead() {
   var params = new URLSearchParams(window.location.search);
@@ -43,16 +44,14 @@ function routeWrite(tab, q, bereich, thema, gruppe) {
 }
 
 // ── Apply initial tab from route ──────────────────────────────────────────────
-var route = routeRead();
-var tabTriggerEl = document.getElementById(TAB_HASHES[route.tab]);
-if (tabTriggerEl) { bootstrap.Tab.getOrCreateInstance(tabTriggerEl).show(); }
-
+var route     = routeRead();
 var activeTab = route.tab;
-document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (trigger) {
-  trigger.addEventListener('shown.bs.tab', function () {
-    activeTab = TRIGGER_TO_HASH[this.id] || TAB_DEFAULT;
-    routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
-  });
+var tabEl     = document.getElementById(TAB_HASHES[route.tab]);
+if (tabEl) { bootstrap.Tab.getOrCreateInstance(tabEl).show(); }
+
+$('[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+  activeTab = TRIGGER_TO_HASH[this.id] || TAB_DEFAULT;
+  routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
 });
 
 // ── Downloads filters ─────────────────────────────────────────────────────────
@@ -61,78 +60,90 @@ var activeBereich = route.bereich;
 var activeThema   = route.thema;
 var activeGruppe  = route.gruppe;
 
-var searchEl = document.getElementById('file-search');
-if (searchEl && route.q) { searchEl.value = route.q; }
+if (route.q)       { $('#file-search').val(route.q); }
+if (route.bereich) { $('#bereich-filter').val(route.bereich); }
+if (route.thema)   { $('#thema-filter').val(route.thema); }
+if (route.gruppe)  { $('#gruppe-filter').val(route.gruppe); }
 
-function setSelectValue(id, val) {
-  var el = document.getElementById(id);
-  if (el && val) { el.value = val; }
-}
-setSelectValue('bereich-filter', route.bereich);
-setSelectValue('thema-filter',   route.thema);
-setSelectValue('gruppe-filter',  route.gruppe);
-
-if (searchEl) {
-  searchEl.addEventListener('input', function () {
-    activeQ = this.value;
-    routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
-    applyDownloadFilters();
-  });
+function updateClearButton() {
+  $('#clear-filters').toggle(!!(activeQ || activeBereich || activeThema || activeGruppe));
 }
 
-function bindDlFilter(id, setter) {
-  var el = document.getElementById(id);
-  if (el) {
-    el.addEventListener('change', function () {
-      setter(this.value);
-      routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
-      applyDownloadFilters();
-    });
-  }
-}
-bindDlFilter('bereich-filter', function (v) { activeBereich = v; });
-bindDlFilter('thema-filter',   function (v) { activeThema   = v; });
-bindDlFilter('gruppe-filter',  function (v) { activeGruppe  = v; });
+$('#file-search').on('input', function () {
+  activeQ = $(this).val();
+  routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+  applyDownloadFilters();
+  updateClearButton();
+});
+
+$('#bereich-filter').on('change', function () {
+  activeBereich = $(this).val();
+  routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+  applyDownloadFilters();
+  updateClearButton();
+});
+
+$('#thema-filter').on('change', function () {
+  activeThema = $(this).val();
+  routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+  applyDownloadFilters();
+  updateClearButton();
+});
+
+$('#gruppe-filter').on('change', function () {
+  activeGruppe = $(this).val();
+  routeWrite(activeTab, activeQ, activeBereich, activeThema, activeGruppe);
+  applyDownloadFilters();
+  updateClearButton();
+});
+
+$('#clear-filters').on('click', function () {
+  activeQ = ''; activeBereich = ''; activeThema = ''; activeGruppe = '';
+  $('#file-search').val('');
+  $('#bereich-filter, #thema-filter, #gruppe-filter').val('');
+  routeWrite(activeTab, '', '', '', '');
+  applyDownloadFilters();
+  updateClearButton();
+});
 
 function applyDownloadFilters() {
   var q = activeQ.toLowerCase();
-  document.querySelectorAll('#downloads-table tbody tr').forEach(function (row) {
-    var parts        = row.dataset.folder ? row.dataset.folder.split('/') : [];
-    var nameMatch    = !q || row.dataset.name.toLowerCase().includes(q)
-                          || row.dataset.folder.toLowerCase().includes(q);
+  $('#downloads-table tbody tr').each(function () {
+    var folder       = $(this).data('folder') || '';
+    var name         = $(this).data('name')   || '';
+    var parts        = folder ? folder.split('/') : [];
+    var nameMatch    = !q || name.toLowerCase().includes(q) || folder.toLowerCase().includes(q);
     var bereichMatch = !activeBereich || (parts[0] || '') === activeBereich;
     var themaMatch   = !activeThema   || (parts[1] || '') === activeThema;
     var gruppeMatch  = !activeGruppe  || (parts[2] || '') === activeGruppe;
-    row.style.display = (nameMatch && bereichMatch && themaMatch && gruppeMatch) ? '' : 'none';
+    $(this).toggle(nameMatch && bereichMatch && themaMatch && gruppeMatch);
   });
 }
 
 if (route.q || route.bereich || route.thema || route.gruppe) {
   applyDownloadFilters();
 }
+updateClearButton();
 
 // ── Copy-to-clipboard ─────────────────────────────────────────────────────────
-document.querySelectorAll('.btn-copy').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    var url = btn.dataset.url;
-    navigator.clipboard.writeText(url).then(function () {
-      var icon = btn.querySelector('[data-lucide]');
-      if (!icon) { return; }
-      icon.setAttribute('data-lucide', 'clipboard-check');
+$('.btn-copy').on('click', function () {
+  var $btn = $(this);
+  navigator.clipboard.writeText($btn.data('url')).then(function () {
+    var icon = $btn.find('[data-lucide]').get(0);
+    if (!icon) { return; }
+    icon.setAttribute('data-lucide', 'clipboard-check');
+    lucide.createIcons({ nodes: [icon] });
+    setTimeout(function () {
+      icon.setAttribute('data-lucide', 'clipboard');
       lucide.createIcons({ nodes: [icon] });
-      setTimeout(function () {
-        icon.setAttribute('data-lucide', 'clipboard');
-        lucide.createIcons({ nodes: [icon] });
-      }, 2000);
-    });
+    }, 2000);
   });
 });
 
 // ── Scroll-to-top ─────────────────────────────────────────────────────────────
-var scrollBtn = document.getElementById('scroll-top');
-window.addEventListener('scroll', function () {
-  scrollBtn.classList.toggle('visible', window.scrollY > 300);
+$(window).on('scroll', function () {
+  $('#scroll-top').toggleClass('visible', $(window).scrollTop() > 300);
 });
-scrollBtn.addEventListener('click', function () {
+$('#scroll-top').on('click', function () {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });

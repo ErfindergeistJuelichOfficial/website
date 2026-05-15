@@ -175,6 +175,7 @@ $api_entries = [
 
 <eg-footer></eg-footer>
 
+<script src="https://share.erfindergeist.org/js/lib/jquery.min.js"></script>
 <script src="https://share.erfindergeist.org/js/lib/bootstrap.bundle.min.js"></script>
 <script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
 <script src="assets/js/share.js?v=<?= filemtime('assets/js/share.js') ?>"></script>

@@ -84,7 +84,6 @@ main { flex: 1; }
 /* ── Search ── */
 #file-search {
   border: 1.5px solid var(--color-border);
-  border-radius: 10px;
   background: var(--color-surface);
   color: var(--color-text);
   font-size: .9rem;
@@ -94,6 +93,7 @@ main { flex: 1; }
   box-shadow: 0 0 0 3px rgba(21,153,137,.15);
   outline: none;
 }
+.form-select { cursor: pointer !important; }
 
 /* ── File list item ── */
 .file-item {
@@ -150,6 +150,17 @@ main { flex: 1; }
 #downloads-table .dl-fmt-col     { width: 1%; padding-right: .35rem; }
 #downloads-table .dl-action-col  { width: 1%; }
 #downloads-table .file-badge     { display: inline-block; }
+#downloads-table .dl-action-col .btn {
+  height: 24px;
+  padding: 0 .4rem;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: .75rem;
+}
+#downloads-table .dl-action-col .btn svg { width: 14px; height: 14px; }
+.dl-clear-btn { display: none; }
 
 [data-theme="dark"] #downloads-table          { color: var(--color-text); }
 [data-theme="dark"] #downloads-table th       { color: var(--color-text-muted); border-color: var(--color-border); }

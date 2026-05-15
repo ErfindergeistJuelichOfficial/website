@@ -257,7 +257,7 @@ See root [CLAUDE.md](../CLAUDE.md) for the full rules. Summary for this module:
 
 ## Do Not Deploy to Server
 
-`compose.yaml`, `README.md`, `CLAUDE.md` → excluded via `exclude` in the workflow.
+`compose.yaml`, `README.md`, `CLAUDE.md`, `galerie-plan.md` → excluded via `exclude` in the workflow.
 `downloads/mock-*` → mock files for local dev testing, excluded via `downloads/mock-*` pattern.
 
 ---

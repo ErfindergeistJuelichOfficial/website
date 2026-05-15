@@ -38,6 +38,10 @@ $__hasGruppe  = !empty($gruppen);
         <?php endforeach; ?>
       </select>
     <?php endif; ?>
+    <button type="button" id="clear-filters" class="btn btn-sm btn-outline-danger dl-clear-btn"
+            aria-label="Filter löschen">
+      <i data-lucide="x" aria-hidden="true"></i> Filter löschen
+    </button>
   </div>
 
   <?php if (empty($entries)) : ?>
