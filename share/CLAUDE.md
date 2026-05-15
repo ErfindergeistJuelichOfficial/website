@@ -56,6 +56,7 @@ Apache serves `index.php` via standard directory index; `api/v1/assets` redirect
 ```text
 share/
 ├── api.php                          # JSON-LD API logic (functions + HTTP handler)
+├── variables.php                    # Shared constants: EG_DOWNLOAD_EXT, EG_ICON_MAP, EG_CLASS_MAP
 ├── api/
 │   └── v1/
 │       └── assets/
@@ -95,7 +96,11 @@ share/
 ├── img/
 │   └── logo.svg                    # Club logo (navbar + hero)
 ├── downloads/                       # Downloadable files for the Downloads tab
-│   └── *.pdf, *.docx, *.md …      # mock-* files are excluded from deployment
+│   ├── _meta.json                   # Optional: folder description + per-file metadata
+│   ├── *.pdf, *.docx, *.md …      # mock-* files are excluded from deployment
+│   └── <subfolder>/
+│       ├── _meta.json               # Optional: subfolder metadata (see _meta.json below)
+│       └── …
 ├── qr/                             # QR code files
 ├── config/                         # JSON config files (content exposed via API)
 └── presentations/                  # Presentation subfolders (one folder per presentation)
@@ -126,14 +131,67 @@ Each tab is a standalone PHP file in `assets/templates/`.
 Templates share variable scope with `index.php` (PHP `include`).
 Available variables per template:
 
-| Template                  | Variables                                      |
-| ------------------------- | ---------------------------------------------- |
-| `tab-downloads.php`       | `$entries`, `$icon_map`, `$class_map`          |
-| `tab-presentations.php`   | `$pres_entries` (assoc: name -> pdf)           |
-| `tab-logos.php`           | `$img_entries`                                 |
-| `tab-qr.php`              | `$qr_entries`                                  |
-| `tab-configs.php`         | `$config_entries`                              |
-| `tab-apis.php`            | `$api_entries` (static array in `index.php`)   |
+- `tab-downloads.php` — `$entries`, `$dl_errors`, `$bereiche`, `$themen`, `$gruppen`, `EG_ICON_MAP`, `EG_CLASS_MAP`
+- `tab-presentations.php` — `$pres_entries` (assoc: name → pdf)
+- `tab-logos.php` — `$img_entries`
+- `tab-qr.php` — `$qr_entries`
+- `tab-configs.php` — `$config_entries`
+- `tab-apis.php` — `$api_entries` (static array in `index.php`)
+
+`$entries` is a flat array; each element:
+
+```php
+[
+  'name'           => 'file.pdf',
+  'path'           => 'downloads/subfolder/file.pdf',
+  'folder'         => 'subfolder',        // '' for root files
+  'description'    => 'Short description', // '' if none
+  'wikiUrl'        => 'https://…',        // '' if none
+  'encodingFormat' => 'application/pdf',
+]
+```
+
+---
+
+## Downloads - `_meta.json`
+
+Any folder inside `downloads/` (including the root) can contain an optional `_meta.json`.
+It is JSON-LD and must have `@context`, `@type` (`DataCatalog`), and `@id`.
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "@id": "https://share.erfindergeist.org/downloads/marketing/Bierdeckel",
+  "name": "Bierdeckel",
+  "description": "Optional folder description shown nowhere yet, but available via API.",
+  "hasPart": [
+    {
+      "@type": "MediaObject",
+      "name": "bierdeckel-vorderseite.svg",
+      "description": "Short file description shown as a subtitle in the table.",
+      "wiki-url": "https://wiki.erfindergeist.org/Bierdeckel",
+      "raw-url": "https://raw.erfindergeist.org/bierdeckel-vorderseite.svg"
+    }
+  ]
+}
+```
+
+- `hasPart[].name` must match an actual file in the same folder (validation warning if not).
+- `hasPart[].wiki-url` is optional; rendered as a **Wiki** button in the downloads table.
+- `hasPart[].raw-url` is optional; rendered as a **Raw** button in the downloads table.
+- `_meta.json` itself never appears as a download entry.
+- Validation errors are shown as an alert at the bottom of the Downloads tab.
+
+---
+
+## Shared Constants (`variables.php`)
+
+`variables.php` is included by both `api.php` and `index.php`. It defines:
+
+- `EG_DOWNLOAD_EXT` (`api.php`) - allowed extensions for the downloads scan
+- `EG_ICON_MAP` (`tab-downloads.php`) - extension → Lucide icon name
+- `EG_CLASS_MAP` (`tab-downloads.php`) - extension → CSS `.file-badge` class
 
 ---
 

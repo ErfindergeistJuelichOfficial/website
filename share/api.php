@@ -2,7 +2,13 @@
 
 declare(strict_types=1);
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use UnexpectedValueException;
+
 define('EG_SHARE_BASE_URL', 'https://share.erfindergeist.org');
+
+require_once __DIR__ . '/variables.php';
 
 /** Map file extension to MIME type. */
 function eg_mime(string $ext): string
@@ -10,6 +16,12 @@ function eg_mime(string $ext): string
   static $map = [
     'pdf'   => 'application/pdf',
     'docx'  => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'xlsx'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'pptx'  => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'odt'   => 'application/vnd.oasis.opendocument.text',
+    'ods'   => 'application/vnd.oasis.opendocument.spreadsheet',
+    'odp'   => 'application/vnd.oasis.opendocument.presentation',
+    'odg'   => 'application/vnd.oasis.opendocument.graphics',
     'md'    => 'text/markdown',
     'yml'   => 'application/yaml',
     'yaml'  => 'application/yaml',
@@ -36,10 +48,10 @@ function eg_mime(string $ext): string
  *
  * @return array<string,mixed>
  */
-function eg_file_entry(string $name, string $rel_path, string $abs_path): array
+function eg_file_entry(string $name, string $rel_path, string $abs_path, string $description = '', string $wikiUrl = '', string $rawUrl = ''): array
 {
-  $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-  return [
+  $ext   = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+  $entry = [
     '@type'          => 'MediaObject',
     'name'           => $name,
     'path'           => $rel_path,
@@ -47,6 +59,16 @@ function eg_file_entry(string $name, string $rel_path, string $abs_path): array
     'encodingFormat' => eg_mime($ext),
     'contentSize'    => (int) filesize($abs_path),
   ];
+  if ($description !== '') {
+    $entry['description'] = $description;
+  }
+  if ($wikiUrl !== '') {
+    $entry['wikiUrl'] = $wikiUrl;
+  }
+  if ($rawUrl !== '') {
+    $entry['rawUrl'] = $rawUrl;
+  }
+  return $entry;
 }
 
 /**
@@ -54,6 +76,7 @@ function eg_file_entry(string $name, string $rel_path, string $abs_path): array
  *
  * @param string[] $allowed_ext  Only include these extensions; empty = all files.
  * @return array<array<string,mixed>>
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function eg_scan_flat(string $base, string $rel, array $allowed_ext = []): array
 {
@@ -78,7 +101,7 @@ function eg_scan_flat(string $base, string $rel, array $allowed_ext = []): array
     $files[] = eg_file_entry($name, "$rel/$name", $full);
   }
   closedir($handle);
-  usort($files, static fn (array $a, array $b): int => strnatcasecmp($a['name'], $b['name']));
+  usort($files, static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   return $files;
 }
 
@@ -96,9 +119,9 @@ function eg_scan_recursive(string $base, string $rel, array $allowed_ext = []): 
   }
   $files = [];
   try {
-    $dir = new RecursiveDirectoryIterator($abs, RecursiveDirectoryIterator::SKIP_DOTS);
-    $it  = new RecursiveIteratorIterator($dir);
-    foreach ($it as $file) {
+    $dir  = new RecursiveDirectoryIterator($abs, RecursiveDirectoryIterator::SKIP_DOTS);
+    $iter = new RecursiveIteratorIterator($dir);
+    foreach ($iter as $file) {
       if (!$file->isFile()) {
         continue;
       }
@@ -115,17 +138,177 @@ function eg_scan_recursive(string $base, string $rel, array $allowed_ext = []): 
       $subRel  = $rel . '/' . substr($absFile, strlen($absBase) + 1);
       $files[] = eg_file_entry($name, $subRel, $file->getPathname());
     }
-  } catch (\UnexpectedValueException $e) {
+  } catch (UnexpectedValueException $e) {
     // unreadable subdirectory - skip silently
   }
-  usort($files, static fn (array $a, array $b): int => strnatcasecmp($a['name'], $b['name']));
+  usort($files, static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   return $files;
+}
+
+/** True if a directory entry should be skipped in the downloads scan. */
+function eg_is_hidden_entry(string $name): bool
+{
+  return str_starts_with($name, '.') || $name === '_meta.json';
+}
+
+/** True if the file's extension is in the allowed list (or list is empty). */
+function eg_ext_allowed(string $filename, array $allowed_ext): bool
+{
+  return $allowed_ext === [] || in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), $allowed_ext, true);
+}
+
+/**
+ * Validate JSON-LD required fields and append errors.
+ *
+ * @param array<string,mixed> $data
+ * @param string[] $errors
+ * @return string[]
+ */
+function eg_validate_meta_jsonld(array $data, string $rel_dir, array $errors): array
+{
+  if (empty($data['@context'])) {
+    $errors[] = "$rel_dir/_meta.json: @context fehlt";
+  }
+  if (($data['@type'] ?? '') !== 'DataCatalog') {
+    $errors[] = "$rel_dir/_meta.json: @type muss 'DataCatalog' sein";
+  }
+  if (empty($data['@id'])) {
+    $errors[] = "$rel_dir/_meta.json: @id fehlt";
+  }
+  return $errors;
+}
+
+/**
+ * Parse hasPart items from _meta.json and append validation errors.
+ *
+ * @param array<mixed> $hasPart
+ * @param string[] $errors
+ * @return array{parts: array<string,array{description:string,wikiUrl:string,rawUrl:string}>, errors: string[]}
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ */
+function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): array
+{
+  $parts = [];
+  foreach ($hasPart as $idx => $part) {
+    if (!is_array($part) || !isset($part['name']) || !is_string($part['name'])) {
+      $errors[] = "$rel_dir/_meta.json: hasPart[$idx] hat kein 'name'-Feld";
+      continue;
+    }
+    $parts[$part['name']] = [
+      'description' => (isset($part['description']) && is_string($part['description'])) ? $part['description'] : '',
+      'wikiUrl'     => (isset($part['wiki-url'])    && is_string($part['wiki-url']))    ? $part['wiki-url']    : '',
+      'rawUrl'      => (isset($part['raw-url'])     && is_string($part['raw-url']))     ? $part['raw-url']     : '',
+    ];
+  }
+  return ['parts' => $parts, 'errors' => $errors];
+}
+
+/**
+ * Load and validate _meta.json from a downloads folder.
+ *
+ * @return array{description:string, parts:array<string,array{description:string,wikiUrl:string,rawUrl:string}>, errors:string[]}
+ */
+function eg_load_downloads_meta(string $abs_dir, string $rel_dir): array
+{
+  $result = ['description' => '', 'parts' => [], 'errors' => []];
+  $path   = "$abs_dir/_meta.json";
+  if (!is_file($path)) {
+    return $result;
+  }
+  $raw = file_get_contents($path);
+  if ($raw === false) {
+    $result['errors'][] = "$rel_dir/_meta.json: Datei nicht lesbar";
+    return $result;
+  }
+  $data = json_decode($raw, true);
+  if (!is_array($data)) {
+    $result['errors'][] = "$rel_dir/_meta.json: Kein valides JSON";
+    return $result;
+  }
+  $result['errors'] = eg_validate_meta_jsonld($data, $rel_dir, $result['errors']);
+  if (isset($data['description']) && is_string($data['description'])) {
+    $result['description'] = $data['description'];
+  }
+  if (isset($data['hasPart']) && is_array($data['hasPart'])) {
+    $parsed           = eg_parse_meta_parts($data['hasPart'], $rel_dir, $result['errors']);
+    $result['parts']  = $parsed['parts'];
+    $result['errors'] = $parsed['errors'];
+  }
+  return $result;
+}
+
+/**
+ * Read direct children of a downloads directory into file names and subdir names.
+ *
+ * @param string[] $allowed_ext
+ * @return array{files: string[], subdirs: string[]}
+ */
+function eg_read_downloads_dir(string $abs_dir, array $allowed_ext): array
+{
+  $files   = [];
+  $subdirs = [];
+  $handle  = opendir($abs_dir);
+  if ($handle === false) {
+    return ['files' => $files, 'subdirs' => $subdirs];
+  }
+  while (false !== ($entry = readdir($handle))) {
+    if ($entry === '.' || $entry === '..' || eg_is_hidden_entry($entry)) {
+      continue;
+    }
+    $full = "$abs_dir/$entry";
+    if (is_dir($full)) {
+      $subdirs[] = $entry;
+    } elseif (is_file($full) && eg_ext_allowed($entry, $allowed_ext)) {
+      $files[] = $entry;
+    }
+  }
+  closedir($handle);
+  return ['files' => $files, 'subdirs' => $subdirs];
+}
+
+/**
+ * Recursively scan a downloads directory and build a JSON-LD DataCatalog tree.
+ *
+ * @param string[] $allowed_ext
+ * @return array<string,mixed>
+ */
+function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): array
+{
+  $abs  = "$base/$rel";
+  $node = [
+    '@type'       => 'DataCatalog',
+    'name'        => basename($rel),
+    'path'        => $rel,
+    'description' => '',
+    'files'       => [],
+    'folders'     => [],
+    'errors'      => [],
+  ];
+  if (!is_dir($abs)) {
+    return $node;
+  }
+  $meta                = eg_load_downloads_meta($abs, $rel);
+  $node['description'] = $meta['description'];
+  $node['errors']      = $meta['errors'];
+
+  $dir = eg_read_downloads_dir($abs, $allowed_ext);
+  foreach ($dir['files'] as $filename) {
+    $partMeta        = $meta['parts'][$filename] ?? ['description' => '', 'wikiUrl' => '', 'rawUrl' => ''];
+    $node['files'][] = eg_file_entry($filename, "$rel/$filename", "$abs/$filename", $partMeta['description'], $partMeta['wikiUrl'], $partMeta['rawUrl']);
+  }
+  usort($node['files'], static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
+  sort($dir['subdirs']);
+  foreach ($dir['subdirs'] as $sub) {
+    $node['folders'][] = eg_scan_downloads_node($base, "$rel/$sub", $allowed_ext);
+  }
+  return $node;
 }
 
 /**
  * Scan config/ and return files list plus parsed JSON content of each file.
  *
  * @return array{files: array<array<string,mixed>>, content: array<string,mixed>}
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function eg_config_data(string $root): array
 {
@@ -156,7 +339,7 @@ function eg_config_data(string $root): array
     $content[pathinfo($name, PATHINFO_FILENAME)] = $parsed;
   }
   closedir($handle);
-  usort($files, static fn (array $a, array $b): int => strnatcasecmp($a['name'], $b['name']));
+  usort($files, static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   ksort($content);
   return ['files' => $files, 'content' => $content];
 }
@@ -165,6 +348,7 @@ function eg_config_data(string $root): array
  * Scan presentations/ and return one item per subfolder (with optional PDF part).
  *
  * @return array{items: array<array<string,mixed>>}
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function eg_presentations_data(string $root): array
 {
@@ -188,23 +372,23 @@ function eg_presentations_data(string $root): array
       'url'     => EG_SHARE_BASE_URL . '/presentations/' . rawurlencode($entry) . '/',
       'hasPart' => [],
     ];
-    $dh = opendir($dir);
-    if ($dh !== false) {
-      while (false !== ($pf = readdir($dh))) {
-        if (!is_file("$dir/$pf")) {
+    $dirHandle = opendir($dir);
+    if ($dirHandle !== false) {
+      while (false !== ($presFile = readdir($dirHandle))) {
+        if (!is_file("$dir/$presFile")) {
           continue;
         }
-        if (strtolower(pathinfo($pf, PATHINFO_EXTENSION)) !== 'pdf') {
+        if (strtolower(pathinfo($presFile, PATHINFO_EXTENSION)) !== 'pdf') {
           continue;
         }
-        $item['hasPart'][] = eg_file_entry($pf, "presentations/$entry/$pf", "$dir/$pf");
+        $item['hasPart'][] = eg_file_entry($presFile, "presentations/$entry/$presFile", "$dir/$presFile");
       }
-      closedir($dh);
+      closedir($dirHandle);
     }
     $items[] = $item;
   }
   closedir($handle);
-  usort($items, static fn (array $a, array $b): int => strnatcasecmp($a['name'], $b['name']));
+  usort($items, static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   return ['items' => $items];
 }
 
@@ -237,7 +421,7 @@ function eg_assets_data(): array
       'img'           => ['files' => eg_scan_flat($root, 'img', ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp'])],
       'js'            => ['files' => eg_scan_recursive($root, 'js', ['js'])],
       'qr'            => ['files' => eg_scan_flat($root, 'qr', ['svg', 'png', 'jpg', 'jpeg'])],
-      'downloads'     => ['files' => eg_scan_flat($root, 'downloads', ['pdf', 'docx', 'md', 'yml', 'yaml', 'svg', 'png', 'jpg', 'jpeg'])],
+      'downloads'     => eg_scan_downloads_node($root, 'downloads', EG_DOWNLOAD_EXT),
       'config'        => eg_config_data($root),
       'presentations' => eg_presentations_data($root),
     ],

@@ -1,24 +1,78 @@
 <?php
 define('EG_API_INCLUDED', true);
+require_once __DIR__ . '/variables.php';
 require_once __DIR__ . '/api.php';
+
+/**
+ * Flatten a DataCatalog downloads tree into a list of file entries and collect errors.
+ *
+ * @param array<string,mixed> $node
+ * @return array{entries: array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,encodingFormat:string}>, errors: string[]}
+ */
+function eg_flatten_downloads(array $node, string $folderRel = ''): array
+{
+  $entries = [];
+  $errors  = array_values((array) ($node['errors'] ?? []));
+
+  foreach ((array) ($node['files'] ?? []) as $file) {
+    if (!is_array($file)) {
+      continue;
+    }
+    $entries[] = [
+      'name'           => (string) ($file['name']           ?? ''),
+      'path'           => (string) ($file['path']           ?? ''),
+      'folder'         => $folderRel,
+      'description'    => (string) ($file['description']    ?? ''),
+      'wikiUrl'        => (string) ($file['wikiUrl']        ?? ''),
+      'rawUrl'         => (string) ($file['rawUrl']         ?? ''),
+      'encodingFormat' => (string) ($file['encodingFormat'] ?? ''),
+    ];
+  }
+
+  foreach ((array) ($node['folders'] ?? []) as $sub) {
+    if (!is_array($sub)) {
+      continue;
+    }
+    $subName = (string) ($sub['name'] ?? '');
+    $subRel  = $folderRel !== '' ? "$folderRel/$subName" : $subName;
+    $child   = eg_flatten_downloads($sub, $subRel);
+    $entries = array_merge($entries, $child['entries']);
+    $errors  = array_merge($errors, $child['errors']);
+  }
+
+  return ['entries' => $entries, 'errors' => $errors];
+}
+
 $__api = eg_assets_data();
 
-$icon_map = [
-  'pdf'  => 'file-text',  'docx' => 'file-type-2',
-  'md'   => 'book-open',  'yml'  => 'file-code',
-  'yaml' => 'file-code',  'svg'  => 'image',
-  'png'  => 'image',      'jpg'  => 'image',
-  'jpeg' => 'image',
-];
-$class_map = [
-  'pdf'  => 'pdf',   'docx' => 'docx',
-  'md'   => 'md',    'yml'  => 'code',
-  'yaml' => 'code',  'svg'  => 'img',
-  'png'  => 'img',   'jpg'  => 'img',
-  'jpeg' => 'img',
-];
+$__dl      = eg_flatten_downloads($__api['assets']['downloads']);
+$entries   = $__dl['entries'];
+$dl_errors = $__dl['errors'];
 
-$entries        = array_column($__api['assets']['downloads']['files'], 'name');
+$bereiche = [];
+$themen   = [];
+$gruppen  = [];
+foreach ($entries as $__e) {
+  if ($__e['folder'] !== '') {
+    $__parts = explode('/', $__e['folder']);
+    if (($__parts[0] ?? '') !== '') {
+      $bereiche[] = $__parts[0];
+    }
+    if (($__parts[1] ?? '') !== '') {
+      $themen[] = $__parts[1];
+    }
+    if (($__parts[2] ?? '') !== '') {
+      $gruppen[] = $__parts[2];
+    }
+  }
+}
+$bereiche = array_values(array_unique($bereiche));
+$themen   = array_values(array_unique($themen));
+$gruppen  = array_values(array_unique($gruppen));
+sort($bereiche);
+sort($themen);
+sort($gruppen);
+unset($__dl, $__e, $__parts);
 $img_entries    = array_column($__api['assets']['img']['files'], 'name');
 $qr_entries     = array_column($__api['assets']['qr']['files'], 'name');
 $config_entries = array_column($__api['assets']['config']['files'], 'name');

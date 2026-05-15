@@ -132,11 +132,52 @@ main { flex: 1; }
 }
 .file-badge.pdf     { background: #ffebee; color: #e53935; }
 .file-badge.docx    { background: #e3f2fd; color: #1565c0; }
+.file-badge.xlsx    { background: #e8f5e9; color: #2e7d32; }
+.file-badge.pptx    { background: #fff3e0; color: #e65100; }
+.file-badge.odt     { background: #e3f2fd; color: #1565c0; }
+.file-badge.ods     { background: #e8f5e9; color: #2e7d32; }
+.file-badge.odp     { background: #fff3e0; color: #e65100; }
+.file-badge.odg     { background: #f3e5f5; color: #6a1b9a; }
 .file-badge.img     { background: #f3e5f5; color: #6a1b9a; }
 .file-badge.code    { background: #e8f5e9; color: #2e7d32; }
 .file-badge.md      { background: #eceff1; color: #37474f; }
 .file-badge.default { background: var(--color-primary-light); color: var(--color-primary); }
 .file-dl-icon { width: 14px; height: 14px; color: var(--color-text-muted); flex-shrink: 0; }
+
+/* ── Downloads table ── */
+#downloads-table td              { white-space: nowrap; }
+#downloads-table .dl-name-cell   { white-space: normal; min-width: 200px; }
+#downloads-table .dl-fmt-col     { width: 1%; padding-right: .35rem; }
+#downloads-table .dl-action-col  { width: 1%; }
+#downloads-table .file-badge     { display: inline-block; }
+
+[data-theme="dark"] #downloads-table          { color: var(--color-text); }
+[data-theme="dark"] #downloads-table th       { color: var(--color-text-muted); border-color: var(--color-border); }
+[data-theme="dark"] #downloads-table td       { color: var(--color-text); border-color: var(--color-border); }
+[data-theme="dark"] #downloads-table tbody tr:hover { background: rgba(255,255,255,.04); }
+[data-theme="dark"] .form-select {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+[data-theme="dark"] .form-select:focus {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(21,153,137,.15);
+}
+[data-theme="dark"] .file-badge.pdf     { background: rgba(229,57,53,.18);  color: #ef9a9a; }
+[data-theme="dark"] .file-badge.docx    { background: rgba(21,101,192,.18); color: #90caf9; }
+[data-theme="dark"] .file-badge.xlsx    { background: rgba(46,125,50,.18);  color: #a5d6a7; }
+[data-theme="dark"] .file-badge.pptx    { background: rgba(230,81,0,.18);   color: #ffcc80; }
+[data-theme="dark"] .file-badge.odt     { background: rgba(21,101,192,.18); color: #90caf9; }
+[data-theme="dark"] .file-badge.ods     { background: rgba(46,125,50,.18);  color: #a5d6a7; }
+[data-theme="dark"] .file-badge.odp     { background: rgba(230,81,0,.18);   color: #ffcc80; }
+[data-theme="dark"] .file-badge.odg     { background: rgba(106,27,154,.18); color: #ce93d8; }
+[data-theme="dark"] .file-badge.img     { background: rgba(106,27,154,.18); color: #ce93d8; }
+[data-theme="dark"] .file-badge.code    { background: rgba(46,125,50,.18);  color: #a5d6a7; }
+[data-theme="dark"] .file-badge.md      { background: rgba(55,71,79,.35);   color: #b0bec5; }
+[data-theme="dark"] .file-badge.default { background: var(--color-primary-light); color: var(--color-primary); }
 
 /* ── API tab ── */
 .api-item .file-name  { display: flex; flex-direction: column; gap: .1rem; }

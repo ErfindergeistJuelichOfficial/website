@@ -14,6 +14,7 @@ podman compose up
 Danach im Browser öffnen: **<http://localhost:8080>**
 
 Testdateien für den Downloads-Tab einfach in `share/downloads/` legen.
+Unterordner werden automatisch als Hierarchie (Bereich/Thema/Gruppe) erkannt.
 Mock-Dateien (`mock-*`) sind bereits enthalten und werden nicht deployed.
 
 ## Stoppen
@@ -58,6 +59,38 @@ Lokal:
 ```bash
 curl http://localhost:8080/api/v1/assets | jq '.assets.downloads.files[].name'
 ```
+
+### Downloads-Metadaten (`_meta.json`)
+
+Jeder Unterordner in `downloads/` kann eine optionale `_meta.json` enthalten.
+Sie beschreibt den Ordner und einzelne Dateien (Beschreibung, Wiki-Link, Raw-Link).
+Pflichtfelder: `@context`, `@type` (`DataCatalog`), `@id`.
+
+Beispiel:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "@id": "https://share.erfindergeist.org/downloads/marketing/Flyer",
+  "name": "Flyer",
+  "description": "Veranstaltungsflyer",
+  "hasPart": [
+    {
+      "@type": "MediaObject",
+      "name": "flyer-sommer-2025.pdf",
+      "description": "Sommerveranstaltung 2025",
+      "wiki-url": "https://wiki.erfindergeist.org/Flyer",
+      "raw-url": "https://raw.erfindergeist.org/flyer-sommer-2025.pdf"
+    }
+  ]
+}
+```
+
+- `wiki-url`: optional, zeigt einen **Wiki**-Button in der Tabelle
+- `raw-url`: optional, zeigt einen **Raw**-Button in der Tabelle
+
+Validierungsfehler werden im Downloads-Tab als Alert angezeigt.
 
 ---
 

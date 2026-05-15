@@ -19,13 +19,34 @@ if (trigger) {
   if (el) { bootstrap.Tab.getOrCreateInstance(el).show(); }
 }
 
-document.getElementById('file-search').addEventListener('input', function () {
-  var q = this.value.toLowerCase();
-  document.querySelectorAll('.file-item').forEach(function (item) {
-    var name = item.querySelector('.file-name').textContent.toLowerCase();
-    item.style.display = name.includes(q) ? '' : 'none';
+var activeBereich = '';
+var activeThema   = '';
+var activeGruppe  = '';
+
+document.getElementById('file-search').addEventListener('input', applyDownloadFilters);
+
+function bindDlFilter(id, setter) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('change', function () { setter(this.value); applyDownloadFilters(); });
+  }
+}
+bindDlFilter('bereich-filter', function (v) { activeBereich = v; });
+bindDlFilter('thema-filter',   function (v) { activeThema   = v; });
+bindDlFilter('gruppe-filter',  function (v) { activeGruppe  = v; });
+
+function applyDownloadFilters() {
+  var q = document.getElementById('file-search').value.toLowerCase();
+  document.querySelectorAll('#downloads-table tbody tr').forEach(function (row) {
+    var parts        = row.dataset.folder ? row.dataset.folder.split('/') : [];
+    var nameMatch    = !q || row.dataset.name.toLowerCase().includes(q)
+                          || row.dataset.folder.toLowerCase().includes(q);
+    var bereichMatch = !activeBereich || (parts[0] || '') === activeBereich;
+    var themaMatch   = !activeThema   || (parts[1] || '') === activeThema;
+    var gruppeMatch  = !activeGruppe  || (parts[2] || '') === activeGruppe;
+    row.style.display = (nameMatch && bereichMatch && themaMatch && gruppeMatch) ? '' : 'none';
   });
-});
+}
 
 document.querySelectorAll('.btn-copy').forEach(function (btn) {
   btn.addEventListener('click', function () {
