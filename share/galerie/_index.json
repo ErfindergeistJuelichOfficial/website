@@ -1,0 +1,48 @@
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "@id": "http://localhost:8080/galerie",
+  "name": "Galerie - Erfindergeist Julich e.V.",
+  "description": "Foto-Galerie des Erfindergeist Julich e.V.",
+  "hasPart": [
+    {
+      "@type": "ImageGallery",
+      "@id": "http://localhost:8080/galerie/Verein/Mobilitaetstag2025",
+      "path": "Verein/Mobilitaetstag2025",
+      "name": "Mobilitätstag 2025",
+      "dateCreated": "2025-09-25",
+      "imageCount": 56,
+      "description": "Wir waren wieder dabei. Diesmal mit 3D-Drucker, LED-Racer und gedruckten Fahrad Zubehör",
+      "keywords": [
+        "Mobilitätstag"
+      ],
+      "preview": "Verein/Mobilitaetstag2025/20250921_185948_28518357_t.webp"
+    },
+    {
+      "@type": "ImageGallery",
+      "@id": "http://localhost:8080/galerie/Werkstatt/3D-Druck",
+      "path": "Werkstatt/3D-Druck",
+      "name": "3D-Druck",
+      "dateCreated": "",
+      "imageCount": 21,
+      "description": "FDM und Resin Drucker",
+      "keywords": [
+        "3D-Druck, Werkstatt"
+      ],
+      "preview": "Werkstatt/3D-Druck/20240713_111828_3ffb10f3_t.webp"
+    },
+    {
+      "@type": "ImageGallery",
+      "@id": "http://localhost:8080/galerie/Werkstatt/3D-Druck/prusa_core_one_building",
+      "path": "Werkstatt/3D-Druck/prusa_core_one_building",
+      "name": "Pruse Core One Zusammenbauk",
+      "dateCreated": "",
+      "imageCount": 56,
+      "description": "EIn paar Bilder des Zusammenbaus",
+      "keywords": [
+        "3D-Druck, Werkstatt"
+      ],
+      "preview": "Werkstatt/3D-Druck/prusa_core_one_building/20250731_170150_68cc1b19_t.webp"
+    }
+  ]
+}

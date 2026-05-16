@@ -1,0 +1,2 @@
+# Generated image files - upload to server separately via galerie/upload.py
+*.webp

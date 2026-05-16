@@ -1,0 +1,307 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "@id": "http://localhost:8080/galerie/Werkstatt/3D-Druck",
+  "name": "3D-Druck",
+  "dateCreated": "",
+  "hasPart": [
+    {
+      "@type": "ImageObject",
+      "name": "20240713_111828_3ffb10f3_n.webp",
+      "thumbnail": "20240713_111828_3ffb10f3_t.webp",
+      "sourceHash": "3ffb10f3",
+      "dateCreated": "2024-07-13T11:18:28",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 58
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20240713_111830_41cd55be_n.webp",
+      "thumbnail": "20240713_111830_41cd55be_t.webp",
+      "sourceHash": "41cd55be",
+      "dateCreated": "2024-07-13T11:18:30",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 145
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20240817_174839_3443164f_n.webp",
+      "thumbnail": "20240817_174839_3443164f_t.webp",
+      "sourceHash": "3443164f",
+      "dateCreated": "2024-08-17T17:48:39",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 867
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20240831_085822_c4ad949b_n.webp",
+      "thumbnail": "20240831_085822_c4ad949b_t.webp",
+      "sourceHash": "c4ad949b",
+      "dateCreated": "2024-08-31T08:58:22",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 152
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20240831_085844_8c19351a_n.webp",
+      "thumbnail": "20240831_085844_8c19351a_t.webp",
+      "sourceHash": "8c19351a",
+      "dateCreated": "2024-08-31T08:58:44",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 183
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110138_ef381eb7_n.webp",
+      "thumbnail": "20250806_110138_ef381eb7_t.webp",
+      "sourceHash": "ef381eb7",
+      "dateCreated": "2025-08-06T11:01:38",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 342
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110140_c2f873e7_n.webp",
+      "thumbnail": "20250806_110140_c2f873e7_t.webp",
+      "sourceHash": "c2f873e7",
+      "dateCreated": "2025-08-06T11:01:40",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 377
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110143_f9cb690e_n.webp",
+      "thumbnail": "20250806_110143_f9cb690e_t.webp",
+      "sourceHash": "f9cb690e",
+      "dateCreated": "2025-08-06T11:01:43",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 353
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110147_57612ed5_n.webp",
+      "thumbnail": "20250806_110147_57612ed5_t.webp",
+      "sourceHash": "57612ed5",
+      "dateCreated": "2025-08-06T11:01:47",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 370
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110157_b1c78986_n.webp",
+      "thumbnail": "20250806_110157_b1c78986_t.webp",
+      "sourceHash": "b1c78986",
+      "dateCreated": "2025-08-06T11:01:57",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 94
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110252_17018da3_n.webp",
+      "thumbnail": "20250806_110252_17018da3_t.webp",
+      "sourceHash": "17018da3",
+      "dateCreated": "2025-08-06T11:02:52",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 180
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_110257_cdb6f96c_n.webp",
+      "thumbnail": "20250806_110257_cdb6f96c_t.webp",
+      "sourceHash": "cdb6f96c",
+      "dateCreated": "2025-08-06T11:02:57",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 227
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250806_111236_e2088136_n.webp",
+      "thumbnail": "20250806_111236_e2088136_t.webp",
+      "sourceHash": "e2088136",
+      "dateCreated": "2025-08-06T11:12:36",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 78
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250810_111617_3d5c70be_n.webp",
+      "thumbnail": "20250810_111617_3d5c70be_t.webp",
+      "sourceHash": "3d5c70be",
+      "dateCreated": "2025-08-10T11:16:17",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 223
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250810_111619_8874961f_n.webp",
+      "thumbnail": "20250810_111619_8874961f_t.webp",
+      "sourceHash": "8874961f",
+      "dateCreated": "2025-08-10T11:16:19",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 184
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250810_111629_5d820440_n.webp",
+      "thumbnail": "20250810_111629_5d820440_t.webp",
+      "sourceHash": "5d820440",
+      "dateCreated": "2025-08-10T11:16:29",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 85
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250810_111653_abc6dc46_n.webp",
+      "thumbnail": "20250810_111653_abc6dc46_t.webp",
+      "sourceHash": "abc6dc46",
+      "dateCreated": "2025-08-10T11:16:53",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 126
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250810_111655_69d65c84_n.webp",
+      "thumbnail": "20250810_111655_69d65c84_t.webp",
+      "sourceHash": "69d65c84",
+      "dateCreated": "2025-08-10T11:16:55",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 124
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20260110_095433_6e48a80b_n.webp",
+      "thumbnail": "20260110_095433_6e48a80b_t.webp",
+      "sourceHash": "6e48a80b",
+      "dateCreated": "2026-01-10T09:54:33",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 254
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20260110_132016_d2d94aa8_n.webp",
+      "thumbnail": "20260110_132016_d2d94aa8_t.webp",
+      "sourceHash": "d2d94aa8",
+      "dateCreated": "2026-01-10T13:20:16",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "20000/1000000s",
+        "iso": 78
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20260110_132018_72323eab_n.webp",
+      "thumbnail": "20260110_132018_72323eab_t.webp",
+      "sourceHash": "72323eab",
+      "dateCreated": "2026-01-10T13:20:18",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 145
+      },
+      "caption": ""
+    }
+  ],
+  "description": "FDM und Resin Drucker",
+  "keywords": [
+    "3D-Druck, Werkstatt"
+  ]
+}

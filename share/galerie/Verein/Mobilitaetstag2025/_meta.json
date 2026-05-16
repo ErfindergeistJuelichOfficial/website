@@ -1,0 +1,757 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "@id": "http://localhost:8080/galerie/Verein/Mobilitaetstag2025",
+  "name": "Mobilitätstag 2025",
+  "dateCreated": "2025-09-25",
+  "hasPart": [
+    {
+      "@type": "ImageObject",
+      "name": "20250921_185948_28518357_n.webp",
+      "thumbnail": "20250921_185948_28518357_t.webp",
+      "sourceHash": "28518357",
+      "dateCreated": "2025-09-21T18:59:48",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_185939_e0e16808_n.webp",
+      "thumbnail": "20250921_185939_e0e16808_t.webp",
+      "sourceHash": "e0e16808",
+      "dateCreated": "2025-09-21T18:59:39",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_185942_e99dc478_n.webp",
+      "thumbnail": "20250921_185942_e99dc478_t.webp",
+      "sourceHash": "e99dc478",
+      "dateCreated": "2025-09-21T18:59:42",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_183326_5faad16b_n.webp",
+      "thumbnail": "20250921_183326_5faad16b_t.webp",
+      "sourceHash": "5faad16b",
+      "dateCreated": "2025-09-21T18:33:26",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_183329_8c8abe76_n.webp",
+      "thumbnail": "20250921_183329_8c8abe76_t.webp",
+      "sourceHash": "8c8abe76",
+      "dateCreated": "2025-09-21T18:33:29",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_183332_fd089023_n.webp",
+      "thumbnail": "20250921_183332_fd089023_t.webp",
+      "sourceHash": "fd089023",
+      "dateCreated": "2025-09-21T18:33:32",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210403_d5300502_n.webp",
+      "thumbnail": "20250917_210403_d5300502_t.webp",
+      "sourceHash": "d5300502",
+      "dateCreated": "2025-09-17T21:04:03",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 105
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210412_86e940c0_n.webp",
+      "thumbnail": "20250917_210412_86e940c0_t.webp",
+      "sourceHash": "86e940c0",
+      "dateCreated": "2025-09-17T21:04:12",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 149
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210417_11dcd3df_n.webp",
+      "thumbnail": "20250917_210417_11dcd3df_t.webp",
+      "sourceHash": "11dcd3df",
+      "dateCreated": "2025-09-17T21:04:17",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 121
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210418_15d4ba3e_n.webp",
+      "thumbnail": "20250917_210418_15d4ba3e_t.webp",
+      "sourceHash": "15d4ba3e",
+      "dateCreated": "2025-09-17T21:04:18",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 108
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210421_828da415_n.webp",
+      "thumbnail": "20250917_210421_828da415_t.webp",
+      "sourceHash": "828da415",
+      "dateCreated": "2025-09-17T21:04:21",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 124
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210421_74436caf_n.webp",
+      "thumbnail": "20250917_210421_74436caf_t.webp",
+      "sourceHash": "74436caf",
+      "dateCreated": "2025-09-17T21:04:21",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 113
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210425_6b7efe62_n.webp",
+      "thumbnail": "20250917_210425_6b7efe62_t.webp",
+      "sourceHash": "6b7efe62",
+      "dateCreated": "2025-09-17T21:04:25",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 97
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_210426_92f7d49a_n.webp",
+      "thumbnail": "20250917_210426_92f7d49a_t.webp",
+      "sourceHash": "92f7d49a",
+      "dateCreated": "2025-09-17T21:04:26",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 113
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_222233_89bf456b_n.webp",
+      "thumbnail": "20250917_222233_89bf456b_t.webp",
+      "sourceHash": "89bf456b",
+      "dateCreated": "2025-09-17T22:22:33",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 172
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_222241_a0a9ea0b_n.webp",
+      "thumbnail": "20250917_222241_a0a9ea0b_t.webp",
+      "sourceHash": "a0a9ea0b",
+      "dateCreated": "2025-09-17T22:22:41",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 67
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_222242_15faedd3_n.webp",
+      "thumbnail": "20250917_222242_15faedd3_t.webp",
+      "sourceHash": "15faedd3",
+      "dateCreated": "2025-09-17T22:22:42",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 70
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_222244_19108ddb_n.webp",
+      "thumbnail": "20250917_222244_19108ddb_t.webp",
+      "sourceHash": "19108ddb",
+      "dateCreated": "2025-09-17T22:22:44",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 67
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250917_222921_fa753a09_n.webp",
+      "thumbnail": "20250917_222921_fa753a09_t.webp",
+      "sourceHash": "fa753a09",
+      "dateCreated": "2025-09-17T22:29:21",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 191
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250919_183620_2b4f5f9a_n.webp",
+      "thumbnail": "20250919_183620_2b4f5f9a_t.webp",
+      "sourceHash": "2b4f5f9a",
+      "dateCreated": "2025-09-19T18:36:20",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 130
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250919_183628_23cd7634_n.webp",
+      "thumbnail": "20250919_183628_23cd7634_t.webp",
+      "sourceHash": "23cd7634",
+      "dateCreated": "2025-09-19T18:36:28",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 143
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_130815_387e0eab_n.webp",
+      "thumbnail": "20250920_130815_387e0eab_t.webp",
+      "sourceHash": "387e0eab",
+      "dateCreated": "2025-09-20T13:08:15",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "1254/1000000s",
+        "iso": 18
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_130821_06452aae_n.webp",
+      "thumbnail": "20250920_130821_06452aae_t.webp",
+      "sourceHash": "06452aae",
+      "dateCreated": "2025-09-20T13:08:21",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "742/1000000s",
+        "iso": 39
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_130827_f9f2e8fa_n.webp",
+      "thumbnail": "20250920_130827_f9f2e8fa_t.webp",
+      "sourceHash": "f9f2e8fa",
+      "dateCreated": "2025-09-20T13:08:27",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "345/1000000s",
+        "iso": 48
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_131751_14207b56_n.webp",
+      "thumbnail": "20250920_131751_14207b56_t.webp",
+      "sourceHash": "14207b56",
+      "dateCreated": "2025-09-20T13:17:51",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 157
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_131824_ac613be6_n.webp",
+      "thumbnail": "20250920_131824_ac613be6_t.webp",
+      "sourceHash": "ac613be6",
+      "dateCreated": "2025-09-20T13:18:24",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 143
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_133201_c17dd177_n.webp",
+      "thumbnail": "20250920_133201_c17dd177_t.webp",
+      "sourceHash": "c17dd177",
+      "dateCreated": "2025-09-20T13:32:01",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 54
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250920_133240_952a31bc_n.webp",
+      "thumbnail": "20250920_133240_952a31bc_t.webp",
+      "sourceHash": "952a31bc",
+      "dateCreated": "2025-09-20T13:32:40",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "10000/1000000s",
+        "iso": 58
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110608_bbe8c2e1_n.webp",
+      "thumbnail": "20250921_110608_bbe8c2e1_t.webp",
+      "sourceHash": "bbe8c2e1",
+      "dateCreated": "2025-09-21T11:06:08",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2694/1000000s",
+        "iso": 42
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110609_7561bb7c_n.webp",
+      "thumbnail": "20250921_110609_7561bb7c_t.webp",
+      "sourceHash": "7561bb7c",
+      "dateCreated": "2025-09-21T11:06:09",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2871/1000000s",
+        "iso": 36
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110611_1213bd85_n.webp",
+      "thumbnail": "20250921_110611_1213bd85_t.webp",
+      "sourceHash": "1213bd85",
+      "dateCreated": "2025-09-21T11:06:11",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2871/1000000s",
+        "iso": 37
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110616_cdc8e0d1_n.webp",
+      "thumbnail": "20250921_110616_cdc8e0d1_t.webp",
+      "sourceHash": "cdc8e0d1",
+      "dateCreated": "2025-09-21T11:06:16",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2191/1000000s",
+        "iso": 35
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110618_10edc9c0_n.webp",
+      "thumbnail": "20250921_110618_10edc9c0_t.webp",
+      "sourceHash": "10edc9c0",
+      "dateCreated": "2025-09-21T11:06:18",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "3719/1000000s",
+        "iso": 49
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110624_6bbb632c_n.webp",
+      "thumbnail": "20250921_110624_6bbb632c_t.webp",
+      "sourceHash": "6bbb632c",
+      "dateCreated": "2025-09-21T11:06:24",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "4284/1000000s",
+        "iso": 65
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_110824_af25022f_n.webp",
+      "thumbnail": "20250921_110824_af25022f_t.webp",
+      "sourceHash": "af25022f",
+      "dateCreated": "2025-09-21T11:08:24",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "3869/1000000s",
+        "iso": 98
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112525_029d150b_n.webp",
+      "thumbnail": "20250921_112525_029d150b_t.webp",
+      "sourceHash": "029d150b",
+      "dateCreated": "2025-09-21T11:25:25",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "3401/1000000s",
+        "iso": 43
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112534_2466235b_n.webp",
+      "thumbnail": "20250921_112534_2466235b_t.webp",
+      "sourceHash": "2466235b",
+      "dateCreated": "2025-09-21T11:25:34",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2350/1000000s",
+        "iso": 46
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112537_f3cb75a4_n.webp",
+      "thumbnail": "20250921_112537_f3cb75a4_t.webp",
+      "sourceHash": "f3cb75a4",
+      "dateCreated": "2025-09-21T11:25:37",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "3542/1000000s",
+        "iso": 45
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112801_33cf20c4_n.webp",
+      "thumbnail": "20250921_112801_33cf20c4_t.webp",
+      "sourceHash": "33cf20c4",
+      "dateCreated": "2025-09-21T11:28:01",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "1352/1000000s",
+        "iso": 40
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112805_36ab3971_n.webp",
+      "thumbnail": "20250921_112805_36ab3971_t.webp",
+      "sourceHash": "36ab3971",
+      "dateCreated": "2025-09-21T11:28:05",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "1272/1000000s",
+        "iso": 45
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112844_aec5027a_n.webp",
+      "thumbnail": "20250921_112844_aec5027a_t.webp",
+      "sourceHash": "aec5027a",
+      "dateCreated": "2025-09-21T11:28:44",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2058/1000000s",
+        "iso": 39
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_112849_dbe8b771_n.webp",
+      "thumbnail": "20250921_112849_dbe8b771_t.webp",
+      "sourceHash": "dbe8b771",
+      "dateCreated": "2025-09-21T11:28:49",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2898/1000000s",
+        "iso": 41
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_123649_dbedbc38_n.webp",
+      "thumbnail": "20250921_123649_dbedbc38_t.webp",
+      "sourceHash": "dbedbc38",
+      "dateCreated": "2025-09-21T12:36:49",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "883/1000000s",
+        "iso": 39
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_123650_ecfd4c68_n.webp",
+      "thumbnail": "20250921_123650_ecfd4c68_t.webp",
+      "sourceHash": "ecfd4c68",
+      "dateCreated": "2025-09-21T12:36:50",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "795/1000000s",
+        "iso": 43
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_123651_44c78dde_n.webp",
+      "thumbnail": "20250921_123651_44c78dde_t.webp",
+      "sourceHash": "44c78dde",
+      "dateCreated": "2025-09-21T12:36:51",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "857/1000000s",
+        "iso": 41
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_123714_ce17a467_n.webp",
+      "thumbnail": "20250921_123714_ce17a467_t.webp",
+      "sourceHash": "ce17a467",
+      "dateCreated": "2025-09-21T12:37:14",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "4311/1000000s",
+        "iso": 47
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_123715_1a5bb8d4_n.webp",
+      "thumbnail": "20250921_123715_1a5bb8d4_t.webp",
+      "sourceHash": "1a5bb8d4",
+      "dateCreated": "2025-09-21T12:37:15",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "4444/1000000s",
+        "iso": 34
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_123720_c5fd5b85_n.webp",
+      "thumbnail": "20250921_123720_c5fd5b85_t.webp",
+      "sourceHash": "c5fd5b85",
+      "dateCreated": "2025-09-21T12:37:20",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "5133/1000000s",
+        "iso": 43
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_182016_e0db732e_n.webp",
+      "thumbnail": "20250921_182016_e0db732e_t.webp",
+      "sourceHash": "e0db732e",
+      "dateCreated": "2025-09-21T18:20:16",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_182034_34d676cf_n.webp",
+      "thumbnail": "20250921_182034_34d676cf_t.webp",
+      "sourceHash": "34d676cf",
+      "dateCreated": "2025-09-21T18:20:34",
+      "exif": {},
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_151339_1c377048_n.webp",
+      "thumbnail": "20250921_151339_1c377048_t.webp",
+      "sourceHash": "1c377048",
+      "dateCreated": "2025-09-21T15:13:39",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2341/1000000s",
+        "iso": 194
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_151341_8e4fc1a7_n.webp",
+      "thumbnail": "20250921_151341_8e4fc1a7_t.webp",
+      "sourceHash": "8e4fc1a7",
+      "dateCreated": "2025-09-21T15:13:41",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "12262/1000000s",
+        "iso": 41
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_160642_070f23f2_n.webp",
+      "thumbnail": "20250921_160642_070f23f2_t.webp",
+      "sourceHash": "070f23f2",
+      "dateCreated": "2025-09-21T16:06:42",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2102/1000000s",
+        "iso": 39
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_160643_5bcd578b_n.webp",
+      "thumbnail": "20250921_160643_5bcd578b_t.webp",
+      "sourceHash": "5bcd578b",
+      "dateCreated": "2025-09-21T16:06:43",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2641/1000000s",
+        "iso": 36
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_160644_58c56df2_n.webp",
+      "thumbnail": "20250921_160644_58c56df2_t.webp",
+      "sourceHash": "58c56df2",
+      "dateCreated": "2025-09-21T16:06:44",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "2862/1000000s",
+        "iso": 38
+      },
+      "caption": ""
+    },
+    {
+      "@type": "ImageObject",
+      "name": "20250921_160714_550ff99e_n.webp",
+      "thumbnail": "20250921_160714_550ff99e_t.webp",
+      "sourceHash": "550ff99e",
+      "dateCreated": "2025-09-21T16:07:14",
+      "exif": {
+        "camera": "Pixel 6",
+        "focalLength": "6mm",
+        "exposureTime": "6405/1000000s",
+        "iso": 38
+      },
+      "caption": ""
+    }
+  ],
+  "description": "Wir waren wieder dabei. Diesmal mit 3D-Drucker, LED-Racer und gedruckten Fahrad Zubehör",
+  "keywords": [
+    "Mobilitätstag"
+  ]
+}

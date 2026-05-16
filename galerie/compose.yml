@@ -1,0 +1,25 @@
+services:
+  process:
+    build:
+      context: .
+      args:
+        INSTALL_AI: ${INSTALL_AI:-false}
+    command: ["process.py"]
+    volumes:
+      - .:/app
+      - ../share/galerie:/output
+      - ${SOURCE_DIR}:/source:ro
+      - hf-cache:/root/.cache/huggingface
+    env_file: .env
+
+  upload:
+    build:
+      context: .
+    command: ["upload.py"]
+    volumes:
+      - .:/app
+      - ../share/galerie:/output:ro
+    env_file: .env
+
+volumes:
+  hf-cache:
