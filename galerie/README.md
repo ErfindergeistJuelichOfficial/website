@@ -110,11 +110,29 @@ Only `title` is required. Folders without a valid `_config.json` are skipped.
 | `date` | no | ISO date `YYYY-MM-DD` - shown on the card |
 | `description` | no | Longer text shown below the title |
 | `consent_collected` | no | Default: `false` - faces are blurred when false or missing |
+| `preview` | no | Source filename to use as album card preview image |
+| `blur` | no | Source filenames to always blur (overrides `consent_collected: true`) |
+| `no_blur` | no | Source filenames to never blur (overrides `consent_collected: false`) |
 | `tags` | no | String array, used as JSON-LD keywords |
 
 **`consent_collected`**: When `false` or not set, faces in output images will be
 automatically blurred using OpenCV face detection. Set to `true` when privacy
 consent forms were collected from all participants.
+
+**`preview`**: Set the album card preview image using the source filename.
+Without this field the first image (sorted by date/time) is used.
+
+```json
+{
+  "title": "Sommerfest 2024",
+  "date": "2024-07-15",
+  "consent_collected": true,
+  "preview": "DSC_0042.jpg"
+}
+```
+
+If the file does not exist in the source folder or has not been processed yet,
+the preview falls back to the first processed image automatically.
 
 **Per-image overrides** (`blur` / `no_blur`): Use these arrays to override the
 album-level `consent_collected` for individual source files by their filename.

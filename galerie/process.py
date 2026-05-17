@@ -770,10 +770,11 @@ def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: li
     return meta
 
 
-def album_summary(meta: dict, album_rel: str, parts: list) -> dict:
+def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Optional[str] = None) -> dict:
     """
     Compact album entry for the root _index.json.
     Contains metadata only - no full image hasPart (kept in per-album _meta.json).
+    preview_thumb: resolved thumbnail filename override from config['preview']; falls back to parts[0].
     """
     summary: dict = {
         '@type':      'ImageGallery',
@@ -788,10 +789,29 @@ def album_summary(meta: dict, album_rel: str, parts: list) -> dict:
         summary['description'] = meta['description']
     if meta.get('keywords'):
         summary['keywords'] = meta['keywords']
-    # First thumbnail as card preview image (path relative to /output root)
-    if parts and parts[0].get('thumbnail'):
-        summary['preview'] = album_rel + '/' + parts[0]['thumbnail']
+    thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
+    if thumb:
+        summary['preview'] = album_rel + '/' + thumb
     return summary
+
+
+def resolve_preview_thumbnail(config: dict, source_album: Path, parts: list) -> Optional[str]:
+    """
+    Resolve config['preview'] (source filename) to the matching thumbnail filename in parts.
+    Returns None if not configured, file not found, or image not yet processed.
+    """
+    preview_src = config.get('preview')
+    if not preview_src:
+        return None
+    preview_path = source_album / preview_src
+    if not preview_path.is_file():
+        print(f'  Warning: preview "{preview_src}" not found in source folder.', file=sys.stderr)
+        return None
+    preview_hash = sha256_short(preview_path)
+    for part in parts:
+        if part.get('sourceHash') == preview_hash:
+            return part['thumbnail']
+    return None  # image not yet processed; falls back to parts[0]
 
 
 def write_index(output_root: Path, summaries: list) -> None:
@@ -861,7 +881,8 @@ def scan_and_process(source_root: Path, output_root: Path) -> list:
                 meta['description'] = _cfg['description']
             if _cfg.get('tags'):
                 meta['keywords'] = _cfg['tags']
-            return album_summary(meta, _rel, parts)
+            preview_thumb = resolve_preview_thumbnail(_cfg, source_album, parts)
+            return album_summary(meta, _rel, parts, preview_thumb)
 
         def _on_progress(parts: list, _rel: str = album_rel) -> None:
             known_summaries[_rel] = _make_summary(parts)
@@ -873,7 +894,8 @@ def scan_and_process(source_root: Path, output_root: Path) -> list:
         parts = process_album(source_album, output_album, config, album_rel, existing, on_progress=_on_progress)
         meta  = write_album_meta(output_album, album_rel, config, parts)
 
-        known_summaries[album_rel] = album_summary(meta, album_rel, parts)
+        preview_thumb = resolve_preview_thumbnail(config, source_album, parts)
+        known_summaries[album_rel] = album_summary(meta, album_rel, parts, preview_thumb)
         write_index(output_root, list(known_summaries.values()))
         new_count = sum(1 for p in parts if p not in existing.values())
         print(f'  Done   : {len(parts)} images ({new_count} new)')

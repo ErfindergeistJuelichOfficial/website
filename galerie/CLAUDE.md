@@ -67,6 +67,7 @@ User-created file, one per album folder in SOURCE_DIR. Never auto-modified.
   "date": "YYYY-MM-DD, optional",
   "description": "string, optional",
   "consent_collected": true,
+  "preview": "DSC_0042.jpg",
   "blur":    ["IMG_007.jpg"],
   "no_blur": ["logo.jpg"],
   "tags": ["string", "array", "optional"]

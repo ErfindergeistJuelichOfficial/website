@@ -2,27 +2,31 @@
 """
 FTPS sync for share/galerie/ - upload to or download from the server.
 
-Files are compared by size; JSON files are always transferred because
-upload.py rewrites localhost <-> production URLs on the fly.
+A local _ftp_sync.json tracks the last known remote state so upload can skip
+unchanged files without querying the server per file (avoids one SIZE request
+per file over 6000+ files).
+
+Sync file format: { "relative/path": sync_key }
+  - binary files: file size in bytes (int)
+  - JSON files:   [size_after_url_rewriting, mtime] — mtime catches edits that
+                  produce the same byte count
 
 Usage (via Podman Compose from the galerie/ folder):
     podman compose run --rm download   # fetch current server state first
     podman compose run --rm upload     # push local changes to server
-
-Or directly:
-    python upload.py download
-    python upload.py upload
 """
 
 import argparse
 import ftplib
 import io
+import json
 import os
 import sys
 from pathlib import Path
 from typing import Optional
 
 OUTPUT_DIR     = Path('/output')
+SYNC_FILE      = OUTPUT_DIR / '_ftp_sync.json'
 FTP_HOST       = os.getenv('FTP_HOST', 'erfindergeist.org')
 FTP_USER       = os.environ['FTP_USER']
 FTP_PASS       = os.environ['FTP_PASS']
@@ -30,6 +34,25 @@ FTP_REMOTE     = os.getenv('FTP_REMOTE_DIR', '/galerie').rstrip('/')
 LOCAL_BASE_URL = 'http://localhost:8080/galerie'
 PROD_BASE_URL  = 'https://share.erfindergeist.org/galerie'
 
+
+# ── Sync file ─────────────────────────────────────────────────────────────────
+
+def load_sync() -> dict:
+    if SYNC_FILE.is_file():
+        try:
+            with open(SYNC_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    return {}
+
+
+def save_sync(sync: dict) -> None:
+    with open(SYNC_FILE, 'w', encoding='utf-8') as f:
+        json.dump(sync, f, ensure_ascii=False, sort_keys=True)
+
+
+# ── FTP helpers ───────────────────────────────────────────────────────────────
 
 def connect() -> ftplib.FTP_TLS:
     print(f'Connecting to {FTP_HOST} (FTPS) ...')
@@ -42,13 +65,6 @@ def connect() -> ftplib.FTP_TLS:
     except ftplib.all_errors as exc:
         print(f'FTP connection failed: {exc}', file=sys.stderr)
         sys.exit(1)
-
-
-def remote_file_size(ftp: ftplib.FTP, remote_path: str) -> Optional[int]:
-    try:
-        return ftp.size(remote_path)
-    except ftplib.all_errors:
-        return None
 
 
 def ensure_remote_dirs(ftp: ftplib.FTP, remote_path: str) -> None:
@@ -64,17 +80,6 @@ def ensure_remote_dirs(ftp: ftplib.FTP, remote_path: str) -> None:
                 ftp.mkd(current)
             except ftplib.error_perm:
                 pass  # already exists (race condition)
-
-
-def rewrite_for_upload(local_path: Path) -> bytes:
-    """Return JSON content with localhost URLs replaced by production URLs."""
-    content = local_path.read_text(encoding='utf-8')
-    return content.replace(LOCAL_BASE_URL, PROD_BASE_URL).encode('utf-8')
-
-
-def rewrite_for_download(data: bytes) -> bytes:
-    """Return JSON content with production URLs replaced by localhost URLs."""
-    return data.replace(PROD_BASE_URL.encode('utf-8'), LOCAL_BASE_URL.encode('utf-8'))
 
 
 def list_remote_recursive(ftp: ftplib.FTP, remote_dir: str) -> list[tuple[str, int]]:
@@ -100,6 +105,19 @@ def list_remote_recursive(ftp: ftplib.FTP, remote_dir: str) -> list[tuple[str, i
     return results
 
 
+# ── URL rewriting ─────────────────────────────────────────────────────────────
+
+def rewrite_for_upload(local_path: Path) -> bytes:
+    """Return JSON content with localhost URLs replaced by production URLs."""
+    content = local_path.read_text(encoding='utf-8')
+    return content.replace(LOCAL_BASE_URL, PROD_BASE_URL).encode('utf-8')
+
+
+def rewrite_for_download(data: bytes) -> bytes:
+    """Return JSON content with production URLs replaced by localhost URLs."""
+    return data.replace(PROD_BASE_URL.encode('utf-8'), LOCAL_BASE_URL.encode('utf-8'))
+
+
 # ── Upload ────────────────────────────────────────────────────────────────────
 
 def upload_main() -> None:
@@ -107,24 +125,28 @@ def upload_main() -> None:
         print('Error: /output is not mounted. Check compose.yml volume mapping.', file=sys.stderr)
         sys.exit(1)
 
-    ftp = connect()
+    sync = load_sync()
+    ftp  = connect()
     uploaded = skipped = errors = 0
 
-    local_files = sorted(p for p in OUTPUT_DIR.rglob('*') if p.is_file())
+    local_files = sorted(
+        p for p in OUTPUT_DIR.rglob('*')
+        if p.is_file() and p != SYNC_FILE
+    )
     print(f'Found {len(local_files)} local file(s) to check.')
 
     for local_path in local_files:
-        rel         = local_path.relative_to(OUTPUT_DIR)
-        remote_path = FTP_REMOTE + '/' + str(rel).replace('\\', '/')
+        rel         = str(local_path.relative_to(OUTPUT_DIR)).replace('\\', '/')
+        remote_path = FTP_REMOTE + '/' + rel
 
         if local_path.suffix == '.json':
-            data       = rewrite_for_upload(local_path)
-            local_size = len(data)
+            data      = rewrite_for_upload(local_path)
+            sync_key: object = [len(data), local_path.stat().st_mtime]
         else:
-            data       = None
-            local_size = local_path.stat().st_size
+            data      = None
+            sync_key  = local_path.stat().st_size
 
-        if remote_file_size(ftp, remote_path) == local_size:
+        if sync.get(rel) == sync_key:
             skipped += 1
             continue
 
@@ -133,6 +155,7 @@ def upload_main() -> None:
             ensure_remote_dirs(ftp, remote_path)
             payload = data if data is not None else local_path.read_bytes()
             ftp.storbinary(f'STOR {remote_path}', io.BytesIO(payload))
+            sync[rel] = sync_key
             uploaded += 1
         except ftplib.all_errors as exc:
             print(f'     Error: {exc}', file=sys.stderr)
@@ -143,6 +166,7 @@ def upload_main() -> None:
     except ftplib.all_errors:
         pass
 
+    save_sync(sync)
     print(f'\nDone. Uploaded: {uploaded}  Skipped: {skipped}  Errors: {errors}')
     if errors:
         sys.exit(1)
@@ -155,7 +179,8 @@ def download_main() -> None:
         print('Error: /output is not mounted. Check compose.yml volume mapping.', file=sys.stderr)
         sys.exit(1)
 
-    ftp = connect()
+    sync = load_sync()
+    ftp  = connect()
     downloaded = skipped = errors = 0
 
     print(f'Listing {FTP_REMOTE} ...')
@@ -165,23 +190,25 @@ def download_main() -> None:
     for remote_path, remote_size in remote_files:
         rel        = remote_path[len(FTP_REMOTE):].lstrip('/')
         local_path = OUTPUT_DIR / rel
-        is_json    = local_path.suffix == '.json'
 
-        # Binary files: skip if local exists with same size
-        if not is_json and local_path.is_file() and local_path.stat().st_size == remote_size:
+        # Skip if sync confirms we already have this version
+        if sync.get(rel) == remote_size:
             skipped += 1
             continue
 
-        # JSON files: always download - prod/localhost URL rewrite changes size
         print(f'  <- {rel}')
         try:
             buf = io.BytesIO()
             ftp.retrbinary(f'RETR {remote_path}', buf.write)
             data = buf.getvalue()
-            if is_json:
+            if local_path.suffix == '.json':
                 data = rewrite_for_download(data)
             local_path.parent.mkdir(parents=True, exist_ok=True)
             local_path.write_bytes(data)
+            if local_path.suffix == '.json':
+                sync[rel] = [remote_size, local_path.stat().st_mtime]
+            else:
+                sync[rel] = remote_size
             downloaded += 1
         except ftplib.all_errors as exc:
             print(f'     Error: {exc}', file=sys.stderr)
@@ -192,6 +219,7 @@ def download_main() -> None:
     except ftplib.all_errors:
         pass
 
+    save_sync(sync)
     print(f'\nDone. Downloaded: {downloaded}  Skipped: {skipped}  Errors: {errors}')
     if errors:
         sys.exit(1)
