@@ -22,17 +22,27 @@ import io
 import json
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
 OUTPUT_DIR     = Path('/output')
 SYNC_FILE      = OUTPUT_DIR / '_ftp_sync.json'
+LOG_DIR        = OUTPUT_DIR / 'log'
 FTP_HOST       = os.getenv('FTP_HOST', 'erfindergeist.org')
 FTP_USER       = os.environ['FTP_USER']
 FTP_PASS       = os.environ['FTP_PASS']
 FTP_REMOTE     = os.getenv('FTP_REMOTE_DIR', '/galerie').rstrip('/')
 LOCAL_BASE_URL = 'http://localhost:8080/galerie'
 PROD_BASE_URL  = 'https://share.erfindergeist.org/galerie'
+
+
+# ── Log file ──────────────────────────────────────────────────────────────────
+
+def open_log(mode: str):
+    LOG_DIR.mkdir(exist_ok=True)
+    ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+    return open(LOG_DIR / f'{ts}_{mode}.txt', 'w', encoding='utf-8')
 
 
 # ── Sync file ─────────────────────────────────────────────────────────────────
@@ -127,11 +137,12 @@ def upload_main() -> None:
 
     sync = load_sync()
     ftp  = connect()
+    log  = open_log('upload')
     uploaded = skipped = errors = 0
 
     local_files = sorted(
         p for p in OUTPUT_DIR.rglob('*')
-        if p.is_file() and p != SYNC_FILE
+        if p.is_file() and p != SYNC_FILE and 'log/' not in str(p.relative_to(OUTPUT_DIR)).replace('\\', '/')
     )
     print(f'Found {len(local_files)} local file(s) to check.')
 
@@ -156,9 +167,11 @@ def upload_main() -> None:
             payload = data if data is not None else local_path.read_bytes()
             ftp.storbinary(f'STOR {remote_path}', io.BytesIO(payload))
             sync[rel] = sync_key
+            log.write(f'UPLOAD   {rel}\n')
             uploaded += 1
         except ftplib.all_errors as exc:
             print(f'     Error: {exc}', file=sys.stderr)
+            log.write(f'ERROR    {rel}  {exc}\n')
             errors += 1
 
     try:
@@ -166,6 +179,7 @@ def upload_main() -> None:
     except ftplib.all_errors:
         pass
 
+    log.close()
     save_sync(sync)
     print(f'\nDone. Uploaded: {uploaded}  Skipped: {skipped}  Errors: {errors}')
     if errors:
@@ -181,6 +195,7 @@ def download_main() -> None:
 
     sync = load_sync()
     ftp  = connect()
+    log  = open_log('download')
     downloaded = skipped = errors = 0
 
     print(f'Listing {FTP_REMOTE} ...')
@@ -189,6 +204,8 @@ def download_main() -> None:
 
     for remote_path, remote_size in remote_files:
         rel        = remote_path[len(FTP_REMOTE):].lstrip('/')
+        if rel.startswith('log/'):
+            continue
         local_path = OUTPUT_DIR / rel
 
         # Skip if sync confirms we already have this version
@@ -209,9 +226,11 @@ def download_main() -> None:
                 sync[rel] = [remote_size, local_path.stat().st_mtime]
             else:
                 sync[rel] = remote_size
+            log.write(f'DOWNLOAD {rel}\n')
             downloaded += 1
         except ftplib.all_errors as exc:
             print(f'     Error: {exc}', file=sys.stderr)
+            log.write(f'ERROR    {rel}  {exc}\n')
             errors += 1
 
     try:
@@ -219,6 +238,7 @@ def download_main() -> None:
     except ftplib.all_errors:
         pass
 
+    log.close()
     save_sync(sync)
     print(f'\nDone. Downloaded: {downloaded}  Skipped: {skipped}  Errors: {errors}')
     if errors:

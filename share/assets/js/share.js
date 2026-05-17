@@ -366,6 +366,10 @@ $('#scroll-top').on('click', function () {
       })
       .then(function (meta) {
         lbImages = meta.hasPart || [];
+        var wikiUrl = meta['wiki-url'] || '';
+        var rawUrl  = meta['raw-url']  || '';
+        $('#gallery-lb-wiki').toggleClass('d-none', !wikiUrl).attr('href', wikiUrl || '#');
+        $('#gallery-lb-raw').toggleClass('d-none', !rawUrl).attr('href', rawUrl || '#');
         $grid.empty();
         if (lbImages.length === 0) {
           $grid.html('<div class="col-12 text-muted text-center py-4">Keine Bilder in diesem Album.</div>');

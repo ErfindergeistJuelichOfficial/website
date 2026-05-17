@@ -114,6 +114,8 @@ Only `title` is required. Folders without a valid `_config.json` are skipped.
 | `blur` | no | Source filenames to always blur (overrides `consent_collected: true`) |
 | `no_blur` | no | Source filenames to never blur (overrides `consent_collected: false`) |
 | `tags` | no | String array, used as JSON-LD keywords |
+| `wiki-url` | no | URL to a wiki page - shown as **Wiki** button in the lightbox |
+| `raw-url` | no | URL to raw/source file - shown as **Raw** button in the lightbox |
 
 **`consent_collected`**: When `false` or not set, faces in output images will be
 automatically blurred using OpenCV face detection. Set to `true` when privacy

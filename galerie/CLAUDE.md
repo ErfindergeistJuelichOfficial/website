@@ -70,7 +70,9 @@ User-created file, one per album folder in SOURCE_DIR. Never auto-modified.
   "preview": "DSC_0042.jpg",
   "blur":    ["IMG_007.jpg"],
   "no_blur": ["logo.jpg"],
-  "tags": ["string", "array", "optional"]
+  "tags": ["string", "array", "optional"],
+  "wiki-url": "https://wiki.erfindergeist.org/...",
+  "raw-url":  "https://..."
 }
 ```
 

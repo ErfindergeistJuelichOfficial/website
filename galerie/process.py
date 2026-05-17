@@ -35,6 +35,7 @@ from PIL import Image, ImageFilter, ImageOps
 
 SOURCE_DIR   = Path('/source')
 OUTPUT_DIR   = Path('/output')
+LOG_DIR      = OUTPUT_DIR / 'log'
 BASE_URL     = 'http://localhost:8080/galerie'
 
 THUMB_WIDTH  = int(os.getenv('THUMBNAIL_WIDTH', '400'))
@@ -631,6 +632,7 @@ def process_album(
     album_rel: str,
     existing_by_hash: dict,
     on_progress: Optional[callable] = None,
+    log: Optional[list] = None,
 ) -> list:
     """
     Process all images in source_album.
@@ -681,6 +683,8 @@ def process_album(
                             ep = dict(ep)
                             ep['caption'] = caption
                             print(f'  Caption ({ep["name"]}): {caption}')
+                            if log is not None:
+                                log.append(f'CAPTION        {album_rel}/{src.name}')
                             parts.append(ep)
                             write_album_meta(output_album, album_rel, config, parts)
                             if on_progress:
@@ -694,10 +698,16 @@ def process_album(
             if blur_mismatch:
                 action = 'blurring' if img_needs_blur else 'unblurring'
                 print(f'  {src.name} (consent changed, {action})')
+                if log is not None:
+                    log.append(f'IMAGE_REPROCESS {album_rel}/{src.name}  consent changed: {action}')
             else:
-                print(f'  {src.name}')
+                print(f'  {src.name} (file missing, reprocessing)')
+                if log is not None:
+                    log.append(f'IMAGE_REPROCESS {album_rel}/{src.name}  file missing')
         else:
             print(f'  {src.name}')
+            if log is not None:
+                log.append(f'IMAGE_NEW      {album_rel}/{src.name}')
 
         try:
             img = open_and_orient(src)
@@ -738,6 +748,8 @@ def process_album(
         }
         if caption:
             part['caption'] = caption
+            if log is not None:
+                log.append(f'CAPTION        {album_rel}/{src.name}')
         parts.append(part)
         # Always write after each new image: persists blurred state and any caption
         write_album_meta(output_album, album_rel, config, parts)
@@ -762,6 +774,10 @@ def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: li
         meta['description'] = config['description']
     if config.get('tags'):
         meta['keywords'] = config['tags']
+    if config.get('wiki-url'):
+        meta['wiki-url'] = config['wiki-url']
+    if config.get('raw-url'):
+        meta['raw-url'] = config['raw-url']
 
     output_album.mkdir(parents=True, exist_ok=True)
     with open(output_album / '_meta.json', 'w', encoding='utf-8') as f:
@@ -831,7 +847,7 @@ def write_index(output_root: Path, summaries: list) -> None:
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-def scan_and_process(source_root: Path, output_root: Path) -> list:
+def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] = None) -> list:
     """
     Recursively find all _config.json files, process valid albums,
     and return a list of all known album summaries for _index.json.
@@ -869,6 +885,8 @@ def scan_and_process(source_root: Path, output_root: Path) -> list:
         print(f'  Privacy: {consent_label}')
 
         existing = load_existing_by_hash(output_album)
+        if not (output_album / '_meta.json').is_file() and log is not None:
+            log.append(f'ALBUM_NEW      {album_rel}')
 
         def _make_summary(parts: list, _rel: str = album_rel, _cfg: dict = config) -> dict:
             meta: dict = {
@@ -891,7 +909,7 @@ def scan_and_process(source_root: Path, output_root: Path) -> list:
         # Write index before processing so the album is visible immediately
         _on_progress(list(existing.values()))
 
-        parts = process_album(source_album, output_album, config, album_rel, existing, on_progress=_on_progress)
+        parts = process_album(source_album, output_album, config, album_rel, existing, on_progress=_on_progress, log=log)
         meta  = write_album_meta(output_album, album_rel, config, parts)
 
         preview_thumb = resolve_preview_thumbnail(config, source_album, parts)
@@ -903,7 +921,7 @@ def scan_and_process(source_root: Path, output_root: Path) -> list:
     return list(known_summaries.values())
 
 
-def reconcile_output(output_root: Path) -> None:
+def reconcile_output(output_root: Path, log: Optional[list] = None) -> None:
     """
     Cross-check _index.json and per-album _meta.json against actual files on disk.
     Removes stale album entries (no _meta.json) and missing image references.
@@ -930,6 +948,8 @@ def reconcile_output(output_root: Path) -> None:
 
         if not meta_path.is_file():
             print(f'  Reconcile: dropping "{album_rel}" - no _meta.json on disk')
+            if log is not None:
+                log.append(f'STALE_ALBUM    {album_rel}')
             index_changed = True
             continue
 
@@ -947,6 +967,10 @@ def reconcile_output(output_root: Path) -> None:
         if len(valid_parts) != len(parts):
             removed = len(parts) - len(valid_parts)
             print(f'  Reconcile: {album_rel}: {removed} missing image(s) removed from _meta.json')
+            if log is not None:
+                stale = {p.get('name', '') for p in parts} - {p.get('name', '') for p in valid_parts}
+                for name in sorted(stale):
+                    log.append(f'STALE_IMAGE    {album_rel}/{name}')
             meta['hasPart'] = valid_parts
             with open(meta_path, 'w', encoding='utf-8') as f:
                 json.dump(meta, f, ensure_ascii=False, indent=2)
@@ -976,10 +1000,19 @@ def main() -> None:
     print(f'AI     : {VISION_MODEL} on {DEVICE}')
     print(f'Blur   : {", ".join(BLUR_MODELS)}')
 
-    summaries = scan_and_process(SOURCE_DIR, output_root)
+    run_log: list[str] = []
+    summaries = scan_and_process(SOURCE_DIR, output_root, log=run_log)
 
     print('\nReconciling output ...')
-    reconcile_output(output_root)
+    reconcile_output(output_root, log=run_log)
+
+    if run_log:
+        LOG_DIR.mkdir(exist_ok=True)
+        ts       = datetime.now().strftime('%Y%m%d_%H%M%S')
+        log_path = LOG_DIR / f'{ts}_process.txt'
+        with open(log_path, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(run_log) + '\n')
+        print(f'\nChange log: {log_path.name} ({len(run_log)} entr(ies))')
 
     print(f'\nFinished. {len(summaries)} known album(s).')
 
