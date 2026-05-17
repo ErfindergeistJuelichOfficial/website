@@ -68,6 +68,8 @@ $__hasGruppe  = !empty($gruppen);
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -113,6 +115,20 @@ $__hasGruppe  = !empty($gruppen);
                   <a href="<?= htmlspecialchars($entry['rawUrl'], ENT_QUOTES, 'UTF-8') ?>"
                      class="btn btn-sm btn-outline-secondary"
                      target="_blank" rel="noopener noreferrer">Raw</a>
+                <?php endif; ?>
+              </td>
+              <td class="dl-action-col">
+                <?php if ($entry['cloudUrl'] !== '') : ?>
+                  <a href="<?= htmlspecialchars($entry['cloudUrl'], ENT_QUOTES, 'UTF-8') ?>"
+                     class="btn btn-sm btn-outline-success"
+                     target="_blank" rel="noopener noreferrer">Cloud</a>
+                <?php endif; ?>
+              </td>
+              <td class="dl-action-col">
+                <?php if ($entry['blogUrl'] !== '') : ?>
+                  <a href="<?= htmlspecialchars($entry['blogUrl'], ENT_QUOTES, 'UTF-8') ?>"
+                     class="btn btn-sm btn-outline-beitrag"
+                     target="_blank" rel="noopener noreferrer">Beitrag</a>
                 <?php endif; ?>
               </td>
               <td class="dl-action-col">

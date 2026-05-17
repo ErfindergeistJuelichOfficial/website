@@ -192,15 +192,23 @@ It is JSON-LD and must have `@context`, `@type` (`DataCatalog`), and `@id`.
       "name": "bierdeckel-vorderseite.svg",
       "description": "Short file description shown as a subtitle in the table.",
       "wiki-url": "https://wiki.erfindergeist.org/Bierdeckel",
-      "raw-url": "https://raw.erfindergeist.org/bierdeckel-vorderseite.svg"
+      "raw-url": "https://raw.erfindergeist.org/bierdeckel-vorderseite.svg",
+      "cloud-url": "https://cloud.erfindergeist.org/s/abc123",
+      "blog-url": "https://erfindergeist.org/blog/bierdeckel"
     }
   ]
 }
 ```
 
-- `hasPart[].name` must match an actual file in the same folder (validation warning if not).
-- `hasPart[].wiki-url` is optional; rendered as a **Wiki** button in the downloads table.
-- `hasPart[].raw-url` is optional; rendered as a **Raw** button in the downloads table.
+| Field | Button label | Style | Description |
+| --- | --- | --- | --- |
+| `hasPart[].name` | - | - | Must match an actual file in the same folder (validation warning if not). |
+| `hasPart[].description` | - | - | Short subtitle shown below the filename in the table. |
+| `hasPart[].wiki-url` | **Wiki** | outline, primary | Link to a wiki page for this file. |
+| `hasPart[].raw-url` | **Raw** | outline, secondary | Link to the raw/source file (e.g. Git, design tool). |
+| `hasPart[].cloud-url` | **Cloud** | outline, green | Link to a cloud storage folder or share (e.g. Nextcloud). |
+| `hasPart[].blog-url` | **Beitrag** | outline, light | Link to a blog post or article about this file. |
+
 - `_meta.json` itself never appears as a download entry.
 - Validation errors are shown as an alert at the bottom of the Downloads tab.
 

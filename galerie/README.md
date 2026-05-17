@@ -114,8 +114,10 @@ Only `title` is required. Folders without a valid `_config.json` are skipped.
 | `blur` | no | Source filenames to always blur (overrides `consent_collected: true`) |
 | `no_blur` | no | Source filenames to never blur (overrides `consent_collected: false`) |
 | `tags` | no | String array, used as JSON-LD keywords |
-| `wiki-url` | no | URL to a wiki page - shown as **Wiki** button in the lightbox |
-| `raw-url` | no | URL to raw/source file - shown as **Raw** button in the lightbox |
+| `wiki-url` | no | URL to a wiki page - shown as **Wiki** button on the album card and info box |
+| `raw-url` | no | URL to raw/source files - shown as **Raw** button on the album card and info box |
+| `cloud-url` | no | URL to a cloud storage folder - shown as **Cloud** button on the album card and info box |
+| `blog-url` | no | URL to a blog post or article - shown as **Beitrag** button on the album card and info box |
 
 **`consent_collected`**: When `false` or not set, faces in output images will be
 automatically blurred using OpenCV face detection. Set to `true` when privacy
@@ -155,6 +157,26 @@ album-level `consent_collected` for individual source files by their filename.
 | `no_blur` | Never blur these filenames - even when `consent_collected: false` |
 
 Both fields accept an array of source filenames (the original file names in SOURCE_DIR, not the generated WebP names). `no_blur` takes precedence over `blur` if a filename appears in both. Reprocessing is triggered automatically when the per-image decision changes.
+
+**External link buttons** (`wiki-url`, `raw-url`, `cloud-url`, `blog-url`): Optional URLs that appear as buttons on the album card in the gallery grid and in the info box when the album is open. Only buttons with a configured URL are shown.
+
+| Field | Button | Style | Intended target |
+| --- | --- | --- | --- |
+| `wiki-url` | **Wiki** | outline, primary (teal) | Wiki page with background info about the event or topic |
+| `raw-url` | **Raw** | outline, secondary (gray) | Raw/source files (e.g. Git repository, design assets) |
+| `cloud-url` | **Cloud** | outline, green | Cloud storage folder with original photos (e.g. Nextcloud share) |
+| `blog-url` | **Beitrag** | outline, light | Blog post or article about the event |
+
+```json
+{
+  "title": "Mobilitaetstag 2025",
+  "date": "2025-04-26",
+  "consent_collected": true,
+  "wiki-url": "https://wiki.erfindergeist.org/Mobilitaetstag",
+  "cloud-url": "https://cloud.erfindergeist.org/s/abc123",
+  "blog-url": "https://erfindergeist.org/blog/mobilitaetstag-2025"
+}
+```
 
 ## Development vs. Production
 

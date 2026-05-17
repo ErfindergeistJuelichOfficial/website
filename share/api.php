@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use UnexpectedValueException;
-
 define('EG_SHARE_BASE_URL', 'https://share.erfindergeist.org');
 
 require_once __DIR__ . '/variables.php';
@@ -48,7 +44,7 @@ function eg_mime(string $ext): string
  *
  * @return array<string,mixed>
  */
-function eg_file_entry(string $name, string $rel_path, string $abs_path, string $description = '', string $wikiUrl = '', string $rawUrl = ''): array
+function eg_file_entry(string $name, string $rel_path, string $abs_path, string $description = '', string $wikiUrl = '', string $rawUrl = '', string $cloudUrl = '', string $blogUrl = ''): array
 {
   $ext   = strtolower(pathinfo($name, PATHINFO_EXTENSION));
   $entry = [
@@ -67,6 +63,12 @@ function eg_file_entry(string $name, string $rel_path, string $abs_path, string 
   }
   if ($rawUrl !== '') {
     $entry['rawUrl'] = $rawUrl;
+  }
+  if ($cloudUrl !== '') {
+    $entry['cloudUrl'] = $cloudUrl;
+  }
+  if ($blogUrl !== '') {
+    $entry['blogUrl'] = $blogUrl;
   }
   return $entry;
 }
@@ -183,7 +185,7 @@ function eg_validate_meta_jsonld(array $data, string $rel_dir, array $errors): a
  *
  * @param array<mixed> $hasPart
  * @param string[] $errors
- * @return array{parts: array<string,array{description:string,wikiUrl:string,rawUrl:string}>, errors: string[]}
+ * @return array{parts: array<string,array{description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string}>, errors: string[]}
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): array
@@ -198,6 +200,8 @@ function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): ar
       'description' => (isset($part['description']) && is_string($part['description'])) ? $part['description'] : '',
       'wikiUrl'     => (isset($part['wiki-url'])    && is_string($part['wiki-url']))    ? $part['wiki-url']    : '',
       'rawUrl'      => (isset($part['raw-url'])     && is_string($part['raw-url']))     ? $part['raw-url']     : '',
+      'cloudUrl'    => (isset($part['cloud-url'])   && is_string($part['cloud-url']))   ? $part['cloud-url']   : '',
+      'blogUrl'     => (isset($part['blog-url'])    && is_string($part['blog-url']))    ? $part['blog-url']    : '',
     ];
   }
   return ['parts' => $parts, 'errors' => $errors];
@@ -206,7 +210,7 @@ function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): ar
 /**
  * Load and validate _meta.json from a downloads folder.
  *
- * @return array{description:string, parts:array<string,array{description:string,wikiUrl:string,rawUrl:string}>, errors:string[]}
+ * @return array{description:string, parts:array<string,array{description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string}>, errors:string[]}
  */
 function eg_load_downloads_meta(string $abs_dir, string $rel_dir): array
 {
@@ -293,8 +297,8 @@ function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): 
 
   $dir = eg_read_downloads_dir($abs, $allowed_ext);
   foreach ($dir['files'] as $filename) {
-    $partMeta        = $meta['parts'][$filename] ?? ['description' => '', 'wikiUrl' => '', 'rawUrl' => ''];
-    $node['files'][] = eg_file_entry($filename, "$rel/$filename", "$abs/$filename", $partMeta['description'], $partMeta['wikiUrl'], $partMeta['rawUrl']);
+    $partMeta        = $meta['parts'][$filename] ?? ['description' => '', 'wikiUrl' => '', 'rawUrl' => '', 'cloudUrl' => '', 'blogUrl' => ''];
+    $node['files'][] = eg_file_entry($filename, "$rel/$filename", "$abs/$filename", $partMeta['description'], $partMeta['wikiUrl'], $partMeta['rawUrl'], $partMeta['cloudUrl'], $partMeta['blogUrl']);
   }
   usort($node['files'], static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   sort($dir['subdirs']);
@@ -308,7 +312,7 @@ function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): 
  * Flatten a DataCatalog downloads tree into a list of file entries and collect errors.
  *
  * @param array<string,mixed> $node
- * @return array{entries: array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,encodingFormat:string}>, errors: string[]}
+ * @return array{entries: array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string,encodingFormat:string}>, errors: string[]}
  */
 function eg_flatten_downloads(array $node, string $folderRel = ''): array
 {
@@ -326,6 +330,8 @@ function eg_flatten_downloads(array $node, string $folderRel = ''): array
       'description'    => (string) ($file['description']    ?? ''),
       'wikiUrl'        => (string) ($file['wikiUrl']        ?? ''),
       'rawUrl'         => (string) ($file['rawUrl']         ?? ''),
+      'cloudUrl'       => (string) ($file['cloudUrl']       ?? ''),
+      'blogUrl'        => (string) ($file['blogUrl']        ?? ''),
       'encodingFormat' => (string) ($file['encodingFormat'] ?? ''),
     ];
   }
@@ -427,7 +433,7 @@ function eg_gallery_data(string $root): array
  * Build all view data needed by index.php in a single call.
  *
  * @return array{
- *   entries:        array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,encodingFormat:string}>,
+ *   entries:        array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string,encodingFormat:string}>,
  *   dl_errors:      string[],
  *   bereiche:       string[],
  *   themen:         string[],

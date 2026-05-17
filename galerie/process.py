@@ -23,6 +23,7 @@ Environment variables (from .env):
 import hashlib
 import json
 import os
+import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -778,6 +779,10 @@ def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: li
         meta['wiki-url'] = config['wiki-url']
     if config.get('raw-url'):
         meta['raw-url'] = config['raw-url']
+    if config.get('cloud-url'):
+        meta['cloud-url'] = config['cloud-url']
+    if config.get('blog-url'):
+        meta['blog-url'] = config['blog-url']
 
     output_album.mkdir(parents=True, exist_ok=True)
     with open(output_album / '_meta.json', 'w', encoding='utf-8') as f:
@@ -809,6 +814,10 @@ def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Option
         summary['wiki-url'] = meta['wiki-url']
     if meta.get('raw-url'):
         summary['raw-url'] = meta['raw-url']
+    if meta.get('cloud-url'):
+        summary['cloud-url'] = meta['cloud-url']
+    if meta.get('blog-url'):
+        summary['blog-url'] = meta['blog-url']
     thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
     if thumb:
         summary['preview'] = album_rel + '/' + thumb
@@ -847,6 +856,39 @@ def write_index(output_root: Path, summaries: list) -> None:
     with open(output_root / '_index.json', 'w', encoding='utf-8') as f:
         json.dump(index, f, ensure_ascii=False, indent=2)
     print(f'_index.json written ({len(summaries)} albums).')
+
+
+# ── Config vs meta comparison ─────────────────────────────────────────────────
+
+def detect_config_changes(config: dict, output_album: Path) -> list[str]:
+    """
+    Compare current config values against existing _meta.json album-level fields.
+    Returns a list of human-readable change strings; empty when nothing changed or
+    no _meta.json exists yet (new album).
+    """
+    meta_path = output_album / '_meta.json'
+    if not meta_path.is_file():
+        return []
+    try:
+        with open(meta_path, 'r', encoding='utf-8') as f:
+            meta = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+    def norm(v: object) -> object:
+        return None if v in (None, '', []) else v
+
+    checks: list[tuple[str, object, object]] = [
+        ('title',      meta.get('name'),          norm(config.get('title'))),
+        ('date',       norm(meta.get('dateCreated')), norm(config.get('date'))),
+        ('description', norm(meta.get('description')), norm(config.get('description'))),
+        ('tags',       norm(meta.get('keywords')),    norm(config.get('tags'))),
+        ('wiki-url',   norm(meta.get('wiki-url')),    norm(config.get('wiki-url'))),
+        ('raw-url',    norm(meta.get('raw-url')),     norm(config.get('raw-url'))),
+        ('cloud-url',  norm(meta.get('cloud-url')),   norm(config.get('cloud-url'))),
+        ('blog-url',   norm(meta.get('blog-url')),    norm(config.get('blog-url'))),
+    ]
+    return [f'{label}: {old!r} -> {new!r}' for label, old, new in checks if old != new]
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -889,8 +931,14 @@ def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] =
         print(f'  Privacy: {consent_label}')
 
         existing = load_existing_by_hash(output_album)
-        if not (output_album / '_meta.json').is_file() and log is not None:
-            log.append(f'ALBUM_NEW      {album_rel}')
+        if not (output_album / '_meta.json').is_file():
+            if log is not None:
+                log.append(f'ALBUM_NEW      {album_rel}')
+        else:
+            for change in detect_config_changes(config, output_album):
+                print(f'  Config change: {change}')
+                if log is not None:
+                    log.append(f'META_CHANGE    {album_rel}  {change}')
 
         def _make_summary(parts: list, _rel: str = album_rel, _cfg: dict = config) -> dict:
             meta: dict = {
@@ -903,6 +951,14 @@ def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] =
                 meta['description'] = _cfg['description']
             if _cfg.get('tags'):
                 meta['keywords'] = _cfg['tags']
+            if _cfg.get('wiki-url'):
+                meta['wiki-url'] = _cfg['wiki-url']
+            if _cfg.get('raw-url'):
+                meta['raw-url'] = _cfg['raw-url']
+            if _cfg.get('cloud-url'):
+                meta['cloud-url'] = _cfg['cloud-url']
+            if _cfg.get('blog-url'):
+                meta['blog-url'] = _cfg['blog-url']
             preview_thumb = resolve_preview_thumbnail(_cfg, source_album, parts)
             return album_summary(meta, _rel, parts, preview_thumb)
 
@@ -914,6 +970,7 @@ def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] =
         _on_progress(list(existing.values()))
 
         parts = process_album(source_album, output_album, config, album_rel, existing, on_progress=_on_progress, log=log)
+        cleanup_orphaned_images(output_album, parts, album_rel, log=log)
         meta  = write_album_meta(output_album, album_rel, config, parts)
 
         preview_thumb = resolve_preview_thumbnail(config, source_album, parts)
@@ -991,6 +1048,41 @@ def reconcile_output(output_root: Path, log: Optional[list] = None) -> None:
         print(f'Reconcile: all {len(valid_summaries)} album(s) consistent.')
 
 
+def cleanup_orphaned_images(output_album: Path, parts: list, album_rel: str, log: Optional[list] = None) -> None:
+    """Delete WebP files in output_album that are not referenced by any part in parts."""
+    referenced = set()
+    for p in parts:
+        if p.get('name'):      referenced.add(p['name'])
+        if p.get('thumbnail'): referenced.add(p['thumbnail'])
+    for webp in sorted(output_album.glob('*.webp')):
+        if webp.name not in referenced:
+            print(f'  Delete (source gone): {album_rel}/{webp.name}')
+            webp.unlink()
+            if log is not None:
+                log.append(f'DELETE_IMAGE   {album_rel}/{webp.name}')
+
+
+def cleanup_orphaned_albums(source_root: Path, output_root: Path, log: Optional[list] = None) -> None:
+    """Delete output album directories whose source folder no longer exists."""
+    print('\nCleaning up orphaned albums ...')
+    removed = 0
+    for meta_path in sorted(output_root.rglob('_meta.json')):
+        album_dir = meta_path.parent
+        rel       = str(album_dir.relative_to(output_root)).replace('\\', '/')
+        if rel.startswith('log'):
+            continue
+        if not (source_root / rel).is_dir():
+            print(f'  Delete (source gone): {rel}/')
+            shutil.rmtree(album_dir)
+            if log is not None:
+                log.append(f'DELETE_ALBUM   {rel}')
+            removed += 1
+    if removed:
+        print(f'  Removed {removed} orphaned album(s).')
+    else:
+        print('  No orphaned albums found.')
+
+
 def main() -> None:
     if not SOURCE_DIR.is_dir():
         print(f'Error: /source is not mounted. Check SOURCE_DIR in .env.', file=sys.stderr)
@@ -1006,6 +1098,8 @@ def main() -> None:
 
     run_log: list[str] = []
     summaries = scan_and_process(SOURCE_DIR, output_root, log=run_log)
+
+    cleanup_orphaned_albums(SOURCE_DIR, output_root, log=run_log)
 
     print('\nReconciling output ...')
     reconcile_output(output_root, log=run_log)

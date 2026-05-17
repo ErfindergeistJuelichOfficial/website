@@ -200,7 +200,12 @@ $('#scroll-top').on('click', function () {
     result.folders.forEach(function (f) { folderPaths[f.path] = true; });
     result.albums = result.albums.filter(function (a) { return !folderPaths[a.path]; });
     result.albums.sort(function (a, b) {
-      return (b.dateCreated || '').localeCompare(a.dateCreated || '');
+      var aDate = a.dateCreated || '';
+      var bDate = b.dateCreated || '';
+      if (aDate && bDate) { return bDate.localeCompare(aDate); }
+      if (aDate) { return -1; }
+      if (bDate) { return 1; }
+      return (a.name || '').localeCompare(b.name || '', 'de');
     });
     result.folders.sort(function (a, b) { return a.name.localeCompare(b.name); });
     return result;
@@ -267,9 +272,11 @@ $('#scroll-top').on('click', function () {
   }
 
   function appendAlbumLinks($card, album) {
-    var wikiUrl = album['wiki-url'] || '';
-    var rawUrl  = album['raw-url']  || '';
-    if (!wikiUrl && !rawUrl) { return; }
+    var wikiUrl  = album['wiki-url']  || '';
+    var rawUrl   = album['raw-url']   || '';
+    var cloudUrl = album['cloud-url'] || '';
+    var blogUrl  = album['blog-url']  || '';
+    if (!wikiUrl && !rawUrl && !cloudUrl && !blogUrl) { return; }
     var $links = $('<div class="gallery-card-links">');
     if (wikiUrl) {
       $links.append(
@@ -285,6 +292,20 @@ $('#scroll-top').on('click', function () {
           .on('click', function (e) { e.stopPropagation(); })
       );
     }
+    if (cloudUrl) {
+      $links.append(
+        $('<a>').attr({ href: cloudUrl, target: '_blank', rel: 'noopener noreferrer' })
+          .addClass('btn btn-sm btn-outline-success').text('Cloud')
+          .on('click', function (e) { e.stopPropagation(); })
+      );
+    }
+    if (blogUrl) {
+      $links.append(
+        $('<a>').attr({ href: blogUrl, target: '_blank', rel: 'noopener noreferrer' })
+          .addClass('btn btn-sm btn-outline-beitrag').text('Beitrag')
+          .on('click', function (e) { e.stopPropagation(); })
+      );
+    }
     $card.find('.gallery-card-body').append($links);
   }
 
@@ -296,6 +317,7 @@ $('#scroll-top').on('click', function () {
     var children = childrenOf(path);
     var $grid    = $('#gallery-grid').empty().removeClass('d-none');
     $('#gallery-images').addClass('d-none');
+    $('#gallery-album-info').addClass('d-none');
     renderBreadcrumb();
 
     // If this folder is also an album, show its own photos as the first card.
@@ -348,7 +370,7 @@ $('#scroll-top').on('click', function () {
       var imgHtml = album.preview
         ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy">'
         : '<i data-lucide="images" style="width:52px;height:52px;opacity:.4" aria-hidden="true"></i>';
-      var meta = (album.dateCreated || '') + (album.imageCount ? ' &middot; ' + album.imageCount + ' Fotos' : '');
+      var metaParts = []; if (album.dateCreated) { metaParts.push(album.dateCreated); } if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); } var meta = metaParts.join(' &middot; ');
       $card.html(
         '<div class="gallery-card-img">' + imgHtml + '</div>' +
         '<div class="gallery-card-body">' +
@@ -390,6 +412,63 @@ $('#scroll-top').on('click', function () {
       })
       .then(function (meta) {
         lbImages = meta.hasPart || [];
+
+        // ── Album info box ──────────────────────────────────────────────────
+        var infoMetaParts = [];
+        if (meta.dateCreated) { infoMetaParts.push(meta.dateCreated); }
+        infoMetaParts.push(lbImages.length + ' Fotos');
+        $('#gallery-album-info-meta').text(infoMetaParts.join(' · '));
+
+        var desc = meta.description || '';
+        $('#gallery-album-info-desc')
+          .toggleClass('d-none', !desc)
+          .toggleClass('gallery-album-info-desc', !!desc)
+          .text(desc);
+
+        var keywords = Array.isArray(meta.keywords) ? meta.keywords : [];
+        var $tags = $('#gallery-album-info-tags');
+        if (keywords.length) {
+          $tags.removeClass('d-none').empty();
+          keywords.forEach(function (kw) {
+            $tags.append($('<span class="badge rounded-pill me-1">').css({
+              background: 'var(--color-primary-light)',
+              color: 'var(--color-primary)',
+            }).text(kw));
+          });
+        } else {
+          $tags.addClass('d-none');
+        }
+
+        var wikiUrl  = meta['wiki-url']  || '';
+        var rawUrl   = meta['raw-url']   || '';
+        var cloudUrl = meta['cloud-url'] || '';
+        var blogUrl  = meta['blog-url']  || '';
+        var $links   = $('#gallery-album-info-links');
+        if (wikiUrl || rawUrl || cloudUrl || blogUrl) {
+          $links.removeClass('d-none').empty();
+          if (wikiUrl) {
+            $links.append($('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
+              .addClass('btn btn-sm btn-outline-primary').text('Wiki'));
+          }
+          if (rawUrl) {
+            $links.append($('<a>').attr({ href: rawUrl, target: '_blank', rel: 'noopener noreferrer' })
+              .addClass('btn btn-sm btn-outline-secondary').text('Raw'));
+          }
+          if (cloudUrl) {
+            $links.append($('<a>').attr({ href: cloudUrl, target: '_blank', rel: 'noopener noreferrer' })
+              .addClass('btn btn-sm btn-outline-success').text('Cloud'));
+          }
+          if (blogUrl) {
+            $links.append($('<a>').attr({ href: blogUrl, target: '_blank', rel: 'noopener noreferrer' })
+              .addClass('btn btn-sm btn-outline-beitrag').text('Beitrag'));
+          }
+        } else {
+          $links.addClass('d-none');
+        }
+
+        $('#gallery-album-info').removeClass('d-none');
+        // ────────────────────────────────────────────────────────────────────
+
         $grid.empty();
         if (lbImages.length === 0) {
           $grid.html('<div class="col-12 text-muted text-center py-4">Keine Bilder in diesem Album.</div>');
