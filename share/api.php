@@ -404,6 +404,26 @@ function eg_build_pres_entries(array $items): array
 }
 
 /**
+ * Load share/galerie/_index.json as a decoded array.
+ * Returns an empty array when the file is missing or invalid.
+ *
+ * @return array<string,mixed>
+ */
+function eg_gallery_data(string $root): array
+{
+  $path = "$root/galerie/_index.json";
+  if (!is_file($path)) {
+    return [];
+  }
+  $raw = file_get_contents($path);
+  if ($raw === false) {
+    return [];
+  }
+  $data = json_decode($raw, true);
+  return is_array($data) ? $data : [];
+}
+
+/**
  * Build all view data needed by index.php in a single call.
  *
  * @return array{
@@ -416,6 +436,7 @@ function eg_build_pres_entries(array $items): array
  *   qr_entries:     string[],
  *   config_entries: string[],
  *   pres_entries:   array<string,string|null>,
+ *   gallery_data:   array<string,mixed>,
  * }
  */
 function eg_page_data(): array
@@ -434,6 +455,7 @@ function eg_page_data(): array
     'qr_entries'     => array_column($api['assets']['qr']['files'], 'name'),
     'config_entries' => array_column($api['assets']['config']['files'], 'name'),
     'pres_entries'   => eg_build_pres_entries($api['assets']['presentations']['items']),
+    'gallery_data'   => eg_gallery_data(__DIR__),
   ];
 }
 
@@ -557,6 +579,7 @@ function eg_assets_data(): array
       'downloads'     => eg_scan_downloads_node($root, 'downloads', EG_DOWNLOAD_EXT),
       'config'        => eg_config_data($root),
       'presentations' => eg_presentations_data($root),
+      'gallery'       => eg_gallery_data($root),
     ],
   ];
 }

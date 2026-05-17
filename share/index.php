@@ -12,6 +12,7 @@ $img_entries    = $__page['img_entries'];
 $qr_entries     = $__page['qr_entries'];
 $config_entries = $__page['config_entries'];
 $pres_entries   = $__page['pres_entries'];
+$gallery_data   = $__page['gallery_data'];
 unset($__page);
 
 $api_entries = [
@@ -72,6 +73,12 @@ $api_entries = [
       </a>
     </li>
     <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-galerie-trigger" data-bs-toggle="tab"
+         href="#tab-galerie" role="tab" aria-controls="tab-galerie" aria-selected="false">
+        Galerie
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
       <a class="nav-link" id="tab-presentations-trigger" data-bs-toggle="tab"
          href="#tab-presentations" role="tab" aria-controls="tab-presentations" aria-selected="false">
         Präsentationen
@@ -105,6 +112,7 @@ $api_entries = [
 
   <div class="tab-content">
     <?php include __DIR__ . '/assets/templates/tab-downloads.php'; ?>
+    <?php include __DIR__ . '/assets/templates/tab-galerie.php'; ?>
     <?php include __DIR__ . '/assets/templates/tab-presentations.php'; ?>
     <?php include __DIR__ . '/assets/templates/tab-logos.php'; ?>
     <?php include __DIR__ . '/assets/templates/tab-qr.php'; ?>
