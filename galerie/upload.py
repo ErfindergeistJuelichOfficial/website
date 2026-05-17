@@ -6,9 +6,10 @@ A local _ftp_sync.json tracks the last known remote state so upload can skip
 unchanged files without querying the server per file (avoids one SIZE request
 per file over 6000+ files).
 
-Sync file format: { "relative/path": effective_size }
-  - binary files: file size in bytes (same local and remote)
-  - JSON files:   size after URL rewriting (= what the server stores)
+Sync file format: { "relative/path": sync_key }
+  - binary files: file size in bytes (int)
+  - JSON files:   [size_after_url_rewriting, mtime] — mtime catches edits that
+                  produce the same byte count
 
 Usage (via Podman Compose from the galerie/ folder):
     podman compose run --rm download   # fetch current server state first
@@ -139,13 +140,13 @@ def upload_main() -> None:
         remote_path = FTP_REMOTE + '/' + rel
 
         if local_path.suffix == '.json':
-            data           = rewrite_for_upload(local_path)
-            effective_size = len(data)
+            data      = rewrite_for_upload(local_path)
+            sync_key: object = [len(data), local_path.stat().st_mtime]
         else:
-            data           = None
-            effective_size = local_path.stat().st_size
+            data      = None
+            sync_key  = local_path.stat().st_size
 
-        if sync.get(rel) == effective_size:
+        if sync.get(rel) == sync_key:
             skipped += 1
             continue
 
@@ -154,7 +155,7 @@ def upload_main() -> None:
             ensure_remote_dirs(ftp, remote_path)
             payload = data if data is not None else local_path.read_bytes()
             ftp.storbinary(f'STOR {remote_path}', io.BytesIO(payload))
-            sync[rel] = effective_size
+            sync[rel] = sync_key
             uploaded += 1
         except ftplib.all_errors as exc:
             print(f'     Error: {exc}', file=sys.stderr)
@@ -204,7 +205,10 @@ def download_main() -> None:
                 data = rewrite_for_download(data)
             local_path.parent.mkdir(parents=True, exist_ok=True)
             local_path.write_bytes(data)
-            sync[rel] = remote_size
+            if local_path.suffix == '.json':
+                sync[rel] = [remote_size, local_path.stat().st_mtime]
+            else:
+                sync[rel] = remote_size
             downloaded += 1
         except ftplib.all_errors as exc:
             print(f'     Error: {exc}', file=sys.stderr)
