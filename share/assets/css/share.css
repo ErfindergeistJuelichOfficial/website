@@ -375,6 +375,12 @@ main { flex: 1; }
   -webkit-box-orient: vertical;
   margin-top: .1rem;
 }
+.gallery-card-links {
+  display: flex;
+  gap: .35rem;
+  justify-content: flex-end;
+  margin-top: .5rem;
+}
 
 /* Gallery image thumbnail grid */
 .gallery-thumb {

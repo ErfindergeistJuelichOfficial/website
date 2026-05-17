@@ -50,11 +50,7 @@ $has_albums = !empty($gallery_data['hasPart']);
           </div>
           <div class="modal-footer border-0 pt-1 justify-content-between align-items-center">
             <span id="gallery-lb-counter" class="text-muted small"></span>
-            <div class="gallery-lb-actions d-flex gap-2 align-items-center">
-              <a id="gallery-lb-wiki" href="#" target="_blank" rel="noopener noreferrer"
-                 class="btn btn-sm btn-outline-primary d-none">Wiki</a>
-              <a id="gallery-lb-raw" href="#" target="_blank" rel="noopener noreferrer"
-                 class="btn btn-sm btn-outline-secondary d-none">Raw</a>
+            <div class="gallery-lb-actions d-flex gap-2">
               <a id="gallery-lb-download" href="#" download
                  class="gallery-lb-btn" aria-label="Bild herunterladen">
                 <i data-lucide="download" aria-hidden="true"></i>

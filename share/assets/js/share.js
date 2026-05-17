@@ -266,6 +266,28 @@ $('#scroll-top').on('click', function () {
     galleryRouteUpdate(path);
   }
 
+  function appendAlbumLinks($card, album) {
+    var wikiUrl = album['wiki-url'] || '';
+    var rawUrl  = album['raw-url']  || '';
+    if (!wikiUrl && !rawUrl) { return; }
+    var $links = $('<div class="gallery-card-links">');
+    if (wikiUrl) {
+      $links.append(
+        $('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
+          .addClass('btn btn-sm btn-outline-primary').text('Wiki')
+          .on('click', function (e) { e.stopPropagation(); })
+      );
+    }
+    if (rawUrl) {
+      $links.append(
+        $('<a>').attr({ href: rawUrl, target: '_blank', rel: 'noopener noreferrer' })
+          .addClass('btn btn-sm btn-outline-secondary').text('Raw')
+          .on('click', function (e) { e.stopPropagation(); })
+      );
+    }
+    $card.find('.gallery-card-body').append($links);
+  }
+
   // ── Folder / album overview ─────────────────────────────────────────────────
   function showFolder(path) {
     curFolder = path;
@@ -294,6 +316,7 @@ $('#scroll-top').on('click', function () {
           (selfAlbum.description ? '<div class="gallery-card-desc">' + esc(selfAlbum.description) + '</div>' : '') +
         '</div>'
       );
+      appendAlbumLinks($card, selfAlbum);
       $card.on('click keydown', (function (a) {
         return function (e) { if (e.type === 'click' || e.key === 'Enter') { openAlbum(a); } };
       })(selfAlbum));
@@ -334,6 +357,7 @@ $('#scroll-top').on('click', function () {
           (album.description ? '<div class="gallery-card-desc">' + esc(album.description) + '</div>' : '') +
         '</div>'
       );
+      appendAlbumLinks($card, album);
       $card.on('click keydown', (function (a) {
         return function (e) { if (e.type === 'click' || e.key === 'Enter') { openAlbum(a); } };
       })(album));
@@ -366,10 +390,6 @@ $('#scroll-top').on('click', function () {
       })
       .then(function (meta) {
         lbImages = meta.hasPart || [];
-        var wikiUrl = meta['wiki-url'] || '';
-        var rawUrl  = meta['raw-url']  || '';
-        $('#gallery-lb-wiki').toggleClass('d-none', !wikiUrl).attr('href', wikiUrl || '#');
-        $('#gallery-lb-raw').toggleClass('d-none', !rawUrl).attr('href', rawUrl || '#');
         $grid.empty();
         if (lbImages.length === 0) {
           $grid.html('<div class="col-12 text-muted text-center py-4">Keine Bilder in diesem Album.</div>');

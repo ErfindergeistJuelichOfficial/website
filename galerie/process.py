@@ -805,6 +805,10 @@ def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Option
         summary['description'] = meta['description']
     if meta.get('keywords'):
         summary['keywords'] = meta['keywords']
+    if meta.get('wiki-url'):
+        summary['wiki-url'] = meta['wiki-url']
+    if meta.get('raw-url'):
+        summary['raw-url'] = meta['raw-url']
     thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
     if thumb:
         summary['preview'] = album_rel + '/' + thumb
