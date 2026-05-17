@@ -21,18 +21,22 @@ Copy-Item .env.example .env
 ```powershell
 # From the galerie/ folder
 
-# 1. Build the container (once, or after requirements.txt changes)
+# 1. Build the container (once, or after requirements.txt / Dockerfile changes)
 podman compose build
 
-# 2. Process images (generate WebP + JSON)
+# 2. Download current server state (WebP + JSON) into share/galerie/
+#    Do this first so process.py can pick up where the server left off.
+podman compose run --rm download
+
+# 3. Process images - generates WebP + JSON, skips already-processed images
 podman compose run --rm process
 
-# 3. Upload images to the server via FTP
+# 4. Upload everything to the server via FTP
 podman compose run --rm upload
 ```
 
-JSON metadata files in `share/galerie/` should be committed to git after processing.
-The CI workflow (`deploy-share.yml`) deploys them to the server automatically on push.
+`share/galerie/_index.json` and `_meta.json` files are gitignored - they are generated
+by `process` or fetched via `download` and deployed directly via `upload`.
 
 ## Folder Structure
 
@@ -101,7 +105,7 @@ Add a `_config.json` to any folder you want to publish as an album.
 Only `title` is required. Folders without a valid `_config.json` are skipped.
 
 | Field | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `title` | YES | Album card title |
 | `date` | no | ISO date `YYYY-MM-DD` - shown on the card |
 | `description` | no | Longer text shown below the title |
@@ -129,9 +133,10 @@ podman compose up
 
 Workflow for local testing:
 
-1. Run `podman compose run --rm process` from `galerie/`
-2. Open `http://localhost:8080` - the Gallery tab shows the processed albums
-3. Commit the JSON files and run `podman compose run --rm upload` to deploy
+1. `podman compose run --rm download` - fetch current server state into `share/galerie/`
+2. `podman compose run --rm process` - process new images on top of the downloaded state
+3. Open `http://localhost:8080` - the Gallery tab shows all albums
+4. Commit the JSON files and run `podman compose run --rm upload` to deploy
 
 ## Incremental Processing
 
@@ -158,7 +163,7 @@ Inference runs entirely locally on your machine (no API, no internet required af
 Available models:
 
 | `VISION_MODEL` | Size | Output |
-|---|---|---|
+| --- | --- | --- |
 | `disabled` | 0 MB | No captions (default) |
 | `clip-b32` | ~300 MB | Keyword tags |
 | `blip-base` | ~440 MB | Natural language captions |
@@ -173,7 +178,6 @@ Use `DEVICE=cuda` if you have a compatible NVIDIA GPU (5-10x faster than CPU).
 share/galerie/
   _index.json                          <- root catalog (all albums)
   <album-path>/
-    _config.json                       <- copy of your config
     _meta.json                         <- JSON-LD with all image metadata
     <YYYYMMDD_HHMMSS>_<hash8>_t.webp  <- thumbnail (~400px wide)
     <YYYYMMDD_HHMMSS>_<hash8>_n.webp  <- normalized (~1920px max)
@@ -182,16 +186,29 @@ share/galerie/
 Image filenames use the photo's creation date/time and a content hash.
 The original filename is not used. Originals are never modified.
 
-## FTP Upload
+## FTP Sync (Upload & Download)
 
-`upload.py` uses FTPS (FTP over TLS) to upload `share/galerie/` to the server.
-Only files that do not exist on the server (or have a different size) are uploaded.
+`upload.py` handles both directions using FTPS (FTP over TLS).
+
+| Command | Direction | Description |
+| --- | --- | --- |
+| `podman compose run --rm download` | server -> local | Fetch current server state into `share/galerie/` |
+| `podman compose run --rm upload` | local -> server | Push local changes to the server |
+
+**Download** fetches all files from `FTP_REMOTE_DIR` that are missing or differ in size locally.
+Use it before `process` to avoid reprocessing images that are already on the server.
+
+**Upload** sends all local files in `share/galerie/` that are missing or differ in size on the server.
+
+Both commands skip files where local and remote sizes already match (binary files).
+JSON files are always transferred because upload.py rewrites `localhost` <-> production URLs on the fly (the size difference would otherwise cause unnecessary re-uploads).
+
 The FTP host is always `erfindergeist.org` - the server handles DNS routing.
 
 ## Environment Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | `SOURCE_DIR` | (required) | Host path to image collection |
 | `THUMBNAIL_WIDTH` | `400` | Thumbnail width in pixels |
 | `NORMALIZED_MAX` | `1920` | Max dimension for normalized images |

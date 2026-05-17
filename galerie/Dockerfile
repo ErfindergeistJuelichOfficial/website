@@ -11,7 +11,8 @@ ARG INSTALL_AI=false
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && \
     if [ "$INSTALL_AI" = "true" ]; then \
-      pip install --no-cache-dir "transformers>=4.40.0,<4.42.0" torch>=2.1.0 timm>=0.9.0 einops>=0.7.0; \
+      pip install --no-cache-dir "transformers>=4.40.0,<4.42.0" "torch>=2.3.0" timm>=0.9.0 einops>=0.7.0 "mediapipe>=0.10.0" facenet-pytorch "numpy>=2.0.0" && \
+      python -c "import urllib.request; urllib.request.urlretrieve('https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx', '/usr/local/share/yunet.onnx')"; \
     fi
 
 ENTRYPOINT ["python"]

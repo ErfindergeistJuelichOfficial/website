@@ -15,10 +15,19 @@ services:
   upload:
     build:
       context: .
-    command: ["upload.py"]
+    command: ["upload.py", "upload"]
     volumes:
       - .:/app
       - ../share/galerie:/output:ro
+    env_file: .env
+
+  download:
+    build:
+      context: .
+    command: ["upload.py", "download"]
+    volumes:
+      - .:/app
+      - ../share/galerie:/output
     env_file: .env
 
 volumes:

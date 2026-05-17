@@ -430,11 +430,24 @@ $('#scroll-top').on('click', function () {
   });
   $('#gallery-lb-copy').on('click', function () {
     var $btn = $(this);
+    var img    = lbImages[lbIdx];
+    var imgUrl = new URL('galerie/' + curAlbum.path + '/' + img.name, window.location.href).href;
+    navigator.clipboard.writeText(imgUrl).then(function () {
+      $btn.html('<i data-lucide="check" aria-hidden="true"></i>');
+      if (window.lucide) { lucide.createIcons({ nodes: [$btn[0]] }); }
+      setTimeout(function () {
+        $btn.html('<i data-lucide="image" aria-hidden="true"></i>');
+        if (window.lucide) { lucide.createIcons({ nodes: [$btn[0]] }); }
+      }, 1500);
+    });
+  });
+  $('#gallery-lb-copy-link').on('click', function () {
+    var $btn = $(this);
     navigator.clipboard.writeText(window.location.href).then(function () {
       $btn.html('<i data-lucide="check" aria-hidden="true"></i>');
       if (window.lucide) { lucide.createIcons({ nodes: [$btn[0]] }); }
       setTimeout(function () {
-        $btn.html('<i data-lucide="copy" aria-hidden="true"></i>');
+        $btn.html('<i data-lucide="link" aria-hidden="true"></i>');
         if (window.lucide) { lucide.createIcons({ nodes: [$btn[0]] }); }
       }, 1500);
     });
