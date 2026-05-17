@@ -116,6 +116,26 @@ Only `title` is required. Folders without a valid `_config.json` are skipped.
 automatically blurred using OpenCV face detection. Set to `true` when privacy
 consent forms were collected from all participants.
 
+**Per-image overrides** (`blur` / `no_blur`): Use these arrays to override the
+album-level `consent_collected` for individual source files by their filename.
+
+```json
+{
+  "title": "Sommerfest 2024",
+  "date": "2024-07-15",
+  "consent_collected": true,
+  "blur":    ["IMG_007.jpg", "DSC_0042.jpg"],
+  "no_blur": ["logo_banner.jpg"]
+}
+```
+
+| Field | Effect |
+| --- | --- |
+| `blur` | Always blur these filenames - even when `consent_collected: true` |
+| `no_blur` | Never blur these filenames - even when `consent_collected: false` |
+
+Both fields accept an array of source filenames (the original file names in SOURCE_DIR, not the generated WebP names). `no_blur` takes precedence over `blur` if a filename appears in both. Reprocessing is triggered automatically when the per-image decision changes.
+
 ## Development vs. Production
 
 `process.py` always writes `http://localhost:8080/galerie` as the `@id` base in

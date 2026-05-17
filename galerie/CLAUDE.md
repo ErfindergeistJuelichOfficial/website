@@ -67,14 +67,21 @@ User-created file, one per album folder in SOURCE_DIR. Never auto-modified.
   "date": "YYYY-MM-DD, optional",
   "description": "string, optional",
   "consent_collected": true,
+  "blur":    ["IMG_007.jpg"],
+  "no_blur": ["logo.jpg"],
   "tags": ["string", "array", "optional"]
 }
 ```
 
 **`consent_collected`** defaults to `false` (safe default).
-When `false` or missing, faces in ALL output images are blurred using
-the model configured via `BLUR_MODEL` (default: `haar`).
+When `false` or missing, faces in ALL output images are blurred.
 Set to `true` only when written privacy consent forms were actually collected from participants.
+
+**`blur`** / **`no_blur`**: arrays of source filenames for per-image overrides.
+`blur` forces blurring even when `consent_collected: true`.
+`no_blur` skips blurring even when `consent_collected: false`.
+`no_blur` takes precedence if a filename appears in both.
+The `blurred` field per image in `_meta.json` stores the actual per-image decision.
 
 A folder is silently skipped when `_config.json` is missing or lacks `title`.
 

@@ -638,11 +638,14 @@ def process_album(
     and whose blur state matches the current config.
     Returns a list of ImageObject dicts for _meta.json hasPart.
     """
-    needs_blur = not bool(config.get('consent_collected', False))
+    needs_blur  = not bool(config.get('consent_collected', False))
+    always_blur = set(config.get('blur',    []))  # force blur regardless of consent_collected
+    never_blur  = set(config.get('no_blur', []))  # skip blur regardless of consent_collected
 
     if VISION_MODEL != 'disabled':
         load_vision_model()
-    if needs_blur and any(m != 'haar' for m in BLUR_MODELS):
+    might_blur = needs_blur or bool(always_blur)
+    if might_blur and any(m != 'haar' for m in BLUR_MODELS):
         load_blur_models()
 
     image_files = sorted(
@@ -654,13 +657,20 @@ def process_album(
     for src in image_files:
         hash8 = sha256_short(src)
 
+        # Per-image blur decision: overrides from blur/no_blur take precedence
+        img_needs_blur = needs_blur
+        if src.name in always_blur:
+            img_needs_blur = True
+        if src.name in never_blur:
+            img_needs_blur = False
+
         # Incremental: reuse existing output if files are still present and blur state matches
         if hash8 in existing_by_hash:
             ep = existing_by_hash[hash8]
             norm_ok  = (output_album / ep.get('name', '')).is_file()
             thumb_ok = (output_album / ep.get('thumbnail', '')).is_file() if ep.get('thumbnail') else True
             stored_blur   = ep.get('blurred')
-            blur_mismatch = stored_blur is not None and stored_blur != needs_blur
+            blur_mismatch = stored_blur is not None and stored_blur != img_needs_blur
             if norm_ok and thumb_ok and not blur_mismatch:
                 # Caption: skip if already present, generate and persist immediately otherwise
                 if VISION_MODEL != 'disabled' and ep.get('caption') is None:
@@ -682,7 +692,7 @@ def process_album(
                 parts.append(ep)
                 continue
             if blur_mismatch:
-                action = 'blurring' if needs_blur else 'unblurring'
+                action = 'blurring' if img_needs_blur else 'unblurring'
                 print(f'  {src.name} (consent changed, {action})')
             else:
                 print(f'  {src.name}')
@@ -703,7 +713,7 @@ def process_album(
         norm_img = make_normalized(img, NORM_MAX)
 
         # Blur the normalized image first, then derive thumbnail from it
-        if needs_blur:
+        if img_needs_blur:
             print('    blurring faces ...')
             norm_img = blur_faces(norm_img)
 
@@ -724,7 +734,7 @@ def process_album(
             'sourceHash':  hash8,
             'dateCreated': dt_iso,
             'exif':        file_exif(src),
-            'blurred':     needs_blur,
+            'blurred':     img_needs_blur,
         }
         if caption:
             part['caption'] = caption
