@@ -206,7 +206,7 @@
 <body>
 
 <!-- ── Header ───────────────────────────────────────────────── -->
-<nav class="eg-nav py-3 sticky-top" style="z-index:1030">
+<nav class="eg-nav py-3 sticky-top" aria-label="Hauptnavigation" style="z-index:1030">
   <div class="container-fluid px-4 d-flex align-items-center gap-3">
     <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer">
       <img src="img/logo.svg" alt="Erfindergeist Jülich" class="eg-nav-logo">
@@ -249,6 +249,7 @@
 
     <!-- Main content -->
     <main class="col-lg-10">
+      <h1 class="visually-hidden">Stylebook - Erfindergeist Julich</h1>
 
       <!-- ═══════════════════════════════════════════════════════
            1. FARBEN
@@ -627,7 +628,7 @@
 
         <div class="sb-subsection">
           <div class="sb-subsection-label">Nav Tabs</div>
-          <ul class="nav nav-tabs mb-3" id="sb-demo-tabs" role="tablist">
+          <ul class="nav nav-tabs mb-3" id="sb-demo-tabs" role="tablist" aria-label="Seitenbereiche">
             <li class="nav-item" role="presentation">
               <a class="nav-link active" id="sb-tab-1-trigger" data-bs-toggle="tab" href="#sb-tab-1" role="tab" aria-controls="sb-tab-1" aria-selected="true">
                 <i data-lucide="download" style="width:14px;height:14px;margin-right:.3rem" aria-hidden="true"></i>Downloads
@@ -947,8 +948,8 @@
                 <th class="dl-fmt-col">Format</th>
                 <th>Name</th>
                 <th>Bereich</th>
-                <th></th>
-                <th></th>
+                <th><span class="visually-hidden">Aktionen</span></th>
+                <th><span class="visually-hidden">Download</span></th>
               </tr>
             </thead>
             <tbody>
