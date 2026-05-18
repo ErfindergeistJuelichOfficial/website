@@ -287,8 +287,18 @@ main { flex: 1; }
 .logo-card-actions .file-badge { align-self: center; }
 
 /* ── Bootstrap btn overrides ── */
-.btn-primary         { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
-.btn-primary:hover   { background: #0a5f56; border-color: #0a5f56; }
+/* Bootstrap compiles outline-button colors as hardcoded hex, not using --bs-primary.
+   Overrides needed for contrast compliance on both body backgrounds. */
+.btn-primary           { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
+.btn-primary:hover     { background: #0a5f56; border-color: #0a5f56; }
+
+.btn-outline-primary   { --bs-btn-color: #107c6f; --bs-btn-border-color: #107c6f; }
+.btn-outline-secondary { --bs-btn-color: #545b61; --bs-btn-border-color: #545b61; }
+.btn-outline-success   { --bs-btn-color: #0a6b3e; --bs-btn-border-color: #0a6b3e; }
+
+[data-theme="dark"] .btn-outline-primary   { --bs-btn-color: #159989; --bs-btn-border-color: #159989; }
+[data-theme="dark"] .btn-outline-secondary { --bs-btn-color: #adb5bd; --bs-btn-border-color: #adb5bd; }
+[data-theme="dark"] .btn-outline-success   { --bs-btn-color: #47a777; --bs-btn-border-color: #47a777; }
 .btn-secondary       { background: var(--color-secondary); border-color: var(--color-secondary); color: #1a2e2c; }
 .btn-secondary:hover { background: #e8a020; border-color: #e8a020; color: #1a2e2c; }
 
