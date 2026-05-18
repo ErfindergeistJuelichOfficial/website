@@ -7,14 +7,16 @@
   <?php else : ?>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
       <?php foreach ($qr_entries as $qrEntry) :
+        $baseName  = pathinfo($qrEntry, PATHINFO_FILENAME);
         $safeLabel = htmlspecialchars($qrEntry, ENT_QUOTES, 'UTF-8');
+        $safeAlt   = htmlspecialchars('QR Code: ' . $baseName, ENT_QUOTES, 'UTF-8');
         $safeUrl   = 'qr/' . rawurlencode($qrEntry);
         $ext       = strtolower(pathinfo($qrEntry, PATHINFO_EXTENSION));
       ?>
         <div class="col">
           <div class="logo-card">
             <div class="logo-card-preview">
-              <img src="<?= $safeUrl ?>" alt="<?= $safeLabel ?>" loading="lazy">
+              <img src="<?= $safeUrl ?>" alt="<?= $safeAlt ?>" loading="lazy">
             </div>
             <div class="logo-card-name" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
             <div class="logo-card-actions">
