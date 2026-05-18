@@ -6,10 +6,12 @@ $__hasGruppe  = !empty($gruppen);
 <div class="tab-pane fade show active" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-trigger">
 
   <div class="d-flex gap-2 mb-3 flex-wrap align-items-center">
+    <label for="file-search" class="visually-hidden">Dateien suchen</label>
     <input type="search" id="file-search" class="form-control" style="max-width:280px"
-           placeholder="Dateien suchen…" aria-label="Dateien suchen">
+           placeholder="Dateien suchen…">
     <?php if ($__hasBereich) : ?>
-      <select id="bereich-filter" class="form-select" style="max-width:180px" aria-label="Bereich filtern">
+      <label for="bereich-filter" class="visually-hidden">Bereich filtern</label>
+      <select id="bereich-filter" class="form-select" style="max-width:180px">
         <option value="">Alle Bereiche</option>
         <?php foreach ($bereiche as $__b) : ?>
           <option value="<?= htmlspecialchars($__b, ENT_QUOTES, 'UTF-8') ?>">
@@ -19,7 +21,8 @@ $__hasGruppe  = !empty($gruppen);
       </select>
     <?php endif; ?>
     <?php if ($__hasThema) : ?>
-      <select id="thema-filter" class="form-select" style="max-width:180px" aria-label="Thema filtern">
+      <label for="thema-filter" class="visually-hidden">Thema filtern</label>
+      <select id="thema-filter" class="form-select" style="max-width:180px">
         <option value="">Alle Themen</option>
         <?php foreach ($themen as $__t) : ?>
           <option value="<?= htmlspecialchars($__t, ENT_QUOTES, 'UTF-8') ?>">
@@ -29,7 +32,8 @@ $__hasGruppe  = !empty($gruppen);
       </select>
     <?php endif; ?>
     <?php if ($__hasGruppe) : ?>
-      <select id="gruppe-filter" class="form-select" style="max-width:180px" aria-label="Gruppe filtern">
+      <label for="gruppe-filter" class="visually-hidden">Gruppe filtern</label>
+      <select id="gruppe-filter" class="form-select" style="max-width:180px">
         <option value="">Alle Gruppen</option>
         <?php foreach ($gruppen as $__g) : ?>
           <option value="<?= htmlspecialchars($__g, ENT_QUOTES, 'UTF-8') ?>">

@@ -18,7 +18,7 @@
 
 /* --- CSS Custom Properties -------------------------------- */
 :root {
-  --color-primary:        #159989;
+  --color-primary:        #107c6f;
   --color-primary-dark:   #107c6f;
   --color-primary-light:  #e6f5f3;
   --color-secondary:      #F9B338;
@@ -26,7 +26,7 @@
   --color-bg:             #f6fbfa;
   --color-surface:        #ffffff;
   --color-text:           #1a2e2c;
-  --color-text-muted:     #5a7a76;
+  --color-text-muted:     #4a6b67;
   --color-border:         #d0e8e4;
   --color-shadow:         rgba(21,153,137,.12);
   --font-scale:           1;
