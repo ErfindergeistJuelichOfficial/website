@@ -173,7 +173,7 @@ html.reduce-motion .bell-wave { animation: none; }
 }
 .ics-puzzle.solved {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(21,153,137,.12), 0 6px 24px rgba(21,153,137,.2);
+  box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), .12), 0 6px 24px rgba(var(--color-primary-rgb), .2);
 }
 
 .ics-spinner-row {

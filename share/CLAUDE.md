@@ -231,6 +231,8 @@ See [root CLAUDE.md](../CLAUDE.md) for design tokens and the no-CDN rule.
 - Custom styles: `assets/css/share.css`
 - Custom scripts: `assets/js/share.js`
 
+**CSS color rule:** Never hardcode a hex value that has a corresponding `--color-*` variable defined in `assets/css/share.css` `:root`. Use `var(--color-primary)`, `var(--color-primary-dark)`, `var(--color-surface)` etc. For RGBA primary shadows use `rgba(var(--color-primary-rgb), alpha)`.
+
 ---
 
 ## Presentations (relocated)

@@ -27,6 +27,8 @@ These rules apply to every PHP file in the project. No exceptions.
 - Primary: `#159989` · Secondary: `#F9B338`
 - Logo: landscape (~200×60px), served from `https://share.erfindergeist.org/img/logo.svg`
 
+**CSS color rule:** Never hardcode a hex value that has a corresponding `--color-*` CSS variable — always use `var(--color-primary)`, `var(--color-primary-dark)`, `var(--color-surface)` etc. For RGBA variants of the primary color use `rgba(var(--color-primary-rgb), alpha)` instead of the raw hex digits.
+
 ## External Assets & Libraries
 
 **All external libraries must be loaded from `https://share.erfindergeist.org/` — never from external CDNs**

@@ -19,6 +19,7 @@
 /* --- CSS Custom Properties -------------------------------- */
 :root {
   --color-primary:        #107c6f;
+  --color-primary-rgb:    16,124,111;
   --color-primary-dark:   #107c6f;
   --color-primary-light:  #e6f5f3;
   --color-secondary:      #F9B338;
@@ -28,7 +29,7 @@
   --color-text:           #1a2e2c;
   --color-text-muted:     #4a6b67;
   --color-border:         #d0e8e4;
-  --color-shadow:         rgba(21,153,137,.12);
+  --color-shadow:         rgba(var(--color-primary-rgb), .12);
   --font-scale:           1;
   --navbar-height:        70px;
 
@@ -63,6 +64,7 @@
 
 [data-theme="dark"] {
   --color-primary:         #159989;
+  --color-primary-rgb:     21,153,137;
   --color-bg:              #0d1918;
   --color-surface:         #162624;
   --color-text:            #e0f0ee;
@@ -257,7 +259,7 @@ a:hover { color: var(--color-primary-dark); }
   --bs-btn-hover-border-color: #0a5f56;
   --bs-btn-active-bg: #0a5f56;
   --bs-btn-active-border-color: #0a5f56;
-  --bs-btn-focus-shadow-rgb: 21, 153, 137;
+  --bs-btn-focus-shadow-rgb: var(--color-primary-rgb);
 }
 .btn-outline-primary {
   --bs-btn-color: var(--color-primary);
@@ -266,7 +268,7 @@ a:hover { color: var(--color-primary-dark); }
   --bs-btn-hover-border-color: var(--color-primary);
   --bs-btn-active-bg: var(--color-primary);
   --bs-btn-active-border-color: var(--color-primary);
-  --bs-btn-focus-shadow-rgb: 21, 153, 137;
+  --bs-btn-focus-shadow-rgb: var(--color-primary-rgb);
 }
 /* Bootstrap compiles --bs-btn-color hardcoded (#6c757d) — override for contrast */
 .btn-outline-secondary {

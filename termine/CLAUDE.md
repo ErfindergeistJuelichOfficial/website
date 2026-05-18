@@ -82,6 +82,8 @@ css/
 
 ## CSS Rules
 
+**CSS color rule:** Never hardcode a hex value that has a corresponding `--color-*` variable defined in `css/main.css` `:root`. Use `var(--color-primary)`, `var(--color-primary-dark)`, `var(--color-surface)` etc. For RGBA primary shadows use `rgba(var(--color-primary-rgb), alpha)`. Note: `--color-primary` and `--color-primary-rgb` have different values in light vs. dark mode — both are defined in `:root` and `[data-theme="dark"]`.
+
 **Bootstrap first:** Before writing custom CSS, check whether Bootstrap already covers it via CSS variables.
 
 - Button colours via `--bs-btn-bg`, `--bs-btn-hover-bg` etc. set on the class (do not override `background-color`)
