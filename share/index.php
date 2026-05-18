@@ -43,7 +43,7 @@ $api_entries = [
 <body>
 
 <!-- ── Navbar ── -->
-<nav class="eg-nav py-3 sticky-top">
+<nav class="eg-nav py-3 sticky-top" aria-label="Hauptnavigation">
   <div class="container d-flex align-items-center gap-3">
     <?php if (file_exists('img/logo.svg')) : ?>
       <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer">
@@ -63,9 +63,10 @@ $api_entries = [
 
 <!-- ── Main ── -->
 <main class="container py-4 pb-5">
+  <h1 class="visually-hidden">Share - Erfindergeist Jülich</h1>
 
   <!-- ── Tabs ── -->
-  <ul class="nav nav-tabs mb-3" id="main-tabs" role="tablist">
+  <ul class="nav nav-tabs mb-3" id="main-tabs" role="tablist" aria-label="Seitenbereiche">
     <li class="nav-item" role="presentation">
       <a class="nav-link active" id="tab-downloads-trigger" data-bs-toggle="tab"
          href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="true">

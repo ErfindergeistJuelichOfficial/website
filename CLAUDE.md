@@ -53,6 +53,8 @@ For social icons always use **inline SVG** (Lucide stroke style: `fill="none" st
 
 **Dynamic icons:** When `data-lucide` elements are inserted into the DOM via JS, call `lucide.createIcons()` again afterwards.
 
+**Icons in JS-generated HTML strings** (`insertAdjacentHTML`, `innerHTML`, template literals): always include `aria-hidden="true"` on the `<i>` tag — `lucide.createIcons()` does NOT add it automatically. Decorative example: `<i data-lucide="map-pin" aria-hidden="true"></i>`
+
 ## Quality Tools
 
 ```bash
@@ -79,10 +81,21 @@ podman compose run --rm composer phpcbf    # auto-fix style violations
 
 **Important:** Changes to quality tool configs must also be reflected in `.github/workflows/ci.yml`.
 
+## Accessibility
+
+- Every `<img>` needs a non-empty `alt` (except explicitly decorative: `alt=""` + comment)
+- When JS sets `img.src`, `img.alt` must be set in the same call (use `caption || filename` — never empty)
+- `<th>` must never be empty — use `<span class="visually-hidden">Text</span>` for icon-only columns
+- Every page has exactly one `<h1>` (use `class="visually-hidden"` if not visually desired)
+- Multiple `<nav>` on one page: each needs a unique `aria-label`
+- `role="menu"` requires `role="menuitem"` children — otherwise use `role="group"`
+- Elements with JS-updated text content: `role="status"` or `aria-live="polite"`
+- Icon-only interactive elements: always `aria-label`
+
 ## CI/CD & Deployment
 
 Pipelines: `.github/workflows/`
 
 ## Typo
 
-Do not use – use - instead.
+Do not use - use - instead.

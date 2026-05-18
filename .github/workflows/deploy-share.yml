@@ -34,3 +34,4 @@ jobs:
             downloads/mock-*
             galerie/.gitignore
             stylebook.html
+            **/A11Y.md

@@ -273,6 +273,39 @@ See root [CLAUDE.md](../CLAUDE.md) for the full rules. Summary for this module:
 - Run `podman compose run --rm composer analyse` from the project root before committing
 - `composer analyse` must pass with zero errors
 
+## Accessibility
+
+Target: WCAG 2.1 AA. Automated check via <https://wave.webaim.org/report#/share.erfindergeist.org> (after deployment to main). Tracked in [A11Y.md](A11Y.md).
+
+### Images
+
+- Every `<img>` needs a non-empty, meaningful `alt`
+- Purely decorative images: `alt=""` + `role="presentation"` (deliberate exception — comment it)
+- When JS sets `img.src`, `img.alt` **must** be set in the same call using `caption || filename` — never empty
+
+### Table headers
+
+- `<th>` must never be empty — not even for icon/action columns
+- Invisible label: `<th><span class="visually-hidden">Action name</span></th>`
+
+### ARIA roles
+
+- `role="menu"` requires `role="menuitem"` on all direct children — otherwise use `role="group"`
+- `role="status"` (or `aria-live="polite"`) on elements whose text is updated dynamically via JS
+- Multiple `<nav>` on one page: each needs a unique `aria-label`
+
+### Headings
+
+- Every page has exactly one `<h1>` describing the page
+- If no visual `<h1>` is desired: `<h1 class="visually-hidden">Page name</h1>`
+- Heading hierarchy must not skip levels (h1 -> h2 -> h3, never h1 -> h3)
+
+### Interactive elements
+
+- Icon-only buttons/links always need `aria-label`
+- Non-interactive elements (`<div>`, `<span>`) must not wrap content that appears interactive
+- Tab lists: `<ul role="tablist">` gets `aria-label`
+
 ## Do Not Deploy to Server
 
 `compose.yaml`, `README.md`, `CLAUDE.md`, `galerie-plan.md`, `stylebook.html` → excluded via `exclude` in the workflow.

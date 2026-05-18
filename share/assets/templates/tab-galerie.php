@@ -53,14 +53,15 @@ $has_albums = !empty($gallery_data['hasPart']);
               <i data-lucide="chevron-left" aria-hidden="true"></i>
             </button>
             <img id="gallery-lb-img" src="" alt=""
+                 aria-hidden="true" aria-describedby="gallery-lb-caption"
                  class="img-fluid" style="max-height:80vh;object-fit:contain">
             <button id="gallery-lb-next" class="gallery-lb-nav gallery-lb-nav--next gallery-lb-btn"
-                    aria-label="Nachstes Bild">
+                    aria-label="Nächstes Bild">
               <i data-lucide="chevron-right" aria-hidden="true"></i>
             </button>
           </div>
           <div class="modal-footer border-0 pt-1 justify-content-between align-items-center">
-            <span id="gallery-lb-counter" class="text-muted small"></span>
+            <span id="gallery-lb-counter" class="text-muted small" role="status"></span>
             <div class="gallery-lb-actions d-flex gap-2">
               <a id="gallery-lb-download" href="#" download
                  class="gallery-lb-btn" aria-label="Bild herunterladen">
@@ -70,7 +71,7 @@ $has_albums = !empty($gallery_data['hasPart']);
                       aria-label="Direktlink zum Bild kopieren">
                 <i data-lucide="image" aria-hidden="true"></i>
               </button>
-              <div id="gallery-lb-share-panel" class="gallery-lb-share-panel" role="menu">
+              <div id="gallery-lb-share-panel" class="gallery-lb-share-panel" role="group" aria-label="Teilen">
                 <button id="gallery-lb-copy-link" class="gallery-lb-btn"
                         aria-label="Seiten-Link kopieren">
                   <i data-lucide="link" aria-hidden="true"></i>

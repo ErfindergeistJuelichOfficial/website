@@ -501,7 +501,7 @@ $(document).ready(function () {
           + '<p class="event-title">' + title + '</p>'
           + (tagDesc ? '<p class="event-desc">' + esc(tagDesc) + '</p>' : '')
           + '<div class="event-meta">';
-        if (loc) { html += '<span><i data-lucide="map-pin"></i>' + loc + '</span>'; }
+        if (loc) { html += '<span><i data-lucide="map-pin" aria-hidden="true"></i>' + loc + '</span>'; }
         html += '</div></div></div>';
         listEl.insertAdjacentHTML('beforeend', html);
       });

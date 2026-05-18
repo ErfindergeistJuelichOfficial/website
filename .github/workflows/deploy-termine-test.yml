@@ -17,6 +17,7 @@ jobs:
       exclude: |
         **/CLAUDE.md
         **/PLAN.md
+        **/A11Y.md
         stylebook.html
     secrets:
       ftp-username: ${{ secrets.FTP_USERNAME_TERMINE_TEST }}

@@ -65,11 +65,11 @@ $__hasGruppe  = !empty($gruppen);
             <?php if ($__hasGruppe) :
 ?><th>Gruppe</th><?php
             endif; ?>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th><span class="visually-hidden">Wiki</span></th>
+            <th><span class="visually-hidden">Raw</span></th>
+            <th><span class="visually-hidden">Cloud</span></th>
+            <th><span class="visually-hidden">Beitrag</span></th>
+            <th><span class="visually-hidden">Download</span></th>
           </tr>
         </thead>
         <tbody>

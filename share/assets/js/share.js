@@ -483,7 +483,7 @@ $('#scroll-top').on('click', function () {
           var $col   = $('<div class="col-6 col-sm-4 col-md-3 col-lg-2">');
           var $thumb = $('<div class="gallery-thumb" role="button" tabindex="0">');
           $thumb.attr('aria-label', 'Bild ' + (i + 1) + ' von ' + lbImages.length + ' offnen');
-          $thumb.html('<img src="galerie/' + esc(album.path) + '/' + esc(img.thumbnail) + '" alt="' + esc(img.caption || '') + '" loading="lazy">');
+          $thumb.html('<img src="galerie/' + esc(album.path) + '/' + esc(img.thumbnail) + '" alt="' + esc(img.caption || img.name) + '" loading="lazy">');
           $thumb.on('click keydown', (function (idx) {
             return function (e) { if (e.type === 'click' || e.key === 'Enter') { openLightbox(idx); } };
           })(i));
@@ -506,7 +506,7 @@ $('#scroll-top').on('click', function () {
     var img    = lbImages[lbIdx];
     if (!img || !curAlbum) { return; }
     var imgSrc = 'galerie/' + curAlbum.path + '/' + img.name;
-    $('#gallery-lb-img').attr('src', imgSrc).attr('alt', img.caption || '');
+    $('#gallery-lb-img').attr('src', imgSrc).attr('alt', img.caption || img.name).removeAttr('aria-hidden');
     $('#gallery-lb-caption').text(img.caption || '');
     $('#gallery-lb-counter').text((lbIdx + 1) + ' / ' + lbImages.length);
     $('#gallery-lb-prev').prop('disabled', lbIdx === 0);

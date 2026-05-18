@@ -42,14 +42,14 @@ $ach = [
 
     <!-- Counter / Rang -->
     <div class="achievements-counter" data-aos="fade-up" data-aos-delay="100">
-      <p class="achievements-rank" id="achievements-rank">-</p>
+      <p class="achievements-rank" id="achievements-rank" role="status" aria-live="polite">-</p>
       <div class="achievements-stars" aria-hidden="true">
         <?php for ($i = 0; $i < 7; $i++) : ?>
         <i data-lucide="star" class="ach-star"></i>
         <?php endfor; ?>
       </div>
       <p class="achievements-fraction">
-        <span id="achievements-count">0</span>&thinsp;/&thinsp;<?= count($ach) ?>
+        <span id="achievements-count" aria-live="polite">0</span>&thinsp;/&thinsp;<?= count($ach) ?>
       </p>
       <p class="achievements-counter-label small text-muted" data-i18n="achievements.counter">Errungenschaften freigeschaltet</p>
       <button id="achievements-reset" class="btn btn-outline-secondary btn-sm mt-3" data-i18n="achievements.reset">Zurücksetzen</button>
