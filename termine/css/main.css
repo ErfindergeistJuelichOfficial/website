@@ -33,13 +33,15 @@
   --navbar-height:        70px;
 
   /* Bootstrap theme */
-  --bs-primary:           #159989;
-  --bs-primary-rgb:       21,153,137;
-  --bs-secondary:         #F9B338;
-  --bs-secondary-rgb:     249,179,56;
-  --bs-link-color:        #159989;
-  --bs-link-hover-color:  #107c6f;
-  --bs-body-font-size:    calc(1rem * var(--font-scale));
+  --bs-primary:                #107c6f;
+  --bs-primary-rgb:            16,124,111;
+  --bs-secondary:              #F9B338;
+  --bs-secondary-rgb:          249,179,56;
+  --bs-link-color:             #107c6f;
+  --bs-link-color-rgb:         16,124,111;
+  --bs-link-hover-color:       #0d6457;
+  --bs-link-hover-color-rgb:   13,100,87;
+  --bs-body-font-size:         calc(1rem * var(--font-scale));
   --bs-body-color:        var(--color-text);
   --bs-body-bg:           var(--color-bg);
 
@@ -60,14 +62,21 @@
 }
 
 [data-theme="dark"] {
-  --color-bg:             #0d1918;
-  --color-surface:        #162624;
-  --color-text:           #e0f0ee;
-  --color-text-muted:     #7aa8a3;
-  --color-border:         #2a4440;
-  --color-shadow:         rgba(0,0,0,.35);
-  --color-primary-light:  #1c3a37;
-  --color-secondary-light:#2b2210;
+  --color-primary:         #159989;
+  --color-bg:              #0d1918;
+  --color-surface:         #162624;
+  --color-text:            #e0f0ee;
+  --color-text-muted:      #7aa8a3;
+  --color-border:          #2a4440;
+  --color-shadow:          rgba(0,0,0,.35);
+  --color-primary-light:   #1c3a37;
+  --color-secondary-light: #2b2210;
+
+  /* Bootstrap — restore original primary for dark bg */
+  --bs-primary:            #159989;
+  --bs-primary-rgb:        21,153,137;
+  --bs-link-color:         #159989;
+  --bs-link-color-rgb:     21,153,137;
 }
 
 .high-contrast {
@@ -244,10 +253,10 @@ a:hover { color: var(--color-primary-dark); }
 .btn-primary {
   --bs-btn-bg: var(--color-primary);
   --bs-btn-border-color: var(--color-primary);
-  --bs-btn-hover-bg: var(--color-primary-dark);
-  --bs-btn-hover-border-color: var(--color-primary-dark);
-  --bs-btn-active-bg: var(--color-primary-dark);
-  --bs-btn-active-border-color: var(--color-primary-dark);
+  --bs-btn-hover-bg: #0a5f56;
+  --bs-btn-hover-border-color: #0a5f56;
+  --bs-btn-active-bg: #0a5f56;
+  --bs-btn-active-border-color: #0a5f56;
   --bs-btn-focus-shadow-rgb: 21, 153, 137;
 }
 .btn-outline-primary {
@@ -258,6 +267,15 @@ a:hover { color: var(--color-primary-dark); }
   --bs-btn-active-bg: var(--color-primary);
   --bs-btn-active-border-color: var(--color-primary);
   --bs-btn-focus-shadow-rgb: 21, 153, 137;
+}
+/* Bootstrap compiles --bs-btn-color hardcoded (#6c757d) — override for contrast */
+.btn-outline-secondary {
+  --bs-btn-color: #545b61;
+  --bs-btn-border-color: #545b61;
+}
+[data-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color: #adb5bd;
+  --bs-btn-border-color: #adb5bd;
 }
 .btn-secondary {
   --bs-btn-bg: var(--color-secondary);
