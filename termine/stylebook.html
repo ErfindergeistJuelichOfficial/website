@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylebook - Erfindergeist Termine</title>
+  <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://share.erfindergeist.org/css/aos.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/sections/section-sponsoring.css">
+  <link rel="stylesheet" href="css/sections/section-termine.css">
+  <link rel="stylesheet" href="css/sections/section-architektur.css">
+  <link rel="stylesheet" href="css/sections/section-plugin.css">
+  <link rel="stylesheet" href="css/sections/section-ics.css">
+  <link rel="stylesheet" href="css/sections/section-hero.css">
+  <link rel="stylesheet" href="css/sections/section-downloads.css">
+  <link rel="stylesheet" href="css/sections/section-homeassistant.css">
+  <link rel="stylesheet" href="css/sections/section-archivments.css">
+  <style>
+    /* ── Stylebook layout ── */
+    .sb-sidebar {
+      border-right: 1px solid var(--color-border);
+      padding-top: 1.5rem;
+      padding-bottom: 2rem;
+      position: sticky;
+      top: var(--navbar-height);
+      overflow-y: auto;
+      max-height: calc(100vh - var(--navbar-height));
+    }
+    .sb-nav-link {
+      display: block;
+      padding: .3rem .75rem;
+      font-size: .82rem;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background .15s, color .15s;
+    }
+    .sb-nav-link:hover,
+    .sb-nav-link.active {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+    .sb-nav-group-label {
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--color-text-muted);
+      padding: .75rem .75rem .2rem;
+    }
+
+    /* ── Sections ── */
+    .sb-section {
+      padding: 2.5rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .sb-section:last-child { border-bottom: none; }
+    .sb-section-label {
+      font-family: system-ui, sans-serif;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--color-text-muted);
+      margin-bottom: .35rem;
+    }
+    .sb-section > h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--color-primary);
+    }
+    .sb-subsection { margin-top: 1.75rem; }
+    .sb-subsection-label {
+      font-family: system-ui, sans-serif;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: .35rem;
+      margin-bottom: .85rem;
+    }
+
+    /* ── Preview row ── */
+    .sb-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+    .sb-preview-block {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .sb-item-label {
+      font-size: .68rem;
+      color: var(--color-text-muted);
+      font-family: monospace;
+    }
+
+    /* ── Color swatches ── */
+    .sb-swatch {
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      min-width: 100px;
+      background: var(--color-surface);
+    }
+    .sb-swatch-color { height: 64px; }
+    .sb-swatch-label {
+      padding: .4rem .6rem;
+      font-size: .72rem;
+      line-height: 1.4;
+    }
+    .sb-swatch-var { font-family: monospace; color: var(--color-text-muted); font-size: .68rem; }
+
+    /* ── Icon grid ── */
+    .sb-icon-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .sb-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+      width: 72px;
+      padding: .6rem .3rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background: var(--color-surface);
+    }
+    .sb-icon-item svg { width: 22px; height: 22px; color: var(--color-text); }
+    .sb-icon-item span { font-size: .6rem; color: var(--color-text-muted); text-align: center; word-break: break-word; font-family: monospace; line-height: 1.2; }
+
+    /* ── Navbar demo ── */
+    .sb-navbar-demo {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+
+    /* ── Section ha demo wrapper ── */
+    .sb-ha-demo {
+      background: linear-gradient(135deg, #0d7060 0%, #0a5a4c 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .sb-ha-demo .analogy-box { background: rgba(255,255,255,.12); border-left-color: var(--color-secondary); color: #fff; }
+
+    /* Toast demo (static) */
+    .sb-toast-demo {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .55rem 1.1rem;
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      border-radius: 999px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.18);
+      font-size: .88rem;
+      font-weight: 500;
+    }
+    .sb-toast-demo svg { width: 18px; height: 18px; color: var(--color-primary); }
+  </style>
+  <script>
+    (function () {
+      var t = localStorage.getItem('eg-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    }());
+  </script>
+</head>
+<body>
+
+<!-- ── Header (Navbar als Komponente + Stylebook-Header) ─────── -->
+<nav class="navbar sticky-top" id="main-nav" aria-label="Stylebook Navigation" style="height:var(--navbar-height)">
+  <div class="container-fluid px-4 d-flex align-items-center gap-3 h-100">
+    <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer" class="navbar-brand p-0">
+      <img src="https://share.erfindergeist.org/img/logo.svg" alt="Erfindergeist Julich" class="navbar-logo">
+    </a>
+    <span class="fw-semibold ms-1" style="font-size:1.05rem;color:var(--color-text)">Stylebook</span>
+    <div class="d-flex align-items-center gap-2 ms-auto">
+      <button id="theme-toggle" class="btn-icon" aria-label="Dark/Light Mode umschalten">
+        <i data-lucide="sun"  aria-hidden="true" id="icon-sun" style="display:none"></i>
+        <i data-lucide="moon" aria-hidden="true" id="icon-moon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Layout ───────────────────────────────────────────────── -->
+<div class="container-fluid px-0">
+  <div class="row g-0">
+
+    <!-- Sidebar -->
+    <nav class="col-lg-2 sb-sidebar d-none d-lg-block" aria-label="Stylebook Navigation">
+      <div class="px-2">
+        <div class="sb-nav-group-label">Grundlagen</div>
+        <a href="#sb-colors"     class="sb-nav-link">Farben</a>
+        <a href="#sb-typography" class="sb-nav-link">Typografie</a>
+        <a href="#sb-icons"      class="sb-nav-link">Icons</a>
+        <div class="sb-nav-group-label">Interaktion</div>
+        <a href="#sb-buttons"    class="sb-nav-link">Buttons</a>
+        <a href="#sb-chips"      class="sb-nav-link">Chips</a>
+        <a href="#sb-forms"      class="sb-nav-link">Formulare</a>
+        <div class="sb-nav-group-label">Navigation</div>
+        <a href="#sb-nav"        class="sb-nav-link">Navigation</a>
+        <div class="sb-nav-group-label">Feedback</div>
+        <a href="#sb-alerts"     class="sb-nav-link">Info-Boxen</a>
+        <a href="#sb-states"     class="sb-nav-link">Zustande</a>
+        <div class="sb-nav-group-label">Karten</div>
+        <a href="#sb-event-cards"    class="sb-nav-link">Event Cards</a>
+        <a href="#sb-sponsor-cards"  class="sb-nav-link">Sponsor Cards</a>
+        <a href="#sb-endpoint-cards" class="sb-nav-link">Endpoint Cards</a>
+        <a href="#sb-explain-cards"  class="sb-nav-link">Explain Cards</a>
+        <a href="#sb-pdf"            class="sb-nav-link">PDF Komponenten</a>
+        <a href="#sb-achievements"   class="sb-nav-link">Achievements</a>
+        <div class="sb-nav-group-label">Spezial</div>
+        <a href="#sb-ics"        class="sb-nav-link">ICS Komponenten</a>
+        <a href="#sb-a11y"       class="sb-nav-link">A11y Toolbar</a>
+        <a href="#sb-code"       class="sb-nav-link">Code-Block</a>
+        <a href="#sb-modal"      class="sb-nav-link">Modal</a>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="col-lg-10">
+
+      <!-- ═══════════════════════════════════════════════════════
+           1. FARBEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-colors" class="sb-section">
+        <div class="sb-section-label">Design Tokens</div>
+        <h2>Farben</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Primary</div>
+          <div class="sb-preview">
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#159989"></div>
+              <div class="sb-swatch-label">Primary<br><span class="sb-swatch-var">--color-primary</span><br><span class="sb-swatch-var">#159989</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#107c6f"></div>
+              <div class="sb-swatch-label">Primary Dark<br><span class="sb-swatch-var">--color-primary-dark</span><br><span class="sb-swatch-var">#107c6f</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#e6f5f3;border-bottom:1px solid #d0e8e4"></div>
+              <div class="sb-swatch-label">Primary Light<br><span class="sb-swatch-var">--color-primary-light</span><br><span class="sb-swatch-var">#e6f5f3</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Secondary</div>
+          <div class="sb-preview">
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#F9B338"></div>
+              <div class="sb-swatch-label">Secondary<br><span class="sb-swatch-var">--color-secondary</span><br><span class="sb-swatch-var">#F9B338</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#fef6e4;border-bottom:1px solid #d0e8e4"></div>
+              <div class="sb-swatch-label">Secondary Light<br><span class="sb-swatch-var">--color-secondary-light</span><br><span class="sb-swatch-var">#fef6e4</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Neutral (reagiert auf Dark/Light)</div>
+          <div class="sb-preview">
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-bg);border-bottom:1px solid var(--color-border)"></div>
+              <div class="sb-swatch-label">Background<br><span class="sb-swatch-var">--color-bg</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-surface);border-bottom:1px solid var(--color-border)"></div>
+              <div class="sb-swatch-label">Surface<br><span class="sb-swatch-var">--color-surface</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-text)"></div>
+              <div class="sb-swatch-label">Text<br><span class="sb-swatch-var">--color-text</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-text-muted)"></div>
+              <div class="sb-swatch-label">Text Muted<br><span class="sb-swatch-var">--color-text-muted</span></div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-border)"></div>
+              <div class="sb-swatch-label">Border<br><span class="sb-swatch-var">--color-border</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           2. TYPOGRAFIE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-typography" class="sb-section">
+        <div class="sb-section-label">Grundlagen</div>
+        <h2>Typografie</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Caveat (Uberschriften h1-h3)</div>
+          <h1>h1 - Uberschrift Eins</h1>
+          <h2>h2 - Uberschrift Zwei</h2>
+          <h3>h3 - Uberschrift Drei</h3>
+          <p class="section-title">section-title (clamp, primary-Farbe)</p>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">System-Font (Fliesstext)</div>
+          <p class="lead">Lead-Text: Etwas grosser und luftiger, fur Untertitel oder Einleitungen.</p>
+          <p>Body-Text: Standard-Fliesstext fur alle anderen Inhalte. Liest sich angenehm auch in langeren Absatzen.</p>
+          <p class="text-muted small">Muted Small: Fur sekundare Informationen, Metadaten, Hilfstexte.</p>
+          <p>Inline <code>code</code> fur Dateinamen, API-Pfade oder kurze Snippets.</p>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">code-block Komponente</div>
+          <div class="code-block" style="max-width:520px">
+            <div class="code-block-label">JSON-LD</div>
+            <pre><code>{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Vereinsfest Erfindergeist",
+  "startDate": "2025-08-23T14:00:00",
+  "location": "Julich Innenstadt"
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           3. ICONS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-icons" class="sb-section">
+        <div class="sb-section-label">Grundlagen</div>
+        <h2>Icons</h2>
+        <p class="text-muted small mb-3">Lucide Icons - initialisiert mit <code>lucide.createIcons()</code>. Altere Version auf Share - keine Brand-Icons. Immer inline SVG fur Social-Icons verwenden.</p>
+        <div class="sb-icon-grid">
+          <div class="sb-icon-item"><i data-lucide="download"></i><span>download</span></div>
+          <div class="sb-icon-item"><i data-lucide="eye"></i><span>eye</span></div>
+          <div class="sb-icon-item"><i data-lucide="calendar"></i><span>calendar</span></div>
+          <div class="sb-icon-item"><i data-lucide="map-pin"></i><span>map-pin</span></div>
+          <div class="sb-icon-item"><i data-lucide="clock"></i><span>clock</span></div>
+          <div class="sb-icon-item"><i data-lucide="search"></i><span>search</span></div>
+          <div class="sb-icon-item"><i data-lucide="sun"></i><span>sun</span></div>
+          <div class="sb-icon-item"><i data-lucide="moon"></i><span>moon</span></div>
+          <div class="sb-icon-item"><i data-lucide="globe"></i><span>globe</span></div>
+          <div class="sb-icon-item"><i data-lucide="heart"></i><span>heart</span></div>
+          <div class="sb-icon-item"><i data-lucide="user-plus"></i><span>user-plus</span></div>
+          <div class="sb-icon-item"><i data-lucide="settings"></i><span>settings</span></div>
+          <div class="sb-icon-item"><i data-lucide="chevron-left"></i><span>chevron-left</span></div>
+          <div class="sb-icon-item"><i data-lucide="chevron-right"></i><span>chevron-right</span></div>
+          <div class="sb-icon-item"><i data-lucide="loader-circle"></i><span>loader-circle</span></div>
+          <div class="sb-icon-item"><i data-lucide="wifi-off"></i><span>wifi-off</span></div>
+          <div class="sb-icon-item"><i data-lucide="check"></i><span>check</span></div>
+          <div class="sb-icon-item"><i data-lucide="alert-triangle"></i><span>alert-triangle</span></div>
+          <div class="sb-icon-item"><i data-lucide="info"></i><span>info</span></div>
+          <div class="sb-icon-item"><i data-lucide="arrow-up"></i><span>arrow-up</span></div>
+          <div class="sb-icon-item"><i data-lucide="link"></i><span>link</span></div>
+          <div class="sb-icon-item"><i data-lucide="accessibility"></i><span>accessibility</span></div>
+          <div class="sb-icon-item"><i data-lucide="lightbulb"></i><span>lightbulb</span></div>
+          <div class="sb-icon-item"><i data-lucide="heart-handshake"></i><span>heart-handshake</span></div>
+          <div class="sb-icon-item"><i data-lucide="clipboard-check"></i><span>clipboard-check</span></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           4. BUTTONS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-buttons" class="sb-section">
+        <div class="sb-section-label">Interaktion</div>
+        <h2>Buttons</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Solid</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-primary btn-lg">Primary lg</button>
+              <span class="sb-item-label">btn-primary btn-lg</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-primary">Primary</button>
+              <span class="sb-item-label">btn-primary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-primary btn-sm">Primary sm</button>
+              <span class="sb-item-label">btn-primary btn-sm</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-secondary btn-lg">Secondary lg</button>
+              <span class="sb-item-label">btn-secondary btn-lg</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-secondary">Secondary</button>
+              <span class="sb-item-label">btn-secondary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-secondary btn-sm">Secondary sm</button>
+              <span class="sb-item-label">btn-secondary btn-sm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Outline</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-primary">Outline Primary</button>
+              <span class="sb-item-label">btn-outline-primary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-secondary">Outline Secondary</button>
+              <span class="sb-item-label">btn-outline-secondary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-success btn-sm">Outline Success sm</button>
+              <span class="sb-item-label">btn-outline-success btn-sm</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-danger btn-sm">Outline Danger sm</button>
+              <span class="sb-item-label">btn-outline-danger btn-sm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Icon-Buttons (.btn-icon)</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn-icon" aria-label="Theme">
+                <i data-lucide="moon" aria-hidden="true"></i>
+              </button>
+              <span class="sb-item-label">btn-icon</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn-icon" aria-label="Sprache">
+                <i data-lucide="globe" aria-hidden="true"></i>
+              </button>
+              <span class="sb-item-label">btn-icon</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="btn-icon btn-icon-sponsor" aria-label="Unterstutze uns">
+                <i data-lucide="heart" aria-hidden="true"></i>
+              </a>
+              <span class="sb-item-label">btn-icon-sponsor</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-sm" style="background:var(--color-secondary);color:var(--color-text);border:none;border-radius:6px">Zeig es mir</button>
+              <span class="sb-item-label">#events-show-me style</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Disabled</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-primary" disabled>Primary disabled</button>
+              <span class="sb-item-label">disabled</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-primary" disabled>Outline disabled</button>
+              <span class="sb-item-label">disabled</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           5. CHIPS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-chips" class="sb-section">
+        <div class="sb-section-label">Interaktion</div>
+        <h2>Chips</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">onesource-chip (Architektur-Section)</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <a href="#" class="onesource-chip">
+                <i data-lucide="calendar" aria-hidden="true" style="width:18px;height:18px"></i>
+                Terminkalender
+              </a>
+              <span class="sb-item-label">onesource-chip</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="onesource-chip">
+                <i data-lucide="file-text" aria-hidden="true" style="width:18px;height:18px"></i>
+                PDF Generator
+              </a>
+              <span class="sb-item-label">onesource-chip</span>
+            </div>
+            <div class="sb-preview-block">
+              <span class="onesource-chip onesource-chip--muted">
+                <i data-lucide="plus" aria-hidden="true" style="width:16px;height:16px"></i>
+                Weitere Tools
+              </span>
+              <span class="sb-item-label">onesource-chip--muted</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">arch-source-btn (Zentraler Quellknopf)</div>
+          <div class="sb-preview">
+            <div class="sb-preview-block">
+              <a href="#" class="arch-source-btn">
+                <i data-lucide="cloud" aria-hidden="true" style="width:18px;height:18px"></i>
+                NextCloud
+              </a>
+              <span class="sb-item-label">arch-source-btn</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           6. FORMULARE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-forms" class="sb-section">
+        <div class="sb-section-label">Interaktion</div>
+        <h2>Formularelemente</h2>
+        <div class="row g-3" style="max-width:640px">
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Text-Input</label>
+            <input type="text" class="form-control" placeholder="Wert eingeben...">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Suche</label>
+            <input type="search" class="form-control" placeholder="Suchen..." style="max-width:280px">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Select</label>
+            <select class="form-select" style="max-width:220px">
+              <option value="">Alle Kategorien</option>
+              <option>Workshop</option>
+              <option>Repair Cafe</option>
+              <option>Vortrag</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Textarea (JSON-Editor-Stil)</label>
+            <textarea class="events-json-editor" rows="4" style="max-width:480px" spellcheck="false">[
+  {
+    "title": "Vereinsfest",
+    "date": "2025-08-23"
+  }
+]</textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           7. NAVIGATION
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-nav" class="sb-section">
+        <div class="sb-section-label">Navigation</div>
+        <h2>Navigation</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Navbar (Bootstrap .navbar - wie in index.php)</div>
+          <div class="sb-navbar-demo">
+            <nav class="navbar navbar-expand-xl" style="background:var(--color-surface);border-bottom:2px solid var(--color-primary-light)">
+              <div class="container">
+                <a class="navbar-brand" href="#">
+                  <img src="https://share.erfindergeist.org/img/logo.svg" alt="Erfindergeist Julich" class="navbar-logo">
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#sb-navbar-demo-collapse" aria-controls="sb-navbar-demo-collapse" aria-expanded="false" aria-label="Menu offnen">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="sb-navbar-demo-collapse">
+                  <ul class="navbar-nav me-auto gap-1">
+                    <li class="nav-item"><a class="nav-link active" href="#">Termine</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">ICS Kalender</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">WordPress Plugin</a></li>
+                  </ul>
+                  <div class="d-flex align-items-center gap-2 mt-2 mt-xl-0">
+                    <a href="#" class="btn-icon btn-icon-sponsor" aria-label="Unterstutze uns">
+                      <i data-lucide="heart" aria-hidden="true"></i>
+                    </a>
+                    <button class="btn-icon" aria-label="Theme">
+                      <i data-lucide="moon" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown">
+                      <button class="btn-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Sprache">
+                        <i data-lucide="globe" aria-hidden="true"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><button class="dropdown-item">Deutsch</button></li>
+                        <li><button class="dropdown-item">English</button></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Nav-Link Zustande</div>
+          <div class="sb-preview">
+            <a class="nav-link" href="#">Normal</a>
+            <a class="nav-link active" href="#">Aktiv</a>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Breadcrumb</div>
+          <nav aria-label="Navigation">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="#">Startseite</a></li>
+              <li class="breadcrumb-item"><a href="#">Termine</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Vereinsfest 2025</li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Dropdown (Sprache)</div>
+          <div class="dropdown">
+            <button class="btn-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Sprache wahlen">
+              <i data-lucide="globe" aria-hidden="true"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><button class="dropdown-item">🇩🇪 Deutsch</button></li>
+              <li><button class="dropdown-item">🇬🇧 English</button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           8. INFO-BOXEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-alerts" class="sb-section">
+        <div class="sb-section-label">Feedback</div>
+        <h2>Info-Boxen</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Analogy Box (main.css)</div>
+          <div class="analogy-box" style="max-width:540px">
+            <i data-lucide="lightbulb" aria-hidden="true"></i>
+            <p class="mb-0">So wie ein Briefkasten fur die Post: der Kalender sammelt alle Termine an einem Ort, egal woher sie kommen.</p>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Info Card (.info-card) - section-plugin.css</div>
+          <div class="info-card" style="max-width:540px">
+            <i data-lucide="info" class="info-card-icon" aria-hidden="true" style="width:22px;height:22px;color:var(--color-primary);flex-shrink:0;margin-top:2px"></i>
+            <p class="mb-0">Der WordPress-Rest-API-Endpunkt liefert alle Termine als strukturierten JSON. Andere Dienste konnen diesen Endpunkt abonnieren.</p>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Bootstrap Alert</div>
+          <div class="alert alert-warning" role="alert" style="max-width:540px">
+            <strong>Hinweis:</strong> Keine Termine fur den gewunschten Zeitraum gefunden.
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Analogy Box auf dunklem Hintergrund (.section-ha)</div>
+          <div class="sb-ha-demo">
+            <div class="analogy-box">
+              <i data-lucide="zap" aria-hidden="true"></i>
+              <p class="mb-0">Wie ein Hausmeister, der automatisch die Lichter anmacht, wenn ein Termin beginnt.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           9. ZUSTANDE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-states" class="sb-section">
+        <div class="sb-section-label">Feedback</div>
+        <h2>Zustande</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Ladeindikator (events)</div>
+          <div class="text-center py-4 text-muted" style="max-width:320px">
+            <i data-lucide="loader-circle" class="events-loading-icon" aria-hidden="true"></i>
+            <p class="mt-2 small mb-0">Termine werden geladen...</p>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Spinner (Bootstrap)</div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Laden...</span>
+            </div>
+            <span class="text-muted small">spinner-border text-primary</span>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Toast (#copy-toast Stil)</div>
+          <div class="sb-toast-demo">
+            <i data-lucide="clipboard-check" aria-hidden="true"></i>
+            <span>Link kopiert!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           10. EVENT CARDS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-event-cards" class="sb-section">
+        <div class="sb-section-label">Karten</div>
+        <h2>Event Cards</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.event-card - von einfach bis voll</div>
+          <div class="d-flex flex-column gap-2" style="max-width:520px">
+
+            <div class="sb-preview-block">
+              <div class="event-card">
+                <div class="event-date-badge">
+                  <span class="event-weekday">Sa</span>
+                  <div class="event-badge-right">
+                    <span class="event-date">23. Aug</span>
+                  </div>
+                </div>
+                <div class="event-info">
+                  <div class="event-title">Vereinsfest Erfindergeist</div>
+                </div>
+              </div>
+              <span class="sb-item-label">Minimal: Badge + Titel</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <div class="event-card">
+                <div class="event-date-badge">
+                  <span class="event-weekday">Mi</span>
+                  <div class="event-badge-right">
+                    <span class="event-date">10. Sep</span>
+                    <span class="event-time">18:30</span>
+                  </div>
+                </div>
+                <div class="event-info">
+                  <div class="event-title">Repair Cafe Julich</div>
+                  <div class="event-desc">Bring deine kaputten Gerate mit - wir reparieren gemeinsam.</div>
+                </div>
+              </div>
+              <span class="sb-item-label">Standard: Badge + Titel + Beschreibung</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <div class="event-card">
+                <div class="event-date-badge">
+                  <span class="event-weekday">Fr</span>
+                  <div class="event-badge-right">
+                    <span class="event-date">5. Dez</span>
+                    <span class="event-time">19:00</span>
+                  </div>
+                </div>
+                <div class="event-info">
+                  <div class="event-title">Werkstatt-Abend: Einfuhrung 3D-Druck</div>
+                  <div class="event-desc">Fur Einsteiger - keine Vorkenntnisse notig. Platze begrenzt.</div>
+                  <div class="event-meta d-flex gap-2 align-items-center mt-1">
+                    <i data-lucide="map-pin" style="width:13px;height:13px;color:var(--color-text-muted)" aria-hidden="true"></i>
+                    <span class="text-muted" style="font-size:.78rem">Werkstatt EGJ, Julich</span>
+                  </div>
+                </div>
+              </div>
+              <span class="sb-item-label">Voll: Badge + Titel + Beschreibung + Meta</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           11. SPONSOR CARDS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-sponsor-cards" class="sb-section">
+        <div class="sb-section-label">Karten</div>
+        <h2>Sponsor Cards</h2>
+        <p class="text-muted small mb-3">Zentrierte Karte mit Icon oben - nur in <code>css/sections/section-sponsoring.css</code>.</p>
+
+        <div class="row row-cols-2 row-cols-md-4 g-3" style="max-width:680px">
+          <div class="col">
+            <div class="sb-preview-block w-100">
+              <div class="sponsor-card">
+                <i data-lucide="heart-handshake" class="sponsor-card-icon" aria-hidden="true"></i>
+                <h3 class="sponsor-card-title">Spendendose</h3>
+                <p class="small text-muted mb-0">Direkt vor Ort in unserer Werkstatt.</p>
+              </div>
+              <span class="sb-item-label">div (nicht klickbar)</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="sb-preview-block w-100">
+              <a href="#" class="sponsor-card">
+                <i data-lucide="user-plus" class="sponsor-card-icon" aria-hidden="true"></i>
+                <h3 class="sponsor-card-title">Fordermitglied</h3>
+                <p class="small text-muted mb-0">Regelmasige Unterstutzung.</p>
+              </a>
+              <span class="sb-item-label">a (klickbar, Hover)</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="sb-preview-block w-100">
+              <a href="#" class="sponsor-card">
+                <i data-lucide="credit-card" class="sponsor-card-icon" aria-hidden="true"></i>
+                <h3 class="sponsor-card-title">Uberweisung</h3>
+                <p class="small text-muted mb-0">Direkt ans Vereinskonto.</p>
+              </a>
+              <span class="sb-item-label">a (klickbar)</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="sb-preview-block w-100">
+              <a href="#" class="sponsor-card">
+                <i data-lucide="link" class="sponsor-card-icon" aria-hidden="true"></i>
+                <h3 class="sponsor-card-title">Alle Wege</h3>
+                <p class="small text-muted mb-0">Linktree mit allen Optionen.</p>
+              </a>
+              <span class="sb-item-label">a (klickbar)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           12. ENDPOINT CARDS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-endpoint-cards" class="sb-section">
+        <div class="sb-section-label">Karten</div>
+        <h2>Endpoint Cards</h2>
+        <p class="text-muted small mb-3">REST-API-Endpunkte - aus <code>css/sections/section-plugin.css</code>.</p>
+
+        <div class="row row-cols-2 row-cols-md-3 g-3" style="max-width:680px">
+          <div class="col">
+            <a href="#" class="endpoint-card">
+              <span class="endpoint-icon">📅</span>
+              <span class="endpoint-method">GET</span>
+              <span class="endpoint-path">/events</span>
+              <span class="endpoint-desc">Alle kommenden Termine als JSON</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="#" class="endpoint-card">
+              <span class="endpoint-icon">📆</span>
+              <span class="endpoint-method">GET</span>
+              <span class="endpoint-path">/ics</span>
+              <span class="endpoint-desc">iCal-Kalender zum Abonnieren</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="#" class="endpoint-card">
+              <span class="endpoint-icon">⚡</span>
+              <span class="endpoint-method">GET</span>
+              <span class="endpoint-path">/tomorrow</span>
+              <span class="endpoint-desc">Nachster Termin fur HA-Automatisierung</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           13. EXPLAIN + INFO CARDS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-explain-cards" class="sb-section">
+        <div class="sb-section-label">Karten</div>
+        <h2>Explain + Info Cards</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.explain-card (section-plugin.css)</div>
+          <div class="explain-card" style="max-width:480px">
+            <div class="explain-card-header d-flex align-items-center gap-2 mb-3">
+              <i data-lucide="server" aria-hidden="true" style="width:28px;height:28px;color:var(--color-primary)"></i>
+              <h3 class="explain-card-title mb-0">Was ist eine REST API?</h3>
+            </div>
+            <p class="mb-2">Eine REST API ist wie ein Kellner im Restaurant: Du gibst deine Bestellung auf (Request), der Kellner geht in die Kuche (Server) und bringt dein Essen zuruck (Response).</p>
+            <code class="explain-badge">GET /events</code>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.info-card (section-plugin.css)</div>
+          <div class="info-card" style="max-width:480px">
+            <i data-lucide="info" aria-hidden="true" style="width:22px;height:22px;color:var(--color-primary);flex-shrink:0;margin-top:2px"></i>
+            <div>
+              <strong>Keine Anmeldung notig.</strong>
+              <p class="mb-0 mt-1 small">Alle Endpunkte sind offentlich. Eine Rate-Limiting-Policy gilt fur automatisierte Abfragen.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           14. PDF KOMPONENTEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-pdf" class="sb-section">
+        <div class="sb-section-label">Karten</div>
+        <h2>PDF Komponenten</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.pdf-step (Prozessschritte)</div>
+          <div class="pdf-steps d-flex gap-2 align-items-center flex-wrap">
+            <div class="pdf-step">
+              <span class="pdf-step-icon">📝</span>
+              <span class="pdf-step-label">Daten eingeben</span>
+            </div>
+            <i data-lucide="chevron-right" class="pdf-step-arrow" aria-hidden="true"></i>
+            <div class="pdf-step">
+              <span class="pdf-step-icon">⚙️</span>
+              <span class="pdf-step-label">Generator startet</span>
+            </div>
+            <i data-lucide="chevron-right" class="pdf-step-arrow" aria-hidden="true"></i>
+            <div class="pdf-step">
+              <span class="pdf-step-icon">📄</span>
+              <span class="pdf-step-label">PDF erhalten</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.pdf-card (Download-Karte)</div>
+          <div class="row row-cols-2 row-cols-md-3 g-3" style="max-width:580px">
+            <div class="col">
+              <div class="pdf-card">
+                <div class="pdf-card-thumb" style="height:100px;background:linear-gradient(135deg,#159989,#107c6f);display:flex;align-items:center;justify-content:center">
+                  <i data-lucide="file-text" aria-hidden="true" style="width:36px;height:36px;color:rgba(255,255,255,.7)"></i>
+                </div>
+                <div class="pdf-card-body p-3">
+                  <div class="pdf-card-title fw-semibold small">Terminubersicht Hochformat</div>
+                  <div class="pdf-card-actions mt-2">
+                    <a href="#" class="btn btn-primary btn-sm w-100">
+                      <i data-lucide="download" style="width:14px;height:14px" aria-hidden="true"></i> Download
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="pdf-card">
+                <div class="pdf-card-thumb" style="height:100px;background:linear-gradient(135deg,#F9B338,#e09c28);display:flex;align-items:center;justify-content:center">
+                  <i data-lucide="file-text" aria-hidden="true" style="width:36px;height:36px;color:rgba(255,255,255,.7)"></i>
+                </div>
+                <div class="pdf-card-body p-3">
+                  <div class="pdf-card-title fw-semibold small">Terminubersicht Querformat</div>
+                  <div class="pdf-card-actions mt-2">
+                    <a href="#" class="btn btn-primary btn-sm w-100">
+                      <i data-lucide="download" style="width:14px;height:14px" aria-hidden="true"></i> Download
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           15. ACHIEVEMENTS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-achievements" class="sb-section">
+        <div class="sb-section-label">Karten</div>
+        <h2>Achievement Cards</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.achievement-card - locked vs. unlocked</div>
+          <div class="achievements-grid" style="display:flex;flex-wrap:wrap;gap:.75rem">
+
+            <div class="sb-preview-block">
+              <div class="achievement-card achievement-locked" style="width:120px">
+                <div class="achievement-icon-wrap">
+                  <i data-lucide="star" class="achievement-icon" aria-hidden="true"></i>
+                  <span class="achievement-lock-icon" aria-hidden="true">🔒</span>
+                </div>
+                <span class="achievement-hint">Noch nicht freigeschaltet</span>
+              </div>
+              <span class="sb-item-label">achievement-locked</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <div class="achievement-card achievement-unlocked" style="width:120px">
+                <div class="achievement-icon-wrap">
+                  <i data-lucide="star" class="achievement-icon" aria-hidden="true" style="color:var(--color-secondary)"></i>
+                  <span class="achievement-badge" aria-hidden="true">⭐</span>
+                </div>
+                <div class="achievement-unlocked-content">
+                  <span class="achievement-name">Erster Besuch</span>
+                  <span class="achievement-desc">Seite zum ersten Mal geoffnet</span>
+                </div>
+              </div>
+              <span class="sb-item-label">achievement-unlocked</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <div class="achievement-card achievement-locked" style="width:120px">
+                <div class="achievement-icon-wrap">
+                  <i data-lucide="trophy" class="achievement-icon" aria-hidden="true"></i>
+                  <span class="achievement-lock-icon" aria-hidden="true">🔒</span>
+                </div>
+                <span class="achievement-hint">Alle Tabs besucht</span>
+              </div>
+              <span class="sb-item-label">locked + hint</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <div class="achievement-card achievement-unlocked" style="width:120px">
+                <div class="achievement-icon-wrap">
+                  <i data-lucide="trophy" class="achievement-icon" aria-hidden="true" style="color:var(--color-secondary)"></i>
+                  <span class="achievement-badge" aria-hidden="true">⭐</span>
+                </div>
+                <div class="achievement-unlocked-content">
+                  <span class="achievement-name">Entdecker</span>
+                  <span class="achievement-desc">Alle Bereiche erkundet</span>
+                </div>
+              </div>
+              <span class="sb-item-label">unlocked + name</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.achievements-counter</div>
+          <div class="achievements-counter">
+            <div class="achievements-rank">Entdecker</div>
+            <div class="achievements-stars d-flex justify-content-center gap-1 mb-2">
+              <i data-lucide="star" class="ach-star ach-star--filled" aria-hidden="true"></i>
+              <i data-lucide="star" class="ach-star ach-star--filled" aria-hidden="true"></i>
+              <i data-lucide="star" class="ach-star ach-star--filled" aria-hidden="true"></i>
+              <i data-lucide="star" class="ach-star" aria-hidden="true"></i>
+              <i data-lucide="star" class="ach-star" aria-hidden="true"></i>
+            </div>
+            <div class="achievements-fraction">3 / 8</div>
+            <div class="achievements-counter-label text-muted small">Errungenschaften freigeschaltet</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           16. ICS KOMPONENTEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-ics" class="sb-section">
+        <div class="sb-section-label">Spezial</div>
+        <h2>ICS Komponenten</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.ics-cal-btn (Kalender-Import-Buttons)</div>
+          <div class="ics-cal-wrap d-flex flex-wrap gap-2 p-3" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:12px;max-width:480px">
+            <span class="ics-cal-label w-100 mb-1">Kalender abonnieren</span>
+            <a href="#" class="ics-cal-btn ics-cal-google">
+              <i data-lucide="calendar" style="width:14px;height:14px" aria-hidden="true"></i> Google
+            </a>
+            <a href="#" class="ics-cal-btn ics-cal-outlook">
+              <i data-lucide="calendar" style="width:14px;height:14px" aria-hidden="true"></i> Outlook
+            </a>
+            <a href="#" class="ics-cal-btn ics-cal-apple">
+              <i data-lucide="calendar" style="width:14px;height:14px" aria-hidden="true"></i> Apple
+            </a>
+            <a href="#" class="ics-cal-btn ics-cal-yahoo">
+              <i data-lucide="calendar" style="width:14px;height:14px" aria-hidden="true"></i> Yahoo
+            </a>
+            <a href="#" class="ics-cal-btn ics-cal-thunderbird">
+              <i data-lucide="calendar" style="width:14px;height:14px" aria-hidden="true"></i> Thunderbird
+            </a>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.spinner (Datum-Auswahl - statisch)</div>
+          <div class="ics-spinner-row d-flex gap-3" style="max-width:320px">
+            <div class="spinner-group">
+              <div class="spinner">
+                <button class="spinner-btn" aria-label="Erhohen">▲</button>
+                <div class="spinner-val">23</div>
+                <button class="spinner-btn" aria-label="Verringern">▼</button>
+              </div>
+              <span class="spinner-label">Tag</span>
+            </div>
+            <div class="spinner-group">
+              <div class="spinner">
+                <button class="spinner-btn" aria-label="Erhohen">▲</button>
+                <div class="spinner-val">Aug</div>
+                <button class="spinner-btn" aria-label="Verringern">▼</button>
+              </div>
+              <span class="spinner-label">Monat</span>
+            </div>
+            <div class="spinner-group">
+              <div class="spinner">
+                <button class="spinner-btn" aria-label="Erhohen">▲</button>
+                <div class="spinner-val">2025</div>
+                <button class="spinner-btn" aria-label="Verringern">▼</button>
+              </div>
+              <span class="spinner-label">Jahr</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           17. A11Y TOOLBAR
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-a11y" class="sb-section">
+        <div class="sb-section-label">Spezial</div>
+        <h2>A11y Toolbar</h2>
+        <p class="text-muted small mb-3">Fixiertes Barrierefreiheits-Panel (unten links). Statische Vorschau ohne Positionierung.</p>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.a11y-panel (aufgeklappt)</div>
+          <div class="a11y-panel open" style="position:static;transform:none;opacity:1;pointer-events:auto;max-width:240px">
+            <h2 class="a11y-panel-title" id="sb-a11y-title">Barrierefreiheit</h2>
+            <div class="a11y-group">
+              <span class="a11y-group-label">Schriftgrosse</span>
+              <div class="a11y-btn-group">
+                <button>A-</button>
+                <button class="active">A</button>
+                <button>A+</button>
+              </div>
+            </div>
+            <div class="a11y-group">
+              <span class="a11y-group-label">Kontrast</span>
+              <div class="a11y-btn-group">
+                <button class="active">Normal</button>
+                <button>Hoch</button>
+              </div>
+            </div>
+            <div class="a11y-group mb-0">
+              <span class="a11y-group-label">Animationen</span>
+              <div class="a11y-btn-group">
+                <button class="active">An</button>
+                <button>Aus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">.a11y-toggle-btn (Offner-Knopf)</div>
+          <button class="a11y-toggle-btn" aria-label="Barrierefreiheits-Optionen" style="position:static">
+            <i data-lucide="accessibility" aria-hidden="true"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           18. CODE-BLOCK
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-code" class="sb-section">
+        <div class="sb-section-label">Spezial</div>
+        <h2>Code-Block</h2>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="code-block">
+              <div class="code-block-label">JSON</div>
+              <pre><code>[
+  {
+    "title": "Vereinsfest Erfindergeist",
+    "date": "2025-08-23",
+    "time": "14:00",
+    "location": "Julich Innenstadt",
+    "category": "event"
+  }
+]</code></pre>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="code-block code-yaml">
+              <div class="code-block-label">YAML</div>
+              <pre><code><span class="k">title</span>: <span class="v">Erfindergeist Termine</span>
+<span class="k">url</span>: <span class="v">https://erfindergeist.org</span>
+<span class="k">ics</span>: <span class="v">webcal://erfindergeist.org/...</span>
+</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           19. MODAL
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-modal" class="sb-section">
+        <div class="sb-section-label">Spezial</div>
+        <h2>Modal</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sb-demo-modal">
+          Modal offnen
+        </button>
+
+        <div class="modal fade" id="sb-demo-modal" tabindex="-1" aria-labelledby="sb-demo-modal-label" aria-modal="true" role="dialog">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background:var(--color-surface);border-color:var(--color-border)">
+              <div class="modal-header" style="border-color:var(--color-border)">
+                <h5 class="modal-title" id="sb-demo-modal-label">Aktion bestatigen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"></button>
+              </div>
+              <div class="modal-body">
+                <p>Soll dieser Termin wirklich aus dem Kalender entfernt werden?</p>
+              </div>
+              <div class="modal-footer" style="border-color:var(--color-border)">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                <button type="button" class="btn btn-primary">Bestatigen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://share.erfindergeist.org/js/lib/jquery.min.js"></script>
+<script src="https://share.erfindergeist.org/js/lib/bootstrap.bundle.min.js"></script>
+<script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
+<script src="https://share.erfindergeist.org/js/components/eg-footer.js"></script>
+<script>
+(function () {
+  if (window.lucide) { lucide.createIcons(); }
+
+  // Theme toggle
+  var html = document.documentElement;
+  function applyTheme(t) {
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('eg-theme', t);
+    document.getElementById('icon-sun').style.display  = t === 'dark'  ? 'block' : 'none';
+    document.getElementById('icon-moon').style.display = t === 'light' ? 'block' : 'none';
+  }
+  applyTheme(html.getAttribute('data-theme') || 'dark');
+
+  $('#theme-toggle').on('click', function () {
+    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  // Sidebar active link via IntersectionObserver
+  var sections = document.querySelectorAll('.sb-section[id]');
+  var navLinks = document.querySelectorAll('.sb-nav-link');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function (l) { l.classList.remove('active'); });
+          var active = document.querySelector('.sb-nav-link[href="#' + entry.target.id + '"]');
+          if (active) { active.classList.add('active'); }
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+}());
+</script>
+</body>
+</html>

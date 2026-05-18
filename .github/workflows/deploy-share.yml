@@ -33,3 +33,4 @@ jobs:
             presentations/hallo-welt/**
             downloads/mock-*
             galerie/.gitignore
+            stylebook.html

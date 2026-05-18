@@ -101,6 +101,8 @@ css/
 
 **New files:** Always check whether the new file needs to be added to the deploy workflows (`deploy-termine-prod.yml`, `deploy-termine-test.yml`) under `exclude` (e.g. local helpers, mocks, docs).
 
+`stylebook.html` → local reference only, excluded via both deploy workflows.
+
 **HTML changes:** When elements are removed or restructured, always check:
 
 - Are there CSS classes in `css/main.css` that are now dead? → remove immediately.

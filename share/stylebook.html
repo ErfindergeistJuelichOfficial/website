@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylebook - Erfindergeist Jülich</title>
+  <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/share.css">
+  <link rel="stylesheet" href="assets/css/section-sponsoring.css">
+  <style>
+    @font-face {
+      font-family: 'Caveat';
+      src: url('https://share.erfindergeist.org/fonts/Caveat-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Caveat';
+      src: url('https://share.erfindergeist.org/fonts/Caveat-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    h1, h2, h3 { font-family: 'Caveat', cursive; font-weight: 700; color: var(--color-text); }
+
+    /* ── Stylebook layout ── */
+    .sb-sidebar {
+      border-right: 1px solid var(--color-border);
+      padding-top: 1.5rem;
+      padding-bottom: 2rem;
+      min-height: calc(100vh - 70px);
+      position: sticky;
+      top: 70px;
+      overflow-y: auto;
+      max-height: calc(100vh - 70px);
+    }
+    .sb-nav-link {
+      display: block;
+      padding: .3rem .75rem;
+      font-size: .82rem;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background .15s, color .15s;
+    }
+    .sb-nav-link:hover,
+    .sb-nav-link.active {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+    .sb-nav-group-label {
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--color-text-muted);
+      padding: .75rem .75rem .2rem;
+    }
+
+    /* ── Sections ── */
+    .sb-section {
+      padding: 2.5rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .sb-section:last-child { border-bottom: none; }
+    .sb-section-label {
+      font-family: system-ui, sans-serif;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--color-text-muted);
+      margin-bottom: .35rem;
+    }
+    .sb-section > h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--color-primary);
+    }
+    .sb-subsection { margin-top: 1.75rem; }
+    .sb-subsection-label {
+      font-family: system-ui, sans-serif;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: .35rem;
+      margin-bottom: .85rem;
+    }
+
+    /* ── Preview row ── */
+    .sb-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+    .sb-preview-block {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .sb-item-label {
+      font-size: .68rem;
+      color: var(--color-text-muted);
+      font-family: monospace;
+    }
+
+    /* ── Color swatches ── */
+    .sb-swatch {
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      min-width: 100px;
+      background: var(--color-surface);
+    }
+    .sb-swatch-color { height: 64px; }
+    .sb-swatch-label {
+      padding: .4rem .6rem;
+      font-size: .72rem;
+      line-height: 1.4;
+    }
+    .sb-swatch-var { font-family: monospace; color: var(--color-text-muted); font-size: .68rem; }
+
+    /* ── Icon grid ── */
+    .sb-icon-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .sb-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+      width: 72px;
+      padding: .6rem .3rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background: var(--color-surface);
+    }
+    .sb-icon-item svg { width: 22px; height: 22px; color: var(--color-text); }
+    .sb-icon-item span { font-size: .6rem; color: var(--color-text-muted); text-align: center; word-break: break-word; font-family: monospace; line-height: 1.2; }
+
+    /* ── Code block (from termine) ── */
+    .code-block {
+      background: #1a2e2c;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    [data-theme="dark"] .code-block { background: #0a1a18; border: 1px solid var(--color-border); }
+    .code-block-label {
+      background: rgba(255,255,255,.07);
+      color: rgba(255,255,255,.55);
+      font-size: .78rem;
+      padding: .4rem .9rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: .04em;
+    }
+    .code-block pre {
+      margin: 0;
+      padding: 1rem 1.1rem 1.2rem;
+      overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'JetBrains Mono', 'Fira Mono', 'Courier New', monospace;
+      font-size: .82rem;
+      color: #a8d8d2;
+      white-space: pre;
+    }
+
+    /* ── Section title (from termine) ── */
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--color-primary);
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    /* ── Analogy box (from termine) ── */
+    .analogy-box {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      background: var(--color-secondary-light);
+      border-left: 4px solid var(--color-secondary);
+      border-radius: 0 10px 10px 0;
+      padding: .85rem 1rem;
+    }
+    .analogy-box svg { color: var(--color-secondary); flex-shrink: 0; width: 22px; height: 22px; margin-top: 2px; }
+
+    /* ── Empty state ── */
+    .empty-state { color: var(--color-text-muted); }
+    .empty-state svg { width: 48px; height: 48px; opacity: .4; }
+
+    /* Nav overrides for dark/light */
+    [data-theme="dark"] .sb-nav-link { color: var(--color-text-muted); }
+    [data-theme="dark"] .sb-nav-link:hover,
+    [data-theme="dark"] .sb-nav-link.active {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ───────────────────────────────────────────────── -->
+<nav class="eg-nav py-3 sticky-top" style="z-index:1030">
+  <div class="container-fluid px-4 d-flex align-items-center gap-3">
+    <a href="https://erfindergeist.org" target="_blank" rel="noopener noreferrer">
+      <img src="img/logo.svg" alt="Erfindergeist Jülich" class="eg-nav-logo">
+    </a>
+    <span class="fw-semibold" style="font-size:1.05rem;color:var(--color-text)">Stylebook</span>
+    <button class="btn-icon ms-auto" id="theme-toggle" aria-label="Dark/Light Mode umschalten">
+      <i data-lucide="sun"  class="icon-dark-only"  aria-hidden="true"></i>
+      <i data-lucide="moon" class="icon-light-only" aria-hidden="true"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Layout ───────────────────────────────────────────────── -->
+<div class="container-fluid px-0">
+  <div class="row g-0">
+
+    <!-- Sidebar -->
+    <nav class="col-lg-2 sb-sidebar d-none d-lg-block" aria-label="Stylebook Navigation">
+      <div class="px-2">
+        <div class="sb-nav-group-label">Grundlagen</div>
+        <a href="#sb-colors"     class="sb-nav-link">Farben</a>
+        <a href="#sb-typography" class="sb-nav-link">Typografie</a>
+        <a href="#sb-icons"      class="sb-nav-link">Icons</a>
+        <div class="sb-nav-group-label">Interaktion</div>
+        <a href="#sb-buttons"    class="sb-nav-link">Buttons</a>
+        <a href="#sb-badges"     class="sb-nav-link">Badges</a>
+        <a href="#sb-forms"      class="sb-nav-link">Formulare</a>
+        <div class="sb-nav-group-label">Navigation</div>
+        <a href="#sb-nav"        class="sb-nav-link">Navigation</a>
+        <div class="sb-nav-group-label">Feedback</div>
+        <a href="#sb-alerts"     class="sb-nav-link">Info-Boxen</a>
+        <a href="#sb-states"     class="sb-nav-link">Zustande</a>
+        <div class="sb-nav-group-label">Komponenten</div>
+        <a href="#sb-cards"      class="sb-nav-link">Karten</a>
+        <a href="#sb-table"      class="sb-nav-link">Tabelle</a>
+        <a href="#sb-code"       class="sb-nav-link">Code-Block</a>
+        <a href="#sb-modal"      class="sb-nav-link">Modal</a>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="col-lg-10">
+
+      <!-- ═══════════════════════════════════════════════════════
+           1. FARBEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-colors" class="sb-section">
+        <div class="sb-section-label">Design Tokens</div>
+        <h2>Farben</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Primary</div>
+          <div class="sb-preview">
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#159989"></div>
+              <div class="sb-swatch-label">
+                Primary<br>
+                <span class="sb-swatch-var">--color-primary</span><br>
+                <span class="sb-swatch-var">#159989</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#107c6f"></div>
+              <div class="sb-swatch-label">
+                Primary Dark<br>
+                <span class="sb-swatch-var">--color-primary-dark</span><br>
+                <span class="sb-swatch-var">#107c6f</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#e6f5f3;border-bottom:1px solid #d0e8e4"></div>
+              <div class="sb-swatch-label">
+                Primary Light<br>
+                <span class="sb-swatch-var">--color-primary-light</span><br>
+                <span class="sb-swatch-var">#e6f5f3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Secondary</div>
+          <div class="sb-preview">
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#F9B338"></div>
+              <div class="sb-swatch-label">
+                Secondary<br>
+                <span class="sb-swatch-var">--color-secondary</span><br>
+                <span class="sb-swatch-var">#F9B338</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:#fef6e4;border-bottom:1px solid #d0e8e4"></div>
+              <div class="sb-swatch-label">
+                Secondary Light<br>
+                <span class="sb-swatch-var">--color-secondary-light</span><br>
+                <span class="sb-swatch-var">#fef6e4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Neutral (reagiert auf Dark/Light)</div>
+          <div class="sb-preview">
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-bg);border-bottom:1px solid var(--color-border)"></div>
+              <div class="sb-swatch-label">
+                Background<br>
+                <span class="sb-swatch-var">--color-bg</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-surface);border-bottom:1px solid var(--color-border)"></div>
+              <div class="sb-swatch-label">
+                Surface<br>
+                <span class="sb-swatch-var">--color-surface</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-text)"></div>
+              <div class="sb-swatch-label">
+                Text<br>
+                <span class="sb-swatch-var">--color-text</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-text-muted)"></div>
+              <div class="sb-swatch-label">
+                Text Muted<br>
+                <span class="sb-swatch-var">--color-text-muted</span>
+              </div>
+            </div>
+            <div class="sb-swatch">
+              <div class="sb-swatch-color" style="background:var(--color-border)"></div>
+              <div class="sb-swatch-label">
+                Border<br>
+                <span class="sb-swatch-var">--color-border</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           2. TYPOGRAFIE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-typography" class="sb-section">
+        <div class="sb-section-label">Grundlagen</div>
+        <h2>Typografie</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Caveat (Uberschriften h1-h3)</div>
+          <h1>h1 - Uberschrift Eins</h1>
+          <h2>h2 - Uberschrift Zwei</h2>
+          <h3>h3 - Uberschrift Drei</h3>
+          <p class="section-title">section-title (clamp)</p>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">System-Font (Fliesstext)</div>
+          <p class="lead">Lead-Text: Etwas grosser und luftiger, fur Untertitel oder Einleitungen.</p>
+          <p>Body-Text: Standard-Fliesstext fur alle anderen Inhalte. Liest sich angenehm auch in langeren Absatzen.</p>
+          <p class="text-muted small">Muted Small: Fur sekundare Informationen, Metadaten, Hilfstexte.</p>
+          <p>Inline <code>code</code> fur Dateinamen, API-Pfade oder kurze Snippets.</p>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">code-block Komponente</div>
+          <div class="code-block" style="max-width:520px">
+            <div class="code-block-label">JSON-LD</div>
+            <pre><code>{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "@id": "https://share.erfindergeist.org/downloads/",
+  "name": "Erfindergeist Dateien"
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           3. ICONS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-icons" class="sb-section">
+        <div class="sb-section-label">Grundlagen</div>
+        <h2>Icons</h2>
+        <p class="text-muted small mb-3">Lucide Icons - initialisiert mit <code>lucide.createIcons()</code>. Altere Version auf Share - keine Brand-Icons. Immer inline SVG fur Social-Icons verwenden.</p>
+        <div class="sb-icon-grid">
+          <div class="sb-icon-item"><i data-lucide="download"></i><span>download</span></div>
+          <div class="sb-icon-item"><i data-lucide="eye"></i><span>eye</span></div>
+          <div class="sb-icon-item"><i data-lucide="clipboard"></i><span>clipboard</span></div>
+          <div class="sb-icon-item"><i data-lucide="x"></i><span>x</span></div>
+          <div class="sb-icon-item"><i data-lucide="search"></i><span>search</span></div>
+          <div class="sb-icon-item"><i data-lucide="sun"></i><span>sun</span></div>
+          <div class="sb-icon-item"><i data-lucide="moon"></i><span>moon</span></div>
+          <div class="sb-icon-item"><i data-lucide="globe"></i><span>globe</span></div>
+          <div class="sb-icon-item"><i data-lucide="heart"></i><span>heart</span></div>
+          <div class="sb-icon-item"><i data-lucide="user-plus"></i><span>user-plus</span></div>
+          <div class="sb-icon-item"><i data-lucide="folder"></i><span>folder</span></div>
+          <div class="sb-icon-item"><i data-lucide="file"></i><span>file</span></div>
+          <div class="sb-icon-item"><i data-lucide="settings"></i><span>settings</span></div>
+          <div class="sb-icon-item"><i data-lucide="chevron-left"></i><span>chevron-left</span></div>
+          <div class="sb-icon-item"><i data-lucide="chevron-right"></i><span>chevron-right</span></div>
+          <div class="sb-icon-item"><i data-lucide="loader-circle"></i><span>loader-circle</span></div>
+          <div class="sb-icon-item"><i data-lucide="wifi-off"></i><span>wifi-off</span></div>
+          <div class="sb-icon-item"><i data-lucide="image"></i><span>image</span></div>
+          <div class="sb-icon-item"><i data-lucide="check"></i><span>check</span></div>
+          <div class="sb-icon-item"><i data-lucide="alert-triangle"></i><span>alert-triangle</span></div>
+          <div class="sb-icon-item"><i data-lucide="info"></i><span>info</span></div>
+          <div class="sb-icon-item"><i data-lucide="arrow-up"></i><span>arrow-up</span></div>
+          <div class="sb-icon-item"><i data-lucide="link"></i><span>link</span></div>
+          <div class="sb-icon-item"><i data-lucide="cloud"></i><span>cloud</span></div>
+          <div class="sb-icon-item"><i data-lucide="book-open"></i><span>book-open</span></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           4. BUTTONS
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-buttons" class="sb-section">
+        <div class="sb-section-label">Interaktion</div>
+        <h2>Buttons</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Solid</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-primary btn-lg">Primary lg</button>
+              <span class="sb-item-label">btn-primary btn-lg</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-primary">Primary</button>
+              <span class="sb-item-label">btn-primary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-primary btn-sm">Primary sm</button>
+              <span class="sb-item-label">btn-primary btn-sm</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-secondary btn-lg">Secondary lg</button>
+              <span class="sb-item-label">btn-secondary btn-lg</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-secondary">Secondary</button>
+              <span class="sb-item-label">btn-secondary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-secondary btn-sm">Secondary sm</button>
+              <span class="sb-item-label">btn-secondary btn-sm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Outline</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-primary">Outline Primary</button>
+              <span class="sb-item-label">btn-outline-primary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-secondary">Outline Secondary</button>
+              <span class="sb-item-label">btn-outline-secondary</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-success">Outline Success</button>
+              <span class="sb-item-label">btn-outline-success</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-danger">Outline Danger</button>
+              <span class="sb-item-label">btn-outline-danger</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-beitrag">Outline Beitrag</button>
+              <span class="sb-item-label">btn-outline-beitrag</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Mit Icon (btn-sm)</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1">
+                <i data-lucide="download" style="width:14px;height:14px" aria-hidden="true"></i> Download
+              </button>
+              <span class="sb-item-label">btn-primary btn-sm + icon</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="btn btn-outline-primary btn-sm">Wiki</a>
+              <span class="sb-item-label">btn-outline-primary btn-sm</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="btn btn-outline-secondary btn-sm">Raw</a>
+              <span class="sb-item-label">btn-outline-secondary btn-sm</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="btn btn-outline-success btn-sm">Cloud</a>
+              <span class="sb-item-label">btn-outline-success btn-sm</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="btn btn-outline-beitrag btn-sm">Beitrag</a>
+              <span class="sb-item-label">btn-outline-beitrag btn-sm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Icon-Buttons (.btn-icon)</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn-icon" aria-label="Suchen">
+                <i data-lucide="search" aria-hidden="true"></i>
+              </button>
+              <span class="sb-item-label">btn-icon</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn-icon" aria-label="Dark/Light Mode">
+                <i data-lucide="moon" aria-hidden="true"></i>
+              </button>
+              <span class="sb-item-label">btn-icon (Theme)</span>
+            </div>
+            <div class="sb-preview-block">
+              <a href="#" class="btn-icon btn-icon-sponsor" aria-label="Unterstutze uns">
+                <i data-lucide="heart" aria-hidden="true"></i>
+              </a>
+              <span class="sb-item-label">btn-icon-sponsor</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Disabled</div>
+          <div class="sb-preview align-items-center">
+            <div class="sb-preview-block">
+              <button class="btn btn-primary" disabled>Primary disabled</button>
+              <span class="sb-item-label">disabled</span>
+            </div>
+            <div class="sb-preview-block">
+              <button class="btn btn-outline-primary" disabled>Outline disabled</button>
+              <span class="sb-item-label">disabled</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           5. BADGES
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-badges" class="sb-section">
+        <div class="sb-section-label">Interaktion</div>
+        <h2>File Badges</h2>
+        <div class="sb-preview align-items-center flex-wrap">
+          <div class="sb-preview-block"><span class="file-badge pdf">PDF</span><span class="sb-item-label">.pdf</span></div>
+          <div class="sb-preview-block"><span class="file-badge docx">DOCX</span><span class="sb-item-label">.docx</span></div>
+          <div class="sb-preview-block"><span class="file-badge xlsx">XLSX</span><span class="sb-item-label">.xlsx</span></div>
+          <div class="sb-preview-block"><span class="file-badge pptx">PPTX</span><span class="sb-item-label">.pptx</span></div>
+          <div class="sb-preview-block"><span class="file-badge odt">ODT</span><span class="sb-item-label">.odt</span></div>
+          <div class="sb-preview-block"><span class="file-badge ods">ODS</span><span class="sb-item-label">.ods</span></div>
+          <div class="sb-preview-block"><span class="file-badge odp">ODP</span><span class="sb-item-label">.odp</span></div>
+          <div class="sb-preview-block"><span class="file-badge odg">ODG</span><span class="sb-item-label">.odg</span></div>
+          <div class="sb-preview-block"><span class="file-badge img">IMG</span><span class="sb-item-label">.png/.svg</span></div>
+          <div class="sb-preview-block"><span class="file-badge code">CODE</span><span class="sb-item-label">.js/.py</span></div>
+          <div class="sb-preview-block"><span class="file-badge md">MD</span><span class="sb-item-label">.md</span></div>
+          <div class="sb-preview-block"><span class="file-badge default">FILE</span><span class="sb-item-label">default</span></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           6. FORMULARE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-forms" class="sb-section">
+        <div class="sb-section-label">Interaktion</div>
+        <h2>Formularelemente</h2>
+        <div class="row g-3" style="max-width:640px">
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Text-Input</label>
+            <input type="text" class="form-control" placeholder="Wert eingeben...">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Suche (wie #file-search)</label>
+            <input type="search" class="form-control" id="file-search" placeholder="Dateien suchen..." aria-label="Dateien suchen" style="max-width:280px">
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Select (wie #bereich-filter)</label>
+            <select class="form-select" style="max-width:220px" aria-label="Bereich">
+              <option value="">Alle Bereiche</option>
+              <option>Marketing</option>
+              <option>Technik</option>
+              <option>Events</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Textarea</label>
+            <textarea class="form-control" rows="3" placeholder="Mehrzeiliger Text..."></textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Input-Gruppe mit Button</label>
+            <div class="input-group" style="max-width:360px">
+              <input type="text" class="form-control" placeholder="URL eingeben...">
+              <button class="btn btn-primary" type="button">Kopieren</button>
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">Disabled</label>
+            <input type="text" class="form-control" value="Nicht bearbeitbar" disabled style="max-width:280px">
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           7. NAVIGATION
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-nav" class="sb-section">
+        <div class="sb-section-label">Navigation</div>
+        <h2>Navigation</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Nav Tabs</div>
+          <ul class="nav nav-tabs mb-3" id="sb-demo-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="sb-tab-1-trigger" data-bs-toggle="tab" href="#sb-tab-1" role="tab" aria-controls="sb-tab-1" aria-selected="true">
+                <i data-lucide="download" style="width:14px;height:14px;margin-right:.3rem" aria-hidden="true"></i>Downloads
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="sb-tab-2-trigger" data-bs-toggle="tab" href="#sb-tab-2" role="tab" aria-controls="sb-tab-2" aria-selected="false">
+                <i data-lucide="image" style="width:14px;height:14px;margin-right:.3rem" aria-hidden="true"></i>Galerie
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="sb-tab-3-trigger" data-bs-toggle="tab" href="#sb-tab-3" role="tab" aria-controls="sb-tab-3" aria-selected="false">
+                Einstellungen
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="sb-tab-1" role="tabpanel" aria-labelledby="sb-tab-1-trigger">
+              <p class="text-muted small">Inhalt Tab 1 - Downloads</p>
+            </div>
+            <div class="tab-pane fade" id="sb-tab-2" role="tabpanel" aria-labelledby="sb-tab-2-trigger">
+              <p class="text-muted small">Inhalt Tab 2 - Galerie</p>
+            </div>
+            <div class="tab-pane fade" id="sb-tab-3" role="tabpanel" aria-labelledby="sb-tab-3-trigger">
+              <p class="text-muted small">Inhalt Tab 3 - Einstellungen</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Breadcrumb</div>
+          <nav aria-label="Galerie Navigation">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="#">Galerie</a></li>
+              <li class="breadcrumb-item"><a href="#">Marketing</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Flyer 2025</li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Dropdown</div>
+          <div class="dropdown">
+            <button class="btn-icon" id="sb-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Sprache wahlen">
+              <i data-lucide="globe" aria-hidden="true"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="sb-dropdown-btn">
+              <li><button class="dropdown-item">Deutsch</button></li>
+              <li><button class="dropdown-item">English</button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           8. INFO-BOXEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-alerts" class="sb-section">
+        <div class="sb-section-label">Feedback</div>
+        <h2>Info-Boxen</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Bootstrap Alert</div>
+          <div class="alert alert-warning" role="alert" style="max-width:540px">
+            <strong>Hinweis:</strong> Diese Datei wurde nicht gefunden.
+            <ul class="mb-0 mt-1">
+              <li>flyer-2025.pdf existiert nicht im Verzeichnis</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Analogy Box (aus termine)</div>
+          <div class="analogy-box" style="max-width:540px">
+            <i data-lucide="lightbulb" aria-hidden="true"></i>
+            <p class="mb-0">So wie ein Briefkasten fur die Post: der Kalender sammelt alle Termine an einem Ort, egal woher sie kommen.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           9. ZUSTANDE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-states" class="sb-section">
+        <div class="sb-section-label">Feedback</div>
+        <h2>Zustande</h2>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Leerzustand</div>
+          <div class="empty-state text-center py-4">
+            <i data-lucide="folder-open" aria-hidden="true"></i>
+            <p class="mt-2 small mb-0">Keine Dateien gefunden.</p>
+          </div>
+        </div>
+
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Ladeindikator</div>
+          <div class="text-center py-4 text-muted">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Wird geladen...</span>
+            </div>
+            <p class="mt-2 small mb-0">Daten werden geladen...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           10. KARTEN
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-cards" class="sb-section">
+        <div class="sb-section-label">Komponenten</div>
+        <h2>Karten</h2>
+
+        <!-- File Item -->
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">File Item (.file-item) - von einfach bis voll</div>
+          <div class="d-flex flex-column gap-2" style="max-width:480px">
+
+            <div class="sb-preview-block">
+              <a href="#" class="file-item">
+                <i data-lucide="file" class="file-icon default" aria-hidden="true"></i>
+                <span class="file-name">dokument.pdf</span>
+              </a>
+              <span class="sb-item-label">Minimal: Icon + Name</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <a href="#" class="file-item">
+                <i data-lucide="file-text" class="file-icon pdf" aria-hidden="true"></i>
+                <span class="file-name">flyer-2025.pdf</span>
+                <span class="file-badge pdf">PDF</span>
+                <i data-lucide="download" class="file-dl-icon" aria-hidden="true"></i>
+              </a>
+              <span class="sb-item-label">Standard: Icon + Name + Badge + Download</span>
+            </div>
+
+            <div class="sb-preview-block">
+              <a href="#" class="file-item">
+                <i data-lucide="file-text" class="file-icon docx" aria-hidden="true"></i>
+                <span class="file-name" style="display:flex;flex-direction:column;gap:.1rem">
+                  <span>vereinssatzung-2024.docx</span>
+                  <small class="text-muted" style="font-size:.77rem">Aktuelle Satzung des Vereins</small>
+                </span>
+                <span class="file-badge docx">DOCX</span>
+                <i data-lucide="download" class="file-dl-icon" aria-hidden="true"></i>
+              </a>
+              <span class="sb-item-label">Voll: Icon + Name + Beschreibung + Badge + Download</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logo Card -->
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Logo Card (.logo-card)</div>
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3" style="max-width:560px">
+            <div class="col">
+              <div class="logo-card">
+                <div class="logo-card-preview">
+                  <img src="img/logo.svg" alt="Erfindergeist Julich Logo" loading="lazy">
+                </div>
+                <div class="logo-card-name" title="logo.svg">logo.svg</div>
+                <div class="logo-card-actions">
+                  <span class="file-badge img me-auto">SVG</span>
+                  <a href="#" class="btn btn-outline-secondary btn-sm" aria-label="Anzeigen">
+                    <i data-lucide="eye" aria-hidden="true"></i>
+                  </a>
+                  <a href="#" class="btn btn-primary btn-sm" aria-label="Download">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                  <button class="btn btn-outline-secondary btn-sm" aria-label="URL kopieren">
+                    <i data-lucide="clipboard" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="logo-card">
+                <div class="logo-card-preview">
+                  <img src="img/logo.svg" alt="Logo dunkel" loading="lazy">
+                </div>
+                <div class="logo-card-name" title="logo-dark.png">logo-dark.png</div>
+                <div class="logo-card-actions">
+                  <span class="file-badge img me-auto">PNG</span>
+                  <a href="#" class="btn btn-outline-secondary btn-sm" aria-label="Anzeigen">
+                    <i data-lucide="eye" aria-hidden="true"></i>
+                  </a>
+                  <a href="#" class="btn btn-primary btn-sm" aria-label="Download">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                  <button class="btn btn-outline-secondary btn-sm" aria-label="URL kopieren">
+                    <i data-lucide="clipboard" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gallery Card -->
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Gallery Card (.gallery-card)</div>
+          <div class="row g-3" style="max-width:720px">
+
+            <!-- Folder variant -->
+            <div class="col-6 col-md-4">
+              <div class="sb-preview-block w-100">
+                <div class="gallery-card gallery-card--folder" tabindex="0">
+                  <div class="gallery-card-img">
+                    <i data-lucide="folder" style="width:48px;height:48px" aria-hidden="true"></i>
+                  </div>
+                  <div class="gallery-card-body">
+                    <div class="gallery-card-title">Vereinsfest 2024</div>
+                    <div class="gallery-card-meta text-muted">
+                      <i data-lucide="image" style="width:12px;height:12px" aria-hidden="true"></i>
+                      42 Bilder
+                    </div>
+                  </div>
+                </div>
+                <span class="sb-item-label">Ordner-Variante</span>
+              </div>
+            </div>
+
+            <!-- Image card minimal -->
+            <div class="col-6 col-md-4">
+              <div class="sb-preview-block w-100">
+                <div class="gallery-card" tabindex="0">
+                  <div class="gallery-card-img" style="background:var(--color-primary-light)">
+                    <i data-lucide="image" style="width:36px;height:36px;color:var(--color-primary)" aria-hidden="true"></i>
+                  </div>
+                  <div class="gallery-card-body">
+                    <div class="gallery-card-title">DSC_0042.webp</div>
+                  </div>
+                </div>
+                <span class="sb-item-label">Bild minimal</span>
+              </div>
+            </div>
+
+            <!-- Image card full -->
+            <div class="col-12 col-md-4">
+              <div class="sb-preview-block w-100">
+                <div class="gallery-card" tabindex="0">
+                  <div class="gallery-card-img" style="background:linear-gradient(135deg,#159989,#107c6f)">
+                    <i data-lucide="image" style="width:36px;height:36px;color:#fff;opacity:.6" aria-hidden="true"></i>
+                  </div>
+                  <div class="gallery-card-body">
+                    <div class="gallery-card-title">Maker-Faire-Stand.webp</div>
+                    <div class="gallery-card-meta text-muted">15.06.2025 - Jülich</div>
+                    <div class="gallery-card-desc">Unser Stand auf der Maker Faire mit dem 3D-Drucker und der CNC-Frase.</div>
+                    <div class="gallery-card-links">
+                      <a href="#" class="btn btn-outline-primary btn-sm">Wiki</a>
+                      <a href="#" class="btn btn-outline-success btn-sm">Cloud</a>
+                      <a href="#" class="btn btn-outline-beitrag btn-sm">Beitrag</a>
+                    </div>
+                  </div>
+                </div>
+                <span class="sb-item-label">Bild voll (alle optionalen Felder)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sponsor Item -->
+        <div class="sb-subsection">
+          <div class="sb-subsection-label">Sponsor Item (.sponsor-item)</div>
+          <div class="row g-3" style="max-width:620px">
+            <div class="col-12 col-sm-6">
+              <div class="sb-preview-block w-100">
+                <div class="sponsor-item">
+                  <i data-lucide="heart-handshake" class="sponsor-item-icon" aria-hidden="true"></i>
+                  <div>
+                    <span class="sponsor-item-title">Spendendose</span>
+                    <p class="small text-muted mb-0">Direkt in unserer Werkstatt vor Ort spenden.</p>
+                  </div>
+                </div>
+                <span class="sb-item-label">div (nicht klickbar)</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="sb-preview-block w-100">
+                <a href="#" class="sponsor-item">
+                  <i data-lucide="user-plus" class="sponsor-item-icon" aria-hidden="true"></i>
+                  <div>
+                    <span class="sponsor-item-title">Fordermitglied werden</span>
+                    <p class="small text-muted mb-0">Regelmasige Unterstutzung als Fordermitglied.</p>
+                  </div>
+                </a>
+                <span class="sb-item-label">a (klickbar, Hover-Effekt)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           11. TABELLE
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-table" class="sb-section">
+        <div class="sb-section-label">Komponenten</div>
+        <h2>Tabelle (Downloads)</h2>
+
+        <div class="d-flex gap-2 mb-3 flex-wrap align-items-center">
+          <input type="search" class="form-control" style="max-width:240px" placeholder="Dateien suchen..." aria-label="Dateien suchen">
+          <select class="form-select" style="max-width:160px" aria-label="Bereich filtern">
+            <option value="">Alle Bereiche</option>
+            <option>Marketing</option>
+            <option>Technik</option>
+          </select>
+          <button type="button" class="btn btn-sm btn-outline-danger" aria-label="Filter loschen">
+            <i data-lucide="x" style="width:14px;height:14px" aria-hidden="true"></i> Filter loschen
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" id="downloads-table">
+            <thead>
+              <tr>
+                <th class="dl-fmt-col">Format</th>
+                <th>Name</th>
+                <th>Bereich</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="dl-fmt-col"><span class="file-badge pdf">PDF</span></td>
+                <td class="dl-name-cell">
+                  <a href="#" class="dl-name-link">
+                    <span class="fw-semibold">flyer-sommer-2025.pdf</span>
+                    <small class="text-muted d-block">Sommer-Flyer fur Aushange</small>
+                  </a>
+                </td>
+                <td class="text-muted small">Marketing</td>
+                <td class="dl-action-col">
+                  <div class="d-flex gap-1">
+                    <a href="#" class="btn btn-sm btn-outline-primary">Wiki</a>
+                    <a href="#" class="btn btn-sm btn-outline-success">Cloud</a>
+                  </div>
+                </td>
+                <td class="dl-action-col">
+                  <a href="#" class="btn btn-sm btn-outline-secondary" aria-label="Herunterladen">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td class="dl-fmt-col"><span class="file-badge docx">DOCX</span></td>
+                <td class="dl-name-cell">
+                  <a href="#" class="dl-name-link">
+                    <span class="fw-semibold">vereinssatzung-2024.docx</span>
+                    <small class="text-muted d-block">Aktuelle Satzung des Vereins</small>
+                  </a>
+                </td>
+                <td class="text-muted small">Verwaltung</td>
+                <td class="dl-action-col">
+                  <a href="#" class="btn btn-sm btn-outline-primary">Wiki</a>
+                </td>
+                <td class="dl-action-col">
+                  <a href="#" class="btn btn-sm btn-outline-secondary" aria-label="Herunterladen">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td class="dl-fmt-col"><span class="file-badge xlsx">XLSX</span></td>
+                <td class="dl-name-cell">
+                  <a href="#" class="dl-name-link">
+                    <span class="fw-semibold">mitglieder-2025.xlsx</span>
+                  </a>
+                </td>
+                <td class="text-muted small">Intern</td>
+                <td class="dl-action-col"></td>
+                <td class="dl-action-col">
+                  <a href="#" class="btn btn-sm btn-outline-secondary" aria-label="Herunterladen">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td class="dl-fmt-col"><span class="file-badge img">SVG</span></td>
+                <td class="dl-name-cell">
+                  <a href="#" class="dl-name-link">
+                    <span class="fw-semibold">logo.svg</span>
+                    <small class="text-muted d-block">Vereinslogo, Querformat</small>
+                  </a>
+                </td>
+                <td class="text-muted small">Logos</td>
+                <td class="dl-action-col">
+                  <div class="d-flex gap-1">
+                    <a href="#" class="btn btn-sm btn-outline-secondary">Raw</a>
+                    <a href="#" class="btn btn-sm btn-outline-beitrag">Beitrag</a>
+                  </div>
+                </td>
+                <td class="dl-action-col">
+                  <a href="#" class="btn btn-sm btn-outline-secondary" aria-label="Herunterladen">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td class="dl-fmt-col"><span class="file-badge md">MD</span></td>
+                <td class="dl-name-cell">
+                  <a href="#" class="dl-name-link">
+                    <span class="fw-semibold">AUFBAU.md</span>
+                    <small class="text-muted d-block">Aufbauanleitung fur Veranstaltungen</small>
+                  </a>
+                </td>
+                <td class="text-muted small">Events</td>
+                <td class="dl-action-col"></td>
+                <td class="dl-action-col">
+                  <a href="#" class="btn btn-sm btn-outline-secondary" aria-label="Herunterladen">
+                    <i data-lucide="download" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           12. CODE-BLOCK
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-code" class="sb-section">
+        <div class="sb-section-label">Komponenten</div>
+        <h2>Code-Block</h2>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="code-block">
+              <div class="code-block-label">JSON-LD</div>
+              <pre><code>{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "@id": "https://share.erfindergeist.org/",
+  "name": "EGJ Mediathek",
+  "hasPart": [
+    {
+      "@type": "MediaObject",
+      "name": "flyer.pdf",
+      "encodingFormat": "application/pdf"
+    }
+  ]
+}</code></pre>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="code-block">
+              <div class="code-block-label">YAML</div>
+              <pre><code>title: Vereinsfest
+date: 2025-08-23
+location: Jülich Innenstadt
+tags:
+  - event
+  - public
+</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           13. MODAL
+      ═══════════════════════════════════════════════════════════ -->
+      <section id="sb-modal" class="sb-section">
+        <div class="sb-section-label">Komponenten</div>
+        <h2>Modal</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sb-demo-modal">
+          Modal offnen
+        </button>
+        <p class="text-muted small mt-2">Beispiel: Bestatigung vor einer Aktion.</p>
+
+        <div class="modal fade" id="sb-demo-modal" tabindex="-1" aria-labelledby="sb-demo-modal-label" aria-modal="true" role="dialog">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background:var(--color-surface);border-color:var(--color-border)">
+              <div class="modal-header" style="border-color:var(--color-border)">
+                <h5 class="modal-title" id="sb-demo-modal-label">Aktion bestatigen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"
+                  style="filter: var(--color-text, invert(1))"></button>
+              </div>
+              <div class="modal-body">
+                <p>Soll diese Datei wirklich geloscht werden? Diese Aktion kann nicht ruckgangig gemacht werden.</p>
+              </div>
+              <div class="modal-footer" style="border-color:var(--color-border)">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                <button type="button" class="btn btn-primary">Bestatigen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://share.erfindergeist.org/js/lib/jquery.min.js"></script>
+<script src="https://share.erfindergeist.org/js/lib/bootstrap.bundle.min.js"></script>
+<script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
+<script src="https://share.erfindergeist.org/js/components/eg-footer.js"></script>
+<script>
+(function () {
+  var stored = localStorage.getItem('eg-theme');
+  if (!stored) {
+    stored = 'dark';
+    localStorage.setItem('eg-theme', stored);
+  }
+  document.documentElement.setAttribute('data-theme', stored);
+
+  if (window.lucide) { lucide.createIcons(); }
+
+  $('#theme-toggle').on('click', function () {
+    var next = $('html').attr('data-theme') === 'dark' ? 'light' : 'dark';
+    $('html').attr('data-theme', next);
+    localStorage.setItem('eg-theme', next);
+  });
+
+  // Sidebar active link via IntersectionObserver
+  var sections = document.querySelectorAll('.sb-section[id]');
+  var navLinks = document.querySelectorAll('.sb-nav-link');
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function (l) { l.classList.remove('active'); });
+          var active = document.querySelector('.sb-nav-link[href="#' + entry.target.id + '"]');
+          if (active) { active.classList.add('active'); }
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+}());
+</script>
+</body>
+</html>

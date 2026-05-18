@@ -275,7 +275,7 @@ See root [CLAUDE.md](../CLAUDE.md) for the full rules. Summary for this module:
 
 ## Do Not Deploy to Server
 
-`compose.yaml`, `README.md`, `CLAUDE.md`, `galerie-plan.md` → excluded via `exclude` in the workflow.
+`compose.yaml`, `README.md`, `CLAUDE.md`, `galerie-plan.md`, `stylebook.html` → excluded via `exclude` in the workflow.
 `galerie/*.webp` → gitignored, uploaded separately via `galerie/upload.py`.
 `galerie/_index.json` and `galerie/**/_meta.json` → gitignored; regenerated via `process` or fetched via `download`. Deployed to server via `upload`.
 `downloads/mock-*` → mock files for local dev testing, excluded via `downloads/mock-*` pattern.
