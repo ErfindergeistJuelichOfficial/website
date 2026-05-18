@@ -10,16 +10,21 @@
   --color-text-muted:     #4a6b67;
   --color-border:         #d0e8e4;
   --color-shadow:         rgba(21,153,137,.12);
-  --bs-primary:           #159989;
-  --bs-primary-rgb:       21,153,137;
+  --bs-primary:           #107c6f;
+  --bs-primary-rgb:       16,124,111;
   --bs-secondary:         #F9B338;
   --bs-secondary-rgb:     249,179,56;
   --bs-link-color:        #107c6f;
+  --bs-link-color-rgb:    16,124,111;
   --bs-link-hover-color:  #0d6457;
+  --bs-link-hover-color-rgb: 13,100,87;
 }
 
 [data-theme="dark"] {
+  --bs-primary:            #159989;
+  --bs-primary-rgb:        21,153,137;
   --bs-link-color:         #159989;
+  --bs-link-color-rgb:     21,153,137;
   --color-bg:              #0f1a19;
   --color-surface:         #1a2e2c;
   --color-text:            #e8f5f3;
@@ -282,8 +287,8 @@ main { flex: 1; }
 .logo-card-actions .file-badge { align-self: center; }
 
 /* ── Bootstrap btn overrides ── */
-.btn-primary         { background: var(--color-primary); border-color: var(--color-primary); }
-.btn-primary:hover   { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
+.btn-primary         { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
+.btn-primary:hover   { background: #0a5f56; border-color: #0a5f56; }
 .btn-secondary       { background: var(--color-secondary); border-color: var(--color-secondary); color: #1a2e2c; }
 .btn-secondary:hover { background: #e8a020; border-color: #e8a020; color: #1a2e2c; }
 
