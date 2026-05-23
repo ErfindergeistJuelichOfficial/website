@@ -255,6 +255,7 @@ $('#scroll-top').on('click', function () {
 
   // ── Routing ─────────────────────────────────────────────────────────────────
   function galleryRouteUpdate(path) {
+    if (activeTab !== 'gallery') { return; }
     var h = 'gallery' + (path ? '/' + path : '');
     history.replaceState(null, '', (window.location.search || '') + '#' + h);
   }
