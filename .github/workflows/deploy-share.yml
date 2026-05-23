@@ -31,6 +31,7 @@ jobs:
             **/galerie-plan.md
             **/.gitkeep
             presentations/hallo-welt/**
+            presentations/mock-multi/**
             downloads/mock-*
             galerie/.gitignore
             stylebook.html

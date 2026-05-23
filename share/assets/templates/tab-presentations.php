@@ -13,25 +13,73 @@
       </span>
     </div>
     <div class="d-flex flex-column gap-2">
-      <?php foreach ($pres_entries as $name => $pdfFile) :
+      <?php foreach ($pres_entries as $name => $files) :
         $safeLabel = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
         $safeUrl   = rawurlencode($name);
+        $htmls     = $files['htmls'];
+        $pdfs      = $files['pdfs'];
       ?>
         <div class="pres-item">
           <i data-lucide="monitor" class="pres-icon" aria-hidden="true"></i>
           <span class="pres-name"><?= $safeLabel ?></span>
           <div class="pres-actions">
-            <a href="presentations/<?= $safeUrl ?>/" class="btn btn-primary btn-sm">
-              <i data-lucide="play" style="width:13px;height:13px" aria-hidden="true"></i>
-              Anzeigen
-            </a>
-            <?php if ($pdfFile !== null) : ?>
-              <a href="presentations/<?= $safeUrl ?>/<?= rawurlencode($pdfFile) ?>" target="_blank"
+
+            <?php if (count($htmls) === 1) : ?>
+              <a href="presentations/<?= $safeUrl ?>/<?= rawurlencode($htmls[0]) ?>" class="btn btn-primary btn-sm">
+                <i data-lucide="play" style="width:13px;height:13px" aria-hidden="true"></i>
+                Anzeigen
+              </a>
+            <?php elseif (count($htmls) > 1) : ?>
+              <div class="dropdown">
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                  <i data-lucide="play" style="width:13px;height:13px" aria-hidden="true"></i>
+                  Anzeigen
+                </button>
+                <ul class="dropdown-menu">
+                  <?php foreach ($htmls as $htmlFile) :
+                    $safeHtmlLabel = htmlspecialchars(pathinfo($htmlFile, PATHINFO_FILENAME), ENT_QUOTES, 'UTF-8');
+                  ?>
+                    <li>
+                      <a class="dropdown-item"
+                         href="presentations/<?= $safeUrl ?>/<?= rawurlencode($htmlFile) ?>">
+                        <?= $safeHtmlLabel ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            <?php endif; ?>
+
+            <?php if (count($pdfs) === 1) : ?>
+              <a href="presentations/<?= $safeUrl ?>/<?= rawurlencode($pdfs[0]) ?>" target="_blank"
                  rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">
                 <i data-lucide="file-text" style="width:13px;height:13px" aria-hidden="true"></i>
                 PDF
               </a>
+            <?php elseif (count($pdfs) > 1) : ?>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                  <i data-lucide="file-text" style="width:13px;height:13px" aria-hidden="true"></i>
+                  PDF
+                </button>
+                <ul class="dropdown-menu">
+                  <?php foreach ($pdfs as $pdfFile) :
+                    $safePdfLabel = htmlspecialchars(pathinfo($pdfFile, PATHINFO_FILENAME), ENT_QUOTES, 'UTF-8');
+                  ?>
+                    <li>
+                      <a class="dropdown-item"
+                         href="presentations/<?= $safeUrl ?>/<?= rawurlencode($pdfFile) ?>"
+                         target="_blank" rel="noopener noreferrer">
+                        <?= $safePdfLabel ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
             <?php endif; ?>
+
           </div>
         </div>
       <?php endforeach; ?>

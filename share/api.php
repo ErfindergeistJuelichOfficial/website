@@ -112,6 +112,7 @@ function eg_scan_flat(string $base, string $rel, array $allowed_ext = []): array
  *
  * @param string[] $allowed_ext  Only include these extensions; empty = all files.
  * @return array<array<string,mixed>>
+ * @SuppressWarnings(PHPMD.MissingImport)
  */
 function eg_scan_recursive(string $base, string $rel, array $allowed_ext = []): array
 {
@@ -187,6 +188,7 @@ function eg_validate_meta_jsonld(array $data, string $rel_dir, array $errors): a
  * @param string[] $errors
  * @return array{parts: array<string,array{description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string}>, errors: string[]}
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): array
 {
@@ -385,26 +387,32 @@ function eg_extract_filter_values(array $entries): array
 }
 
 /**
- * Build a name => pdf-filename map from presentations items.
+ * Build a name => {htmls, pdfs} map from presentations items.
  *
  * @param array<array<string,mixed>> $items
- * @return array<string,string|null>
+ * @return array<string,array{htmls:string[],pdfs:string[]}>
  */
 function eg_build_pres_entries(array $items): array
 {
   $result = [];
   foreach ($items as $item) {
-    $pdf = null;
+    $htmls = [];
+    $pdfs  = [];
     foreach ((array) ($item['hasPart'] ?? []) as $part) {
-      if (
-          is_array($part)
-          && strtolower(pathinfo((string) ($part['name'] ?? ''), PATHINFO_EXTENSION)) === 'pdf'
-      ) {
-        $pdf = (string) $part['name'];
-        break;
+      if (!is_array($part)) {
+        continue;
+      }
+      $name = (string) ($part['name'] ?? '');
+      $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+      if ($ext === 'html') {
+        $htmls[] = $name;
+      } elseif ($ext === 'pdf') {
+        $pdfs[] = $name;
       }
     }
-    $result[(string) ($item['name'] ?? '')] = $pdf;
+    sort($htmls);
+    sort($pdfs);
+    $result[(string) ($item['name'] ?? '')] = ['htmls' => $htmls, 'pdfs' => $pdfs];
   }
   return $result;
 }
@@ -441,7 +449,7 @@ function eg_gallery_data(string $root): array
  *   img_entries:    string[],
  *   qr_entries:     string[],
  *   config_entries: string[],
- *   pres_entries:   array<string,string|null>,
+ *   pres_entries:   array<string,array{htmls:string[],pdfs:string[]}>,
  *   gallery_data:   array<string,mixed>,
  * }
  */
@@ -539,7 +547,8 @@ function eg_presentations_data(string $root): array
         if (!is_file("$dir/$presFile")) {
           continue;
         }
-        if (strtolower(pathinfo($presFile, PATHINFO_EXTENSION)) !== 'pdf') {
+        $ext = strtolower(pathinfo($presFile, PATHINFO_EXTENSION));
+        if ($ext !== 'pdf' && $ext !== 'html') {
           continue;
         }
         $item['hasPart'][] = eg_file_entry($presFile, "presentations/$entry/$presFile", "$dir/$presFile");

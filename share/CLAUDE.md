@@ -153,7 +153,7 @@ Available variables per template:
 
 - `tab-downloads.php` — `$entries`, `$dl_errors`, `$bereiche`, `$themen`, `$gruppen`, `EG_ICON_MAP`, `EG_CLASS_MAP`
 - `tab-galerie.php` — `$gallery_data` (decoded `_index.json`; empty array when no gallery exists)
-- `tab-presentations.php` — `$pres_entries` (assoc: name → pdf)
+- `tab-presentations.php` — `$pres_entries` (assoc: `name => {htmls: string[], pdfs: string[]}`) — je ein sortiertes Array der gefundenen HTML- bzw. PDF-Dateien
 - `tab-logos.php` — `$img_entries`
 - `tab-qr.php` — `$qr_entries`
 - `tab-configs.php` — `$config_entries`

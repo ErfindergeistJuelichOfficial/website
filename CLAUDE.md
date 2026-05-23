@@ -83,6 +83,37 @@ podman compose run --rm composer phpcbf    # auto-fix style violations
 
 **Important:** Changes to quality tool configs must also be reflected in `.github/workflows/ci.yml`.
 
+### Suppression Patterns
+
+Use these only when a violation genuinely cannot be fixed (e.g. unavoidable structural complexity, SVG path data):
+
+**PHPCS - long lines in PHP templates (inline SVG path data):**
+
+```php
+<?php // phpcs:disable Generic.Files.LineLength -- SVG path data cannot be shortened ?>
+  <svg ...><path d="...very long path..."/></svg>
+<?php // phpcs:enable Generic.Files.LineLength ?>
+```
+
+**PHPMD - built-in iterator classes without `use` statements** (`RecursiveDirectoryIterator`, `RecursiveIteratorIterator`, etc.):
+
+```php
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
+function eg_example(): array { ... }
+```
+
+**PHPMD - complex functions:** use both annotations together:
+
+```php
+/**
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ */
+function eg_complex(): array { ... }
+```
+
 ## Accessibility
 
 - Every `<img>` needs a non-empty `alt` (except explicitly decorative: `alt=""` + comment)
