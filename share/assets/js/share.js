@@ -169,11 +169,13 @@ $('#scroll-top').on('click', function () {
   var lbIdx     = 0;
 
   // Returns direct sub-folders and direct albums at the given folder path.
+  // Intermediate paths that are also albums are placed in result.albums (not result.folders).
   function childrenOf(path) {
     var seen        = {};
     var albumByPath = {};
     albums.forEach(function (a) { albumByPath[a.path] = a; });
     var result = { folders: [], albums: [] };
+    var albumsAdded = {};
     albums.forEach(function (a) {
       var rel;
       if (path === '') {
@@ -184,21 +186,27 @@ $('#scroll-top').on('click', function () {
         return;
       }
       if (rel.indexOf('/') === -1) {
-        result.albums.push(a);
+        if (!albumsAdded[a.path]) {
+          albumsAdded[a.path] = true;
+          result.albums.push(a);
+        }
       } else {
         var seg = rel.split('/')[0];
         var fp  = path === '' ? seg : path + '/' + seg;
         if (!seen[fp]) {
           seen[fp] = true;
-          result.folders.push({ name: seg, path: fp, album: albumByPath[fp] || null });
+          var intermediate = albumByPath[fp];
+          if (intermediate) {
+            if (!albumsAdded[fp]) {
+              albumsAdded[fp] = true;
+              result.albums.push(intermediate);
+            }
+          } else {
+            result.folders.push({ name: seg, path: fp });
+          }
         }
       }
     });
-    // A path that is both a folder and an album shows only as a folder card (no duplicate album card).
-    // Its own photos appear when navigating into the folder (as selfAlbum in showFolder).
-    var folderPaths = {};
-    result.folders.forEach(function (f) { folderPaths[f.path] = true; });
-    result.albums = result.albums.filter(function (a) { return !folderPaths[a.path]; });
     result.albums.sort(function (a, b) {
       var aDate = a.dateCreated || '';
       var bDate = b.dateCreated || '';
@@ -215,6 +223,10 @@ $('#scroll-top').on('click', function () {
     return albums.filter(function (a) {
       return a.path === path || a.path.startsWith(path + '/');
     }).length;
+  }
+
+  function hasChildren(albumPath) {
+    return albums.some(function (a) { return a.path.startsWith(albumPath + '/'); });
   }
 
   function esc(str) {
@@ -315,79 +327,95 @@ $('#scroll-top').on('click', function () {
     curFolder = path;
     curAlbum  = null;
     galleryRouteUpdate(path);
-    var children = childrenOf(path);
-    var $grid    = $('#gallery-grid').empty().removeClass('d-none');
-    $('#gallery-images').addClass('d-none');
-    $('#gallery-album-info').addClass('d-none');
-    renderBreadcrumb();
-
-    // If this folder is also an album, show its own photos as the first card.
+    var children    = childrenOf(path);
     var selfMatches = path !== '' ? albums.filter(function (a) { return a.path === path; }) : [];
     var selfAlbum   = selfMatches.length > 0 ? selfMatches[0] : null;
-    if (selfAlbum) {
-      var $col  = $('<div class="col">');
-      var $card = $('<div class="gallery-card" role="button" tabindex="0">');
-      var imgHtml = selfAlbum.preview
-        ? '<img src="galerie/' + esc(selfAlbum.preview) + '" alt="' + esc(selfAlbum.name) + '" loading="lazy">'
-        : '<i data-lucide="images" style="width:52px;height:52px;opacity:.4" aria-hidden="true"></i>';
-      var meta = (selfAlbum.dateCreated || '') + (selfAlbum.imageCount ? ' &middot; ' + selfAlbum.imageCount + ' Fotos' : '');
-      $card.html(
-        '<div class="gallery-card-img">' + imgHtml + '</div>' +
-        '<div class="gallery-card-body">' +
-          '<div class="gallery-card-title">' + esc(selfAlbum.name) + '</div>' +
-          '<div class="gallery-card-meta text-muted">' + meta + '</div>' +
-          (selfAlbum.description ? '<div class="gallery-card-desc">' + esc(selfAlbum.description) + '</div>' : '') +
-        '</div>'
-      );
-      appendAlbumLinks($card, selfAlbum);
-      $card.on('click keydown', (function (a) {
-        return function (e) { if (e.type === 'click' || e.key === 'Enter') { openAlbum(a); } };
-      })(selfAlbum));
-      $grid.append($col.append($card));
+    var mixed       = !!selfAlbum;
+
+    var $grid = $('#gallery-grid').empty().removeClass('d-none');
+    $('#gallery-images').addClass('d-none');
+    $('#gallery-album-info').addClass('d-none');
+
+    if (mixed) {
+      $grid.removeClass('row-cols-1 row-cols-sm-2 row-cols-md-3 g-4')
+           .addClass('row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2 gallery-grid--mixed');
+    } else {
+      $grid.removeClass('gallery-grid--mixed row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2')
+           .addClass('row-cols-1 row-cols-sm-2 row-cols-md-3 g-4');
     }
 
+    renderBreadcrumb();
+
     children.folders.forEach(function (folder) {
-      var $col  = $('<div class="col">');
       var $card = $('<div class="gallery-card gallery-card--folder" role="button" tabindex="0">');
-      var folderImgHtml = folder.album && folder.album.preview
-        ? '<img src="galerie/' + esc(folder.album.preview) + '" alt="' + esc(folder.album.name) + '" loading="lazy">'
-        : '<i data-lucide="folder-open" style="width:52px;height:52px" aria-hidden="true"></i>';
       $card.html(
-        '<div class="gallery-card-img">' + folderImgHtml + '</div>' +
+        '<div class="gallery-card-img"><i data-lucide="folder-open" aria-hidden="true"></i></div>' +
         '<div class="gallery-card-body">' +
           '<div class="gallery-card-title">' + esc(folder.name) + '</div>' +
-          '<div class="gallery-card-meta text-muted">' + albumCountIn(folder.path) + ' Album(s)</div>' +
+          '<div class="gallery-card-meta">' + albumCountIn(folder.path) + ' Album(s)</div>' +
         '</div>'
       );
       $card.on('click keydown', (function (fp) {
         return function (e) { if (e.type === 'click' || e.key === 'Enter') { showFolder(fp); } };
       })(folder.path));
-      $grid.append($col.append($card));
+      $grid.append($('<div class="col">').append($card));
     });
 
     children.albums.forEach(function (album) {
-      var $col  = $('<div class="col">');
       var $card = $('<div class="gallery-card" role="button" tabindex="0">');
       var imgHtml = album.preview
         ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy">'
-        : '<i data-lucide="images" style="width:52px;height:52px;opacity:.4" aria-hidden="true"></i>';
+        : '<i data-lucide="images" aria-hidden="true"></i>';
       var metaParts = []; if (album.dateCreated) { metaParts.push(album.dateCreated); } if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); } var meta = metaParts.join(' &middot; ');
       $card.html(
         '<div class="gallery-card-img">' + imgHtml + '</div>' +
         '<div class="gallery-card-body">' +
           '<div class="gallery-card-title">' + esc(album.name) + '</div>' +
-          '<div class="gallery-card-meta text-muted">' + meta + '</div>' +
-          (album.description ? '<div class="gallery-card-desc">' + esc(album.description) + '</div>' : '') +
+          '<div class="gallery-card-meta">' + meta + '</div>' +
+          (!mixed && album.description ? '<div class="gallery-card-desc">' + esc(album.description) + '</div>' : '') +
         '</div>'
       );
-      appendAlbumLinks($card, album);
+      if (!mixed) { appendAlbumLinks($card, album); }
       $card.on('click keydown', (function (a) {
-        return function (e) { if (e.type === 'click' || e.key === 'Enter') { openAlbum(a); } };
+        return function (e) {
+          if (e.type === 'click' || e.key === 'Enter') {
+            if (hasChildren(a.path)) { showFolder(a.path); } else { openAlbum(a); }
+          }
+        };
       })(album));
-      $grid.append($col.append($card));
+      $grid.append($('<div class="col">').append($card));
     });
 
     if (window.lucide) { lucide.createIcons({ nodes: $grid[0].querySelectorAll('[data-lucide]') }); }
+
+    if (mixed) {
+      curAlbum = selfAlbum;
+      var $loadingCol = $('<div class="col-12 text-center py-4">').html(
+        '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Laden...</span></div>'
+      );
+      $grid.append($loadingCol);
+      fetch('galerie/' + selfAlbum.path + '/_meta.json')
+        .then(function (r) {
+          if (!r.ok) { throw new Error('HTTP ' + r.status); }
+          return r.json();
+        })
+        .then(function (meta) {
+          lbImages = meta.hasPart || [];
+          $loadingCol.remove();
+          lbImages.forEach(function (img, i) {
+            var $thumb = $('<div class="gallery-thumb" role="button" tabindex="0">');
+            $thumb.attr('aria-label', 'Bild ' + (i + 1) + ' von ' + lbImages.length + ' offnen');
+            $thumb.html('<img src="galerie/' + esc(selfAlbum.path) + '/' + esc(img.thumbnail) + '" alt="' + esc(img.caption || img.name) + '" loading="lazy">');
+            $thumb.on('click keydown', (function (idx) {
+              return function (e) { if (e.type === 'click' || e.key === 'Enter') { openLightbox(idx); } };
+            })(i));
+            $grid.append($('<div class="col">').append($thumb));
+          });
+        })
+        .catch(function (err) {
+          $loadingCol.html('<span class="text-muted">Fehler beim Laden: ' + esc(err.message) + '</span>');
+        });
+    }
   }
 
   // ── Album image grid ────────────────────────────────────────────────────────
@@ -595,8 +623,7 @@ $('#scroll-top').on('click', function () {
       }
     }
     // Path has child albums → show as folder (also handles mixed album+folder paths)
-    var hasChildren = albums.some(function (a) { return a.path.startsWith(path + '/'); });
-    if (hasChildren) { showFolder(path); return; }
+    if (hasChildren(path)) { showFolder(path); return; }
     // Path matches an album → open album
     var albumMatch = albums.filter(function (a) { return a.path === path; });
     if (albumMatch.length > 0) {

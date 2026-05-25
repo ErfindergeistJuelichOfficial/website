@@ -352,6 +352,14 @@ main { flex: 1; }
   background: var(--color-primary-light);
   color: var(--color-primary);
 }
+.gallery-card--folder .gallery-card-img i[data-lucide] {
+  width: 52px;
+  height: 52px;
+}
+#gallery-grid.gallery-grid--mixed .gallery-card-img i[data-lucide] {
+  width: 40%;
+  height: 40%;
+}
 .gallery-card-img {
   height: 160px;
   background: var(--color-border);
@@ -424,6 +432,33 @@ main { flex: 1; }
 }
 .gallery-album-info-desc {
   font-size: .9rem;
+}
+
+/* Mixed mode: album/folder cards + inline thumbnails, uniform Bootstrap grid */
+#gallery-grid.gallery-grid--mixed .gallery-card {
+  position: relative;
+}
+#gallery-grid.gallery-grid--mixed .gallery-card-img {
+  height: auto;
+  aspect-ratio: 1;
+}
+#gallery-grid.gallery-grid--mixed .gallery-card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: .4rem .5rem;
+  background: rgba(0, 0, 0, .45);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  border-radius: 0 0 10px 10px;
+}
+#gallery-grid.gallery-grid--mixed .gallery-card-title {
+  color: #fff;
+}
+#gallery-grid.gallery-grid--mixed .gallery-card-meta {
+  font-size: .7rem;
+  color: #fff;
 }
 
 /* Gallery image thumbnail grid */
