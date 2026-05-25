@@ -14,23 +14,23 @@
         $ext       = strtolower(pathinfo($qrEntry, PATHINFO_EXTENSION));
       ?>
         <div class="col">
-          <div class="logo-card">
-            <div class="logo-card-preview">
+          <div class="logo-card d-flex flex-column">
+            <div class="logo-card-preview d-flex align-items-center justify-content-center flex-shrink-0">
               <img src="<?= $safeUrl ?>" alt="<?= $safeAlt ?>" loading="lazy">
             </div>
-            <div class="logo-card-name" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
-            <div class="logo-card-actions">
+            <div class="logo-card-name text-truncate" title="<?= $safeLabel ?>"><?= $safeLabel ?></div>
+            <div class="logo-card-actions d-flex gap-1 justify-content-end">
               <span class="file-badge img me-auto"><?= strtoupper($ext) ?></span>
               <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer"
-                 class="btn btn-outline-secondary btn-sm" title="Anzeigen" aria-label="Anzeigen">
+                 class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center flex-shrink-0" title="Anzeigen" aria-label="Anzeigen">
                 <i data-lucide="eye" aria-hidden="true"></i>
               </a>
               <a href="<?= $safeUrl ?>" download="<?= $safeLabel ?>"
-                 class="btn btn-primary btn-sm" title="Download" aria-label="Download">
+                 class="btn btn-primary btn-sm d-flex align-items-center justify-content-center flex-shrink-0" title="Download" aria-label="Download">
                 <i data-lucide="download" aria-hidden="true"></i>
               </a>
               <button type="button"
-                      class="btn btn-outline-secondary btn-sm btn-copy"
+                      class="btn btn-outline-secondary btn-sm btn-copy d-flex align-items-center justify-content-center flex-shrink-0"
                       data-url="https://share.erfindergeist.org/<?= $safeUrl ?>"
                       aria-label="URL kopieren" title="URL kopieren">
                 <i data-lucide="clipboard" aria-hidden="true"></i>

@@ -366,7 +366,15 @@ $('#scroll-top').on('click', function () {
       var imgHtml = album.preview
         ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy" class="w-100 h-100 d-block object-fit-cover">'
         : '<i data-lucide="images" aria-hidden="true"></i>';
-      var metaParts = []; if (album.dateCreated) { metaParts.push(album.dateCreated); } if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); } var meta = metaParts.join(' &middot; ');
+      var metaParts = [];
+      if (album.dateCreated) { metaParts.push(album.dateCreated); }
+      if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); }
+      if (hasChildren(album.path)) {
+        var sub = childrenOf(album.path);
+        var subCount = sub.albums.length + sub.folders.length;
+        metaParts.push(subCount + (subCount === 1 ? ' Album' : ' Alben'));
+      }
+      var meta = metaParts.join(' &middot; ');
       $card.html(
         '<div class="gallery-card-img d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0">' + imgHtml + '</div>' +
         '<div class="gallery-card-body d-flex flex-column gap-1 flex-grow-1">' +

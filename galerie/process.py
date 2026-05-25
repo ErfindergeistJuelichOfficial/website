@@ -1071,8 +1071,14 @@ def cleanup_orphaned_albums(source_root: Path, output_root: Path, log: Optional[
         rel       = str(album_dir.relative_to(output_root)).replace('\\', '/')
         if rel.startswith('log'):
             continue
-        if not (source_root / rel).is_dir():
-            print(f'  Delete (source gone): {rel}/')
+        source_album = source_root / rel
+        source_gone  = not source_album.is_dir()
+        config_gone  = not source_gone and load_config(source_album) is None
+        if source_gone or config_gone:
+            if not album_dir.is_dir():
+                continue  # already removed as part of a parent rmtree
+            reason = 'source gone' if source_gone else 'config removed/invalid'
+            print(f'  Delete ({reason}): {rel}/')
             shutil.rmtree(album_dir)
             if log is not None:
                 log.append(f'DELETE_ALBUM   {rel}')
