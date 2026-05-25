@@ -290,7 +290,7 @@ $('#scroll-top').on('click', function () {
     var cloudUrl = album['cloud-url'] || '';
     var blogUrl  = album['blog-url']  || '';
     if (!wikiUrl && !rawUrl && !cloudUrl && !blogUrl) { return; }
-    var $links = $('<div class="gallery-card-links">');
+    var $links = $('<div class="gallery-card-links d-flex gap-1 justify-content-end mt-2">');
     if (wikiUrl) {
       $links.append(
         $('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
@@ -347,11 +347,11 @@ $('#scroll-top').on('click', function () {
     renderBreadcrumb();
 
     children.folders.forEach(function (folder) {
-      var $card = $('<div class="gallery-card gallery-card--folder" role="button" tabindex="0">');
+      var $card = $('<div class="gallery-card gallery-card--folder d-flex flex-column h-100" role="button" tabindex="0">');
       $card.html(
-        '<div class="gallery-card-img"><i data-lucide="folder-open" aria-hidden="true"></i></div>' +
-        '<div class="gallery-card-body">' +
-          '<div class="gallery-card-title">' + esc(folder.name) + '</div>' +
+        '<div class="gallery-card-img d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0"><i data-lucide="folder-open" aria-hidden="true"></i></div>' +
+        '<div class="gallery-card-body d-flex flex-column gap-1 flex-grow-1">' +
+          '<div class="gallery-card-title fw-semibold text-truncate">' + esc(folder.name) + '</div>' +
           '<div class="gallery-card-meta">' + albumCountIn(folder.path) + ' Album(s)</div>' +
         '</div>'
       );
@@ -362,15 +362,15 @@ $('#scroll-top').on('click', function () {
     });
 
     children.albums.forEach(function (album) {
-      var $card = $('<div class="gallery-card" role="button" tabindex="0">');
+      var $card = $('<div class="gallery-card d-flex flex-column h-100" role="button" tabindex="0">');
       var imgHtml = album.preview
-        ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy">'
+        ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy" class="w-100 h-100 d-block object-fit-cover">'
         : '<i data-lucide="images" aria-hidden="true"></i>';
       var metaParts = []; if (album.dateCreated) { metaParts.push(album.dateCreated); } if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); } var meta = metaParts.join(' &middot; ');
       $card.html(
-        '<div class="gallery-card-img">' + imgHtml + '</div>' +
-        '<div class="gallery-card-body">' +
-          '<div class="gallery-card-title">' + esc(album.name) + '</div>' +
+        '<div class="gallery-card-img d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0">' + imgHtml + '</div>' +
+        '<div class="gallery-card-body d-flex flex-column gap-1 flex-grow-1">' +
+          '<div class="gallery-card-title fw-semibold text-truncate">' + esc(album.name) + '</div>' +
           '<div class="gallery-card-meta">' + meta + '</div>' +
           (!mixed && album.description ? '<div class="gallery-card-desc">' + esc(album.description) + '</div>' : '') +
         '</div>'

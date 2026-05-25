@@ -40,7 +40,7 @@ $api_entries = [
   <link rel="stylesheet" href="assets/css/section-sponsoring.css?v=<?= filemtime('assets/css/section-sponsoring.css') ?>">
   <script>(function(){var t=localStorage.getItem('eg-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <!-- ── Navbar ── -->
 <nav class="eg-nav py-3 sticky-top" aria-label="Hauptnavigation">
@@ -178,7 +178,7 @@ $api_entries = [
 
 </main>
 
-<button id="scroll-top" aria-label="Nach oben scrollen">
+<button id="scroll-top" class="d-flex align-items-center justify-content-center" aria-label="Nach oben scrollen">
   <i data-lucide="arrow-up" aria-hidden="true"></i>
 </button>
 

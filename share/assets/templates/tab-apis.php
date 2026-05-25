@@ -14,7 +14,7 @@
         $safeFormat = htmlspecialchars($ep['format'], ENT_QUOTES, 'UTF-8');
         $safeVer    = htmlspecialchars($ep['version'], ENT_QUOTES, 'UTF-8');
       ?>
-        <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item api-item">
+        <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item api-item d-flex align-items-center gap-2 text-decoration-none">
           <i data-lucide="zap" class="file-icon default" aria-hidden="true"></i>
           <span class="file-name">
             <span><?= $safeName ?></span>

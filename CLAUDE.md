@@ -29,6 +29,8 @@ These rules apply to every PHP file in the project. No exceptions.
 
 **CSS color rule:** Never hardcode a hex value that has a corresponding `--color-*` CSS variable — always use `var(--color-primary)`, `var(--color-primary-dark)`, `var(--color-surface)` etc. For RGBA variants of the primary color use `rgba(var(--color-primary-rgb), alpha)` instead of the raw hex digits.
 
+**Bootstrap utility rule:** When Bootstrap is loaded, prefer its utility classes over custom CSS for layout and typography — `d-flex`, `flex-column`, `align-items-center`, `justify-content-end`, `overflow-hidden`, `flex-shrink-0`, `flex-grow-1`, `h-100`, `w-100`, `fw-semibold`, `text-truncate`, `object-fit-cover`, `text-decoration-none`, etc. Write custom CSS only for project-specific styling Bootstrap does not cover (colors, borders, transitions, box-shadow, exact spacing outside Bootstrap's scale). Exception: when many elements share the same layout utilities, one CSS rule is cleaner than repeating classes on each element.
+
 ## External Assets & Libraries
 
 **All external libraries must be loaded from `https://share.erfindergeist.org/` — never from external CDNs**

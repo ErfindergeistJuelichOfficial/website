@@ -10,7 +10,7 @@
         $safeLabel = htmlspecialchars($cfgEntry, ENT_QUOTES, 'UTF-8');
         $safeUrl   = 'config/' . rawurlencode($cfgEntry);
       ?>
-        <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item">
+        <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer" class="file-item d-flex align-items-center gap-2 text-decoration-none">
           <i data-lucide="file-code" class="file-icon code" aria-hidden="true"></i>
           <span class="file-name"><?= $safeLabel ?></span>
           <span class="file-badge code">JSON</span>

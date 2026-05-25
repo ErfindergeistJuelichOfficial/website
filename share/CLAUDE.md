@@ -233,6 +233,25 @@ See [root CLAUDE.md](../CLAUDE.md) for design tokens and the no-CDN rule.
 
 **CSS color rule:** Never hardcode a hex value that has a corresponding `--color-*` variable defined in `assets/css/share.css` `:root`. Use `var(--color-primary)`, `var(--color-primary-dark)`, `var(--color-surface)` etc. For RGBA primary shadows use `rgba(var(--color-primary-rgb), alpha)`.
 
+**Bootstrap utility rule:** Prefer Bootstrap utility classes over custom CSS for layout and typography. Write custom CSS only for properties Bootstrap does not cover (colors, borders, border-radius, box-shadow, transitions, exact spacing not on Bootstrap's scale).
+
+| Instead of custom CSS | Use Bootstrap class |
+| --- | --- |
+| `display: flex / inline-flex / block` | `d-flex` / `d-inline-flex` / `d-block` |
+| `flex-direction: column` | `flex-column` |
+| `align-items: center` | `align-items-center` |
+| `justify-content: center / flex-end` | `justify-content-center` / `justify-content-end` |
+| `overflow: hidden` | `overflow-hidden` |
+| `flex-shrink: 0` / `flex-grow: 1` | `flex-shrink-0` / `flex-grow-1` |
+| `height: 100%` / `min-height: 100vh` | `h-100` / `min-vh-100` |
+| `width: 100%` | `w-100` |
+| `font-weight: 600 / 700` | `fw-semibold` / `fw-bold` |
+| `white-space: nowrap; overflow: hidden; text-overflow: ellipsis` | `text-truncate` |
+| `object-fit: cover` | `object-fit-cover` |
+| `text-decoration: none` | `text-decoration-none` |
+
+**Exception:** When many elements share the same set of layout utilities, a single CSS rule is cleaner than repeating them on each element (e.g. `.gallery-lb-btn` covers 11 lightbox buttons).
+
 ---
 
 ## Presentations (relocated)
