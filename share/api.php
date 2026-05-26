@@ -42,9 +42,11 @@ function eg_mime(string $ext): string
 /**
  * Build a Schema.org MediaObject entry for a single file.
  *
+ * @param string[] $linkIds
+ * @param string[] $tags
  * @return array<string,mixed>
  */
-function eg_file_entry(string $name, string $rel_path, string $abs_path, string $description = '', string $wikiUrl = '', string $rawUrl = '', string $cloudUrl = '', string $blogUrl = ''): array
+function eg_file_entry(string $name, string $rel_path, string $abs_path, string $description = '', array $linkIds = [], array $tags = []): array
 {
   $ext   = strtolower(pathinfo($name, PATHINFO_EXTENSION));
   $entry = [
@@ -58,18 +60,8 @@ function eg_file_entry(string $name, string $rel_path, string $abs_path, string 
   if ($description !== '') {
     $entry['description'] = $description;
   }
-  if ($wikiUrl !== '') {
-    $entry['wikiUrl'] = $wikiUrl;
-  }
-  if ($rawUrl !== '') {
-    $entry['rawUrl'] = $rawUrl;
-  }
-  if ($cloudUrl !== '') {
-    $entry['cloudUrl'] = $cloudUrl;
-  }
-  if ($blogUrl !== '') {
-    $entry['blogUrl'] = $blogUrl;
-  }
+  $entry['link_ids'] = $linkIds;
+  $entry['tags']     = $tags;
   return $entry;
 }
 
@@ -186,24 +178,20 @@ function eg_validate_meta_jsonld(array $data, string $rel_dir, array $errors): a
  *
  * @param array<mixed> $hasPart
  * @param string[] $errors
- * @return array{parts: array<string,array{description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string}>, errors: string[]}
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @return array{parts: array<string,array{description:string,link_ids:string[],tags:string[]}>, errors: string[]}
  */
 function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): array
 {
   $parts = [];
   foreach ($hasPart as $idx => $part) {
-    if (!is_array($part) || !isset($part['name']) || !is_string($part['name'])) {
-      $errors[] = "$rel_dir/_meta.json: hasPart[$idx] hat kein 'name'-Feld";
+    if (!is_array($part) || !isset($part['title']) || !is_string($part['title'])) {
+      $errors[] = "$rel_dir/_meta.json: hasPart[$idx] hat kein 'title'-Feld";
       continue;
     }
-    $parts[$part['name']] = [
+    $parts[$part['title']] = [
       'description' => (isset($part['description']) && is_string($part['description'])) ? $part['description'] : '',
-      'wikiUrl'     => (isset($part['wiki-url'])    && is_string($part['wiki-url']))    ? $part['wiki-url']    : '',
-      'rawUrl'      => (isset($part['raw-url'])     && is_string($part['raw-url']))     ? $part['raw-url']     : '',
-      'cloudUrl'    => (isset($part['cloud-url'])   && is_string($part['cloud-url']))   ? $part['cloud-url']   : '',
-      'blogUrl'     => (isset($part['blog-url'])    && is_string($part['blog-url']))    ? $part['blog-url']    : '',
+      'link_ids'    => array_values(array_filter((array) ($part['link_ids'] ?? []), 'is_string')),
+      'tags'        => array_values(array_filter((array) ($part['tags']     ?? []), 'is_string')),
     ];
   }
   return ['parts' => $parts, 'errors' => $errors];
@@ -299,8 +287,8 @@ function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): 
 
   $dir = eg_read_downloads_dir($abs, $allowed_ext);
   foreach ($dir['files'] as $filename) {
-    $partMeta        = $meta['parts'][$filename] ?? ['description' => '', 'wikiUrl' => '', 'rawUrl' => '', 'cloudUrl' => '', 'blogUrl' => ''];
-    $node['files'][] = eg_file_entry($filename, "$rel/$filename", "$abs/$filename", $partMeta['description'], $partMeta['wikiUrl'], $partMeta['rawUrl'], $partMeta['cloudUrl'], $partMeta['blogUrl']);
+    $partMeta        = $meta['parts'][$filename] ?? ['description' => '', 'link_ids' => [], 'tags' => []];
+    $node['files'][] = eg_file_entry($filename, "$rel/$filename", "$abs/$filename", $partMeta['description'], $partMeta['link_ids'], $partMeta['tags']);
   }
   usort($node['files'], static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   sort($dir['subdirs']);
@@ -314,7 +302,7 @@ function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): 
  * Flatten a DataCatalog downloads tree into a list of file entries and collect errors.
  *
  * @param array<string,mixed> $node
- * @return array{entries: array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string,encodingFormat:string}>, errors: string[]}
+ * @return array{entries: array<array{name:string,path:string,folder:string,description:string,link_ids:string[],tags:string[],encodingFormat:string}>, errors: string[]}
  */
 function eg_flatten_downloads(array $node, string $folderRel = ''): array
 {
@@ -330,10 +318,8 @@ function eg_flatten_downloads(array $node, string $folderRel = ''): array
       'path'           => (string) ($file['path']           ?? ''),
       'folder'         => $folderRel,
       'description'    => (string) ($file['description']    ?? ''),
-      'wikiUrl'        => (string) ($file['wikiUrl']        ?? ''),
-      'rawUrl'         => (string) ($file['rawUrl']         ?? ''),
-      'cloudUrl'       => (string) ($file['cloudUrl']       ?? ''),
-      'blogUrl'        => (string) ($file['blogUrl']        ?? ''),
+      'link_ids'       => array_values((array) ($file['link_ids'] ?? [])),
+      'tags'           => array_values((array) ($file['tags']     ?? [])),
       'encodingFormat' => (string) ($file['encodingFormat'] ?? ''),
     ];
   }
@@ -441,7 +427,7 @@ function eg_gallery_data(string $root): array
  * Build all view data needed by index.php in a single call.
  *
  * @return array{
- *   entries:        array<array{name:string,path:string,folder:string,description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string,encodingFormat:string}>,
+ *   entries:        array<array{name:string,path:string,folder:string,description:string,link_ids:string[],tags:string[],encodingFormat:string}>,
  *   dl_errors:      string[],
  *   bereiche:       string[],
  *   themen:         string[],
@@ -451,6 +437,8 @@ function eg_gallery_data(string $root): array
  *   config_entries: string[],
  *   pres_entries:   array<string,array{htmls:string[],pdfs:string[]}>,
  *   gallery_data:   array<string,mixed>,
+ *   chronicle_data: array<string,mixed>,
+ *   links_data:     array<string,mixed>,
  * }
  */
 function eg_page_data(): array
@@ -471,6 +459,7 @@ function eg_page_data(): array
     'pres_entries'   => eg_build_pres_entries($api['assets']['presentations']['items']),
     'gallery_data'   => eg_gallery_data(__DIR__),
     'chronicle_data' => $api['assets']['config']['content']['chronicle'] ?? [],
+    'links_data'     => $api['assets']['config']['content']['links'] ?? [],
   ];
 }
 

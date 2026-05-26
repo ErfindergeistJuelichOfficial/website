@@ -13,6 +13,8 @@ $qr_entries     = $__page['qr_entries'];
 $config_entries = $__page['config_entries'];
 $pres_entries   = $__page['pres_entries'];
 $gallery_data   = $__page['gallery_data'];
+$chronicle_data = $__page['chronicle_data'];
+$links_data     = $__page['links_data'];
 unset($__page);
 
 $api_entries = [

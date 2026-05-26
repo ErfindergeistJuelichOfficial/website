@@ -7,10 +7,13 @@
   "hasPart": [
     {
       "@type": "MediaObject",
-      "name": "datenschutz.pdf",
+      "title": "datenschutz.pdf",
       "description": "Datenschutzinformationen Auslegen bei Veranstaltungen, Jeder Besucher muss trotzdem eine Individuelle Datenschutzerklärung unterschreiben",
-      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/compliance-XZy2u2yzKV",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/datenschutz.html"
+      "link_ids": [
+        "urn:uuid:8735867c-3139-4237-9615-e615e352ba79",
+        "urn:uuid:1ed9f2a7-d96c-4e4b-a27a-716bfb6b3497"
+      ],
+      "tags": []
     }
   ]
 }

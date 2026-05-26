@@ -32,6 +32,12 @@ Placeholder / landing page (no local dev server).
 
 redirect to share
 
+### gui/
+
+Local web editor for `share/config/` JSON files and gallery album `_config.json` files, running at port 8082. Never deployed.
+
+Tabs: **Chronik** (form CRUD with full/undo log), **Alben** (gallery album configs, optional), **Raw JSON** (Monaco editor).
+
 ---
 
 ## Local Development
@@ -72,6 +78,45 @@ cd termine
 podman compose up
 # http://localhost:8081
 ```
+
+### gui/ - Config editor (port 8082)
+
+```powershell
+cd gui
+
+# First build (downloads Monaco editor ~25 MB into image)
+podman compose build
+
+# Start editor
+podman compose up
+# http://localhost:8082
+```
+
+#### Optional: Galerie-Album-Editing
+
+Copy `.env.example` to `.env` and set `ALBUMS_DIR` to your local photo source folder
+(the same path used as `SOURCE_DIR` in `galerie/.env`):
+
+```powershell
+# gui/.env
+ALBUMS_DIR=C:\Users\Lars\Fotos\Erfindergeist
+```
+
+After saving album configs via the GUI, re-run `process.py` to update `_meta.json`:
+
+```powershell
+cd galerie
+podman compose run --rm process
+```
+
+#### Log files
+
+Every edit/delete in the GUI appends a NDJSON line to:
+
+- `share/config/chronicle.log`, `links.log`, `tags.log` (tracked in git)
+- `<ALBUMS_DIR>/album.log` (local, outside repo)
+
+The Verlauf panel in the Chronik tab lets you undo individual changes.
 
 ### galerie/ - Image processing
 

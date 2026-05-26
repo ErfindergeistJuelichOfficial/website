@@ -7,24 +7,33 @@
   "hasPart": [
     {
       "@type": "MediaObject",
-      "name": "bierdeckel-vorderseite.svg",
+      "title": "bierdeckel-vorderseite.svg",
       "description": "Bierdeckel Vorderseite mit Logo und Slogan",
-      "wiki-url": "https://docs.erfindergeist.org/doc/bierdeckel-Oyj8t9mOge",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/website/blob/main/share/downloads/Marketing/Bierdeckel/bierdeckel-vorderseite.svg"
+      "link_ids": [
+        "urn:uuid:44f23390-4bdd-41b0-ad71-0093cc231360",
+        "urn:uuid:9fab71a2-4c91-42c3-8aa0-5a2610bbfc26"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "bierdeckel-rueckseite.svg",
+      "title": "bierdeckel-rueckseite.svg",
       "description": "Bierdeckel Rückseite mit Kontaktdaten",
-      "wiki-url": "https://docs.erfindergeist.org/doc/bierdeckel-Oyj8t9mOge",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/website/blob/main/share/downloads/Marketing/Bierdeckel/bierdeckel-rueckseite.svg"
+      "link_ids": [
+        "urn:uuid:44f23390-4bdd-41b0-ad71-0093cc231360",
+        "urn:uuid:5705b6a4-73fd-4541-a7e4-890cc8c403ad"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "bierdeckel2-rueckseite.svg",
+      "title": "bierdeckel2-rueckseite.svg",
       "description": "Bierdeckel Rückseite Version 2",
-      "wiki-url": "https://docs.erfindergeist.org/doc/bierdeckel-Oyj8t9mOge",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/website/blob/main/share/downloads/Marketing/Bierdeckel/bierdeckel2-rueckseite.svg"
+      "link_ids": [
+        "urn:uuid:44f23390-4bdd-41b0-ad71-0093cc231360",
+        "urn:uuid:1a5eb7a4-6a34-4692-8f12-2afd8ba1ec28"
+      ],
+      "tags": []
     }
   ]
 }

@@ -5,25 +5,33 @@
   "name": "Vereins Downloads",
   "description": "Vereins spezifische Downloads für den Verein Erfindergeist Jülich e.V.",
   "hasPart": [
-
     {
       "@type": "MediaObject",
-      "name": "vereinssatzung.pdf",
+      "title": "vereinssatzung.pdf",
       "description": "Vereinssatzung des Vereins Erfindergeist Jülich e.V.",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/vereinssatzung.html",
-      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/vereinssatzung-mYcVAwWpu4"
+      "link_ids": [
+        "urn:uuid:e618ec81-7c49-4540-8cc5-5b671b3da23c",
+        "urn:uuid:2a3a78f2-ec1e-4a22-88ee-faf5d5575821"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "terminuebersicht_quer.pdf",
+      "title": "terminuebersicht_quer.pdf",
       "description": "Terminübersicht im Querformat",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine.html"
+      "link_ids": [
+        "urn:uuid:9b6507a7-5f44-46f3-aea5-557704ed2a67"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "terminuebersicht_hoch.pdf",
+      "title": "terminuebersicht_hoch.pdf",
       "description": "Terminübersicht im Hochformat",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine.html"
+      "link_ids": [
+        "urn:uuid:9b6507a7-5f44-46f3-aea5-557704ed2a67"
+      ],
+      "tags": []
     }
   ]
 }

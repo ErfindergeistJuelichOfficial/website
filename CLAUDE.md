@@ -131,6 +131,23 @@ function eg_complex(): array { ... }
 
 Pipelines: `.github/workflows/`
 
+## gui/ - lokaler Config-Editor
+
+Lokales Webinterface fuer die JSON-Config-Dateien in `share/config/` und optionale
+Galerie-Album-`_config.json`-Dateien aus einem konfigurierten Quellordner.
+
+- Stack: Python 3.11-slim (Standardbibliothek, kein pip), Bootstrap 5 + jQuery von share.erfindergeist.org
+- Port: **8082**
+- Nie deployed, nur lokale Entwicklung
+
+Kein PHP, keine Qualitaetstools fuer diesen Ordner.
+
+## Datenmodell
+
+Alle Aenderungen am JSON-Schema der Config-Dateien (`chronicle.json`, `links.json`, `tags.json`) oder der Album-`_config.json` muessen auch in `DATENMODELL.md` nachgezogen werden (ER-Diagramm, Speicherorte, API-Tabellen).
+
+Property-Namen werden niemals eingedeutscht — immer die originale Bezeichnung aus dem JSON-Schema verwenden (z.B. `title`, `description`, `type`, `httpMethod` — niemals `titel`, `beschreibung`, `typ`, `http_methode`).
+
 ## Typo
 
 Do not use - use - instead.

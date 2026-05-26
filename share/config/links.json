@@ -12,239 +12,787 @@
   "itemListElement": [
     {
       "@type": "ListItem",
-      "position": 1,
       "item": {
-        "@type": "WebPage",
         "url": "https://erfindergeist.org/",
-        "name": "Homepage",
         "description": "Offizielle Website des Erfindergeist Jülich e.V. mit allen Infos zum Verein, Projekten und Terminen.",
-        "category": "website"
+        "@id": "urn:uuid:41046cd9-4784-48ba-be06-20bdcfe98c89",
+        "title": "Homepage",
+        "type": "website"
       }
     },
     {
       "@type": "ListItem",
-      "position": 2,
       "item": {
-        "@type": "WebPage",
         "url": "https://erfindergeist.org/veranstaltungen/",
-        "name": "Veranstaltungen",
         "description": "Kalenderansicht aller kommenden Veranstaltungen auf der Vereinswebsite.",
-        "category": "website"
+        "@id": "urn:uuid:56677265-df68-446b-adc2-e81f92afda09",
+        "title": "Veranstaltungen",
+        "type": "website"
       }
     },
     {
       "@type": "ListItem",
-      "position": 3,
       "item": {
-        "@type": "WebPage",
         "url": "https://erfindergeist.org/mitglied-werden/",
-        "name": "Fördermitglied werden",
         "description": "Unterstütze den Erfindergeist Jülich e.V. als Fördermitglied und halte die Werkstatt offen.",
-        "category": "website"
+        "@id": "urn:uuid:f589d1ed-d486-4c1c-a283-ff46c700ea47",
+        "title": "Fördermitglied werden",
+        "type": "website"
       }
     },
     {
       "@type": "ListItem",
-      "position": 4,
       "item": {
-        "@type": "WebPage",
         "url": "https://erfindergeist.org/kontakt/",
-        "name": "Kontakt",
         "description": "Kontaktformular und Ansprechpartner des Erfindergeist Jülich e.V.",
-        "category": "website"
+        "@id": "urn:uuid:bfd33dbb-4641-41c7-bf2a-bce7c3f3124a",
+        "title": "Kontakt",
+        "type": "website"
       }
     },
     {
       "@type": "ListItem",
-      "position": 5,
       "item": {
-        "@type": "WebPage",
         "url": "https://termine.erfindergeist.org/",
-        "name": "Termine - Technischer Aufbau",
         "description": "Erklärt wie die Termine technisch von NextCloud über WordPress bis zu PDF, ICS und Home Assistant fließen.",
-        "category": "service"
+        "@id": "urn:uuid:8bf942d2-ab9b-4ff6-875c-8c33b731d0aa",
+        "title": "Termine - Technischer Aufbau",
+        "type": "service"
       }
     },
     {
       "@type": "ListItem",
-      "position": 6,
       "item": {
-        "@type": "WebPage",
         "url": "https://share.erfindergeist.org/",
-        "name": "Share Server",
         "description": "Zentraler Asset-Server für Logos, QR-Codes, PDFs und gemeinsam genutzte Bibliotheken.",
-        "category": "service"
+        "@id": "urn:uuid:b880da69-2104-40e9-b2d5-bd9673044011",
+        "title": "Share Server",
+        "type": "service"
       }
     },
     {
       "@type": "ListItem",
-      "position": 7,
       "item": {
-        "@type": "WebPage",
         "url": "https://presentations.erfindergeist.org/",
-        "name": "Präsentationen",
         "description": "Übersicht aller interaktiven Präsentationen des Erfindergeist Jülich e.V.",
-        "category": "service"
+        "@id": "urn:uuid:80bd3815-2679-4471-8f58-b1f2232728f6",
+        "title": "Präsentationen",
+        "type": "service"
       }
     },
     {
       "@type": "ListItem",
-      "position": 8,
       "item": {
-        "@type": "WebPage",
         "url": "https://docs.erfindergeist.org/",
-        "name": "Dokumentation",
         "description": "Interne Dokumentation zu Systemen, Prozessen und Infrastruktur des Vereins.",
-        "category": "service"
+        "@id": "urn:uuid:26298938-dc9a-4add-a1aa-a2692344d2a4",
+        "title": "Dokumentation",
+        "type": "service"
       }
     },
     {
       "@type": "ListItem",
-      "position": 9,
       "item": {
-        "@type": "WebPage",
         "url": "https://linktree.erfindergeist.org/",
-        "name": "Linktree",
         "description": "Alle wichtigen Links des Erfindergeist Jülich e.V. auf einen Blick.",
-        "category": "service"
+        "@id": "urn:uuid:1ed12589-96ce-4291-80b5-7539c5760b64",
+        "title": "Linktree",
+        "type": "service"
       }
     },
     {
       "@type": "ListItem",
-      "position": 10,
       "item": {
-        "@type": "WebPage",
         "url": "https://www.instagram.com/erfindergeistjuelich/",
-        "name": "Instagram",
         "description": "Folge uns auf Instagram für Einblicke in Projekte, Veranstaltungen und den Vereinsalltag.",
-        "category": "social"
+        "@id": "urn:uuid:cf8e00e0-9d0b-40ac-bc0a-4eb70acce9cd",
+        "title": "Instagram",
+        "type": "social"
       }
     },
     {
       "@type": "ListItem",
-      "position": 11,
       "item": {
-        "@type": "WebPage",
         "url": "https://social.erfindergeist.org/@verein",
-        "name": "Mastodon",
         "description": "Folge uns im Fediverse auf unserer eigenen Mastodon-Instanz.",
-        "category": "social"
+        "@id": "urn:uuid:5eceb9bc-ef86-439d-a47c-f416498d9b5b",
+        "title": "Mastodon",
+        "type": "social"
       }
     },
     {
       "@type": "ListItem",
-      "position": 12,
       "item": {
-        "@type": "WebPage",
         "url": "https://www.linkedin.com/company/erfindergeist-j%C3%BClich-e-v/",
-        "name": "LinkedIn",
         "description": "Erfindergeist Jülich e.V. auf LinkedIn - Neuigkeiten und Vereinsinfos.",
-        "category": "social"
+        "@id": "urn:uuid:818cd545-b2a2-41db-9436-f4ff0e04fb45",
+        "title": "LinkedIn",
+        "type": "social"
       }
     },
     {
       "@type": "ListItem",
-      "position": 13,
       "item": {
-        "@type": "WebPage",
         "url": "https://www.facebook.com/erfindergeistjuelich",
-        "name": "Facebook",
         "description": "Erfindergeist Jülich e.V. auf Facebook - Veranstaltungen und Community.",
-        "category": "social"
+        "@id": "urn:uuid:6bcb3594-b6af-4748-a52b-f79306d8ca5e",
+        "title": "Facebook",
+        "type": "social"
       }
     },
     {
       "@type": "ListItem",
-      "position": 14,
       "item": {
-        "@type": "SoftwareSourceCode",
         "url": "https://github.com/ErfindergeistJuelichOfficial",
-        "name": "GitHub Organisation",
         "description": "Alle Open-Source-Projekte des Erfindergeist Jülich e.V. auf GitHub.",
-        "category": "github"
+        "@id": "urn:uuid:87433912-6488-402e-bcdf-072dffdf0044",
+        "title": "GitHub Organisation",
+        "type": "github"
       }
     },
     {
       "@type": "ListItem",
-      "position": 15,
       "item": {
-        "@type": "SoftwareSourceCode",
         "url": "https://github.com/ErfindergeistJuelichOfficial/calendar-wp-plugin",
-        "name": "GitHub - WordPress Plugin",
         "description": "Quellcode des WordPress-Plugins zur Bereitstellung der Termin-REST-API.",
-        "category": "github"
+        "@id": "urn:uuid:a60a7701-3860-44cf-8911-ad8f6e55f93a",
+        "title": "GitHub - WordPress Plugin",
+        "type": "github"
       }
     },
     {
       "@type": "ListItem",
-      "position": 16,
       "item": {
-        "@type": "SoftwareSourceCode",
         "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-termine",
-        "name": "GitHub - pdf-termine",
         "description": "GitHub Actions Workflow der automatisch PDF-Terminübersichten aus der API generiert.",
-        "category": "github"
+        "@id": "urn:uuid:ae01e03e-6028-4e27-bb47-b235ea69a9dc",
+        "title": "GitHub - pdf-termine",
+        "type": "github"
       }
     },
     {
       "@type": "ListItem",
-      "position": 17,
       "item": {
-        "@type": "EntryPoint",
         "url": "https://erfindergeist.org/wp-json/erfindergeist/v2/events",
-        "name": "API - /events",
         "description": "REST-Endpunkt: Alle kommenden Termine als JSON. Offen für eigene Projekte.",
-        "category": "api",
         "httpMethod": "GET",
-        "encodingType": "application/json"
+        "encodingType": "application/json",
+        "@id": "urn:uuid:1b77b013-7058-4b7e-9e99-c9847ef8709c",
+        "title": "API - /events",
+        "type": "api"
       }
     },
     {
       "@type": "ListItem",
-      "position": 18,
       "item": {
-        "@type": "EntryPoint",
         "url": "https://erfindergeist.org/wp-json/erfindergeist/v2/ics",
-        "name": "API - /ics",
         "description": "ICS-Kalender-Feed zum Abonnieren in Apple Kalender, Google Calendar, Outlook u.v.m.",
-        "category": "api",
         "httpMethod": "GET",
-        "encodingType": "text/calendar"
+        "encodingType": "text/calendar",
+        "@id": "urn:uuid:531cce13-6f83-4ee6-96ff-502e0730472d",
+        "title": "API - /ics",
+        "type": "api"
       }
     },
     {
       "@type": "ListItem",
-      "position": 19,
       "item": {
-        "@type": "EntryPoint",
         "url": "https://erfindergeist.org/wp-json/erfindergeist/v2/tomorrow",
-        "name": "API - /tomorrow",
         "description": "REST-Endpunkt: Nur die Termine von morgen als JSON. Ideal für Smart-Home-Automationen.",
-        "category": "api",
         "httpMethod": "GET",
-        "encodingType": "application/json"
+        "encodingType": "application/json",
+        "@id": "urn:uuid:964327d2-c6f3-4f90-8271-9269164b1276",
+        "title": "API - /tomorrow",
+        "type": "api"
       }
     },
     {
       "@type": "ListItem",
-      "position": 20,
       "item": {
-        "@type": "WebPage",
         "url": "http://konto.erfindergeist.org/",
-        "name": "Bankverbindung",
         "description": "Direkte Weiterleitung zu den Bankdaten für Überweisungen an den Verein.",
-        "category": "sponsoring"
+        "@id": "urn:uuid:7d986f74-edca-49f7-921d-ac3f81fe2ca4",
+        "title": "Bankverbindung",
+        "type": "sponsoring"
       }
     },
     {
       "@type": "ListItem",
-      "position": 21,
       "item": {
-        "@type": "WebPage",
         "url": "http://paypal.erfindergeist.org/",
-        "name": "Spende via PayPal",
         "description": "Schnell und unkompliziert per PayPal an den Erfindergeist Jülich e.V. spenden.",
-        "category": "sponsoring"
+        "@id": "urn:uuid:c401c3b1-7afb-4af1-8e1c-7e3861cb15c3",
+        "title": "Spende via PayPal",
+        "type": "sponsoring"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:09500dda-2080-4a8a-954e-1dfc372ec954",
+        "title": "maker-faire.de",
+        "url": "https://maker-faire.de/makerspaces/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:6c7378ec-927e-46b2-8c1e-57e2f1275a9c",
+        "title": "ZEW",
+        "url": "https://www.zew-entsorgung.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:0cb2170a-3a78-4be7-b46a-71e18d99a2c8",
+        "title": "Repair Café Seite",
+        "url": "https://erfindergeist.org/angebote/repaircafe/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:5dc7c388-0878-4222-af93-4dc1fdd19f01",
+        "title": "",
+        "url": "https://cloud.erfindergeist.org/apps/files/files/31962?dir=/Mitglieder/Mitgliederversammlung/2026",
+        "type": "cloud"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:56d438e4-3410-435a-99b7-e7bc654354bd",
+        "title": "",
+        "url": "https://erfindergeist.org/2026/03/17/rueckblick-mitgliederversammlung-2026/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:9df89abc-7ef9-45ea-8b68-38df3cfac540",
+        "title": "taschenstation.de",
+        "url": "https://taschenstation.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:42d6de1c-9fbf-40f2-8595-3baae3aab91f",
+        "title": "Verbraucherzentrale NRW",
+        "url": "https://www.mehrwertrevier.nrw/mitmach-kompass?kreis=5&city=J%C3%BClich&tags=4",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:34e599ac-c552-4310-8125-6af2a4feece0",
+        "title": "heimat-info.de",
+        "url": "https://www.heimat-info.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:d40351e7-ffc5-4ce8-9f5c-8066e2662598",
+        "title": "unbegrenzttv",
+        "url": "https://www.twitch.tv/unbegrenzttv",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:58aa54b9-b612-438a-b16b-f2c53cd2989f",
+        "title": "Indeland",
+        "url": "https://indeland.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:c59ccf41-f3a3-4a76-ab11-4a1bc9145f37",
+        "title": "Tomorrow",
+        "url": "https://www.tomorrow-derfilm.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:27bfdb6d-e16a-4794-88c8-acc00a01ff48",
+        "title": "Heimatpreis",
+        "url": "https://www.juelich.de/heimatpreis",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:9932535e-a7ff-4cdc-ba0e-0f946d6b3f8a",
+        "title": "Mobilitätstag",
+        "url": "https://erfindergeist.org/mobilitaetstag",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:e7049249-805b-41fa-9ac5-2e7ac7259583",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2025/04/21/podcast-workshop/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:19e9c0fe-cd6f-4c5d-a7b6-7e9a0a391eaf",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/DHyJhsyMsHa/",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:8609c704-5b72-4411-b393-2029862a6261",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/DHaV1hPsZ90/",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:7af732e5-bb9b-456f-b68f-f41cfe14f211",
+        "title": "GitHub Projekt",
+        "url": "https://github.com/orgs/ErfindergeistJuelichOfficial/projects/3",
+        "type": "raw"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:0e2a012a-a0be-46d3-8a8e-49cbd45136ec",
+        "title": "Anpacker-App",
+        "url": "https://dueren-juelich.packt-mit-an.de/hilfegesuche/detail/e02523e5-ed3f-11ef-b18f-560507f73e1d",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:fbd6de77-2e6f-4817-abca-0219ef8566ac",
+        "title": "Freiwilligenzentrum Caritas",
+        "url": "https://www.caritasverband-dueren.de/spende-und-engagement/ehrenamt/freiwilligenzentrum/freiwilligenzentrum",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:c20ef9b1-4d02-40d1-82c4-ed1aa4cd0e81",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/DGYITQfq_fx/",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:7b634008-c359-4a7c-91e4-6b3f0ca3255d",
+        "title": "Bericht",
+        "url": "https://erfindergeist.org/2025/01/31/ruckblickmitgliederversammlung2025/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:396e2a1d-2e70-4706-a780-8c1709364334",
+        "title": "Presse",
+        "url": "https://www.herzog-magazin.de/magazin/vereine/erfindungsreich/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:a8ea2475-22a6-4896-89d0-3a8f5842e3ae",
+        "title": "reparatur-initiativen.de",
+        "url": "https://www.reparatur-initiativen.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:c0899808-0e8c-44ad-8bcb-ecb26f16e283",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2024/09/01/nachtrag-repair-cafe-7/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:b557924e-723d-42d5-bb47-3c47896909e3",
+        "title": "Presse",
+        "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/neue-heimat-fuer-bastler-und-kreative/19718836.html",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:0256d7ae-8d21-46a6-9b15-89ac5c018f6d",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/C99kK-5qas8/",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:82be5f2c-554e-43cb-9800-aa9977c6bcb5",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2024/05/26/nachtrag-repair-cafe-5-25-05-2024/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:072c548b-5bc3-4a1a-bca6-f3177d68acc9",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2024/04/18/nachtrag-robotik-workshop-3/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:df9eaff7-ca83-46df-8ae2-ad82da438685",
+        "title": "Aachener Zeitung",
+        "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/wie-man-einen-roboter-am-schnellsten-durchs-labyrinth-schickt/11001689.html",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:8612d60a-8a5f-40d8-a1d8-ea364a347aa1",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2024/03/24/nachtrag-repair-cafe-4-vom-23-03-2024/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:ee0c4a18-b2dd-4e21-bfa4-43f9c74fc8ce",
+        "title": "Vereinsregister Jülich",
+        "url": "https://www.juelich.de/vereinesonstige",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:6ad0cdee-01b2-4dc3-adc7-70c89b3f9d81",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2024/01/27/repair-cafe-3-27-01-2024/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:1710eb65-98a7-4315-9915-8f98b462e653",
+        "title": "offene-werkstaetten.org",
+        "url": "https://www.offene-werkstaetten.org",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:57e03e02-f3c9-4c3c-84bf-4b11d8ed1410",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2023/10/26/zweites-repair-cafe-am-25-november-2023/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:5456a803-092d-42fd-999c-d6cfc1df8c71",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/C0EkgZPKYl5/",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:45c1e1cf-3dbe-4812-8868-e52d5b57c438",
+        "title": "Aachener Zeitung",
+        "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/das-julicher-repair-cafe-bietet-kostenfreie-hilfe-an/4939790.html",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:8e76c202-5e5f-44dc-8b7c-8b1bcf5a1604",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2023/09/18/tag-der-mobilitaet/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:6739a78d-a9be-41ff-8180-ee13b22285a1",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2023/08/20/repaircafe-juelich/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:479248e3-84c9-4f11-8830-e05aad26ee9c",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/Cx7hJaFq7uO/?img_index=1",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:7f67ef19-8667-4bf0-a913-0b4a51384d68",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2022/10/01/1-robotik-workshop-fuer-kids/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:d1ada8f1-576c-4da1-8eee-cdce718275c5",
+        "title": "Instagram",
+        "url": "https://www.instagram.com/p/CjNLJi1qu3C/?img_index=1",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:89eabf86-8ed0-4369-b4e8-6ea06dee0ff5",
+        "title": "Instagram (2)",
+        "url": "https://www.instagram.com/p/CjNYHaTqKHf/",
+        "type": "social"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:1f94dcee-e543-4122-8a42-799dcaa324a7",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2021/12/15/erfindergeist-praesenztreffen/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:75055a1c-1e9b-4193-831c-51cd0b013ffb",
+        "title": "Beitrag",
+        "url": "https://erfindergeist.org/2021/06/01/founding/",
+        "type": "blog"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:3c961a17-0b36-4742-9a44-8131ed587f56",
+        "title": "Aachener Zeitung",
+        "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/ein-ort-an-dem-ideen-realisiert-werden/3956141.html",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
+        "title": "RepairCafé Wiki",
+        "type": "wiki",
+        "description": "Wiki Eintrag des RepairCafés",
+        "@id": "urn:uuid:23e87385-97e7-48af-a6af-2336fc72d764"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine_repaircafe.html",
+        "title": "Github Raw",
+        "type": "github",
+        "@id": "urn:uuid:dca18cb3-e342-4de2-b661-b8f14b5df2b5"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_laufzettel.html",
+        "title": "Github Raw",
+        "type": "github",
+        "@id": "urn:uuid:e960c432-6ce9-4cc1-bbc0-4271e9a66c71"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_haftungsbegrenzung.html",
+        "title": "Github Raw",
+        "type": "github",
+        "@id": "urn:uuid:10372a68-8f54-40d1-8732-9696c74f701b"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://docs.erfindergeist.org/s/wiki/doc/verhaltensregeln-eokwcOmpCE",
+        "title": "Wiki",
+        "type": "wiki",
+        "@id": "urn:uuid:514c4c26-84f7-4d26-9b87-c984f3dc9b74"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/verhaltensregeln.html",
+        "title": "GitHub Raw",
+        "type": "github",
+        "@id": "urn:uuid:7a7937e8-0777-49fb-93d3-92dbfc3b40f1"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:88d19a1f-66de-4a6e-a693-e54c46f7932f",
+        "title": "",
+        "url": "https://docs.erfindergeist.org/s/wiki/doc/haftungsausschluss-wlka6EnP4C",
+        "description": "",
+        "type": "wiki"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/einweisung_werkstatt.html",
+        "title": "GitHub Raw",
+        "type": "github",
+        "@id": "urn:uuid:a0459419-f6b9-4d9f-bb61-1f0c37d3c86c"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:44f23390-4bdd-41b0-ad71-0093cc231360",
+        "title": "",
+        "url": "https://docs.erfindergeist.org/doc/bierdeckel-Oyj8t9mOge",
+        "description": "",
+        "type": "wiki"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:9fab71a2-4c91-42c3-8aa0-5a2610bbfc26",
+        "title": "",
+        "url": "https://github.com/ErfindergeistJuelichOfficial/website/blob/main/share/downloads/Marketing/Bierdeckel/bierdeckel-vorderseite.svg",
+        "description": "",
+        "type": "raw"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:5705b6a4-73fd-4541-a7e4-890cc8c403ad",
+        "title": "",
+        "url": "https://github.com/ErfindergeistJuelichOfficial/website/blob/main/share/downloads/Marketing/Bierdeckel/bierdeckel-rueckseite.svg",
+        "description": "",
+        "type": "raw"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:1a5eb7a4-6a34-4692-8f12-2afd8ba1ec28",
+        "title": "",
+        "url": "https://github.com/ErfindergeistJuelichOfficial/website/blob/main/share/downloads/Marketing/Bierdeckel/bierdeckel2-rueckseite.svg",
+        "description": "",
+        "type": "raw"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:8735867c-3139-4237-9615-e615e352ba79",
+        "title": "",
+        "url": "https://docs.erfindergeist.org/s/wiki/doc/compliance-XZy2u2yzKV",
+        "description": "",
+        "type": "wiki"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:1ed9f2a7-d96c-4e4b-a27a-716bfb6b3497",
+        "title": "",
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/datenschutz.html",
+        "description": "",
+        "type": "raw"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:e618ec81-7c49-4540-8cc5-5b671b3da23c",
+        "title": "",
+        "url": "https://docs.erfindergeist.org/s/wiki/doc/vereinssatzung-mYcVAwWpu4",
+        "description": "",
+        "type": "wiki"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:2a3a78f2-ec1e-4a22-88ee-faf5d5575821",
+        "title": "",
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/vereinssatzung.html",
+        "description": "",
+        "type": "raw"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:9b6507a7-5f44-46f3-aea5-557704ed2a67",
+        "title": "",
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine.html",
+        "description": "",
+        "type": "raw"
       }
     }
   ]

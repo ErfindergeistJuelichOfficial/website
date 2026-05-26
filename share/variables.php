@@ -22,6 +22,20 @@ const EG_ICON_MAP = [
   'jpeg' => 'image',
 ];
 
+/** Bootstrap button modifier class per link type (used in download link buttons). */
+const EG_LINK_BUTTON_CLASS = [
+  'wiki'      => 'btn-outline-primary',
+  'raw'       => 'btn-outline-secondary',
+  'cloud'     => 'btn-outline-success',
+  'blog'      => 'btn-outline-beitrag',
+  'github'    => 'btn-outline-dark',
+  'website'   => 'btn-outline-primary',
+  'service'   => 'btn-outline-secondary',
+  'social'    => 'btn-outline-secondary',
+  'api'       => 'btn-outline-dark',
+  'extern'    => 'btn-outline-secondary',
+];
+
 /** CSS modifier class per file extension (drives .file-badge coloring). */
 const EG_CLASS_MAP = [
   'pdf'  => 'pdf',   'docx' => 'docx',

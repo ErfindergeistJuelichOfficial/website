@@ -775,14 +775,6 @@ def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: li
         meta['description'] = config['description']
     if config.get('tags'):
         meta['keywords'] = config['tags']
-    if config.get('wiki-url'):
-        meta['wiki-url'] = config['wiki-url']
-    if config.get('raw-url'):
-        meta['raw-url'] = config['raw-url']
-    if config.get('cloud-url'):
-        meta['cloud-url'] = config['cloud-url']
-    if config.get('blog-url'):
-        meta['blog-url'] = config['blog-url']
     if config.get('chronicle_id'):
         meta['chronicleId'] = config['chronicle_id']
 
@@ -812,14 +804,6 @@ def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Option
         summary['description'] = meta['description']
     if meta.get('keywords'):
         summary['keywords'] = meta['keywords']
-    if meta.get('wiki-url'):
-        summary['wiki-url'] = meta['wiki-url']
-    if meta.get('raw-url'):
-        summary['raw-url'] = meta['raw-url']
-    if meta.get('cloud-url'):
-        summary['cloud-url'] = meta['cloud-url']
-    if meta.get('blog-url'):
-        summary['blog-url'] = meta['blog-url']
     if meta.get('chronicleId'):
         summary['chronicleId'] = meta['chronicleId']
     thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
@@ -887,10 +871,6 @@ def detect_config_changes(config: dict, output_album: Path) -> list[str]:
         ('date',       norm(meta.get('dateCreated')), norm(config.get('date'))),
         ('description', norm(meta.get('description')), norm(config.get('description'))),
         ('tags',       norm(meta.get('keywords')),    norm(config.get('tags'))),
-        ('wiki-url',   norm(meta.get('wiki-url')),    norm(config.get('wiki-url'))),
-        ('raw-url',    norm(meta.get('raw-url')),     norm(config.get('raw-url'))),
-        ('cloud-url',  norm(meta.get('cloud-url')),   norm(config.get('cloud-url'))),
-        ('blog-url',   norm(meta.get('blog-url')),    norm(config.get('blog-url'))),
     ]
     return [f'{label}: {old!r} -> {new!r}' for label, old, new in checks if old != new]
 
@@ -955,14 +935,6 @@ def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] =
                 meta['description'] = _cfg['description']
             if _cfg.get('tags'):
                 meta['keywords'] = _cfg['tags']
-            if _cfg.get('wiki-url'):
-                meta['wiki-url'] = _cfg['wiki-url']
-            if _cfg.get('raw-url'):
-                meta['raw-url'] = _cfg['raw-url']
-            if _cfg.get('cloud-url'):
-                meta['cloud-url'] = _cfg['cloud-url']
-            if _cfg.get('blog-url'):
-                meta['blog-url'] = _cfg['blog-url']
             preview_thumb = resolve_preview_thumbnail(_cfg, source_album, parts)
             return album_summary(meta, _rel, parts, preview_thumb)
 

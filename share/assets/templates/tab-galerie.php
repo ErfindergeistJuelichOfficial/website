@@ -14,7 +14,8 @@ $has_albums = !empty($gallery_data['hasPart']);
     </div>
   <?php else : ?>
     <script>var GALLERY_DATA = <?= $gallery_json ?>;
-var CHRONICLE_DATA = <?= json_encode($chronicle_data ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
+var CHRONICLE_DATA = <?= json_encode($chronicle_data ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+var LINKS_DATA = <?= json_encode($links_data ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
 
     <nav aria-label="Galerie Navigation" class="mb-3">
       <ol class="breadcrumb mb-0" id="gallery-breadcrumb"></ol>

@@ -1,0 +1,15 @@
+services:
+  gui:
+    image: python:3.11-slim
+    command: python /app/server.py
+    ports:
+      - "8082:8082"
+    volumes:
+      - ../share/config:/config:z
+      - ${ALBUMS_DIR:-/dev/null}:/albums:z
+      - ./server.py:/app/server.py:ro,z
+      - ./index.html:/app/index.html:ro,z
+      - ./style.css:/app/style.css:ro,z
+      - ./app.js:/app/app.js:ro,z
+      - ../share/downloads:/downloads:z
+    restart: unless-stopped

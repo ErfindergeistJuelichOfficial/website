@@ -189,25 +189,21 @@ It is JSON-LD and must have `@context`, `@type` (`DataCatalog`), and `@id`.
   "hasPart": [
     {
       "@type": "MediaObject",
-      "name": "bierdeckel-vorderseite.svg",
+      "title": "bierdeckel-vorderseite.svg",
       "description": "Short file description shown as a subtitle in the table.",
-      "wiki-url": "https://wiki.erfindergeist.org/Bierdeckel",
-      "raw-url": "https://raw.erfindergeist.org/bierdeckel-vorderseite.svg",
-      "cloud-url": "https://cloud.erfindergeist.org/s/abc123",
-      "blog-url": "https://erfindergeist.org/blog/bierdeckel"
+      "link_ids": ["urn:uuid:..."],
+      "tags": ["stammtisch"]
     }
   ]
 }
 ```
 
-| Field | Button label | Style | Description |
-| --- | --- | --- | --- |
-| `hasPart[].name` | - | - | Must match an actual file in the same folder (validation warning if not). |
-| `hasPart[].description` | - | - | Short subtitle shown below the filename in the table. |
-| `hasPart[].wiki-url` | **Wiki** | outline, primary | Link to a wiki page for this file. |
-| `hasPart[].raw-url` | **Raw** | outline, secondary | Link to the raw/source file (e.g. Git, design tool). |
-| `hasPart[].cloud-url` | **Cloud** | outline, green | Link to a cloud storage folder or share (e.g. Nextcloud). |
-| `hasPart[].blog-url` | **Beitrag** | outline, light | Link to a blog post or article about this file. |
+| Field | Description |
+| --- | --- |
+| `hasPart[].title` | Filename — must match an actual file in the same folder (validation warning if not). |
+| `hasPart[].description` | Short subtitle shown below the filename in the table. |
+| `hasPart[].link_ids` | Array of link GUIDs from `links.json`. Rendered as buttons using `EG_LINK_BUTTON_CLASS` per link type. |
+| `hasPart[].tags` | Array of tag keys from `tags.json` (without `#`). |
 
 - `_meta.json` itself never appears as a download entry.
 - Validation errors are shown as an alert at the bottom of the Downloads tab.

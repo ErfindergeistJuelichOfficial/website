@@ -14,15 +14,10 @@
       "@type": "Event",
       "@id": "urn:uuid:3f8c2d1a-7e4b-4a9f-8c3e-1d5b6a2f9e7c",
       "title": "Repair Café",
-      "description": "Repair Café in der Erfindergeist Werkstatt. 12 Geräte waren vor Ort.",
       "date": "2026-04-25",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
-      "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "description": "Repair Café in der Erfindergeist Werkstatt. 12 Geräte waren vor Ort.",
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -31,10 +26,11 @@
       "description": "Erster Stammtisch mit acht Mitgliedern in der Werkstatt. Netter Plausch mit allen.",
       "date": "2026-04-24",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["stammtisch"],
+      "tags": [
+        "stammtisch"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -43,10 +39,11 @@
       "description": "Offene Werkstatt: Hilfe beim Lernen vom Löten.",
       "date": "2026-04-21",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -55,10 +52,11 @@
       "description": "Offene Werkstatt.",
       "date": "2026-04-07",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -67,12 +65,16 @@
       "description": "Repair Café Fahrrad Frühjahrs-Check: 24 Reparaturen. Zusammen mit P4F, Pro Rad Jülich, ADFC und ADAC.",
       "date": "2026-03-28",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
-      "collaborators": ["P4F", "Pro Rad Jülich", "ADFC", "ADAC"],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "tags": [
+        "repaircafe"
+      ],
+      "collaborators": [
+        "P4F",
+        "Pro Rad Jülich",
+        "ADFC",
+        "ADAC"
+      ],
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -83,8 +85,7 @@
       "location": "Erfindergeist Werkstatt",
       "tags": [],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -93,11 +94,13 @@
       "description": "Der Verein ist nun auch auf maker-faire.de als Makerspace gelistet.",
       "date": "2026-03-24",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "maker-faire.de", "url": "https://maker-faire.de/makerspaces/", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:09500dda-2080-4a8a-954e-1dfc372ec954"
       ]
     },
     {
@@ -107,10 +110,11 @@
       "description": "Offene Werkstatt.",
       "date": "2026-03-24",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -119,25 +123,27 @@
       "description": "Der Verein ist nun im ZEW Flyer vertreten. Die ZEW versucht alle Repair Cafés in Aachen und Düren zu verbinden. Der Flyer ist auf der Repair Café Seite des Vereins zu finden.",
       "date": "2026-03-19",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "ZEW", "url": "https://www.zew-entsorgung.de/", "type": "extern" },
-        { "title": "Repair Café Seite", "url": "https://erfindergeist.org/angebote/repaircafe/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:6c7378ec-927e-46b2-8c1e-57e2f1275a9c",
+        "urn:uuid:0cb2170a-3a78-4be7-b46a-71e18d99a2c8"
       ]
     },
     {
       "@type": "Event",
       "@id": "urn:uuid:2c7b1a0d-6b3e-4d8c-7f2b-0a4e5d1c8b6f",
       "title": "Mitgliederversammlung 2026",
-      "description": "Mitgliederversammlung 2026. Abstimmung: Erhöhung des Mitgliedsbeitrags ab 2027 auf 15 Euro.",
       "date": "2026-03-15",
-      "location": "",
-      "tags": ["mitgliederversammlung"],
-      "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "description": "Mitgliederversammlung 2026. Abstimmung: Erhöhung des Mitgliedsbeitrags ab 2027 auf 15 Euro.",
+      "consent_collected": true,
+      "link_ids": [
+        "urn:uuid:5dc7c388-0878-4222-af93-4dc1fdd19f01",
+        "urn:uuid:56d438e4-3410-435a-99b7-e7bc654354bd"
+      ]
     },
     {
       "@type": "Event",
@@ -146,11 +152,13 @@
       "description": "Der Verein macht mit bei taschenstation.de als Stations-Pat:in und druckt für die Stadtbücherei eine Reuse Station.",
       "date": "2026-03-10",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "taschenstation.de", "url": "https://taschenstation.de/", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:9df89abc-7ef9-45ea-8b68-38df3cfac540"
       ]
     },
     {
@@ -160,10 +168,11 @@
       "description": "Offene Werkstatt.",
       "date": "2026-03-10",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -172,10 +181,11 @@
       "description": "Repair Café #22 in der Stadtbücherei. CD als Playstation 2 gerettet.",
       "date": "2026-02-28",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -184,10 +194,11 @@
       "description": "Offene Werkstatt.",
       "date": "2026-02-24",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -196,11 +207,13 @@
       "description": "Der Verein ist nun in der Verbraucherzentrale NRW (Mehrwertrevier Mitmach-Kompass) eingetragen.",
       "date": "2026-02-17",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Verbraucherzentrale NRW", "url": "https://www.mehrwertrevier.nrw/mitmach-kompass?kreis=5&city=J%C3%BClich&tags=4", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:42d6de1c-9fbf-40f2-8595-3baae3aab91f"
       ]
     },
     {
@@ -210,10 +223,11 @@
       "description": "Offene Werkstatt: Neue Mitglieder treffen, 3D-Druck.",
       "date": "2026-02-10",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -222,10 +236,11 @@
       "description": "Repair Café #21.",
       "date": "2026-01-31",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -234,10 +249,11 @@
       "description": "Offene Werkstatt.",
       "date": "2026-01-27",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -246,11 +262,13 @@
       "description": "Der Verein ist nun auch in der heimat-info.de App zu finden. Dank an die Stadt Jülich für das Umsetzen.",
       "date": "2026-01-15",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "heimat-info.de", "url": "https://www.heimat-info.de/", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:34e599ac-c552-4310-8125-6af2a4feece0"
       ]
     },
     {
@@ -260,11 +278,13 @@
       "description": "Offene Werkstatt: Besuch von unbegrenzttv, T-Shirt-Folien-Druck für Kindergeburtstag, Vogelhaus aus Holz herstellen.",
       "date": "2026-01-13",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "unbegrenzttv", "url": "https://www.twitch.tv/unbegrenzttv", "type": "social" }
+      "link_ids": [
+        "urn:uuid:d40351e7-ffc5-4ce8-9f5c-8066e2662598"
       ]
     },
     {
@@ -274,10 +294,11 @@
       "description": "Offene Werkstatt: Workstation Upgrade - neues Mainboard, CPU und RAM. Sublimationsdrucker getestet.",
       "date": "2025-12-30",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -286,12 +307,14 @@
       "description": "Indeland im Gespräch im Kuba Jülich. Gemeinsames Schauen des Films Tomorrow und anschließende Podiumsdiskussion.",
       "date": "2025-12-17",
       "location": "Kuba Jülich",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Indeland", "url": "https://indeland.de/", "type": "extern" },
-        { "title": "Tomorrow", "url": "https://www.tomorrow-derfilm.de/", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:58aa54b9-b612-438a-b16b-f2c53cd2989f",
+        "urn:uuid:c59ccf41-f3a3-4a76-ab11-4a1bc9145f37"
       ]
     },
     {
@@ -301,10 +324,11 @@
       "description": "Offene Werkstatt. TowTrees Fräse von einem Mitglied einrichten.",
       "date": "2025-12-16",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -313,11 +337,13 @@
       "description": "Heimatpreis-Verleihung im Neuen Rathaus Jülich. Der Verein hat den dritten Platz erreicht.",
       "date": "2025-12-15",
       "location": "Neues Rathaus Jülich",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Heimatpreis", "url": "https://www.juelich.de/heimatpreis", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:27bfdb6d-e16a-4794-88c8-acc00a01ff48"
       ]
     },
     {
@@ -327,10 +353,11 @@
       "description": "Offene Werkstatt, Sondertermin. Einige Mitglieder wollten sich eine Fräse anschauen und diese zum Laufen bringen.",
       "date": "2025-12-09",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -339,10 +366,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-12-02",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -351,12 +379,11 @@
       "description": "Repair Café #20 in der Stadtbücherei Jülich. 16 Geräte.",
       "date": "2025-11-29",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -365,10 +392,11 @@
       "description": "Offene Werkstatt: Anfrage zur Öffnung. Absprachen interne IT. Willi stellt Demo CNC-Fräse vor. Vorstandstreffen.",
       "date": "2025-11-25",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -377,10 +405,11 @@
       "description": "Offene Werkstatt. Austausch über CNC, Foliendruck und Heißpresse.",
       "date": "2025-11-18",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -389,10 +418,11 @@
       "description": "End of 10: Umstieg auf Linux - Installationshilfe. 6 Besucher.",
       "date": "2025-11-15",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["workshop"],
+      "tags": [
+        "workshop"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -401,10 +431,11 @@
       "description": "Plenum Q4 2025: Budgetplanung 2026, Projekt Keller-Raum initialisiert.",
       "date": "2025-11-08",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["plenum"],
+      "tags": [
+        "plenum"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -413,12 +444,11 @@
       "description": "End of 10: Umstieg auf Linux - Infoveranstaltung. 12 Besucher.",
       "date": "2025-11-08",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["workshop"],
+      "tags": [
+        "workshop"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -427,10 +457,11 @@
       "description": "Offene Werkstatt. Herstellung eines japanischen Teeservierwagens.",
       "date": "2025-11-04",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -439,10 +470,11 @@
       "description": "Repair Café #19 in der Werkstatt. 7 Geräte.",
       "date": "2025-10-22",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -451,10 +483,11 @@
       "description": "Offene Werkstatt: Basteln eines Kindertisches. Weiterbau am wetterfesten LED-Racer, Folien schneiden.",
       "date": "2025-10-21",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -463,10 +496,13 @@
       "description": "Handysammlung-Abgabe. Dank an die AWA-GmbH für die Chance. 111 Handys gesammelt und abgegeben. 50 Vereine nahmen Teil, gesamt 3407 Handys gesammelt.",
       "date": "2025-10-14",
       "location": "",
-      "tags": ["meilenstein"],
-      "collaborators": ["AWA-GmbH"],
-      "consent_collected": false,
-      "links": []
+      "tags": [
+        "meilenstein"
+      ],
+      "collaborators": [
+        "AWA-GmbH"
+      ],
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -475,10 +511,11 @@
       "description": "Offene Werkstatt: Planung und Umsetzung des wetterfesten LED-Racers.",
       "date": "2025-10-10",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -487,10 +524,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-10-07",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -499,10 +537,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-09-23",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -511,11 +550,13 @@
       "description": "Mobilitätstag Stadt Jülich - Teilnahme als Aussteller.",
       "date": "2025-09-21",
       "location": "Jülich",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Mobilitätstag", "url": "https://erfindergeist.org/mobilitaetstag", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:9932535e-a7ff-4cdc-ba0e-0f946d6b3f8a"
       ]
     },
     {
@@ -525,10 +566,11 @@
       "description": "Plenum: Planung der Repair Cafés für 2026.",
       "date": "2025-09-13",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["plenum"],
+      "tags": [
+        "plenum"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -537,10 +579,11 @@
       "description": "Aufbau eines Bücherschranks und einer RadService Station vor dem AWO-Gebäude.",
       "date": "2025-09-13",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -549,10 +592,11 @@
       "description": "Offene Werkstatt: Überlegung zum Kauf einer Selbstbau-Fräse.",
       "date": "2025-09-09",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -561,10 +605,11 @@
       "description": "Repair Café #18 in der Stadtbücherei Jülich. 11 Geräte.",
       "date": "2025-08-30",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -573,10 +618,11 @@
       "description": "Offene Werkstatt: Vorbereitung für den Mobilitätstag 2025.",
       "date": "2025-08-26",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -585,10 +631,11 @@
       "description": "Neue Postanschrift: Erfindergeist Jülich e.V., Bauhofstraße 18, 52428 Jülich. Neue Telefonnummer: 02461/6210862.",
       "date": "2025-08-12",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -597,10 +644,11 @@
       "description": "Offene Werkstatt: 2 Gäste, 5 Mitglieder. Stempel mit 3D-Drucker hergestellt. Private Projekte 3D-gedruckt. Laser-Gravur privat. Sägen und Schleifen.",
       "date": "2025-08-12",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -609,10 +657,11 @@
       "description": "Auswärtshilfe beim neuen Repair Café in Langerwehe. 10 Personen konnte geholfen werden.",
       "date": "2025-08-09",
       "location": "Langerwehe",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -621,10 +670,11 @@
       "description": "Offene Werkstatt: Gemeinsamer Aufbau einer Prusa Core One.",
       "date": "2025-07-29",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -633,10 +683,11 @@
       "description": "Repair Café #17 - Sommerloch in der Werkstatt. 6 Geräte.",
       "date": "2025-07-23",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -645,10 +696,11 @@
       "description": "Offene Werkstatt: Besuchern 3D-Druck vermittelt.",
       "date": "2025-07-15",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -657,10 +709,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-07-01",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -669,10 +722,11 @@
       "description": "Repair Café #16 in der Werkstatt. 9 Geräte. Highlights: E-Gitarre, Abbruchhammer. Raumtemperatur: 28 Grad.",
       "date": "2025-06-25",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -681,10 +735,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-06-17",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -693,10 +748,11 @@
       "description": "Offene Werkstatt: Willi stellt Laser-gecuttete Werke aus seiner Werkstatt vor.",
       "date": "2025-06-03",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -705,12 +761,11 @@
       "description": "Repair Café #15 in der Stadtbücherei. 21 Geräte.",
       "date": "2025-05-31",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -719,10 +774,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-05-20",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -731,10 +787,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-05-06",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -743,12 +800,13 @@
       "description": "Podcast-Workshop.",
       "date": "2025-04-26",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["workshop"],
+      "tags": [
+        "workshop"
+      ],
       "collaborators": [],
       "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" },
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2025/04/21/podcast-workshop/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:e7049249-805b-41fa-9ac5-2e7ac7259583"
       ]
     },
     {
@@ -758,12 +816,11 @@
       "description": "Repair Café #14.",
       "date": "2025-04-23",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -772,10 +829,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-04-16",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -784,12 +842,11 @@
       "description": "Repair Café F1 (Fahrrad-Check): 20 Fahrräder und eine externe Festplatte.",
       "date": "2025-04-05",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" }
-      ]
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -798,27 +855,28 @@
       "description": "Kreativ Tag #4: Bau von Nisthilfen für Insekten, Vögel und Fledermäuse.",
       "date": "2025-03-29",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["kreativtag"],
+      "tags": [
+        "kreativtag"
+      ],
       "collaborators": [],
       "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" },
-        { "title": "Instagram", "url": "https://www.instagram.com/p/DHyJhsyMsHa/", "type": "social" }
+      "link_ids": [
+        "urn:uuid:19e9c0fe-cd6f-4c5d-a7b6-7e9a0a391eaf"
       ]
     },
     {
       "@type": "Event",
       "@id": "urn:uuid:6c1a5f4e-0b7a-4d2d-1f6c-4a8a9f5e2d0b",
       "title": "Repair Café #13",
-      "description": "Repair Café #13.",
       "date": "2025-03-19",
-      "location": "",
-      "tags": ["repaircafe"],
-      "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" },
-        { "title": "Instagram", "url": "https://www.instagram.com/p/DHaV1hPsZ90/", "type": "social" }
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "repaircafe"
+      ],
+      "description": "Repair Café #13.",
+      "link_ids": [
+        "urn:uuid:8609c704-5b72-4411-b393-2029862a6261"
       ]
     },
     {
@@ -828,11 +886,13 @@
       "description": "Team-Treffen zur Weiterentwicklung der Vereinswebseite. GitHub-Projekt gestartet.",
       "date": "2025-03-14",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "GitHub Projekt", "url": "https://github.com/orgs/ErfindergeistJuelichOfficial/projects/3", "type": "raw" }
+      "link_ids": [
+        "urn:uuid:7af732e5-bb9b-456f-b68f-f41cfe14f211"
       ]
     },
     {
@@ -842,10 +902,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-03-10",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -854,12 +915,14 @@
       "description": "Der Verein ist nun bei der Anpacker-App und im Freiwilligenzentrum der Caritas zu finden.",
       "date": "2025-02-24",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Anpacker-App", "url": "https://dueren-juelich.packt-mit-an.de/hilfegesuche/detail/e02523e5-ed3f-11ef-b18f-560507f73e1d", "type": "extern" },
-        { "title": "Freiwilligenzentrum Caritas", "url": "https://www.caritasverband-dueren.de/spende-und-engagement/ehrenamt/freiwilligenzentrum/freiwilligenzentrum", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:0e2a012a-a0be-46d3-8a8e-49cbd45136ec",
+        "urn:uuid:fbd6de77-2e6f-4817-abca-0219ef8566ac"
       ]
     },
     {
@@ -869,12 +932,13 @@
       "description": "Repair Café #12 in der Stadtbücherei Jülich. 16 Geräte. 131,16 Euro Spenden.",
       "date": "2025-02-22",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
       "consent_collected": true,
-      "links": [
-        { "title": "Galerie", "url": "", "type": "galerie" },
-        { "title": "Instagram", "url": "https://www.instagram.com/p/DGYITQfq_fx/", "type": "social" }
+      "link_ids": [
+        "urn:uuid:c20ef9b1-4d02-40d1-82c4-ed1aa4cd0e81"
       ]
     },
     {
@@ -884,10 +948,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-02-19",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -896,10 +961,11 @@
       "description": "Offene Werkstatt.",
       "date": "2025-02-03",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -908,12 +974,14 @@
       "description": "Mitgliederversammlung 2025. Gewählter Vorstand: 1. Vorsitzender Lars Eschweiler, 2. Vorsitzender Johannes Rothe, 1. Rechnungsführer Fabian Pelikan, 2. Rechnungsführer Karim Al Montassir.",
       "date": "2025-01-29",
       "location": "",
-      "tags": ["mitgliederversammlung"],
+      "tags": [
+        "mitgliederversammlung"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Bericht", "url": "https://erfindergeist.org/2025/01/31/ruckblickmitgliederversammlung2025/", "type": "blog" },
-        { "title": "Presse", "url": "https://www.herzog-magazin.de/magazin/vereine/erfindungsreich/", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:7b634008-c359-4a7c-91e4-6b3f0ca3255d",
+        "urn:uuid:396e2a1d-2e70-4706-a780-8c1709364334"
       ]
     },
     {
@@ -923,12 +991,11 @@
       "description": "Repair Café #11: 5 Reparaturen und 34 Euro Spenden.",
       "date": "2025-01-22",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "", "type": "blog" }
-      ]
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -937,11 +1004,13 @@
       "description": "Der Verein erhält 3000 Euro Förderung von reparatur-initiativen.de.",
       "date": "2025-01-09",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "reparatur-initiativen.de", "url": "https://www.reparatur-initiativen.de/", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:a8ea2475-22a6-4896-89d0-3a8f5842e3ae"
       ]
     },
     {
@@ -951,10 +1020,11 @@
       "description": "Treffen mit dem Bürgermeister der Stadt Jülich.",
       "date": "2025-01-08",
       "location": "Jülich",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -963,10 +1033,11 @@
       "description": "Erste Offene Werkstatt im Jahr 2025.",
       "date": "2025-01-02",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -975,10 +1046,11 @@
       "description": "Jahres-End-Plenum 2024.",
       "date": "2024-12-18",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["plenum"],
+      "tags": [
+        "plenum"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -987,12 +1059,11 @@
       "description": "Kreativ-Tag: Weihnachtsbasteln.",
       "date": "2024-12-07",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["kreativtag"],
+      "tags": [
+        "kreativtag"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": [
-        { "title": "Beitrag", "url": "", "type": "blog" }
-      ]
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -1001,10 +1072,11 @@
       "description": "Repair Café #10: Trotz vieler Krankmeldungen 10 Reparaturen und 70 Euro Spenden.",
       "date": "2024-11-23",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1013,10 +1085,11 @@
       "description": "Robo-Workshop #4: 7 Kinder im Alter von 8 bis 12 Jahren das Programmieren von Robotern vermittelt.",
       "date": "2024-11-16",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["workshop"],
+      "tags": [
+        "workshop"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": []
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -1025,10 +1098,11 @@
       "description": "Kreativ-Tag #2: Laser-Gravur.",
       "date": "2024-11-09",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["kreativtag"],
+      "tags": [
+        "kreativtag"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1037,10 +1111,11 @@
       "description": "Repair Café #9.",
       "date": "2024-10-30",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1049,10 +1124,11 @@
       "description": "Ehrenamtstag der Stadt Jülich - als Aussteller teilgenommen.",
       "date": "2024-10-26",
       "location": "Jülich",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1061,12 +1137,11 @@
       "description": "Kreativ-Tag: KI - Fokus Bildgenerator. Sechs Besucher waren vor Ort.",
       "date": "2024-10-12",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["kreativtag"],
+      "tags": [
+        "kreativtag"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": [
-        { "title": "Angebot", "url": "", "type": "extern" }
-      ]
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1075,10 +1150,11 @@
       "description": "Offene Werkstatt.",
       "date": "2024-10-12",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1087,10 +1163,11 @@
       "description": "Repair Café #8: 12 Geräte, 65 Euro Spenden.",
       "date": "2024-09-28",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1099,10 +1176,11 @@
       "description": "Offene Werkstatt.",
       "date": "2024-09-25",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1111,10 +1189,11 @@
       "description": "Tag der Mobilität in Jülich - Teilnahme als Aussteller.",
       "date": "2024-09-22",
       "location": "Jülich",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1123,11 +1202,13 @@
       "description": "Repair Café #7: Das erste Mal in der Werkstatt im AWO-Gebäude. Trotz heißem Sommerwetter 6 Geräte. 40 Euro Spenden.",
       "date": "2024-08-31",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2024/09/01/nachtrag-repair-cafe-7/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:c0899808-0e8c-44ad-8bcb-ecb26f16e283"
       ]
     },
     {
@@ -1137,10 +1218,11 @@
       "description": "Offene Werkstatt.",
       "date": "2024-08-14",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["offenewerkstatt"],
+      "tags": [
+        "offenewerkstatt"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1149,11 +1231,13 @@
       "description": "Die Werkstatt im AWO-Gebäude (Marie-Juchacz-Weg 2) ist erstmals für alle geöffnet.",
       "date": "2024-07-31",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Presse", "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/neue-heimat-fuer-bastler-und-kreative/19718836.html", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:b557924e-723d-42d5-bb47-3c47896909e3"
       ]
     },
     {
@@ -1163,10 +1247,11 @@
       "description": "Repair Café #6: 12 Geräte, 100 Euro Spenden.",
       "date": "2024-07-27",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1175,11 +1260,13 @@
       "description": "Grillen für alle Mitglieder und Reparateure.",
       "date": "2024-07-27",
       "location": "Erfindergeist Werkstatt",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
       "consent_collected": true,
-      "links": [
-        { "title": "Instagram", "url": "https://www.instagram.com/p/C99kK-5qas8/", "type": "social" }
+      "link_ids": [
+        "urn:uuid:0256d7ae-8d21-46a6-9b15-89ac5c018f6d"
       ]
     },
     {
@@ -1189,10 +1276,11 @@
       "description": "Vereinssatzung-Änderung von März 2024 vom Amtsgericht Düren anerkannt und auf der Webseite aktualisiert. Neue Werkstatt im AWO-Stadt-Jülich-Gebäude (Marie-Juchacz-Weg 2) gefunden.",
       "date": "2024-07-01",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1201,11 +1289,13 @@
       "description": "Repair Café #5: 12 Geräte, 100 Euro Spenden. Neuer Reparateur Milan.",
       "date": "2024-05-25",
       "location": "",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2024/05/26/nachtrag-repair-cafe-5-25-05-2024/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:82be5f2c-554e-43cb-9800-aa9977c6bcb5"
       ]
     },
     {
@@ -1215,12 +1305,16 @@
       "description": "Robotik-Workshop #3: 11 junge Teilnehmer. Die VHS stellte eine Unterkunft bereit.",
       "date": "2024-04-13",
       "location": "VHS Jülich",
-      "tags": ["workshop"],
-      "collaborators": ["VHS Jülich"],
+      "tags": [
+        "workshop"
+      ],
+      "collaborators": [
+        "VHS Jülich"
+      ],
       "consent_collected": true,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2024/04/18/nachtrag-robotik-workshop-3/", "type": "blog" },
-        { "title": "Aachener Zeitung", "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/wie-man-einen-roboter-am-schnellsten-durchs-labyrinth-schickt/11001689.html", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:072c548b-5bc3-4a1a-bca6-f3177d68acc9",
+        "urn:uuid:df9eaff7-ca83-46df-8ae2-ad82da438685"
       ]
     },
     {
@@ -1230,11 +1324,13 @@
       "description": "Repair Café #4: Erneut 11 reparierte Geräte. Durchgeführt im Keller der Bücherei aufgrund des Stadtfestes.",
       "date": "2024-03-23",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2024/03/24/nachtrag-repair-cafe-4-vom-23-03-2024/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:8612d60a-8a5f-40d8-a1d8-ea364a347aa1"
       ]
     },
     {
@@ -1244,10 +1340,11 @@
       "description": "Mitgliederversammlung 2 2024: Wiederholung der Abstimmung über die Satzungsänderung (erste Versammlung vom Amtsgericht abgelehnt wegen Fehler in der Einladung).",
       "date": "2024-03-23",
       "location": "",
-      "tags": ["mitgliederversammlung"],
+      "tags": [
+        "mitgliederversammlung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1256,11 +1353,13 @@
       "description": "Der Verein ist nun im Vereinsregister der Stadt Jülich zu finden.",
       "date": "2024-02-03",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Vereinsregister Jülich", "url": "https://www.juelich.de/vereinesonstige", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:ee0c4a18-b2dd-4e21-bfa4-43f9c74fc8ce"
       ]
     },
     {
@@ -1270,11 +1369,13 @@
       "description": "Repair Café #3: Mit 11 reparierten Geräten und vielen tollen Besuchern ein voller Erfolg.",
       "date": "2024-01-27",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2024/01/27/repair-cafe-3-27-01-2024/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:6ad0cdee-01b2-4dc3-adc7-70c89b3f9d81"
       ]
     },
     {
@@ -1284,10 +1385,11 @@
       "description": "Mitgliederversammlung 2024. 8 Mitglieder. Kassenprüfer 1: Fabian Pelikan, Kassenprüfer 2: Jürgen Pettrak. Ziele 2024: Suche Werkstatt, 8 geplante Veranstaltungen, Werkzeugkauf Repair Café.",
       "date": "2024-01-20",
       "location": "",
-      "tags": ["mitgliederversammlung"],
+      "tags": [
+        "mitgliederversammlung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1296,11 +1398,13 @@
       "description": "Der Verein tritt dem Verbund offener Werkstätten bei. Unterstützung bei der Suche nach Werkstatt-Räumlichkeiten und Haftpflichtversicherung für Veranstaltungen.",
       "date": "2024-01-01",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "offene-werkstaetten.org", "url": "https://www.offene-werkstaetten.org", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:1710eb65-98a7-4315-9915-8f98b462e653"
       ]
     },
     {
@@ -1310,10 +1414,11 @@
       "description": "Jahresrückblick-Seite 2023 wird veröffentlicht. Mitglieder im Verein: 16 (davon ordentlich: 15). Austritt: 1, Eintritt: 1.",
       "date": "2023-12-30",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1322,13 +1427,15 @@
       "description": "Repair Café #2. 4 Mitglieder, 13 Teilnehmer, viele Gäste. Die Stadtbücherei stellte erneut Räumlichkeiten zur Verfügung. Neben reparierten Geräten interessierten sich viele Besucher für den Verein.",
       "date": "2023-11-25",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
+      "tags": [
+        "repaircafe"
+      ],
       "collaborators": [],
       "consent_collected": true,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2023/10/26/zweites-repair-cafe-am-25-november-2023/", "type": "blog" },
-        { "title": "Instagram", "url": "https://www.instagram.com/p/C0EkgZPKYl5/", "type": "social" },
-        { "title": "Aachener Zeitung", "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/das-julicher-repair-cafe-bietet-kostenfreie-hilfe-an/4939790.html", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:57e03e02-f3c9-4c3c-84bf-4b11d8ed1410",
+        "urn:uuid:5456a803-092d-42fd-999c-d6cfc1df8c71",
+        "urn:uuid:45c1e1cf-3dbe-4812-8868-e52d5b57c438"
       ]
     },
     {
@@ -1338,10 +1445,11 @@
       "description": "Der Verein darf Räume im Stammhaus Jülich nutzen. Nutzungsvereinbarung wird abgeschlossen.",
       "date": "2023-11-15",
       "location": "Stammhaus Jülich",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1350,10 +1458,11 @@
       "description": "Die Vereinsanschrift wird auf Buchenweg 16, 52399 Merzenich, geändert.",
       "date": "2023-10-02",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1362,11 +1471,13 @@
       "description": "Tag der Mobilität, Jülich. 2 Mitglieder, ca. 20 Besucher. Präsentation der Automatisierung von Bussen mithilfe der Edison-Roboter.",
       "date": "2023-09-18",
       "location": "Jülich",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2023/09/18/tag-der-mobilitaet/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:8e76c202-5e5f-44dc-8b7c-8b1bcf5a1604"
       ]
     },
     {
@@ -1376,10 +1487,11 @@
       "description": "Der Verein erhält eine Telefonnummer: 02421 4072560.",
       "date": "2023-09-02",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1388,12 +1500,18 @@
       "description": "Erstes Repair Café. 4 Mitglieder, 15 Besucher. Veranstaltungsort: Stadtbibliothek Jülich.",
       "date": "2023-08-20",
       "location": "Stadtbücherei Jülich",
-      "tags": ["repaircafe"],
-      "collaborators": ["Parents for Future Jülich", "Makerspace Bonn", "Repair Café Düren"],
+      "tags": [
+        "repaircafe"
+      ],
+      "collaborators": [
+        "Parents for Future Jülich",
+        "Makerspace Bonn",
+        "Repair Café Düren"
+      ],
       "consent_collected": true,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2023/08/20/repaircafe-juelich/", "type": "blog" },
-        { "title": "Instagram", "url": "https://www.instagram.com/p/Cx7hJaFq7uO/?img_index=1", "type": "social" }
+      "link_ids": [
+        "urn:uuid:6739a78d-a9be-41ff-8180-ee13b22285a1",
+        "urn:uuid:479248e3-84c9-4f11-8830-e05aad26ee9c"
       ]
     },
     {
@@ -1403,10 +1521,11 @@
       "description": "Die Nutzungsvereinbarung für das Roncallihaus wird zurückgezogen, da es zeitnah abgerissen werden soll.",
       "date": "2023-07-01",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1415,10 +1534,11 @@
       "description": "Die Kontakt-E-Mail-Adresse lautet nun kontakt@erfindergeist.org. Jedes Mitglied hat eine eigene E-Mail-Adresse für Vereinstätigkeiten.",
       "date": "2023-07-01",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1427,10 +1547,11 @@
       "description": "Robotik-Workshop #2. 4 Mitglieder, 9 externe Teilnehmer. Workshop für Kinder (8-12 Jahre) zur Programmierung von Edison v2.0 Robotern. Kostenlose Bereitstellung von Räumlichkeiten durch die Stadtbücherei Jülich.",
       "date": "2023-06-09",
       "location": "Stadtbücherei Jülich",
-      "tags": ["workshop"],
+      "tags": [
+        "workshop"
+      ],
       "collaborators": [],
-      "consent_collected": true,
-      "links": []
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -1439,10 +1560,11 @@
       "description": "Mitgliederversammlung 2 2023. 9 Mitglieder. Wahl des neuen Vorstands: 1. Vorsitzender Lars Eschweiler, 1. Rechnungsführer Torsten Wagner, 2. Vorsitzender Jürgen Rinne, 2. Rechnungsführer Karim Al Montassir, Kassenprüfer 1: Fabian Pelikan, Kassenprüfer 2: Jürgen Pettrak.",
       "date": "2023-04-25",
       "location": "",
-      "tags": ["mitgliederversammlung"],
+      "tags": [
+        "mitgliederversammlung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1451,10 +1573,11 @@
       "description": "Mitgliederversammlung 1 2023. 9 Mitglieder. Einladungsfrist nicht eingehalten - daher keine Beschlüsse.",
       "date": "2023-04-01",
       "location": "",
-      "tags": ["mitgliederversammlung"],
+      "tags": [
+        "mitgliederversammlung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1463,10 +1586,11 @@
       "description": "Der Verein blickt auf ein erfolgreiches Jahr zurück, in dem die Mitgliederzahl auf 16 angewachsen ist.",
       "date": "2022-12-30",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1475,12 +1599,14 @@
       "description": "Workshop zum 3D-Drucken in Kooperation mit dem Gründungszentrum der FH Aachen und dem Campus Jülich. Vermittlung von 3D-Drucktechnologien für Kinder und Erwachsene.",
       "date": "2022-11-26",
       "location": "",
-      "tags": ["workshop"],
-      "collaborators": ["Gründungszentrum FH Aachen", "Campus Jülich"],
-      "consent_collected": true,
-      "links": [
-        { "title": "Instagram", "url": "", "type": "social" }
-      ]
+      "tags": [
+        "workshop"
+      ],
+      "collaborators": [
+        "Gründungszentrum FH Aachen",
+        "Campus Jülich"
+      ],
+      "consent_collected": true
     },
     {
       "@type": "Event",
@@ -1489,13 +1615,15 @@
       "description": "Robotik-Workshop #1. 4 Mitglieder, 11 externe Teilnehmer. Kinder im Alter von 8-12 Jahren lernten das Programmieren von Edison v2.0 Robotern. Veranstaltung im Roncallihaus Jülich.",
       "date": "2022-10-01",
       "location": "Roncallihaus Jülich",
-      "tags": ["workshop"],
+      "tags": [
+        "workshop"
+      ],
       "collaborators": [],
       "consent_collected": true,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2022/10/01/1-robotik-workshop-fuer-kids/", "type": "blog" },
-        { "title": "Instagram", "url": "https://www.instagram.com/p/CjNLJi1qu3C/?img_index=1", "type": "social" },
-        { "title": "Instagram (2)", "url": "https://www.instagram.com/p/CjNYHaTqKHf/", "type": "social" }
+      "link_ids": [
+        "urn:uuid:7f67ef19-8667-4bf0-a913-0b4a51384d68",
+        "urn:uuid:d1ada8f1-576c-4da1-8eee-cdce718275c5",
+        "urn:uuid:89eabf86-8ed0-4369-b4e8-6ea06dee0ff5"
       ]
     },
     {
@@ -1505,10 +1633,11 @@
       "description": "Der Verein investiert in zehn programmierbare Edison v2.0-Roboter für zukünftige Bildungs- und Workshop-Aktivitäten.",
       "date": "2022-05-06",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1517,10 +1646,11 @@
       "description": "Mitgliederversammlung 2022 im Science College Overbach, gefolgt von einem Rundgang durch die Werkstatt. Kassenprüfung durch Jürgen Rinne und Johannes Rothe.",
       "date": "2022-04-03",
       "location": "Science College Overbach",
-      "tags": ["mitgliederversammlung"],
+      "tags": [
+        "mitgliederversammlung"
+      ],
       "collaborators": [],
-      "consent_collected": false,
-      "links": []
+      "consent_collected": false
     },
     {
       "@type": "Event",
@@ -1529,11 +1659,13 @@
       "description": "Präsenztreffen: Mitglieder und Interessenten treffen sich persönlich, tauschen Ideen aus und legen die Basis für eine starke Gemeinschaft.",
       "date": "2021-12-11",
       "location": "",
-      "tags": ["ausstellung"],
+      "tags": [
+        "ausstellung"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2021/12/15/erfindergeist-praesenztreffen/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:1f94dcee-e543-4122-8a42-799dcaa324a7"
       ]
     },
     {
@@ -1543,11 +1675,13 @@
       "description": "Der Verein erhält den offiziellen Status gemeinnützig, was steuerliche Begünstigung und verstärkte Ausrichtung auf soziale und gemeinnützige Projekte ermöglicht.",
       "date": "2021-05-04",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Beitrag", "url": "https://erfindergeist.org/2021/06/01/founding/", "type": "blog" }
+      "link_ids": [
+        "urn:uuid:75055a1c-1e9b-4193-831c-51cd0b013ffb"
       ]
     },
     {
@@ -1557,11 +1691,13 @@
       "description": "Gründung des Erfindergeist Jülich e.V. Sieben Teilnehmer gründen den Verein mit dem Ziel, gemeinsam innovative Ideen zu fördern. Gründungsvorstand: 1. Vorsitzender Karim Al Montassir, 1. Rechnungsführer Julien Secker, 2. Vorsitzender Fabian Pelikan, 2. Rechnungsführer Youssef Samari. Gründungsmitglieder: Karim Al Montassir, Roman Klamandt, Fabian Pelikan, Fabian Engels, Youssef Samari, Viraj Soni, Julien Secker.",
       "date": "2021-03-06",
       "location": "",
-      "tags": ["meilenstein"],
+      "tags": [
+        "meilenstein"
+      ],
       "collaborators": [],
       "consent_collected": false,
-      "links": [
-        { "title": "Aachener Zeitung", "url": "https://www.aachener-zeitung.de/lokales/region-dueren/juelich/ein-ort-an-dem-ideen-realisiert-werden/3956141.html", "type": "extern" }
+      "link_ids": [
+        "urn:uuid:3c961a17-0b36-4742-9a44-8131ed587f56"
       ]
     }
   ]

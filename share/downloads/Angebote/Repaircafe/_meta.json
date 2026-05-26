@@ -7,31 +7,43 @@
   "hasPart": [
     {
       "@type": "MediaObject",
-      "name": "termine_repaircafe_quer.pdf",
+      "title": "termine_repaircafe_quer.pdf",
       "description": "Terminübersicht Repair Café im Querformat",
-      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine_repaircafe.html"
+      "link_ids": [
+        "urn:uuid:23e87385-97e7-48af-a6af-2336fc72d764",
+        "urn:uuid:dca18cb3-e342-4de2-b661-b8f14b5df2b5"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "termine_repaircafe_hoch.pdf",
+      "title": "termine_repaircafe_hoch.pdf",
       "description": "Terminübersicht Repair Café im Hochformat",
-      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/termine_repaircafe.html"
+      "link_ids": [
+        "urn:uuid:23e87385-97e7-48af-a6af-2336fc72d764",
+        "urn:uuid:dca18cb3-e342-4de2-b661-b8f14b5df2b5"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "repaircafe_laufzettel.pdf",
+      "title": "repaircafe_laufzettel.pdf",
       "description": "Laufzettel für das Repair Café, Rückseite der Haftungsbegrenzung",
-      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_laufzettel.html"
+      "link_ids": [
+        "urn:uuid:23e87385-97e7-48af-a6af-2336fc72d764",
+        "urn:uuid:e960c432-6ce9-4cc1-bbc0-4271e9a66c71"
+      ],
+      "tags": []
     },
     {
       "@type": "MediaObject",
-      "name": "repaircafe_haftungsbegrenzung.pdf",
+      "title": "repaircafe_haftungsbegrenzung.pdf",
       "description": "Laufzettel für das Repair Café, Vorderseite des Laufzettel. Datenschutzerklärung muss ausgelegt werden.",
-      "wiki-url": "https://docs.erfindergeist.org/s/wiki/doc/repair-cafe-xsJlOwcUTY",
-      "raw-url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/repaircafe_haftungsbegrenzung.html"
+      "link_ids": [
+        "urn:uuid:23e87385-97e7-48af-a6af-2336fc72d764",
+        "urn:uuid:10372a68-8f54-40d1-8732-9696c74f701b"
+      ],
+      "tags": []
     }
   ]
 }

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Config-Editor - Erfindergeist Jülich</title>
+  <link rel="stylesheet" href="https://share.erfindergeist.org/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="eg-nav navbar px-3 py-2">
+  <a href="/" class="navbar-brand p-0">
+    <img src="https://share.erfindergeist.org/img/logo.svg" alt="Erfindergeist Jülich" class="eg-nav-logo">
+  </a>
+  <span class="text-muted small ms-3">Config-Editor</span>
+  <button id="theme-toggle" class="btn btn-sm btn-outline-secondary ms-auto" aria-label="Theme wechseln">
+    <i data-lucide="sun" aria-hidden="true"></i>
+  </button>
+</nav>
+
+<div class="container-fluid px-3 px-md-4">
+
+  <!-- Main tabs -->
+  <ul class="nav nav-tabs mt-3" id="main-tabs" role="tablist" aria-label="Hauptnavigation">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab-chronik-btn" data-bs-toggle="tab" data-bs-target="#tab-chronik" role="tab" aria-selected="true">Chronik</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-links-btn" data-bs-toggle="tab" data-bs-target="#tab-links" role="tab" aria-selected="false">Links</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-tags-btn" data-bs-toggle="tab" data-bs-target="#tab-tags" role="tab" aria-selected="false">Tags</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-alben-btn" data-bs-toggle="tab" data-bs-target="#tab-alben" role="tab" aria-selected="false">Alben</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-downloads-btn" data-bs-toggle="tab" data-bs-target="#tab-downloads" role="tab" aria-selected="false">Downloads</button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="main-tab-content">
+
+    <!-- ═══════════ CHRONIK TAB ═══════════ -->
+    <div class="tab-pane fade show active" id="tab-chronik" role="tabpanel" aria-labelledby="tab-chronik-btn">
+      <div class="toolbar">
+        <button id="btn-new-entry" class="btn btn-sm btn-eg">
+          <i data-lucide="plus" aria-hidden="true"></i> Neu
+        </button>
+        <input type="search" id="chronik-search" class="form-control form-control-sm search-box" placeholder="Suche nach Titel…" aria-label="Chronik durchsuchen">
+        <select id="chronik-filter-ort" class="form-select form-select-sm" style="max-width:160px;" aria-label="Nach Ort filtern">
+          <option value="">Alle Orte</option>
+        </select>
+        <select id="chronik-filter-tag" class="form-select form-select-sm" style="max-width:160px;" aria-label="Nach Tag filtern">
+          <option value="">Alle Tags</option>
+        </select>
+        <span id="chronik-count" class="text-muted small" role="status"></span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Titel</th>
+              <th class="hide-sm">Ort</th>
+              <th class="hide-sm">Tags</th>
+              <th><span class="visually-hidden">Aktionen</span></th>
+            </tr>
+          </thead>
+          <tbody id="chronik-tbody"></tbody>
+        </table>
+      </div>
+      <!-- Verlauf accordion -->
+      <div class="accordion mt-4" id="verlauf-accordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#verlauf-body" aria-expanded="false" aria-controls="verlauf-body">
+              <i data-lucide="history" class="me-2" aria-hidden="true"></i> Verlauf (Chronik)
+            </button>
+          </h2>
+          <div id="verlauf-body" class="accordion-collapse collapse">
+            <div class="accordion-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm table-hover mb-0">
+                  <thead><tr><th class="verlauf-ts">Zeitstempel</th><th class="verlauf-action">Aktion</th><th>Titel</th><th><span class="visually-hidden">Wiederherstellen</span></th></tr></thead>
+                  <tbody id="verlauf-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ LINKS TAB ═══════════ -->
+    <div class="tab-pane fade" id="tab-links" role="tabpanel" aria-labelledby="tab-links-btn">
+      <div class="toolbar">
+        <button id="btn-new-link" class="btn btn-sm btn-eg">
+          <i data-lucide="plus" aria-hidden="true"></i> Neu
+        </button>
+        <select id="links-filter-cat" class="form-select form-select-sm" style="max-width:180px;" aria-label="Nach Kategorie filtern">
+          <option value="">Alle Kategorien</option>
+        </select>
+        <span class="text-muted small ms-auto" id="links-count" role="status"></span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th class="hide-sm">URL</th>
+              <th class="hide-sm">Typ</th>
+              <th><span class="visually-hidden">Aktionen</span></th>
+            </tr>
+          </thead>
+          <tbody id="links-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════ TAGS TAB ═══════════ -->
+    <div class="tab-pane fade" id="tab-tags" role="tabpanel" aria-labelledby="tab-tags-btn">
+      <div class="row g-4" id="tags-content">
+        <div class="col-md-6">
+          <h6 class="mb-3">Orts-Tags <small class="text-muted">(location_tags)</small></h6>
+          <div id="location-tags-list"></div>
+          <div class="card mt-2">
+            <div class="card-body p-2">
+              <div class="row g-2 align-items-end">
+                <div class="col">
+                  <label class="form-label small mb-1" for="new-loc-key">Schlüssel</label>
+                  <input type="text" id="new-loc-key" class="form-control form-control-sm" placeholder="z.B. awo">
+                  <small class="text-muted">Ohne # - z.B. awo</small>
+                </div>
+                <div class="col">
+                  <label class="form-label small mb-1" for="new-loc-label">Label</label>
+                  <input type="text" id="new-loc-label" class="form-control form-control-sm" placeholder="Anzeigename">
+                </div>
+                <div class="col">
+                  <label class="form-label small mb-1" for="new-loc-location">Ort</label>
+                  <input type="text" id="new-loc-location" class="form-control form-control-sm" placeholder="Ort, Stadt">
+                </div>
+                <div class="col-auto">
+                  <button id="btn-add-loc-tag" class="btn btn-sm btn-outline-primary" aria-label="Orts-Tag hinzufügen">
+                    <i data-lucide="plus" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h6 class="mb-3">Beschreibungs-Tags <small class="text-muted">(description_tags)</small></h6>
+          <div id="description-tags-list"></div>
+          <div class="card mt-2">
+            <div class="card-body p-2">
+              <div class="row g-2 align-items-end">
+                <div class="col">
+                  <label class="form-label small mb-1" for="new-desc-key">Schlüssel</label>
+                  <input type="text" id="new-desc-key" class="form-control form-control-sm" placeholder="z.B. stammtisch">
+                  <small class="text-muted">Ohne # - z.B. stammtisch</small>
+                </div>
+                <div class="col">
+                  <label class="form-label small mb-1" for="new-desc-label">Label</label>
+                  <input type="text" id="new-desc-label" class="form-control form-control-sm" placeholder="Anzeigename">
+                </div>
+                <div class="col">
+                  <label class="form-label small mb-1" for="new-desc-desc">Beschreibung</label>
+                  <input type="text" id="new-desc-desc" class="form-control form-control-sm" placeholder="Kurzbeschreibung">
+                </div>
+                <div class="col-auto">
+                  <button id="btn-add-desc-tag" class="btn btn-sm btn-outline-primary" aria-label="Beschreibungs-Tag hinzufügen">
+                    <i data-lucide="plus" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 d-flex gap-2 align-items-center">
+        <button id="btn-save-tags" class="btn btn-sm btn-eg">
+          <i data-lucide="save" aria-hidden="true"></i> Tags speichern
+        </button>
+        <span id="tags-save-msg" class="small" role="status"></span>
+      </div>
+    </div>
+
+    <!-- ═══════════ ALBEN TAB ═══════════ -->
+    <div class="tab-pane fade" id="tab-alben" role="tabpanel" aria-labelledby="tab-alben-btn">
+      <div id="alben-list-view">
+        <p class="text-muted small mb-2">Galerie-Album-Ordner aus <code>ALBUMS_DIR</code>. Nach dem Speichern <code>galerie/process.py</code> ausfuehren.</p>
+        <div class="toolbar mb-2">
+          <label for="alben-filter-top" class="visually-hidden">Oberordner filtern</label>
+          <select id="alben-filter-top" class="form-select form-select-sm" style="max-width:220px;" aria-label="Oberordner filtern">
+            <option value="">Alle Ordner</option>
+          </select>
+          <span id="alben-count" class="text-muted small" role="status"></span>
+        </div>
+        <div id="alben-list" class="list-group"></div>
+        <div id="alben-empty" class="d-none text-muted small mt-2">
+          Keine Alben gefunden. <code>ALBUMS_DIR</code> in <code>gui/.env</code> eintragen.
+        </div>
+      </div>
+      <div id="alben-form-view" class="d-none">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <button id="btn-alben-back" class="btn btn-sm btn-outline-secondary">
+            <i data-lucide="arrow-left" aria-hidden="true"></i> Zurück
+          </button>
+          <h5 id="alben-form-title" class="mb-0"></h5>
+        </div>
+        <form id="alben-form" novalidate>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label" for="alb-title">Titel <span class="text-danger">*</span></label>
+              <input type="text" id="alb-title" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="alb-date">Datum</label>
+              <input type="date" id="alb-date" class="form-control">
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="alb-desc">Beschreibung</label>
+              <textarea id="alb-desc" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tags</label>
+              <div class="dropdown">
+                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 text-start" id="alb-tags-btn" data-bs-toggle="dropdown" aria-expanded="false">Tags auswählen</button>
+                <ul class="dropdown-menu p-2" id="alb-tags-menu" style="min-width:220px;max-height:220px;overflow-y:auto;" aria-labelledby="alb-tags-btn"></ul>
+              </div>
+              <div id="alb-tags-badges" class="mt-1 d-flex flex-wrap gap-1"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="alb-chronicle">Chronik-Eintrag</label>
+              <select id="alb-chronicle" class="form-select">
+                <option value="">– kein –</option>
+              </select>
+            </div>
+            <div class="col-12 d-none" id="alb-chronicle-info">
+              <div class="card">
+                <div class="card-body p-2" id="alb-chronicle-info-body"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="alb-preview">Vorschau-Dateiname</label>
+              <div class="input-group">
+                <input type="text" id="alb-preview" class="form-control" placeholder="DSC_0042.jpg">
+                <button type="button" class="btn btn-outline-secondary" id="btn-preview-pick" aria-label="Vorschau-Bild wählen">
+                  <i data-lucide="image" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch mt-4">
+                <input class="form-check-input" type="checkbox" id="alb-consent" role="switch">
+                <label class="form-check-label" for="alb-consent">Einverständnis erteilt</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label mb-0">Blur (Dateinamen)</label>
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0" id="btn-blur-pick">
+                  <i data-lucide="image" aria-hidden="true"></i> Wählen
+                </button>
+              </div>
+              <div class="chip-container" id="alb-blur-chips">
+                <input type="text" placeholder="Dateiname + Enter" aria-label="Blur-Dateiname hinzufügen">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label mb-0">No-Blur (Dateinamen)</label>
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0" id="btn-noblur-pick">
+                  <i data-lucide="image" aria-hidden="true"></i> Wählen
+                </button>
+              </div>
+              <div class="chip-container" id="alb-noblur-chips">
+                <input type="text" placeholder="Dateiname + Enter" aria-label="No-Blur-Dateiname hinzufügen">
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 d-flex gap-2 align-items-center">
+            <button type="submit" class="btn btn-sm btn-eg">
+              <i data-lucide="save" aria-hidden="true"></i> Speichern
+            </button>
+            <span id="alb-save-msg" class="small" role="status"></span>
+          </div>
+          <div class="alert alert-info mt-3 small py-2">
+            <i data-lucide="info" class="me-1" aria-hidden="true"></i>
+            Nach dem Speichern <code>podman compose run --rm process</code> in <code>galerie/</code> ausfuehren.
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══════════ DOWNLOADS TAB ═══════════ -->
+    <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-btn">
+      <div id="dl-list-view">
+        <p class="text-muted small mb-2">Ordner in <code>share/downloads/</code> mit <code>_meta.json</code>-Metadaten.</p>
+        <div id="dl-list" class="list-group"></div>
+        <div id="dl-empty" class="d-none text-muted small mt-2">Keine Ordner gefunden.</div>
+      </div>
+      <div id="dl-form-view" class="d-none">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <button id="btn-dl-back" class="btn btn-sm btn-outline-secondary">
+            <i data-lucide="arrow-left" aria-hidden="true"></i> Zurück
+          </button>
+          <h5 id="dl-form-title" class="mb-0"></h5>
+        </div>
+        <form id="dl-form" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="dl-description">Ordner-Beschreibung</label>
+              <textarea id="dl-description" class="form-control" rows="2"></textarea>
+            </div>
+          </div>
+
+          <h6 class="eg-section-title">Dateien</h6>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle" id="dl-parts-table">
+              <thead>
+                <tr>
+                  <th>Dateiname</th>
+                  <th>Beschreibung</th>
+                  <th>Links</th>
+                  <th>Tags</th>
+                  <th><span class="visually-hidden">Loeschen</span></th>
+                </tr>
+              </thead>
+              <tbody id="dl-parts-body"></tbody>
+            </table>
+          </div>
+          <button type="button" id="btn-dl-add-part" class="btn btn-sm btn-outline-secondary mt-1">
+            <i data-lucide="plus" aria-hidden="true"></i> Datei hinzufügen
+          </button>
+
+          <div class="mt-3 d-flex gap-2 align-items-center">
+            <button type="submit" class="btn btn-sm btn-eg">
+              <i data-lucide="save" aria-hidden="true"></i> Speichern
+            </button>
+            <span id="dl-save-msg" class="small" role="status"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- /tab-content -->
+</div>
+
+<!-- ═══════════ CHRONIK ENTRY MODAL ═══════════ -->
+<div class="modal fade" id="entry-modal" tabindex="-1" aria-labelledby="entry-modal-label" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="entry-modal-label">Chronik-Eintrag</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"></button>
+      </div>
+      <div class="modal-body">
+        <form id="entry-form" novalidate>
+          <input type="hidden" id="ef-id">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label" for="ef-title">Titel <span class="text-danger">*</span></label>
+              <input type="text" id="ef-title" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="ef-date">Datum <span class="text-danger">*</span></label>
+              <input type="date" id="ef-date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="ef-location">Ort</label>
+              <input type="text" id="ef-location" class="form-control" list="loc-datalist" autocomplete="off" placeholder="Freitext oder vorhandenen Ort wählen">
+              <datalist id="loc-datalist"></datalist>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tags</label>
+              <div class="dropdown">
+                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 text-start" id="ef-tags-btn" data-bs-toggle="dropdown" aria-expanded="false">Tags auswählen</button>
+                <ul class="dropdown-menu p-2" id="ef-tags-menu" style="min-width:220px;max-height:220px;overflow-y:auto;" aria-labelledby="ef-tags-btn"></ul>
+              </div>
+              <div id="ef-tags-badges" class="mt-1 d-flex flex-wrap gap-1"></div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Kollaborateure</label>
+              <div class="chip-container" id="ef-collabs-chips">
+                <input type="text" placeholder="Name tippen oder aus Liste wählen + Enter" list="collabs-datalist" aria-label="Kollaborateur hinzufügen" autocomplete="off">
+                <datalist id="collabs-datalist"></datalist>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="ef-desc">Beschreibung</label>
+              <textarea id="ef-desc" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Links</label>
+              <div id="ef-link-ids" class="d-flex flex-wrap gap-1 mb-2"></div>
+              <div class="input-group input-group-sm mb-1">
+                <input type="text" id="ef-link-search" class="form-control" placeholder="Link suchen (Titel oder URL)…" autocomplete="off" aria-label="Link suchen">
+              </div>
+              <div id="ef-link-suggestions" class="list-group list-group-flush small mb-1" style="max-height:160px;overflow-y:auto;"></div>
+              <button type="button" id="btn-ef-new-link" class="btn btn-sm btn-outline-secondary">
+                <i data-lucide="plus" aria-hidden="true"></i> Neuen Link anlegen
+              </button>
+              <div id="ef-new-link-form" class="d-none mt-2 p-2 border rounded">
+                <div class="row g-2">
+                  <div class="col-12">
+                    <input type="text" id="ef-nl-title" class="form-control form-control-sm" placeholder="Titel">
+                  </div>
+                  <div class="col-12">
+                    <input type="url" id="ef-nl-url" class="form-control form-control-sm" placeholder="https://…">
+                  </div>
+                  <div class="col-md-6">
+                    <select id="ef-nl-type" class="form-select form-select-sm">
+                      <option value="extern">extern</option>
+                      <option value="blog">blog</option>
+                      <option value="wiki">wiki</option>
+                      <option value="cloud">cloud</option>
+                      <option value="raw">raw</option>
+                      <option value="social">social</option>
+                      <option value="galerie">galerie</option>
+                      <option value="website">website</option>
+                      <option value="service">service</option>
+                      <option value="github">github</option>
+                      <option value="api">api</option>
+                      <option value="sponsoring">sponsoring</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 d-flex gap-2 align-items-center">
+                    <button type="button" id="btn-ef-nl-save" class="btn btn-sm btn-eg">Anlegen</button>
+                    <button type="button" id="btn-ef-nl-cancel" class="btn btn-sm btn-outline-secondary">Abbrechen</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <span id="entry-save-msg" class="small me-auto" role="status"></span>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+        <button type="button" id="btn-save-entry" class="btn btn-sm btn-eg">
+          <i data-lucide="save" aria-hidden="true"></i> Speichern
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LINK EDIT MODAL ═══════════ -->
+<div class="modal fade" id="link-modal" tabindex="-1" aria-labelledby="link-modal-label" aria-modal="true" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="link-modal-label">Link bearbeiten</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label" for="lm-title">Titel <span class="text-danger">*</span></label>
+            <input type="text" id="lm-title" class="form-control" required>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="lm-url">URL <span class="text-danger">*</span></label>
+            <input type="url" id="lm-url" class="form-control" required>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="lm-desc">Beschreibung</label>
+            <textarea id="lm-desc" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="lm-type">Typ</label>
+            <select id="lm-type" class="form-select">
+              <option value="website">website</option>
+              <option value="service">service</option>
+              <option value="social">social</option>
+              <option value="github">github</option>
+              <option value="api">api</option>
+              <option value="sponsoring">sponsoring</option>
+              <option value="galerie">galerie</option>
+              <option value="extern">extern</option>
+              <option value="blog">blog</option>
+              <option value="cloud">cloud</option>
+              <option value="raw">raw</option>
+              <option value="wiki">wiki</option>
+            </select>
+          </div>
+          <div id="lm-api-fields" class="col-12 d-none">
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label small" for="lm-method">HTTP-Methode</label>
+                <input type="text" id="lm-method" class="form-control form-control-sm" placeholder="GET">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small" for="lm-encoding">encodingType</label>
+                <input type="text" id="lm-encoding" class="form-control form-control-sm" placeholder="application/json">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span id="link-save-msg" class="small me-auto" role="status"></span>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+        <button type="button" id="btn-save-link" class="btn btn-sm btn-eg">
+          <i data-lucide="save" aria-hidden="true"></i> Speichern
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Image picker modal -->
+<div class="modal fade" id="image-picker-modal" tabindex="-1" aria-labelledby="image-picker-label" aria-modal="true" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="image-picker-label">Bild wählen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"></button>
+      </div>
+      <div class="modal-body">
+        <div id="image-picker-grid" class="d-flex flex-wrap gap-2"></div>
+      </div>
+      <div class="modal-footer" id="image-picker-footer">
+        <span class="me-auto text-muted small" id="image-picker-count" role="status"></span>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+        <button type="button" id="btn-image-picker-confirm" class="btn btn-sm btn-eg">Übernehmen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+  <div id="main-toast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-msg"></div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Schliessen"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://share.erfindergeist.org/js/lib/jquery.min.js"></script>
+<script src="https://share.erfindergeist.org/js/lib/bootstrap.bundle.min.js"></script>
+<script src="https://share.erfindergeist.org/js/lib/lucide.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

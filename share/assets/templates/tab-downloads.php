@@ -2,6 +2,12 @@
 $__hasBereich = !empty($bereiche);
 $__hasThema   = !empty($themen);
 $__hasGruppe  = !empty($gruppen);
+$__linksById  = [];
+foreach (($links_data['itemListElement'] ?? []) as $__li) {
+  if (isset($__li['item']['@id'])) {
+    $__linksById[$__li['item']['@id']] = $__li['item'];
+  }
+}
 ?>
 <div class="tab-pane fade show active" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-trigger">
 
@@ -69,10 +75,7 @@ $__hasGruppe  = !empty($gruppen);
             <?php if ($__hasGruppe) :
 ?><th>Gruppe</th><?php
             endif; ?>
-            <th><span class="visually-hidden">Wiki</span></th>
-            <th><span class="visually-hidden">Raw</span></th>
-            <th><span class="visually-hidden">Cloud</span></th>
-            <th><span class="visually-hidden">Beitrag</span></th>
+            <th><span class="visually-hidden">Links</span></th>
             <th><span class="visually-hidden">Download</span></th>
           </tr>
         </thead>
@@ -108,32 +111,20 @@ $__hasGruppe  = !empty($gruppen);
                 <td class="text-muted small"><?= htmlspecialchars($parts[2] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
               <?php endif; ?>
               <td class="dl-action-col">
-                <?php if ($entry['wikiUrl'] !== '') : ?>
-                  <a href="<?= htmlspecialchars($entry['wikiUrl'], ENT_QUOTES, 'UTF-8') ?>"
-                     class="btn btn-sm btn-outline-primary"
-                     target="_blank" rel="noopener noreferrer">Wiki</a>
-                <?php endif; ?>
-              </td>
-              <td class="dl-action-col">
-                <?php if ($entry['rawUrl'] !== '') : ?>
-                  <a href="<?= htmlspecialchars($entry['rawUrl'], ENT_QUOTES, 'UTF-8') ?>"
-                     class="btn btn-sm btn-outline-secondary"
-                     target="_blank" rel="noopener noreferrer">Raw</a>
-                <?php endif; ?>
-              </td>
-              <td class="dl-action-col">
-                <?php if ($entry['cloudUrl'] !== '') : ?>
-                  <a href="<?= htmlspecialchars($entry['cloudUrl'], ENT_QUOTES, 'UTF-8') ?>"
-                     class="btn btn-sm btn-outline-success"
-                     target="_blank" rel="noopener noreferrer">Cloud</a>
-                <?php endif; ?>
-              </td>
-              <td class="dl-action-col">
-                <?php if ($entry['blogUrl'] !== '') : ?>
-                  <a href="<?= htmlspecialchars($entry['blogUrl'], ENT_QUOTES, 'UTF-8') ?>"
-                     class="btn btn-sm btn-outline-beitrag"
-                     target="_blank" rel="noopener noreferrer">Beitrag</a>
-                <?php endif; ?>
+                <?php foreach ($entry['link_ids'] as $__lid) :
+                  $__lnk = $__linksById[$__lid] ?? null;
+                  if ($__lnk === null || empty($__lnk['url'])) { continue; }
+                  $__cls      = EG_LINK_BUTTON_CLASS[$__lnk['type'] ?? ''] ?? 'btn-outline-secondary';
+                  $__rawTitle = trim((string) ($__lnk['title'] ?? ''));
+                  $__label    = $__rawTitle !== '' ? $__rawTitle : ucfirst((string) ($__lnk['type'] ?? ''));
+                ?>
+                  <a href="<?= htmlspecialchars($__lnk['url'], ENT_QUOTES, 'UTF-8') ?>"
+                     class="btn btn-sm <?= $__cls ?> me-1"
+                     target="_blank" rel="noopener noreferrer"
+                     aria-label="<?= htmlspecialchars($__label, ENT_QUOTES, 'UTF-8') ?>">
+                    <?= htmlspecialchars($__label, ENT_QUOTES, 'UTF-8') ?>
+                  </a>
+                <?php endforeach; ?>
               </td>
               <td class="dl-action-col">
                 <a href="<?= $safeUrl ?>" target="_blank" rel="noopener noreferrer"

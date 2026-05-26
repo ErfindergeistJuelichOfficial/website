@@ -177,6 +177,12 @@ function egFormatDate(iso) {
       if (e['@id']) { chronicleMap[e['@id']] = e; }
     });
   }
+  var linksById = {};
+  if (typeof LINKS_DATA !== 'undefined' && Array.isArray(LINKS_DATA.itemListElement)) {
+    LINKS_DATA.itemListElement.forEach(function (li) {
+      if (li.item && li.item['@id']) { linksById[li.item['@id']] = li.item; }
+    });
+  }
   var curFolder = '';
   var curAlbum  = null;
   var lbImages  = [];
@@ -298,44 +304,6 @@ function egFormatDate(iso) {
     galleryRouteUpdate(path);
   }
 
-  function appendAlbumLinks($card, album) {
-    var wikiUrl  = album['wiki-url']  || '';
-    var rawUrl   = album['raw-url']   || '';
-    var cloudUrl = album['cloud-url'] || '';
-    var blogUrl  = album['blog-url']  || '';
-    if (!wikiUrl && !rawUrl && !cloudUrl && !blogUrl) { return; }
-    var $links = $('<div class="gallery-card-links d-flex gap-1 justify-content-end mt-2">');
-    if (wikiUrl) {
-      $links.append(
-        $('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
-          .addClass('btn btn-sm btn-outline-primary').text('Wiki')
-          .on('click', function (e) { e.stopPropagation(); })
-      );
-    }
-    if (rawUrl) {
-      $links.append(
-        $('<a>').attr({ href: rawUrl, target: '_blank', rel: 'noopener noreferrer' })
-          .addClass('btn btn-sm btn-outline-secondary').text('Raw')
-          .on('click', function (e) { e.stopPropagation(); })
-      );
-    }
-    if (cloudUrl) {
-      $links.append(
-        $('<a>').attr({ href: cloudUrl, target: '_blank', rel: 'noopener noreferrer' })
-          .addClass('btn btn-sm btn-outline-success').text('Cloud')
-          .on('click', function (e) { e.stopPropagation(); })
-      );
-    }
-    if (blogUrl) {
-      $links.append(
-        $('<a>').attr({ href: blogUrl, target: '_blank', rel: 'noopener noreferrer' })
-          .addClass('btn btn-sm btn-outline-beitrag').text('Beitrag')
-          .on('click', function (e) { e.stopPropagation(); })
-      );
-    }
-    $card.find('.gallery-card-body').append($links);
-  }
-
   // ── Folder / album overview ─────────────────────────────────────────────────
   function showFolder(path) {
     curFolder = path;
@@ -397,7 +365,6 @@ function egFormatDate(iso) {
           (!mixed && album.description ? '<div class="gallery-card-desc">' + esc(album.description) + '</div>' : '') +
         '</div>'
       );
-      if (!mixed) { appendAlbumLinks($card, album); }
       $card.on('click keydown', (function (a) {
         return function (e) {
           if (e.type === 'click' || e.key === 'Enter') {
@@ -490,37 +457,18 @@ function egFormatDate(iso) {
           $tags.addClass('d-none');
         }
 
-        var wikiUrl  = meta['wiki-url']  || '';
-        var rawUrl   = meta['raw-url']   || '';
-        var cloudUrl = meta['cloud-url'] || '';
-        var blogUrl  = meta['blog-url']  || '';
-        var $links   = $('#gallery-album-info-links');
+        var $links = $('#gallery-album-info-links');
         $links.empty();
-        if (wikiUrl) {
-          $links.append($('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
-            .addClass('btn btn-sm btn-outline-primary').text('Wiki'));
-        }
-        if (rawUrl) {
-          $links.append($('<a>').attr({ href: rawUrl, target: '_blank', rel: 'noopener noreferrer' })
-            .addClass('btn btn-sm btn-outline-secondary').text('Raw'));
-        }
-        if (cloudUrl) {
-          $links.append($('<a>').attr({ href: cloudUrl, target: '_blank', rel: 'noopener noreferrer' })
-            .addClass('btn btn-sm btn-outline-success').text('Cloud'));
-        }
-        if (blogUrl) {
-          $links.append($('<a>').attr({ href: blogUrl, target: '_blank', rel: 'noopener noreferrer' })
-            .addClass('btn btn-sm btn-outline-beitrag').text('Beitrag'));
-        }
         var chronicleTypeClass = {
           blog: 'btn-outline-beitrag', wiki: 'btn-outline-primary',
           raw: 'btn-outline-secondary', cloud: 'btn-outline-success',
           social: 'btn-outline-info', extern: 'btn-outline-light'
         };
         var chronicleEntry = meta.chronicleId ? chronicleMap[meta.chronicleId] : null;
-        if (chronicleEntry && Array.isArray(chronicleEntry.links)) {
-          chronicleEntry.links.forEach(function (lnk) {
-            if (!lnk.url || lnk.type === 'galerie') { return; }
+        if (chronicleEntry && Array.isArray(chronicleEntry.link_ids)) {
+          chronicleEntry.link_ids.forEach(function (lid) {
+            var lnk = linksById[lid];
+            if (!lnk || !lnk.url || lnk.type === 'galerie') { return; }
             var cls = chronicleTypeClass[lnk.type] || 'btn-outline-secondary';
             $links.append($('<a>').attr({ href: lnk.url, target: '_blank', rel: 'noopener noreferrer' })
               .addClass('btn btn-sm ' + cls).text(lnk.title));
