@@ -470,6 +470,7 @@ function eg_page_data(): array
     'config_entries' => array_column($api['assets']['config']['files'], 'name'),
     'pres_entries'   => eg_build_pres_entries($api['assets']['presentations']['items']),
     'gallery_data'   => eg_gallery_data(__DIR__),
+    'chronicle_data' => $api['assets']['config']['content']['chronicle'] ?? [],
   ];
 }
 

@@ -783,6 +783,8 @@ def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: li
         meta['cloud-url'] = config['cloud-url']
     if config.get('blog-url'):
         meta['blog-url'] = config['blog-url']
+    if config.get('chronicle_id'):
+        meta['chronicleId'] = config['chronicle_id']
 
     output_album.mkdir(parents=True, exist_ok=True)
     with open(output_album / '_meta.json', 'w', encoding='utf-8') as f:
@@ -818,6 +820,8 @@ def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Option
         summary['cloud-url'] = meta['cloud-url']
     if meta.get('blog-url'):
         summary['blog-url'] = meta['blog-url']
+    if meta.get('chronicleId'):
+        summary['chronicleId'] = meta['chronicleId']
     thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
     if thumb:
         summary['preview'] = album_rel + '/' + thumb

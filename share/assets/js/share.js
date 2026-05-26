@@ -158,11 +158,25 @@ $('#scroll-top').on('click', function () {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+function egFormatDate(iso) {
+  if (!iso) { return ''; }
+  var parts = iso.split('-');
+  if (parts.length !== 3) { return iso; }
+  return parts[2] + '.' + parts[1] + '.' + parts[0];
+}
+
 // ── Gallery ───────────────────────────────────────────────────────────────────
 (function () {
   if (typeof GALLERY_DATA === 'undefined') { return; }
 
   var albums    = GALLERY_DATA.hasPart || [];
+
+  var chronicleMap = {};
+  if (typeof CHRONICLE_DATA !== 'undefined' && Array.isArray(CHRONICLE_DATA.itemListElement)) {
+    CHRONICLE_DATA.itemListElement.forEach(function (e) {
+      if (e['@id']) { chronicleMap[e['@id']] = e; }
+    });
+  }
   var curFolder = '';
   var curAlbum  = null;
   var lbImages  = [];
@@ -367,7 +381,7 @@ $('#scroll-top').on('click', function () {
         ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy" class="w-100 h-100 d-block object-fit-cover">'
         : '<i data-lucide="images" aria-hidden="true"></i>';
       var metaParts = [];
-      if (album.dateCreated) { metaParts.push(album.dateCreated); }
+      if (album.dateCreated) { metaParts.push(egFormatDate(album.dateCreated)); }
       if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); }
       if (hasChildren(album.path)) {
         var sub = childrenOf(album.path);
@@ -452,7 +466,7 @@ $('#scroll-top').on('click', function () {
 
         // ── Album info box ──────────────────────────────────────────────────
         var infoMetaParts = [];
-        if (meta.dateCreated) { infoMetaParts.push(meta.dateCreated); }
+        if (meta.dateCreated) { infoMetaParts.push(egFormatDate(meta.dateCreated)); }
         infoMetaParts.push(lbImages.length + ' Fotos');
         $('#gallery-album-info-meta').text(infoMetaParts.join(' · '));
 
@@ -481,24 +495,39 @@ $('#scroll-top').on('click', function () {
         var cloudUrl = meta['cloud-url'] || '';
         var blogUrl  = meta['blog-url']  || '';
         var $links   = $('#gallery-album-info-links');
-        if (wikiUrl || rawUrl || cloudUrl || blogUrl) {
-          $links.removeClass('d-none').empty();
-          if (wikiUrl) {
-            $links.append($('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
-              .addClass('btn btn-sm btn-outline-primary').text('Wiki'));
-          }
-          if (rawUrl) {
-            $links.append($('<a>').attr({ href: rawUrl, target: '_blank', rel: 'noopener noreferrer' })
-              .addClass('btn btn-sm btn-outline-secondary').text('Raw'));
-          }
-          if (cloudUrl) {
-            $links.append($('<a>').attr({ href: cloudUrl, target: '_blank', rel: 'noopener noreferrer' })
-              .addClass('btn btn-sm btn-outline-success').text('Cloud'));
-          }
-          if (blogUrl) {
-            $links.append($('<a>').attr({ href: blogUrl, target: '_blank', rel: 'noopener noreferrer' })
-              .addClass('btn btn-sm btn-outline-beitrag').text('Beitrag'));
-          }
+        $links.empty();
+        if (wikiUrl) {
+          $links.append($('<a>').attr({ href: wikiUrl, target: '_blank', rel: 'noopener noreferrer' })
+            .addClass('btn btn-sm btn-outline-primary').text('Wiki'));
+        }
+        if (rawUrl) {
+          $links.append($('<a>').attr({ href: rawUrl, target: '_blank', rel: 'noopener noreferrer' })
+            .addClass('btn btn-sm btn-outline-secondary').text('Raw'));
+        }
+        if (cloudUrl) {
+          $links.append($('<a>').attr({ href: cloudUrl, target: '_blank', rel: 'noopener noreferrer' })
+            .addClass('btn btn-sm btn-outline-success').text('Cloud'));
+        }
+        if (blogUrl) {
+          $links.append($('<a>').attr({ href: blogUrl, target: '_blank', rel: 'noopener noreferrer' })
+            .addClass('btn btn-sm btn-outline-beitrag').text('Beitrag'));
+        }
+        var chronicleTypeClass = {
+          blog: 'btn-outline-beitrag', wiki: 'btn-outline-primary',
+          raw: 'btn-outline-secondary', cloud: 'btn-outline-success',
+          social: 'btn-outline-info', extern: 'btn-outline-light'
+        };
+        var chronicleEntry = meta.chronicleId ? chronicleMap[meta.chronicleId] : null;
+        if (chronicleEntry && Array.isArray(chronicleEntry.links)) {
+          chronicleEntry.links.forEach(function (lnk) {
+            if (!lnk.url || lnk.type === 'galerie') { return; }
+            var cls = chronicleTypeClass[lnk.type] || 'btn-outline-secondary';
+            $links.append($('<a>').attr({ href: lnk.url, target: '_blank', rel: 'noopener noreferrer' })
+              .addClass('btn btn-sm ' + cls).text(lnk.title));
+          });
+        }
+        if ($links.children().length) {
+          $links.removeClass('d-none');
         } else {
           $links.addClass('d-none');
         }
