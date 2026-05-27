@@ -4,10 +4,26 @@
 var state = { chronicle: {}, links: {}, tags: {}, albums: [], downloads: [] };
 var currentAlbumPath = null;
 var currentDownloadPath = null;
+var currentDownloadFile = null;
 var currentLinkId = null;
 var imagePickerMode = null; // 'preview', 'blur', 'noblur'
+var dlSearch = '', dlFilterBereich = '', dlFilterThema = '', dlFilterGruppe = '';
+var KNOWN_BADGE_EXTS = { pdf:1, docx:1, xlsx:1, pptx:1, odt:1, ods:1, odp:1, odg:1, md:1 };
 
 var LINK_TYPES = ['website','service','social','github','api','sponsoring','galerie','extern','blog','cloud','raw','wiki'];
+
+var LINK_BUTTON_CLASS = {
+  wiki:    'btn-outline-primary',
+  raw:     'btn-outline-secondary',
+  cloud:   'btn-outline-success',
+  blog:    'btn-outline-secondary',
+  github:  'btn-outline-secondary',
+  website: 'btn-outline-primary',
+  service: 'btn-outline-secondary',
+  social:  'btn-outline-secondary',
+  api:     'btn-outline-secondary',
+  extern:  'btn-outline-secondary',
+};
 
 function linkById(id) {
   var found = null;
@@ -144,6 +160,39 @@ function initCollabsDatalist() {
 }
 
 /* ═══════════════════════════════════════════════
+   Tab routing (hash-based, like share)
+═══════════════════════════════════════════════ */
+var TAB_HASHES = {
+  chronik:   '#tab-chronik-btn',
+  links:     '#tab-links-btn',
+  tags:      '#tab-tags-btn',
+  alben:     '#tab-alben-btn',
+  downloads: '#tab-downloads-btn',
+};
+
+function activateTabFromHash() {
+  var hash = location.hash.replace('#', '');
+  var sel  = (hash && TAB_HASHES[hash]) ? TAB_HASHES[hash] : TAB_HASHES.chronik;
+  var el   = document.querySelector(sel);
+  if (el) { bootstrap.Tab.getOrCreateInstance(el).show(); }
+}
+
+function initTabRouting() {
+  activateTabFromHash();
+
+  $('#main-tabs').on('shown.bs.tab', 'button[data-bs-toggle="tab"]', function () {
+    var tabName = ($(this).data('bsTarget') || '').replace('#tab-', '');
+    if (!tabName || tabName === 'chronik') {
+      history.replaceState(null, '', location.pathname + location.search);
+    } else {
+      history.replaceState(null, '', '#' + tabName);
+    }
+  });
+
+  $(window).on('popstate', activateTabFromHash);
+}
+
+/* ═══════════════════════════════════════════════
    Boot
 ═══════════════════════════════════════════════ */
 $(function () {
@@ -165,7 +214,7 @@ $(function () {
     renderAlbenList();
   });
 
-  $.get('/api/downloads', function (list) {
+  $.get('/api/download-entries', function (list) {
     state.downloads = list || [];
     renderDownloadsList();
   });
@@ -180,11 +229,13 @@ $(function () {
   initDownloadsTab();
   initLinksFilter();
   initImagePicker();
+  initTabRouting();
 
   $('#theme-toggle').on('click', function () {
     var $html = $('html');
     var next = $html.attr('data-theme') === 'dark' ? 'light' : 'dark';
     $html.attr({ 'data-theme': next, 'data-bs-theme': next });
+    localStorage.setItem('eg-theme', next);
   });
 
   // Delegated handlers for dynamically rendered content
@@ -226,6 +277,13 @@ function initChronikFilters() {
   });
   $('#chronik-filter-tag').on('change', function () {
     chronikFilterTag = $(this).val();
+    renderChronikTable();
+  });
+  $('#chronik-clear-filters').on('click', function () {
+    chronikSearch = ''; chronikFilterOrt = ''; chronikFilterTag = '';
+    $('#chronik-search').val('');
+    $('#chronik-filter-ort').val('');
+    $('#chronik-filter-tag').val('');
     renderChronikTable();
   });
 }
@@ -276,6 +334,7 @@ function renderChronikTable() {
       + '</td></tr>';
   }).join('');
   $('#chronik-tbody').html(rows || '<tr><td colspan="5" class="text-muted text-center py-3">Keine Einträge.</td></tr>');
+  $('#chronik-clear-filters').toggle(!!(chronikSearch || chronikFilterOrt || chronikFilterTag));
   lucide.createIcons();
 }
 
@@ -808,16 +867,12 @@ function initAlbenTab() {
     var title = $('#alb-title').val().trim();
     if (!title) { $('#alb-save-msg').text('Titel ist Pflicht.'); return; }
     var cfg = { title: title, consent_collected: $('#alb-consent').prop('checked') };
-    var date = $('#alb-date').val();
-    if (date) { cfg.date = date; }
     var desc = $('#alb-desc').val().trim();
     if (desc) { cfg.description = desc; }
     var preview = $('#alb-preview').val().trim();
     if (preview) { cfg.preview = preview; }
     var cid = $('#alb-chronicle').val();
     if (cid) { cfg.chronicle_id = cid; }
-    var tags = getSelectedTags($('#alb-tags-menu'));
-    if (tags.length) { cfg.tags = tags; }
     var blur   = chipContainerValues($('#alb-blur-chips'));
     var noblur = chipContainerValues($('#alb-noblur-chips'));
     if (blur.length)   { cfg.blur    = blur; }
@@ -941,13 +996,11 @@ function openAlbumForm(path) {
   $('#alb-save-msg').text('');
   $.get('/api/album?path=' + encodeURIComponent(path), function (cfg) {
     $('#alb-title').val(cfg.title || '');
-    $('#alb-date').val(cfg.date  || '');
     $('#alb-desc').val(cfg.description || '');
     $('#alb-consent').prop('checked', !!cfg.consent_collected);
     $('#alb-preview').val(cfg.preview || '');
     buildChronicleDropdown($('#alb-chronicle'), cfg.chronicle_id || '');
     renderChronicleInfo(cfg.chronicle_id || '');
-    buildTagsMenu($('#alb-tags-menu'), $('#alb-tags-badges'), $('#alb-tags-btn'), cfg.tags || []);
     clearChips($('#alb-blur-chips'));
     $.each(cfg.blur || [], function (_, f) { addChip($('#alb-blur-chips'), f); });
     clearChips($('#alb-noblur-chips'));
@@ -968,230 +1021,385 @@ function renderDownloadsList() {
   var $list  = $('#dl-list');
   var $empty = $('#dl-empty');
   if (!state.downloads || state.downloads.length === 0) {
-    $list.empty();
+    $list.html('');
     $empty.removeClass('d-none');
     return;
   }
   $empty.addClass('d-none');
-  $list.html($.map(state.downloads, function (d) {
-    return '<a href="#" class="list-group-item list-group-item-action dl-folder-item d-flex justify-content-between align-items-center" data-path="' + sanitize(d.path) + '">'
-      + '<span>' + sanitize(d.path) + '</span>'
-      + (d.hasMeta ? '<span class="badge bg-secondary">_meta.json</span>' : '<span class="badge bg-light text-muted">leer</span>')
-      + '</a>';
-  }).join(''));
-}
 
-function initDlFixedDropdowns($scope) {
-  $scope.find('[data-bs-toggle="dropdown"]').each(function () {
-    new bootstrap.Dropdown(this, { popperConfig: { strategy: 'fixed' } });
+  var bereiche = {}, themen = {}, gruppen = {};
+  $.each(state.downloads, function (_, d) {
+    var p = d.folder ? d.folder.split('/') : [];
+    if (p[0]) { bereiche[p[0]] = true; }
+    if (p[1]) { themen[p[1]] = true; }
+    if (p[2]) { gruppen[p[2]] = true; }
   });
-}
+  var hasBer  = Object.keys(bereiche).length > 0;
+  var hasThem = Object.keys(themen).length > 0;
+  var hasGrp  = Object.keys(gruppen).length > 0;
 
-function renderDownloadParts(hasPart, availableFiles) {
-  var $tbody = $('#dl-parts-body');
-  $tbody.empty();
-  $.each(hasPart || [], function (idx, part) {
-    $tbody.append(buildPartRow(idx, part, availableFiles));
-  });
-  initDlFixedDropdowns($tbody);
+  var filterHtml = '<div class="d-flex gap-2 mb-3 flex-wrap align-items-center" id="dl-filter-bar">'
+    + '<label for="dl-search" class="visually-hidden">Dateien suchen</label>'
+    + '<input type="search" id="dl-search" class="form-control" style="max-width:280px" placeholder="Dateien suchen..." value="' + sanitize(dlSearch) + '">'
+    + (hasBer ? ('<label for="dl-filter-bereich" class="visually-hidden">Bereich</label>'
+        + '<select id="dl-filter-bereich" class="form-select" style="max-width:180px"><option value="">Alle Bereiche</option>'
+        + $.map(Object.keys(bereiche).sort(), function (b) { return '<option value="' + sanitize(b) + '"' + (dlFilterBereich === b ? ' selected' : '') + '>' + sanitize(b) + '</option>'; }).join('') + '</select>') : '')
+    + (hasThem ? ('<label for="dl-filter-thema" class="visually-hidden">Thema</label>'
+        + '<select id="dl-filter-thema" class="form-select" style="max-width:180px"><option value="">Alle Themen</option>'
+        + $.map(Object.keys(themen).sort(), function (t) { return '<option value="' + sanitize(t) + '"' + (dlFilterThema === t ? ' selected' : '') + '>' + sanitize(t) + '</option>'; }).join('') + '</select>') : '')
+    + (hasGrp ? ('<label for="dl-filter-gruppe" class="visually-hidden">Gruppe</label>'
+        + '<select id="dl-filter-gruppe" class="form-select" style="max-width:180px"><option value="">Alle Gruppen</option>'
+        + $.map(Object.keys(gruppen).sort(), function (g) { return '<option value="' + sanitize(g) + '"' + (dlFilterGruppe === g ? ' selected' : '') + '>' + sanitize(g) + '</option>'; }).join('') + '</select>') : '')
+    + '<button type="button" id="dl-clear-filters" class="btn btn-sm btn-outline-danger dl-clear-btn" aria-label="Filter loeschen">'
+    + '<i data-lucide="x" aria-hidden="true"></i> Filter loeschen</button>'
+    + '<button type="button" id="btn-dl-new" class="btn btn-sm btn-eg ms-auto"><i data-lucide="plus" aria-hidden="true"></i> Neu</button>'
+    + '</div>';
+
+  var thead = '<thead><tr>'
+    + '<th class="dl-fmt-col">Format</th>'
+    + '<th>Name</th>'
+    + (hasBer  ? '<th>Bereich</th>' : '')
+    + (hasThem ? '<th>Thema</th>'   : '')
+    + (hasGrp  ? '<th>Gruppe</th>'  : '')
+    + '<th><span class="visually-hidden">Links</span></th>'
+    + '<th><span class="visually-hidden">Bearbeiten</span></th>'
+    + '</tr></thead>';
+
+  $list.html(filterHtml
+    + '<div class="table-responsive">'
+    + '<table class="table table-hover align-middle mb-0" id="downloads-table">'
+    + thead + '<tbody id="dl-tbody"></tbody>'
+    + '</table></div>');
+
+  $list.data({ hasBer: hasBer, hasThem: hasThem, hasGrp: hasGrp });
+  renderDownloadsRows();
   lucide.createIcons();
 }
 
-function buildPartRow(idx, part, availableFiles) {
-  var linkChips = $.map(part.link_ids || [], function (lid) {
-    var lnk = linkById(lid);
-    var label = lnk ? sanitize(linkLabel(lnk) || lid) : sanitize(lid);
-    return '<span class="badge bg-primary me-1 dl-link-chip" data-id="' + sanitize(lid) + '">' + label
-      + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1 dl-link-chip-remove" aria-label="Link entfernen"></button></span>';
-  }).join('');
-  var tagBadges = $.map(part.tags || [], function (t) {
-    return '<span class="badge bg-secondary me-1 dl-tag-chip" data-key="' + sanitize(t) + '">' + sanitize(t)
-      + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1 dl-tag-chip-remove" aria-label="Tag entfernen"></button></span>';
-  }).join('');
+function renderDownloadsRows() {
+  var $list  = $('#dl-list');
+  var hasBer  = $list.data('hasBer');
+  var hasThem = $list.data('hasThem');
+  var hasGrp  = $list.data('hasGrp');
+  var search  = dlSearch.toLowerCase();
 
-  return '<tr data-idx="' + idx + '">'
-    + '<td><input type="text" class="form-control form-control-sm dl-part-title" value="' + sanitize(part.title || '') + '" placeholder="Dateiname" aria-label="Dateiname"></td>'
-    + '<td><input type="text" class="form-control form-control-sm dl-part-desc" value="' + sanitize(part.description || '') + '" placeholder="Beschreibung"></td>'
-    + '<td><div class="dl-part-links d-flex flex-wrap gap-1 align-items-center">'
-    + linkChips
-    + '<input type="text" class="form-control form-control-sm dl-link-search" placeholder="Link suchen..." style="max-width:140px;" autocomplete="off">'
-    + '<ul class="dropdown-menu dl-link-suggestions p-1" style="font-size:.8rem;min-width:200px;"></ul>'
-    + '</div></td>'
-    + '<td><div class="dl-part-tags d-flex flex-wrap gap-1 align-items-center">'
-    + tagBadges
-    + '<div class="dropdown">'
-    + '<button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle py-0 dl-tag-btn" data-bs-toggle="dropdown" aria-expanded="false">Tag</button>'
-    + '<ul class="dropdown-menu p-2 dl-tag-menu" style="min-width:200px;max-height:200px;overflow-y:auto;"></ul>'
-    + '</div></div></td>'
-    + '<td><button type="button" class="btn btn-sm btn-outline-danger py-0 dl-part-delete" aria-label="Eintrag loeschen"><i data-lucide="trash-2" aria-hidden="true"></i></button></td>'
-    + '</tr>';
+  var rows = $.map(state.downloads, function (d) {
+    var fp = d.folder ? d.folder.split('/') : [];
+    if (search && (d.name + ' ' + d.description).toLowerCase().indexOf(search) === -1) { return ''; }
+    if (dlFilterBereich && fp[0] !== dlFilterBereich) { return ''; }
+    if (dlFilterThema   && fp[1] !== dlFilterThema)   { return ''; }
+    if (dlFilterGruppe  && fp[2] !== dlFilterGruppe)  { return ''; }
+
+    var ext      = d.name.lastIndexOf('.') > 0 ? d.name.split('.').pop().toLowerCase() : '';
+    var extClass = KNOWN_BADGE_EXTS[ext] ? ext : 'default';
+    var extLabel = ext ? ext.toUpperCase() : 'FILE';
+
+    var linkBtns = $.map(d.link_ids || [], function (lid) {
+      var lnk = linkById(lid);
+      if (!lnk || !lnk.url) { return ''; }
+      var cls   = LINK_BUTTON_CLASS[lnk.type || ''] || 'btn-outline-secondary';
+      var label = sanitize(linkLabel(lnk));
+      return '<a href="' + sanitize(lnk.url) + '" class="btn btn-sm ' + cls + ' me-1" target="_blank" rel="noopener noreferrer" aria-label="' + label + '">' + label + '</a>';
+    }).join('');
+
+    var folderAttr = ' data-folder="' + sanitize(d.folder) + '" data-name="' + sanitize(d.name) + '"';
+    return '<tr>'
+      + '<td class="dl-fmt-col"><span class="file-badge ' + extClass + '">' + extLabel + '</span></td>'
+      + '<td class="dl-name-cell"><a href="#" class="dl-name-link dl-edit-file"' + folderAttr + '>'
+      +   '<span class="fw-semibold">' + sanitize(d.name) + '</span>'
+      +   (d.description ? '<small class="text-muted d-block">' + sanitize(d.description) + '</small>' : '')
+      + '</a></td>'
+      + (hasBer  ? '<td class="text-muted small">' + sanitize(fp[0] || '') + '</td>' : '')
+      + (hasThem ? '<td class="text-muted small">' + sanitize(fp[1] || '') + '</td>' : '')
+      + (hasGrp  ? '<td class="text-muted small">' + sanitize(fp[2] || '') + '</td>' : '')
+      + '<td class="dl-action-col">' + linkBtns + '</td>'
+      + '<td class="dl-action-col"><button type="button" class="btn btn-sm btn-outline-secondary dl-edit-file"' + folderAttr + ' aria-label="Bearbeiten"><i data-lucide="pencil" aria-hidden="true"></i></button></td>'
+      + '</tr>';
+  });
+
+  $('#dl-tbody').html(rows.join(''));
+  lucide.createIcons();
+  $('#dl-clear-filters').toggle(!!(dlSearch || dlFilterBereich || dlFilterThema || dlFilterGruppe));
 }
 
-function collectPartsFromTable() {
-  var parts = [];
-  $('#dl-parts-body tr').each(function () {
-    var $row   = $(this);
-    var title  = $row.find('.dl-part-title').val() || '';
-    var desc   = $row.find('.dl-part-desc').val().trim();
-    var linkIds = [];
-    $row.find('.dl-link-chip').each(function () { linkIds.push($(this).attr('data-id')); });
-    var tags = [];
-    $row.find('.dl-tag-chip').each(function () { tags.push($(this).attr('data-key')); });
-    if (title) {
-      var part = { '@type': 'MediaObject', title: title, link_ids: linkIds, tags: tags };
-      if (desc) { part.description = desc; }
-      parts.push(part);
-    }
+function openDownloadForm(folder, filename) {
+  currentDownloadPath = folder;
+  currentDownloadFile = filename;
+  $('#dl-edit-modal-label').text(filename);
+  $('#dl-edit-modal-folder').text(folder);
+  $('#dl-save-msg').text('');
+  $.get('/api/download-meta?path=' + encodeURIComponent(folder), function (meta) {
+    var part = null;
+    $.each(meta.hasPart || [], function (_, p) { if (p.title === filename) { part = p; return false; } });
+    if (!part) { part = { title: filename, description: '', link_ids: [], tags: [] }; }
+
+    $('#dl-file-desc').val(part.description || '');
+
+    var $links = $('#dl-file-links').empty();
+    $.each(part.link_ids || [], function (_, lid) {
+      var lnk = linkById(lid);
+      $links.append(buildDlFileChip(lid, lnk ? linkLabel(lnk) : lid));
+    });
+
+    var $tagChips = $('#dl-file-tag-chips').empty();
+    $.each(part.tags || [], function (_, t) { $tagChips.append(buildDlTagChip(t)); });
+
+    $('#dl-file-link-search').val('');
+    $('#dl-file-link-suggestions').empty().hide();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('dl-edit-modal')).show();
+  }).fail(function (xhr) {
+    showToast('Laden fehlgeschlagen: ' + ((xhr.responseJSON && xhr.responseJSON.error) || xhr.status), false);
   });
-  return parts;
 }
 
-function initDownloadsTab() {
-  $('#btn-dl-back').on('click', function () {
-    $('#dl-form-view').addClass('d-none');
-    $('#dl-list-view').removeClass('d-none');
-    currentDownloadPath = null;
-  });
+function buildDlFileChip(id, label) {
+  return $('<span class="badge bg-primary me-1 dl-file-link-chip" data-id="' + sanitize(id) + '">'
+    + sanitize(label) + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1" aria-label="Link entfernen"></button></span>');
+}
 
-  $('#dl-list').on('click', '.dl-folder-item', function (e) {
-    e.preventDefault();
-    openDownloadForm($(this).attr('data-path'));
-  });
+function buildDlTagChip(key) {
+  return $('<span class="badge bg-secondary me-1 dl-file-tag-chip" data-key="' + sanitize(key) + '">'
+    + sanitize(key) + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1" aria-label="Tag entfernen"></button></span>');
+}
 
-  $('#btn-dl-add-part').on('click', function () {
-    var path = currentDownloadPath;
-    if (!path) { return; }
-    $.get('/api/download-files?path=' + encodeURIComponent(path), function (files) {
-      var idx = $('#dl-parts-body tr').length;
-      var $row = $(buildPartRow(idx, { title: '', description: '', link_ids: [], tags: [] }, files));
-      $('#dl-parts-body').append($row);
-      wirePartRow($row);
-      initDlFixedDropdowns($row);
-      lucide.createIcons();
-    });
-  });
+function buildDlNewLinkChip(id, label) {
+  return $('<span class="badge bg-primary me-1 dl-new-link-chip" data-id="' + sanitize(id) + '">'
+    + sanitize(label) + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1" aria-label="Link entfernen"></button></span>');
+}
 
-  $('#dl-parts-body').on('click', '.dl-part-delete', function () {
-    $(this).closest('tr').remove();
-  });
+function buildDlNewTagChip(key) {
+  return $('<span class="badge bg-secondary me-1 dl-new-tag-chip" data-key="' + sanitize(key) + '">'
+    + sanitize(key) + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1" aria-label="Tag entfernen"></button></span>');
+}
 
-  $('#dl-parts-body').on('click', '.dl-link-chip-remove', function (e) {
-    e.stopPropagation();
-    $(this).closest('.dl-link-chip').remove();
-  });
+function saveDlFile() {
+  var folder   = currentDownloadPath;
+  var filename = currentDownloadFile;
+  if (!folder || !filename) { return; }
+  var linkIds = [];
+  $('#dl-file-links .dl-file-link-chip').each(function () { linkIds.push($(this).attr('data-id')); });
+  var tags = [];
+  $('#dl-file-tag-chips .dl-file-tag-chip').each(function () { tags.push($(this).attr('data-key')); });
+  var updatedPart = { '@type': 'MediaObject', title: filename, link_ids: linkIds, tags: tags };
+  var desc = $('#dl-file-desc').val().trim();
+  if (desc) { updatedPart.description = desc; }
 
-  $('#dl-parts-body').on('click', '.dl-link-chip', function () {
-    var id = $(this).attr('data-id');
-    if (id) { openLinkModal(id); }
-  });
-
-  $('#dl-parts-body').on('click', '.dl-tag-chip-remove', function () {
-    $(this).closest('.dl-tag-chip').remove();
-  });
-
-  $('#dl-parts-body').on('input', '.dl-link-search', function () {
-    var $input = $(this);
-    var $ul    = $input.siblings('.dl-link-suggestions');
-    var query  = $input.val().trim().toLowerCase();
-    if (!query) { $ul.removeClass('show').css({ top: '', left: '', width: '' }); return; }
-    var existingIds = [];
-    $input.closest('td').find('.dl-link-chip').each(function () { existingIds.push($(this).attr('data-id')); });
-    var matches = [];
-    $.each(state.links.itemListElement || [], function (_, li) {
-      if (!li.item || !li.item['@id']) { return; }
-      if (existingIds.indexOf(li.item['@id']) !== -1) { return; }
-      if ((li.item.title || '').toLowerCase().indexOf(query) !== -1 || (li.item.url || '').toLowerCase().indexOf(query) !== -1) {
-        matches.push(li.item);
-      }
-    });
-    if (!matches.length) { $ul.removeClass('show').css({ top: '', left: '', width: '' }); return; }
-    var rect = $input[0].getBoundingClientRect();
-    $ul.html($.map(matches.slice(0, 8), function (lnk) {
-      return '<li><a href="#" class="dropdown-item py-1 dl-link-suggestion-item" data-id="' + sanitize(lnk['@id']) + '">'
-        + sanitize(linkLabel(lnk) || lnk.url) + '</a></li>';
-    }).join('')).css({ top: rect.bottom + 'px', left: rect.left + 'px', width: Math.max(220, rect.width) + 'px' }).addClass('show');
-  });
-
-  $('#dl-parts-body').on('click', '.dl-link-suggestion-item', function (e) {
-    e.preventDefault();
-    var id    = $(this).attr('data-id');
-    var $td   = $(this).closest('td');
-    $td.find('.dl-link-suggestions').removeClass('show').css({ top: '', left: '', width: '' });
-    $td.find('.dl-link-search').val('');
-    var lnk   = linkById(id);
-    var label = lnk ? sanitize(linkLabel(lnk) || id) : sanitize(id);
-    var $chip = $('<span class="badge bg-primary me-1 dl-link-chip" data-id="' + sanitize(id) + '">'
-      + label + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1 dl-link-chip-remove" aria-label="Link entfernen"></button></span>');
-    $td.find('.dl-link-search').before($chip);
-  });
-
-  $('#dl-parts-body').on('show.bs.dropdown', '.dl-tag-btn', function () {
-    var $menu = $(this).siblings('.dl-tag-menu');
-    var existingKeys = [];
-    $(this).closest('td').find('.dl-tag-chip').each(function () { existingKeys.push($(this).attr('data-key')); });
-    var allTags = {};
-    $.each(state.tags.location_tags || {}, function (k, v) { allTags[k] = v.label || k; });
-    $.each(state.tags.description_tags || {}, function (k, v) { allTags[k] = v.label || k; });
-    $menu.empty();
-    $.each(allTags, function (key, label) {
-      if (existingKeys.indexOf(key) !== -1) { return; }
-      $menu.append('<li><a href="#" class="dropdown-item py-1 dl-tag-pick-item" data-key="' + sanitize(key) + '">' + sanitize(label) + '</a></li>');
-    });
-    if (!$menu.children().length) { $menu.append('<li><span class="dropdown-item text-muted">Keine weiteren Tags</span></li>'); }
-  });
-
-  $('#dl-parts-body').on('click', '.dl-tag-pick-item', function (e) {
-    e.preventDefault();
-    var key  = $(this).attr('data-key');
-    var $td  = $(this).closest('td');
-    var $chip = $('<span class="badge bg-secondary me-1 dl-tag-chip" data-key="' + sanitize(key) + '">' + sanitize(key)
-      + ' <button type="button" class="btn-close btn-close-white btn-close-sm ms-1 dl-tag-chip-remove" aria-label="Tag entfernen"></button></span>');
-    $td.find('.dropdown').before($chip);
-  });
-
-  $('#dl-form').on('submit', function (ev) {
-    ev.preventDefault();
-    if (!currentDownloadPath) { return; }
-    var meta = {
-      '@context': 'https://schema.org',
-      '@type':    'DataCatalog',
-      '@id':      'https://share.erfindergeist.org/downloads/' + currentDownloadPath,
-      'name':     currentDownloadPath.split('/').pop(),
-      'description': $('#dl-description').val().trim(),
-      'hasPart':  collectPartsFromTable(),
-    };
+  $.get('/api/download-meta?path=' + encodeURIComponent(folder), function (meta) {
+    var hasPart = meta.hasPart || [];
+    var found = false;
+    $.each(hasPart, function (i, p) { if (p.title === filename) { hasPart[i] = updatedPart; found = true; return false; } });
+    if (!found) { hasPart.push(updatedPart); }
+    meta.hasPart = hasPart;
     $.ajax({
-      url: '/api/download-meta?path=' + encodeURIComponent(currentDownloadPath),
+      url: '/api/download-meta?path=' + encodeURIComponent(folder),
       type: 'POST', contentType: 'application/json',
       data: JSON.stringify(meta),
       success: function () {
-        $('#dl-save-msg').text('Gespeichert.');
-        showToast('_meta.json gespeichert.', true);
-        $.get('/api/downloads', function (list) { state.downloads = list || []; renderDownloadsList(); });
+        showToast('Gespeichert.', true);
+        bootstrap.Modal.getInstance(document.getElementById('dl-edit-modal')).hide();
+        $.get('/api/download-entries', function (list) { state.downloads = list || []; renderDownloadsList(); });
       },
       error: function (xhr) { showToast('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status), false); },
     });
   });
 }
 
-function wirePartRow($row) {
-  // nothing extra needed — event delegation covers all .dl-* handlers
+function openDlNewModal() {
+  $.get('/api/downloads', function (folders) {
+    var withMeta = $.grep(folders || [], function (f) { return f.hasMeta; });
+    var $sel = $('#dl-new-folder').empty();
+    if (!withMeta.length) {
+      $sel.append('<option value="">Keine Ordner mit _meta.json</option>');
+    } else {
+      $sel.append('<option value="">-- Ordner wahlen --</option>');
+      $.each(withMeta, function (_, f) {
+        $sel.append('<option value="' + sanitize(f.path) + '">' + sanitize(f.path) + '</option>');
+      });
+    }
+    $('#dl-new-name').val('');
+    $('#dl-new-desc').val('');
+    $('#dl-new-links').empty();
+    $('#dl-new-tag-chips').empty();
+    $('#dl-new-link-search').val('');
+    $('#dl-new-link-suggestions').empty().hide();
+    $('#dl-new-msg').text('');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('dl-new-modal')).show();
+  }).fail(function () { showToast('Fehler beim Laden der Ordner.', false); });
 }
 
-function openDownloadForm(path) {
-  currentDownloadPath = path;
-  $('#dl-form-title').text(path);
-  $('#dl-save-msg').text('');
-  $.get('/api/download-meta?path=' + encodeURIComponent(path), function (meta) {
-    $('#dl-description').val(meta.description || '');
-    $.get('/api/download-files?path=' + encodeURIComponent(path), function (files) {
-      renderDownloadParts(meta.hasPart || [], files);
-      $('#dl-list-view').addClass('d-none');
-      $('#dl-form-view').removeClass('d-none');
-      lucide.createIcons();
+function saveDlNew() {
+  var folder   = $('#dl-new-folder').val();
+  var filename = $('#dl-new-name').val().trim();
+  var desc     = $('#dl-new-desc').val().trim();
+  if (!folder)   { $('#dl-new-msg').text('Bitte einen Ordner wahlen.'); return; }
+  if (!filename) { $('#dl-new-msg').text('Dateiname ist Pflicht.'); return; }
+
+  var linkIds = [];
+  $('#dl-new-links .dl-new-link-chip').each(function () { linkIds.push($(this).attr('data-id')); });
+  var tags = [];
+  $('#dl-new-tag-chips .dl-new-tag-chip').each(function () { tags.push($(this).attr('data-key')); });
+  var newPart = { '@type': 'MediaObject', title: filename, link_ids: linkIds, tags: tags };
+  if (desc) { newPart.description = desc; }
+
+  $.get('/api/download-meta?path=' + encodeURIComponent(folder), function (meta) {
+    var hasPart = meta.hasPart || [];
+    var dup = false;
+    $.each(hasPart, function (_, p) { if (p.title === filename) { dup = true; return false; } });
+    if (dup) { $('#dl-new-msg').text('Dateiname existiert bereits in diesem Ordner.'); return; }
+    hasPart.push(newPart);
+    meta.hasPart = hasPart;
+    $.ajax({
+      url: '/api/download-meta?path=' + encodeURIComponent(folder),
+      type: 'POST', contentType: 'application/json',
+      data: JSON.stringify(meta),
+      success: function () {
+        showToast('Eintrag angelegt.', true);
+        bootstrap.Modal.getInstance(document.getElementById('dl-new-modal')).hide();
+        $.get('/api/download-entries', function (list) { state.downloads = list || []; renderDownloadsList(); });
+      },
+      error: function (xhr) { showToast('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status), false); },
     });
   }).fail(function (xhr) {
-    showToast('Download-Ordner laden fehlgeschlagen: ' + ((xhr.responseJSON && xhr.responseJSON.error) || xhr.status), false);
+    showToast('Laden fehlgeschlagen: ' + ((xhr.responseJSON && xhr.responseJSON.error) || xhr.status), false);
   });
 }
+
+function initDownloadsTab() {
+  $('#dl-list').on('click', '.dl-edit-file', function (e) {
+    e.preventDefault();
+    openDownloadForm($(this).attr('data-folder'), $(this).attr('data-name'));
+  });
+
+  $('#dl-list').on('input', '#dl-search', function () {
+    dlSearch = $(this).val();
+    renderDownloadsRows();
+  });
+  $('#dl-list').on('change', '#dl-filter-bereich', function () { dlFilterBereich = $(this).val(); renderDownloadsRows(); });
+  $('#dl-list').on('change', '#dl-filter-thema',   function () { dlFilterThema   = $(this).val(); renderDownloadsRows(); });
+  $('#dl-list').on('change', '#dl-filter-gruppe',  function () { dlFilterGruppe  = $(this).val(); renderDownloadsRows(); });
+  $('#dl-list').on('click', '#dl-clear-filters', function () {
+    dlSearch = ''; dlFilterBereich = ''; dlFilterThema = ''; dlFilterGruppe = '';
+    renderDownloadsList();
+  });
+
+  $('#dl-edit-modal').on('hidden.bs.modal', function () {
+    currentDownloadPath = null;
+    currentDownloadFile = null;
+  });
+
+  $('#dl-file-link-search').on('input', function () {
+    var query = $(this).val().trim().toLowerCase();
+    var $sug  = $('#dl-file-link-suggestions');
+    if (!query) { $sug.empty().hide(); return; }
+    var existing = [];
+    $('#dl-file-links .dl-file-link-chip').each(function () { existing.push($(this).attr('data-id')); });
+    var matches = [];
+    $.each(state.links.itemListElement || [], function (_, li) {
+      if (!li.item || !li.item['@id']) { return; }
+      if (existing.indexOf(li.item['@id']) !== -1) { return; }
+      if ((li.item.title || '').toLowerCase().indexOf(query) !== -1 || (li.item.url || '').toLowerCase().indexOf(query) !== -1) {
+        matches.push(li.item);
+      }
+    });
+    if (!matches.length) { $sug.empty().hide(); return; }
+    $sug.html($.map(matches.slice(0, 8), function (lnk) {
+      return '<a href="#" class="list-group-item list-group-item-action py-1 dl-file-link-pick" data-id="' + sanitize(lnk['@id']) + '">'
+        + sanitize(linkLabel(lnk) || lnk.url) + '</a>';
+    }).join('')).show();
+  });
+
+  $('#dl-file-link-suggestions').on('click', '.dl-file-link-pick', function (e) {
+    e.preventDefault();
+    var id  = $(this).attr('data-id');
+    var lnk = linkById(id);
+    $('#dl-file-links').append(buildDlFileChip(id, lnk ? linkLabel(lnk) : id));
+    $('#dl-file-link-search').val('');
+    $('#dl-file-link-suggestions').empty().hide();
+  });
+
+  $('#dl-file-links').on('click', '.btn-close', function () { $(this).closest('.dl-file-link-chip').remove(); });
+  $('#dl-file-tag-chips').on('click', '.btn-close', function () { $(this).closest('.dl-file-tag-chip').remove(); });
+
+  $('#dl-file-tags-btn').on('show.bs.dropdown', function () {
+    var $menu    = $('#dl-file-tags-menu');
+    var existing = [];
+    $('#dl-file-tag-chips .dl-file-tag-chip').each(function () { existing.push($(this).attr('data-key')); });
+    var allTags  = {};
+    $.each(state.tags.location_tags    || {}, function (k, v) { allTags[k] = v.label || k; });
+    $.each(state.tags.description_tags || {}, function (k, v) { allTags[k] = v.label || k; });
+    $menu.empty();
+    $.each(allTags, function (key, label) {
+      if (existing.indexOf(key) !== -1) { return; }
+      $menu.append('<li><a href="#" class="dropdown-item py-1 dl-file-tag-pick" data-key="' + sanitize(key) + '">' + sanitize(label) + '</a></li>');
+    });
+    if (!$menu.children().length) { $menu.append('<li><span class="dropdown-item text-muted">Keine weiteren Tags</span></li>'); }
+  });
+
+  $('#dl-file-tags-menu').on('click', '.dl-file-tag-pick', function (e) {
+    e.preventDefault();
+    $('#dl-file-tag-chips').append(buildDlTagChip($(this).attr('data-key')));
+  });
+
+  $('#btn-save-dl-file').on('click', saveDlFile);
+
+  $('#dl-list').on('click', '#btn-dl-new', openDlNewModal);
+
+  $('#dl-new-link-search').on('input', function () {
+    var query = $(this).val().trim().toLowerCase();
+    var $sug  = $('#dl-new-link-suggestions');
+    if (!query) { $sug.empty().hide(); return; }
+    var existing = [];
+    $('#dl-new-links .dl-new-link-chip').each(function () { existing.push($(this).attr('data-id')); });
+    var matches = [];
+    $.each(state.links.itemListElement || [], function (_, li) {
+      if (!li.item || !li.item['@id']) { return; }
+      if (existing.indexOf(li.item['@id']) !== -1) { return; }
+      if ((li.item.title || '').toLowerCase().indexOf(query) !== -1 || (li.item.url || '').toLowerCase().indexOf(query) !== -1) {
+        matches.push(li.item);
+      }
+    });
+    if (!matches.length) { $sug.empty().hide(); return; }
+    $sug.html($.map(matches.slice(0, 8), function (lnk) {
+      return '<a href="#" class="list-group-item list-group-item-action py-1 dl-new-link-pick" data-id="' + sanitize(lnk['@id']) + '">'
+        + sanitize(linkLabel(lnk) || lnk.url) + '</a>';
+    }).join('')).show();
+  });
+
+  $('#dl-new-link-suggestions').on('click', '.dl-new-link-pick', function (e) {
+    e.preventDefault();
+    var id  = $(this).attr('data-id');
+    var lnk = linkById(id);
+    $('#dl-new-links').append(buildDlNewLinkChip(id, lnk ? linkLabel(lnk) : id));
+    $('#dl-new-link-search').val('');
+    $('#dl-new-link-suggestions').empty().hide();
+  });
+
+  $('#dl-new-links').on('click', '.btn-close', function () { $(this).closest('.dl-new-link-chip').remove(); });
+  $('#dl-new-tag-chips').on('click', '.btn-close', function () { $(this).closest('.dl-new-tag-chip').remove(); });
+
+  $('#dl-new-tags-btn').on('show.bs.dropdown', function () {
+    var $menu    = $('#dl-new-tags-menu');
+    var existing = [];
+    $('#dl-new-tag-chips .dl-new-tag-chip').each(function () { existing.push($(this).attr('data-key')); });
+    var allTags  = {};
+    $.each(state.tags.location_tags    || {}, function (k, v) { allTags[k] = v.label || k; });
+    $.each(state.tags.description_tags || {}, function (k, v) { allTags[k] = v.label || k; });
+    $menu.empty();
+    $.each(allTags, function (key, label) {
+      if (existing.indexOf(key) !== -1) { return; }
+      $menu.append('<li><a href="#" class="dropdown-item py-1 dl-new-tag-pick" data-key="' + sanitize(key) + '">' + sanitize(label) + '</a></li>');
+    });
+    if (!$menu.children().length) { $menu.append('<li><span class="dropdown-item text-muted">Keine weiteren Tags</span></li>'); }
+  });
+
+  $('#dl-new-tags-menu').on('click', '.dl-new-tag-pick', function (e) {
+    e.preventDefault();
+    $('#dl-new-tag-chips').append(buildDlNewTagChip($(this).attr('data-key')));
+  });
+
+  $('#dl-new-modal').on('hidden.bs.modal', function () { $('#dl-new-msg').text(''); });
+
+  $('#btn-save-dl-new').on('click', saveDlNew);
+}
+
 

@@ -12,6 +12,80 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:c5d20ac6-d010-4989-867b-77505162fe91",
+      "title": "Windener Bastelopas",
+      "date": "2025-05-22",
+      "description": "Besuch bei den Windener Bastelopas"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:34c13a9a-218c-4467-8c64-d8ab5a23f420",
+      "title": "Chaos Computer Club Aachen e.V.",
+      "date": "2025-10-18",
+      "description": "Besuch bei Chaos Computer Club Aachen e.V.",
+      "link_ids": [
+        "urn:uuid:a8d0a4d3-627b-45d5-927c-810cec14b6e8"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:de67012a-53b9-470e-a09f-39bc59062937",
+      "title": "DingFabrik Köln e.V.",
+      "date": "2025-04-11",
+      "description": "Besuch bei DingFabrik Köln e.V.",
+      "link_ids": [
+        "urn:uuid:57726b6c-d7d1-4485-97a9-0810c23076e2"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:2d06ec81-97c9-49e3-a6c5-e6fa7cb28528",
+      "title": "FabLab Aachen",
+      "date": "2024-06-19",
+      "description": "Besuch bei FabLab Aachen",
+      "link_ids": [
+        "urn:uuid:b8e8ca13-79df-40e1-9e51-02b8db4f54d4"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:4952ed51-0a1b-489b-a0e6-e5a139dabbe1",
+      "title": "KLuG e.V. Köln",
+      "date": "2025-11-04",
+      "location": "Besuch bei KLuG e.V. Köln"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:9b016aae-5062-42ac-a27c-082943c4d88a",
+      "title": "LabAix Aachen",
+      "date": "2024-01-04",
+      "description": "Besuch bei LabAix Aachen",
+      "link_ids": [
+        "urn:uuid:410250b9-a890-40d1-9e8f-91e4f5a88fd9"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:a628ad9a-8afb-4e87-8466-e462a1128853",
+      "title": "Meffi.s Aachen",
+      "date": "2023-12-06",
+      "description": "Besuch bei Meffi.s Aachen",
+      "link_ids": [
+        "urn:uuid:5dd219f6-006e-4420-add8-f7221b3dca9d"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:3d6d8aa8-56b5-4c92-a983-a0a5f3f9e93c",
+      "title": "Studiwerkstatt Aachen e.V.",
+      "date": "2023-12-21",
+      "description": "Besuch bei Studiwerkstatt Aachen e.V.",
+      "link_ids": [
+        "urn:uuid:0df8c7b8-3401-41b3-9bbb-beefdc45c97c"
+      ]
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:3f8c2d1a-7e4b-4a9f-8c3e-1d5b6a2f9e7c",
       "title": "Repair Café",
       "date": "2026-04-25",

@@ -64,15 +64,16 @@ User-created file, one per album folder in SOURCE_DIR. Never auto-modified.
 ```json
 {
   "title": "string, required",
-  "date": "YYYY-MM-DD, optional",
   "description": "string, optional",
   "consent_collected": true,
   "preview": "DSC_0042.jpg",
   "blur":    ["IMG_007.jpg"],
   "no_blur": ["logo.jpg"],
-  "tags": ["string", "array", "optional"]
+  "chronicle_id": "urn:uuid:..., optional"
 }
 ```
+
+**Kein `date`, kein `tags`** - diese Felder kommen ausschliesslich aus dem verknuepften Chronik-Eintrag (`chronicle_id`). Datum und Tags werden in `share.js` zur Laufzeit aus `CHRONICLE_DATA` aufgeloest.
 
 **`consent_collected`** defaults to `false` (safe default).
 When `false` or missing, faces in ALL output images are blurred.

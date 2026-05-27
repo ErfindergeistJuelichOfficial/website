@@ -794,6 +794,60 @@
         "description": "",
         "type": "raw"
       }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:0df8c7b8-3401-41b3-9bbb-beefdc45c97c",
+        "title": "Studiwerkstatt Aachen e.V.",
+        "url": "https://www.studiwerkstatt.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:5dd219f6-006e-4420-add8-f7221b3dca9d",
+        "title": "Meffi.s Aachen",
+        "url": "https://www.meffis.org/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:410250b9-a890-40d1-9e8f-91e4f5a88fd9",
+        "title": "LabAix Aachen",
+        "url": "https://www.labaix.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:b8e8ca13-79df-40e1-9e51-02b8db4f54d4",
+        "title": "FabLab Aachen",
+        "url": "https://hci.rwth-aachen.de/fablab",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:57726b6c-d7d1-4485-97a9-0810c23076e2",
+        "title": "DingFabrik Köln e.V.",
+        "url": "https://dingfabrik.de/",
+        "type": "extern"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:a8d0a4d3-627b-45d5-927c-810cec14b6e8",
+        "title": "Chaos Computer Club Aachen e.V.",
+        "url": "https://aachen.ccc.de/",
+        "type": "extern"
+      }
     }
   ]
 }

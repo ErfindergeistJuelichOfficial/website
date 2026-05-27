@@ -228,8 +228,10 @@ function egFormatDate(iso) {
       }
     });
     result.albums.sort(function (a, b) {
-      var aDate = a.dateCreated || '';
-      var bDate = b.dateCreated || '';
+      var aChron = a.chronicleId ? chronicleMap[a.chronicleId] : null;
+      var bChron = b.chronicleId ? chronicleMap[b.chronicleId] : null;
+      var aDate  = (aChron && aChron.date) || '';
+      var bDate  = (bChron && bChron.date) || '';
       if (aDate && bDate) { return bDate.localeCompare(aDate); }
       if (aDate) { return -1; }
       if (bDate) { return 1; }
@@ -349,7 +351,8 @@ function egFormatDate(iso) {
         ? '<img src="galerie/' + esc(album.preview) + '" alt="' + esc(album.name) + '" loading="lazy" class="w-100 h-100 d-block object-fit-cover">'
         : '<i data-lucide="images" aria-hidden="true"></i>';
       var metaParts = [];
-      if (album.dateCreated) { metaParts.push(egFormatDate(album.dateCreated)); }
+      var albumChron = album.chronicleId ? chronicleMap[album.chronicleId] : null;
+      if (albumChron && albumChron.date) { metaParts.push(egFormatDate(albumChron.date)); }
       if (album.imageCount) { metaParts.push(album.imageCount + ' Fotos'); }
       if (hasChildren(album.path)) {
         var sub = childrenOf(album.path);
@@ -432,18 +435,21 @@ function egFormatDate(iso) {
         lbImages = meta.hasPart || [];
 
         // ── Album info box ──────────────────────────────────────────────────
+        var chronicleEntry = meta.chronicleId ? chronicleMap[meta.chronicleId] : null;
+
         var infoMetaParts = [];
-        if (meta.dateCreated) { infoMetaParts.push(egFormatDate(meta.dateCreated)); }
+        var albumDate = chronicleEntry ? chronicleEntry.date : null;
+        if (albumDate) { infoMetaParts.push(egFormatDate(albumDate)); }
         infoMetaParts.push(lbImages.length + ' Fotos');
         $('#gallery-album-info-meta').text(infoMetaParts.join(' · '));
 
-        var desc = meta.description || '';
+        var desc = meta.description || (chronicleEntry ? (chronicleEntry.description || '') : '');
         $('#gallery-album-info-desc')
           .toggleClass('d-none', !desc)
           .toggleClass('gallery-album-info-desc', !!desc)
           .text(desc);
 
-        var keywords = Array.isArray(meta.keywords) ? meta.keywords : [];
+        var keywords = chronicleEntry && Array.isArray(chronicleEntry.tags) ? chronicleEntry.tags : [];
         var $tags = $('#gallery-album-info-tags');
         if (keywords.length) {
           $tags.removeClass('d-none').empty();
@@ -464,7 +470,6 @@ function egFormatDate(iso) {
           raw: 'btn-outline-secondary', cloud: 'btn-outline-success',
           social: 'btn-outline-info', extern: 'btn-outline-light'
         };
-        var chronicleEntry = meta.chronicleId ? chronicleMap[meta.chronicleId] : null;
         if (chronicleEntry && Array.isArray(chronicleEntry.link_ids)) {
           chronicleEntry.link_ids.forEach(function (lid) {
             var lnk = linksById[lid];

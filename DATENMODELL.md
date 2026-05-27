@@ -52,16 +52,10 @@ erDiagram
     ALBUM {
         string path PK
         string title
-        string date
         string description
         string consent_collected
         string chronicle_id FK
         string preview
-    }
-
-    ALBUM_TAG {
-        string album_path FK
-        string tag_key FK
     }
 
     ALBUM_FILE_MASK {
@@ -109,8 +103,6 @@ erDiagram
     CHRONICLE_ENTRY ||--o{ CHRONICLE_TAG : tags
     TAG ||--o{ CHRONICLE_TAG : references
     ALBUM }o--o| CHRONICLE_ENTRY : chronicle_id
-    ALBUM ||--o{ ALBUM_TAG : tags
-    TAG ||--o{ ALBUM_TAG : references
     ALBUM ||--o{ ALBUM_FILE_MASK : masks
     ALBUM ||--o{ GALLERY_IMAGE : images
     DOWNLOAD_FOLDER ||--o{ DOWNLOAD_FILE : hasPart
@@ -129,7 +121,7 @@ erDiagram
 | `CHRONICLE_ENTRY`, `CHRONICLE_COLLABORATOR`, `CHRONICLE_TAG`, `CHRONICLE_ENTRY_LINK` | `share/config/chronicle.json` | JSON-LD `ItemList > Event[]` |
 | `TAG` | `share/config/tags.json` | JSON-LD `DefinedTermSet` |
 | `LINK` | `share/config/links.json` | JSON-LD `ItemList > ListItem[]` |
-| `ALBUM`, `ALBUM_TAG`, `ALBUM_FILE_MASK` | `<SOURCE_DIR>/<path>/_config.json` | JSON, pro Album eine Datei |
+| `ALBUM`, `ALBUM_FILE_MASK` | `<SOURCE_DIR>/<path>/_config.json` | JSON, pro Album eine Datei |
 | `GALLERY_IMAGE` | `share/galerie/<path>/_meta.json` | JSON-LD `ImageGallery`, generiert |
 | `DOWNLOAD_FOLDER`, `DOWNLOAD_FILE`, `DOWNLOAD_FILE_LINK`, `DOWNLOAD_FILE_TAG` | `share/downloads/<path>/_meta.json` | JSON-LD `DataCatalog`, pro Ordner eine Datei |
 

@@ -769,12 +769,8 @@ def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: li
         'name':     config['title'],
         'hasPart':  parts,
     }
-    if config.get('date'):
-        meta['dateCreated'] = config['date']
     if config.get('description'):
         meta['description'] = config['description']
-    if config.get('tags'):
-        meta['keywords'] = config['tags']
     if config.get('chronicle_id'):
         meta['chronicleId'] = config['chronicle_id']
 
@@ -798,12 +794,8 @@ def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Option
         'name':       meta['name'],
         'imageCount': len(parts),
     }
-    if meta.get('dateCreated'):
-        summary['dateCreated'] = meta['dateCreated']
     if meta.get('description'):
         summary['description'] = meta['description']
-    if meta.get('keywords'):
-        summary['keywords'] = meta['keywords']
     if meta.get('chronicleId'):
         summary['chronicleId'] = meta['chronicleId']
     thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
@@ -867,10 +859,8 @@ def detect_config_changes(config: dict, output_album: Path) -> list[str]:
         return None if v in (None, '', []) else v
 
     checks: list[tuple[str, object, object]] = [
-        ('title',      meta.get('name'),          norm(config.get('title'))),
-        ('date',       norm(meta.get('dateCreated')), norm(config.get('date'))),
+        ('title',       meta.get('name'),          norm(config.get('title'))),
         ('description', norm(meta.get('description')), norm(config.get('description'))),
-        ('tags',       norm(meta.get('keywords')),    norm(config.get('tags'))),
     ]
     return [f'{label}: {old!r} -> {new!r}' for label, old, new in checks if old != new]
 
@@ -911,7 +901,6 @@ def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] =
         consent_label = 'consent collected' if config.get('consent_collected') else 'NO consent - faces will be blurred'
         print(f'\nAlbum: {album_rel}')
         print(f'  Title  : {config["title"]}')
-        print(f'  Date   : {config.get("date") or "-"}')
         print(f'  Privacy: {consent_label}')
 
         existing = load_existing_by_hash(output_album)

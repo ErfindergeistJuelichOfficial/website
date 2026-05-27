@@ -142,6 +142,16 @@ Galerie-Album-`_config.json`-Dateien aus einem konfigurierten Quellordner.
 
 Kein PHP, keine Qualitaetstools fuer diesen Ordner.
 
+### gui Downloads - Design-Kopplung
+
+`gui/` laedt `share.erfindergeist.org/assets/css/share.css` direkt. Der Downloads-Tab
+in `gui/index.html` + `gui/app.js` spiegelt das Design von `share/assets/templates/tab-downloads.php`
+1:1 wider (gleiche Tabellenstruktur, gleiche CSS-Klassen, gleiche Filter-Bar).
+
+**Bei Design-Aenderungen an `share/assets/templates/tab-downloads.php` oder den
+zugehoerigen CSS-Regeln in `share/assets/css/share.css` muss `gui/app.js`
+(`renderDownloadsList`, `renderDownloadsRows`) entsprechend angepasst werden.**
+
 ## Datenmodell
 
 Alle Aenderungen am JSON-Schema der Config-Dateien (`chronicle.json`, `links.json`, `tags.json`) oder der Album-`_config.json` muessen auch in `DATENMODELL.md` nachgezogen werden (ER-Diagramm, Speicherorte, API-Tabellen).

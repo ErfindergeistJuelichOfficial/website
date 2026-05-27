@@ -8,12 +8,12 @@
     {
       "@type": "MediaObject",
       "title": "termine_repaircafe_quer.pdf",
-      "description": "Terminübersicht Repair Café im Querformat",
       "link_ids": [
         "urn:uuid:23e87385-97e7-48af-a6af-2336fc72d764",
         "urn:uuid:dca18cb3-e342-4de2-b661-b8f14b5df2b5"
       ],
-      "tags": []
+      "tags": [],
+      "description": "Terminübersicht Repair Café im Querformat"
     },
     {
       "@type": "MediaObject",

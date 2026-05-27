@@ -84,9 +84,6 @@ podman compose up
 ```powershell
 cd gui
 
-# First build (downloads Monaco editor ~25 MB into image)
-podman compose build
-
 # Start editor
 podman compose up
 # http://localhost:8082

@@ -197,6 +197,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._api_album_get(qs)
         elif p == '/api/downloads':
             self._api_downloads()
+        elif p == '/api/download-entries':
+            self._api_download_entries()
         elif p == '/api/download-meta':
             self._api_download_meta_get(qs)
         elif p == '/api/download-files':
@@ -356,6 +358,37 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 rel = str(entry.relative_to(DOWNLOADS_DIR)).replace('\\', '/')
                 folders.append({'path': rel, 'hasMeta': (entry / '_meta.json').is_file()})
         self._json(200, folders)
+
+    def _api_download_entries(self) -> None:
+        """Flat list of all entries from _meta.json hasPart across all folders.
+        Files without a hasPart entry are appended afterwards (no metadata)."""
+        if not _downloads_available():
+            self._json(200, [])
+            return
+        entries = []
+        for folder_path in sorted(DOWNLOADS_DIR.rglob('*')):
+            if not folder_path.is_dir():
+                continue
+            rel_folder = str(folder_path.relative_to(DOWNLOADS_DIR)).replace('\\', '/')
+            meta_parts: dict = {}
+            meta_path = folder_path / '_meta.json'
+            if meta_path.is_file():
+                try:
+                    meta = _read_json(meta_path)
+                    for part in (meta.get('hasPart') or []):
+                        title = part.get('title', '')
+                        if title:
+                            meta_parts[title] = part
+                            entries.append({
+                                'name': title,
+                                'folder': rel_folder,
+                                'description': part.get('description', ''),
+                                'link_ids': part.get('link_ids') or [],
+                                'tags': part.get('tags') or [],
+                            })
+                except (json.JSONDecodeError, OSError):
+                    pass
+        self._json(200, entries)
 
     def _api_download_meta_get(self, qs: dict) -> None:
         rel = (qs.get('path') or [''])[0]

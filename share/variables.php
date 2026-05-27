@@ -28,11 +28,11 @@ const EG_LINK_BUTTON_CLASS = [
   'raw'       => 'btn-outline-secondary',
   'cloud'     => 'btn-outline-success',
   'blog'      => 'btn-outline-beitrag',
-  'github'    => 'btn-outline-dark',
+  'github'    => 'btn-outline-secondary',
   'website'   => 'btn-outline-primary',
   'service'   => 'btn-outline-secondary',
   'social'    => 'btn-outline-secondary',
-  'api'       => 'btn-outline-dark',
+  'api'       => 'btn-outline-secondary',
   'extern'    => 'btn-outline-secondary',
 ];
 
