@@ -69,7 +69,7 @@
       html += pad2(day) + '. ' + MONTHS[month] + ': ';
       html += '<b>' + escHtml(event.title) + '</b>';
       if (text) {
-        html += ' ' + escHtml(text) + '.';
+        html += ' ' + escHtml(text);
       }
       if (linkAnchors.length) {
         html += ' ' + linkAnchors.join(', ');
