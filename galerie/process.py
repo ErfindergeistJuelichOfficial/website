@@ -15,8 +15,8 @@ Environment variables (from .env):
     NORMALIZED_MAX    - max dimension for normalized images in px (default: 1920)
     QUALITY_THUMB     - WebP quality for thumbnails (default: 80)
     QUALITY_NORM      - WebP quality for normalized images (default: 85)
-    VISION_MODEL      - AI model for captions: disabled|clip-b32|blip-base|florence-2|moondream2
-    BLUR_MODEL        - comma-separated list of face-detection models applied sequentially
+    VISION_MODEL      - AI model for captions: disabled|florence-2
+    BLUR_MODEL        - comma-separated list of face-detection models: owlvit|mtcnn
     DEVICE            - AI inference device: cpu|cuda
 """
 
@@ -46,7 +46,6 @@ QUALITY_N    = int(os.getenv('QUALITY_NORM',    '85'))
 VISION_MODEL     = os.getenv('VISION_MODEL', 'disabled').lower()
 BLUR_MODELS      = [m.strip() for m in os.getenv('BLUR_MODEL', 'haar').lower().split(',') if m.strip()]
 DEVICE           = os.getenv('DEVICE', 'cpu').lower()
-YUNET_MODEL_PATH = Path('/usr/local/share/yunet.onnx')
 
 IMAGE_EXTS = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.tif', '.webp'}
 
@@ -87,33 +86,12 @@ def load_vision_model() -> None:
 
     print(f'Loading vision model: {VISION_MODEL} on {DEVICE} ...')
     try:
-        if VISION_MODEL == 'blip-base':
-            from transformers import BlipForConditionalGeneration, BlipProcessor
-            _vision_proc  = BlipProcessor.from_pretrained('Salesforce/blip-image-captioning-base')
-            _vision_model = BlipForConditionalGeneration.from_pretrained(
-                'Salesforce/blip-image-captioning-base'
-            ).to(DEVICE)
-
-        elif VISION_MODEL == 'florence-2':
+        if VISION_MODEL == 'florence-2':
             _install_flash_attn_stub()
             from transformers import AutoModelForCausalLM, AutoProcessor
             _vision_proc  = AutoProcessor.from_pretrained('microsoft/Florence-2-base', trust_remote_code=True)
             _vision_model = AutoModelForCausalLM.from_pretrained(
                 'microsoft/Florence-2-base', trust_remote_code=True, attn_implementation='eager'
-            ).to(DEVICE)
-
-        elif VISION_MODEL == 'clip-b32':
-            from transformers import CLIPModel, CLIPProcessor
-            _vision_proc  = CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32')
-            _vision_model = CLIPModel.from_pretrained('openai/clip-vit-base-patch32').to(DEVICE)
-
-        elif VISION_MODEL == 'moondream2':
-            from transformers import AutoModelForCausalLM, AutoTokenizer
-            _vision_proc  = AutoTokenizer.from_pretrained(
-                'vikhyatk/moondream2', revision='2024-07-23', trust_remote_code=True
-            )
-            _vision_model = AutoModelForCausalLM.from_pretrained(
-                'vikhyatk/moondream2', revision='2024-07-23', trust_remote_code=True
             ).to(DEVICE)
 
         else:
@@ -128,39 +106,14 @@ def load_vision_model() -> None:
 
 
 def load_blur_models() -> None:
-    """Load all configured face-detection models (skips haar - no loading needed)."""
+    """Load all configured face-detection models."""
     global _blur_instances
     for model_name in BLUR_MODELS:
-        if model_name == 'haar' or model_name in _blur_instances:
+        if model_name in _blur_instances:
             continue
         print(f'Loading blur model: {model_name} on {DEVICE} ...')
         try:
-            if model_name == 'mediapipe':
-                import mediapipe as mp
-                _blur_instances[model_name] = (mp.solutions.face_detection, None)
-
-            elif model_name == 'florence-2':
-                if VISION_MODEL == 'florence-2' and _vision_model is not None:
-                    _blur_instances[model_name] = (_vision_model, _vision_proc)
-                    print('  Reusing vision model instance.')
-                else:
-                    _install_flash_attn_stub()
-                    from transformers import AutoModelForCausalLM, AutoProcessor
-                    proc  = AutoProcessor.from_pretrained('microsoft/Florence-2-base', trust_remote_code=True)
-                    model = AutoModelForCausalLM.from_pretrained(
-                        'microsoft/Florence-2-base', trust_remote_code=True, attn_implementation='eager'
-                    ).to(DEVICE)
-                    _blur_instances[model_name] = (model, proc)
-
-            elif model_name == 'grounding-dino':
-                from transformers import AutoModelForZeroShotObjectDetection, AutoProcessor
-                proc  = AutoProcessor.from_pretrained('IDEA-Research/grounding-dino-tiny')
-                model = AutoModelForZeroShotObjectDetection.from_pretrained(
-                    'IDEA-Research/grounding-dino-tiny'
-                ).to(DEVICE)
-                _blur_instances[model_name] = (model, proc)
-
-            elif model_name == 'owlvit':
+            if model_name == 'owlvit':
                 from transformers import AutoModelForZeroShotObjectDetection, AutoProcessor
                 proc  = AutoProcessor.from_pretrained('google/owlvit-base-patch32')
                 model = AutoModelForZeroShotObjectDetection.from_pretrained(
@@ -173,17 +126,6 @@ def load_blur_models() -> None:
                 model = FaceMTCNN(
                     keep_all=True, device=DEVICE, post_process=False,
                     min_face_size=20, thresholds=[0.6, 0.7, 0.7],
-                )
-                _blur_instances[model_name] = (model, None)
-
-            elif model_name == 'yunet':
-                import cv2
-                if not YUNET_MODEL_PATH.is_file():
-                    print('  yunet.onnx not found. Rebuild with INSTALL_AI=true.', file=sys.stderr)
-                    continue
-                model = cv2.FaceDetectorYN.create(
-                    str(YUNET_MODEL_PATH), '', (0, 0),
-                    score_threshold=0.9, nms_threshold=0.3, top_k=5000,
                 )
                 _blur_instances[model_name] = (model, None)
 
@@ -212,12 +154,6 @@ def generate_caption(img: Image.Image) -> Optional[str]:
 
         rgb = img.convert('RGB')
 
-        if VISION_MODEL == 'blip-base':
-            inputs = _vision_proc(rgb, return_tensors='pt').to(DEVICE)
-            with torch.no_grad():
-                out = _vision_model.generate(**inputs, max_new_tokens=64)
-            return _vision_proc.decode(out[0], skip_special_tokens=True)
-
         if VISION_MODEL == 'florence-2':
             inputs = _vision_proc(text='<CAPTION>', images=rgb, return_tensors='pt').to(DEVICE)
             with torch.no_grad():
@@ -228,27 +164,6 @@ def generate_caption(img: Image.Image) -> Optional[str]:
             )
             text = parsed.get('<CAPTION>', '').strip()
             return text if text else None
-
-        if VISION_MODEL == 'clip-b32':
-            labels = [
-                'people', 'outdoor', 'indoor', 'food', 'technology', 'nature',
-                'presentation', 'workshop', 'group photo', 'maker', 'electronics',
-                'children', 'adults', 'celebration', 'work', 'demonstration',
-            ]
-            inputs = _vision_proc(
-                text=labels, images=rgb, return_tensors='pt', padding=True
-            ).to(DEVICE)
-            with torch.no_grad():
-                logits = _vision_model(**inputs).logits_per_image[0]
-            probs = logits.softmax(dim=0).tolist()
-            top = sorted(zip(labels, probs), key=lambda x: x[1], reverse=True)[:3]
-            return ', '.join(label for label, prob in top if prob > 0.1) or None
-
-        if VISION_MODEL == 'moondream2':
-            enc = _vision_model.encode_image(rgb)
-            return _vision_model.answer_question(
-                enc, 'Describe what you see in this image.', _vision_proc
-            )
 
     except Exception as exc:
         print(f'  ERROR: caption generation failed: {exc}')
@@ -320,135 +235,6 @@ def sha256_short(path: Path) -> str:
     return h.hexdigest()[:8]
 
 
-def _detect_faces_haar(img: Image.Image) -> list[tuple[int, int, int, int]]:
-    """Haar cascade detection: frontal (default + alt2) and profile cascades with mirror pass."""
-    try:
-        import cv2
-        import numpy as np
-
-        arr  = np.array(img.convert('RGB'))
-        gray = cv2.cvtColor(arr, cv2.COLOR_RGB2GRAY)
-        cv2.equalizeHist(gray, gray)
-        width = gray.shape[1]
-
-        cascade_names = [
-            'haarcascade_frontalface_default.xml',
-            'haarcascade_frontalface_alt2.xml',
-            'haarcascade_profileface.xml',
-        ]
-
-        boxes: list = []
-        for fname in cascade_names:
-            path = cv2.data.haarcascades + fname
-            if not os.path.exists(path):
-                continue
-            cascade = cv2.CascadeClassifier(path)
-            detected = cascade.detectMultiScale(
-                gray, scaleFactor=1.05, minNeighbors=3, minSize=(25, 25)
-            )
-            if hasattr(detected, '__len__') and len(detected) > 0:
-                for face in detected:
-                    boxes.append((int(face[0]), int(face[1]), int(face[2]), int(face[3])))
-            if 'profile' in fname:
-                detected_flip = cascade.detectMultiScale(
-                    cv2.flip(gray, 1), scaleFactor=1.05, minNeighbors=3, minSize=(25, 25)
-                )
-                if hasattr(detected_flip, '__len__') and len(detected_flip) > 0:
-                    for face in detected_flip:
-                        x, y, w, h = int(face[0]), int(face[1]), int(face[2]), int(face[3])
-                        boxes.append((width - x - w, y, w, h))
-        return boxes
-
-    except ImportError:
-        print('  Warning: opencv not available, face detection skipped.', file=sys.stderr)
-        return []
-    except Exception as exc:
-        print(f'  Warning: haar detection failed: {exc}', file=sys.stderr)
-        return []
-
-
-def _detect_faces_mediapipe(img: Image.Image, model: object, proc: object) -> list[tuple[int, int, int, int]]:
-    """MediaPipe BlazeFace (long-range model, model_selection=1)."""
-    try:
-        import numpy as np
-
-        arr    = np.array(img.convert('RGB'))
-        iw, ih = img.width, img.height
-        boxes: list = []
-        with model.FaceDetection(model_selection=1, min_detection_confidence=0.5) as fd:  # type: ignore[attr-defined]
-            results = fd.process(arr)
-            if results.detections:
-                for det in results.detections:
-                    bb = det.location_data.relative_bounding_box
-                    boxes.append((
-                        max(0, int(bb.xmin * iw)),
-                        max(0, int(bb.ymin * ih)),
-                        int(bb.width  * iw),
-                        int(bb.height * ih),
-                    ))
-        return boxes
-
-    except Exception as exc:
-        print(f'  Warning: mediapipe detection failed: {exc}', file=sys.stderr)
-        return []
-
-
-def _detect_faces_florence(img: Image.Image, model: object, proc: object) -> list[tuple[int, int, int, int]]:
-    """Florence-2 open-vocabulary detection with text query 'human face'."""
-    try:
-        import torch
-
-        rgb    = img.convert('RGB')
-        inputs = proc(  # type: ignore[operator]
-            text='<OPEN_VOCABULARY_DETECTION>human face',
-            images=rgb,
-            return_tensors='pt',
-        ).to(DEVICE)
-        with torch.no_grad():
-            out = model.generate(**inputs, max_new_tokens=512)  # type: ignore[operator]
-        raw    = proc.batch_decode(out, skip_special_tokens=False)[0]  # type: ignore[attr-defined]
-        parsed = proc.post_process_generation(  # type: ignore[attr-defined]
-            raw, task='<OPEN_VOCABULARY_DETECTION>', image_size=(img.width, img.height)
-        )
-        od     = parsed.get('<OPEN_VOCABULARY_DETECTION>', {})
-        boxes: list = []
-        for bbox in od.get('bboxes', []):
-            x1, y1, x2, y2 = (int(v) for v in bbox)
-            boxes.append((x1, y1, x2 - x1, y2 - y1))
-        return boxes
-
-    except Exception as exc:
-        print(f'  Warning: florence-2 detection failed: {exc}', file=sys.stderr)
-        return []
-
-
-def _detect_faces_grounding_dino(img: Image.Image, model: object, proc: object) -> list[tuple[int, int, int, int]]:
-    """Grounding DINO zero-shot detection with text query "a face."."""
-    try:
-        import torch
-
-        rgb    = img.convert('RGB')
-        inputs = proc(images=rgb, text='a face.', return_tensors='pt').to(DEVICE)  # type: ignore[operator]
-        with torch.no_grad():
-            outputs = model(**inputs)  # type: ignore[operator]
-        results = proc.post_process_grounded_object_detection(  # type: ignore[attr-defined]
-            outputs,
-            inputs['input_ids'],
-            box_threshold=0.35,
-            text_threshold=0.25,
-            target_sizes=[(img.height, img.width)],
-        )[0]
-        boxes: list = []
-        for box in results['boxes']:
-            x1, y1, x2, y2 = (int(v) for v in box.tolist())
-            boxes.append((x1, y1, x2 - x1, y2 - y1))
-        return boxes
-
-    except Exception as exc:
-        print(f'  Warning: grounding-dino detection failed: {exc}', file=sys.stderr)
-        return []
-
-
 def _detect_faces_owlvit(img: Image.Image, model: object, proc: object) -> list[tuple[int, int, int, int]]:
     """OWL-ViT zero-shot detection with text queries "a photo of a face"."""
     try:
@@ -496,50 +282,16 @@ def _detect_faces_mtcnn(img: Image.Image, model: object, proc: object) -> list[t
         return []
 
 
-def _detect_faces_yunet(img: Image.Image, model: object, proc: object) -> list[tuple[int, int, int, int]]:
-    """YuNet OpenCV DNN face detector. Output columns: x, y, w, h, ...landmarks..., score."""
-    try:
-        import numpy as np
-
-        arr    = np.array(img.convert('RGB'))
-        h, w   = arr.shape[:2]
-        model.setInputSize((w, h))  # type: ignore[attr-defined]
-        _, faces = model.detect(arr)  # type: ignore[attr-defined]
-        if faces is None:
-            return []
-        boxes: list = []
-        for face in faces:
-            x, y, fw, fh = int(face[0]), int(face[1]), int(face[2]), int(face[3])
-            score = float(face[14])
-            if score < 0.9:
-                continue
-            boxes.append((max(0, x), max(0, y), fw, fh))
-        return boxes
-    except Exception as exc:
-        print(f'  Warning: yunet detection failed: {exc}', file=sys.stderr)
-        return []
-
-
 def _detect_faces_with(model_name: str, img: Image.Image) -> list[tuple[int, int, int, int]]:
     """Dispatch face detection for a single model. Returns [(x, y, w, h), ...]."""
-    if model_name == 'haar':
-        return _detect_faces_haar(img)
     instance = _blur_instances.get(model_name)
     if instance is None:
         return []
     model, proc = instance
-    if model_name == 'mediapipe':
-        return _detect_faces_mediapipe(img, model, proc)
-    if model_name == 'florence-2':
-        return _detect_faces_florence(img, model, proc)
-    if model_name == 'grounding-dino':
-        return _detect_faces_grounding_dino(img, model, proc)
     if model_name == 'owlvit':
         return _detect_faces_owlvit(img, model, proc)
     if model_name == 'mtcnn':
         return _detect_faces_mtcnn(img, model, proc)
-    if model_name == 'yunet':
-        return _detect_faces_yunet(img, model, proc)
     return []
 
 
