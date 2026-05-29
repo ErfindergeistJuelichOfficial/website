@@ -12,6 +12,51 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:cc3e506f-6717-41ca-a733-4cffabc21285",
+      "title": "Repair Café #24",
+      "date": "2026-05-30",
+      "location": "Stadtbücherei Jülich",
+      "tags": [
+        "stadtbücherei",
+        "repaircafe"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:9e992fff-00e1-4087-b067-9e674f325b09",
+      "title": "Erfinder-Stammtisch",
+      "date": "2026-05-29",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "stammtisch"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:8f6614d5-2fe6-434f-a180-680c29dbd256",
+      "title": "Offene Werkstatt",
+      "date": "2026-05-19",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:b25bf375-1216-45e5-b074-51cce1f1e183",
+      "title": "Offene Werkstatt",
+      "date": "2026-05-05",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ],
+      "description": "Neue Mitglieder schauen sich die Werkstatt an."
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:c5d20ac6-d010-4989-867b-77505162fe91",
       "title": "Windener Bastelopas",
       "date": "2025-05-22",

@@ -162,14 +162,25 @@ Models are downloaded from HuggingFace Hub on first run (cached in the `hf-cache
 The `DEVICE` env var controls inference: `cpu` (default) or `cuda`.
 CPU is always available; CUDA requires an NVIDIA GPU with matching drivers.
 
+**`CAPTION_BATCH_SIZE`** controls how many images are sent to the model in one forward pass
+(default: `1`). On CPU, batch size is always 1 regardless of this setting. On CUDA, larger
+batches process images in parallel on the GPU:
+
+| GPU VRAM | Recommended `CAPTION_BATCH_SIZE` |
+| --- | --- |
+| CPU | 1 (forced) |
+| 4 GB | 2 |
+| 8 GB | 4 |
+| 16 GB+ | 8 |
+
 ## Face Detection Models (blur)
 
 `BLUR_MODEL` accepts a comma-separated list of models applied sequentially
 (each pass blurs the already-blurred image). All AI options require `INSTALL_AI=true`.
 
 `_detect_faces_with(model_name, img)` is the dispatch function - each model implements
-a private `_detect_faces_*(img, model, proc)` helper. `load_blur_models()` loads all
-configured models at the start of an album that requires blurring.
+a private `_detect_faces_*(img, model, proc)` helper. `load_blur_model(name)` loads one
+model; `unload_blur_model(name)` releases it. Phase 3 calls these one model at a time.
 
 | `BLUR_MODEL` | Method | CPU speed | HuggingFace / Docs |
 | --- | --- | --- | --- |
@@ -191,7 +202,7 @@ during build (`INSTALL_AI=true` required). No HuggingFace download at runtime.
 
 **Vision (caption):** Add `elif VISION_MODEL == 'your-model':` in `load_vision_model()` and `generate_caption()`.
 
-**Blur (face detection):** Add a branch in `load_blur_models()` + a `_detect_faces_yourmodel(img, model, proc)`
+**Blur (face detection):** Add a branch in `load_blur_model()` + a `_detect_faces_yourmodel(img, model, proc)`
 function, then add the dispatch case in `_detect_faces_with()`. Document in `.env.example` and this table.
 
 ## Checklist Before Committing
