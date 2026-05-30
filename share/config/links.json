@@ -848,6 +848,33 @@
         "url": "https://aachen.ccc.de/",
         "type": "extern"
       }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:0e679c29-8592-4bc8-903d-ed305b53bf6f",
+        "title": "Repair Café Statistik",
+        "url": "https://docs.erfindergeist.org/doc/statistiken-CajbFd1Aev",
+        "type": "wiki"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:7df12b72-ec03-46ed-8f00-bff4e028725a",
+        "title": "Repair Café Haftungsbegrenzung",
+        "url": "https://share.erfindergeist.org/downloads/Angebote/Repaircafe/repaircafe_haftungsbegrenzung.pdf",
+        "type": "document"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:7f8d3200-11de-4e37-bffe-a9488d346377",
+        "title": "Repair Café Laufzettel",
+        "url": "https://share.erfindergeist.org/downloads/Angebote/Repaircafe/repaircafe_laufzettel.pdf",
+        "type": "document"
+      }
     }
   ]
 }

@@ -189,6 +189,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._api_log('tags')
         elif p == '/api/albums':
             self._api_albums()
+        elif p == '/api/album/dirs':
+            self._api_album_dirs()
         elif p == '/api/album/images':
             self._api_album_images(qs)
         elif p == '/api/album/image':
@@ -221,6 +223,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._api_undo()
         elif p == '/api/album':
             self._api_album_post(qs)
+        elif p == '/api/album/delete':
+            self._api_album_delete(qs)
         elif p == '/api/download-meta':
             self._api_download_meta_post(qs)
         else:
@@ -299,6 +303,23 @@ class Handler(http.server.BaseHTTPRequestHandler):
         _write_json(path, current)
         self._json(200, {'ok': True, 'data': current})
 
+    def _api_album_dirs(self) -> None:
+        if not _albums_available():
+            self._json(200, [])
+            return
+        existing: set[str] = set()
+        for cfg_path in ALBUMS_DIR.rglob('_config.json'):
+            rel = str(cfg_path.parent.relative_to(ALBUMS_DIR)).replace('\\', '/')
+            existing.add(rel)
+        dirs = []
+        for d in sorted(ALBUMS_DIR.rglob('*')):
+            if not d.is_dir():
+                continue
+            rel = str(d.relative_to(ALBUMS_DIR)).replace('\\', '/')
+            if rel and rel != '.' and rel not in existing:
+                dirs.append(rel)
+        self._json(200, dirs)
+
     def _api_albums(self) -> None:
         if not _albums_available():
             self._json(200, [])
@@ -308,9 +329,15 @@ class Handler(http.server.BaseHTTPRequestHandler):
             rel = str(cfg_path.parent.relative_to(ALBUMS_DIR)).replace('\\', '/')
             try:
                 cfg = _read_json(cfg_path)
-                albums.append({'path': rel, 'title': cfg.get('title', rel)})
+                albums.append({
+                    'path': rel,
+                    'title': cfg.get('title', rel),
+                    'description': cfg.get('description', ''),
+                    'chronicle_id': cfg.get('chronicle_id', ''),
+                    'consent_collected': bool(cfg.get('consent_collected', False)),
+                })
             except (json.JSONDecodeError, OSError):
-                albums.append({'path': rel, 'title': rel})
+                albums.append({'path': rel, 'title': rel, 'description': '', 'chronicle_id': '', 'consent_collected': False})
         self._json(200, albums)
 
     def _api_album_images(self, qs: dict) -> None:
@@ -463,6 +490,21 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     {'ts': _now_iso(), 'action': 'edit', 'path': rel,
                      'before': old_cfg, 'after': new_cfg})
         _write_json(cfg_path, new_cfg)
+        self._json(200, {'ok': True})
+
+    def _api_album_delete(self, qs: dict) -> None:
+        rel = (qs.get('path') or [''])[0]
+        if not rel or '..' in rel or rel.startswith('/'):
+            self._error(400, 'Invalid path')
+            return
+        cfg_path = ALBUMS_DIR / rel / '_config.json'
+        if not cfg_path.is_file():
+            self._error(404, 'Config not found')
+            return
+        old_cfg = _read_json(cfg_path)
+        _append_log(ALBUMS_DIR / 'album.log',
+                    {'ts': _now_iso(), 'action': 'delete', 'path': rel, 'before': old_cfg})
+        cfg_path.unlink()
         self._json(200, {'ok': True})
 
 

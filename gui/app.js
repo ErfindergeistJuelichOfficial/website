@@ -255,8 +255,9 @@ $(function () {
 
   $('#alben-filter-top').on('change', function () { renderAlbenList(); });
 
-  $('#alben-list')
-    .on('click', '.album-item', function (e) { e.preventDefault(); openAlbumForm($(this).attr('data-path')); });
+  $('#alben-tbody')
+    .on('click', '.btn-edit-album',   function () { openAlbumModal($(this).data('path')); })
+    .on('click', '.btn-delete-album', function () { deleteAlbum($(this).data('path')); });
 
   lucide.createIcons();
 });
@@ -323,17 +324,21 @@ function renderChronikTable() {
     var tags = $.map(e.tags || [], function (t) {
       return '<span class="badge me-1" style="background:rgba(var(--color-primary-rgb),.18);color:var(--color-primary);">' + sanitize(t) + '</span>';
     }).join('');
+    var rawDesc = e.description || '';
+    var descShort = rawDesc.length > 60 ? rawDesc.slice(0, 60) + '...' : rawDesc;
+    var entryId = sanitize(e['@id']);
     return '<tr>'
       + '<td class="text-nowrap">' + sanitize(egFormatDate(e.date)) + '</td>'
       + '<td>' + sanitize(e.title || '') + '</td>'
+      + '<td class="hide-sm text-muted small btn-edit-entry" data-id="' + entryId + '" style="cursor:pointer;" title="' + sanitize(rawDesc) + '">' + sanitize(descShort) + '</td>'
       + '<td class="hide-sm">' + sanitize(e.location || '') + '</td>'
       + '<td class="hide-sm">' + tags + '</td>'
       + '<td class="text-end text-nowrap">'
-      + '<button class="btn btn-sm btn-outline-secondary me-1 btn-edit-entry" data-id="' + sanitize(e['@id']) + '" aria-label="Bearbeiten"><i data-lucide="pencil" aria-hidden="true"></i></button>'
-      + '<button class="btn btn-sm btn-outline-danger btn-delete-entry" data-id="' + sanitize(e['@id']) + '" aria-label="Löschen"><i data-lucide="trash-2" aria-hidden="true"></i></button>'
+      + '<button class="btn btn-sm btn-outline-secondary me-1 btn-edit-entry" data-id="' + entryId + '" aria-label="Bearbeiten"><i data-lucide="pencil" aria-hidden="true"></i></button>'
+      + '<button class="btn btn-sm btn-outline-danger btn-delete-entry" data-id="' + entryId + '" aria-label="Löschen"><i data-lucide="trash-2" aria-hidden="true"></i></button>'
       + '</td></tr>';
   }).join('');
-  $('#chronik-tbody').html(rows || '<tr><td colspan="5" class="text-muted text-center py-3">Keine Einträge.</td></tr>');
+  $('#chronik-tbody').html(rows || '<tr><td colspan="6" class="text-muted text-center py-3">Keine Einträge.</td></tr>');
   $('#chronik-clear-filters').toggle(!!(chronikSearch || chronikFilterOrt || chronikFilterTag));
   lucide.createIcons();
 }
@@ -840,13 +845,50 @@ function openImagePicker(mode) {
 /* ═══════════════════════════════════════════════
    Alben tab
 ═══════════════════════════════════════════════ */
-function initAlbenTab() {
-  $('#btn-alben-back').on('click', function () {
-    $('#alben-form-view').addClass('d-none');
-    $('#alben-list-view').removeClass('d-none');
-    $('#alb-chronicle-info').addClass('d-none');
-    currentAlbumPath = null;
+function initNewAlbumModal() {
+  $('#btn-new-album').on('click', function () {
+    $('#new-alb-path').html('<option value="">- Laden... -</option>');
+    $('#new-alb-title').val('');
+    $('#new-alb-msg').text('');
+    $.get('/api/album/dirs', function (dirs) {
+      if (!dirs.length) {
+        $('#new-alb-path').html('<option value="">Keine Ordner verfugbar</option>');
+      } else {
+        $('#new-alb-path').html('<option value="">- Bitte waehlen -</option>'
+          + $.map(dirs, function (d) { return '<option value="' + sanitize(d) + '">' + sanitize(d) + '</option>'; }).join(''));
+      }
+      lucide.createIcons();
+    }).fail(function () {
+      $('#new-alb-path').html('<option value="">Fehler beim Laden</option>');
+    });
+    new bootstrap.Modal($('#new-album-modal')[0]).show();
   });
+
+  $('#btn-new-alb-save').on('click', function () {
+    var path  = $('#new-alb-path').val();
+    var title = $('#new-alb-title').val().trim();
+    if (!path)  { $('#new-alb-msg').text('Bitte einen Ordner wahlen.'); return; }
+    if (!title) { $('#new-alb-msg').text('Bitte einen Titel eingeben.'); return; }
+    $.ajax({
+      url: '/api/album?path=' + encodeURIComponent(path), type: 'POST', contentType: 'application/json',
+      data: JSON.stringify({ title: title }),
+      success: function () {
+        bootstrap.Modal.getInstance($('#new-album-modal')[0]).hide();
+        $.get('/api/albums', function (albums) {
+          state.albums = albums || [];
+          renderAlbenList();
+        });
+        showToast('Album-Config erstellt.', true);
+      },
+      error: function (xhr) {
+        $('#new-alb-msg').text('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status));
+      }
+    });
+  });
+}
+
+function initAlbenTab() {
+  initNewAlbumModal();
 
   $('#alb-chronicle').on('change', function () { renderChronicleInfo($(this).val()); });
 
@@ -861,8 +903,9 @@ function initAlbenTab() {
     renderChronicleInfo(id);
   });
 
-  $('#alben-form').on('submit', function (ev) {
-    ev.preventDefault();
+  $('#album-edit-modal').on('hidden.bs.modal', function () { currentAlbumPath = null; });
+
+  $('#btn-alb-save').on('click', function () {
     if (!currentAlbumPath) { return; }
     var title = $('#alb-title').val().trim();
     if (!title) { $('#alb-save-msg').text('Titel ist Pflicht.'); return; }
@@ -881,27 +924,24 @@ function initAlbenTab() {
       url: '/api/album?path=' + encodeURIComponent(currentAlbumPath), type: 'POST', contentType: 'application/json',
       data: JSON.stringify(cfg),
       success: function () {
-        showToast('Album gespeichert. Bitte process.py ausfuehren.', true);
+        bootstrap.Modal.getInstance($('#album-edit-modal')[0]).hide();
         $.get('/api/albums', function (albums) {
           state.albums = albums || [];
           renderAlbenList();
-          $('#alben-form-view').addClass('d-none');
-          $('#alben-list-view').removeClass('d-none');
-          currentAlbumPath = null;
         });
+        showToast('Album gespeichert. Bitte process.py ausfuehren.', true);
       },
-      error: function (xhr) { showToast('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status), false); }
+      error: function (xhr) { $('#alb-save-msg').text('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status)); }
     });
   });
 }
 
 function renderAlbenList() {
-  var $list   = $('#alben-list');
+  var $tbody  = $('#alben-tbody');
   var $empty  = $('#alben-empty');
   var $filter = $('#alben-filter-top');
   var selected = $filter.val() || '';
 
-  // Rebuild top-level path options when state changed
   var tops = {};
   $.each(state.albums || [], function (_, a) {
     var top = (a.path || '').split('/')[0];
@@ -925,16 +965,38 @@ function renderAlbenList() {
   $('#alben-count').text(filtered.length + ' Album' + (filtered.length !== 1 ? 'en' : ''));
 
   if (!filtered.length) {
-    $list.empty();
+    $tbody.empty();
     $empty.removeClass('d-none');
     return;
   }
   $empty.addClass('d-none');
-  $list.html($.map(filtered, function (a) {
-    return '<a href="#" class="list-group-item list-group-item-action album-item d-flex justify-content-between align-items-center" data-path="' + sanitize(a.path) + '">'
-      + '<span>' + sanitize(a.title) + '</span>'
-      + '<small class="text-muted">' + sanitize(a.path) + '</small></a>';
-  }).join(''));
+  var rows = $.map(filtered, function (a) {
+    var rawDesc = a.description || '';
+    var descShort = rawDesc.length > 60 ? rawDesc.slice(0, 60) + '...' : rawDesc;
+    var entry = null;
+    if (a.chronicle_id) {
+      $.each(state.chronicle.itemListElement || [], function (_, e) {
+        if (e['@id'] === a.chronicle_id) { entry = e; return false; }
+      });
+    }
+    var chronicleText = entry ? sanitize(egFormatDate(entry.date) + ' - ' + (entry.title || '')) : '';
+    var consentIcon = a.consent_collected
+      ? '<i data-lucide="check-square" aria-hidden="true" style="color:var(--color-primary);"></i>'
+      : '<i data-lucide="square" aria-hidden="true" class="text-muted"></i>';
+    var path = sanitize(a.path);
+    return '<tr>'
+      + '<td>' + sanitize(a.title) + '</td>'
+      + '<td class="hide-sm text-muted small" title="' + sanitize(rawDesc) + '">' + sanitize(descShort) + '</td>'
+      + '<td class="hide-sm small">' + chronicleText + '</td>'
+      + '<td class="text-center">' + consentIcon + '</td>'
+      + '<td class="hide-sm text-muted small">' + path + '</td>'
+      + '<td class="text-end text-nowrap">'
+      + '<button class="btn btn-sm btn-outline-secondary me-1 btn-edit-album" data-path="' + path + '" aria-label="Bearbeiten"><i data-lucide="pencil" aria-hidden="true"></i></button>'
+      + '<button class="btn btn-sm btn-outline-danger btn-delete-album" data-path="' + path + '" aria-label="Loeschen"><i data-lucide="trash-2" aria-hidden="true"></i></button>'
+      + '</td></tr>';
+  }).join('');
+  $tbody.html(rows);
+  lucide.createIcons();
 }
 
 function renderChronicleInfo(id) {
@@ -990,9 +1052,9 @@ function buildChronicleDropdown($selectEl, selectedId) {
     }).join(''));
 }
 
-function openAlbumForm(path) {
+function openAlbumModal(path) {
   currentAlbumPath = path;
-  $('#alben-form-title').text(path);
+  $('#album-edit-modal-label').text('Album: ' + path);
   $('#alb-save-msg').text('');
   $.get('/api/album?path=' + encodeURIComponent(path), function (cfg) {
     $('#alb-title').val(cfg.title || '');
@@ -1005,12 +1067,24 @@ function openAlbumForm(path) {
     $.each(cfg.blur || [], function (_, f) { addChip($('#alb-blur-chips'), f); });
     clearChips($('#alb-noblur-chips'));
     $.each(cfg.no_blur || [], function (_, f) { addChip($('#alb-noblur-chips'), f); });
-    $('#alben-list-view').addClass('d-none');
-    $('#alben-form-view').removeClass('d-none');
+    new bootstrap.Modal($('#album-edit-modal')[0]).show();
     lucide.createIcons();
   }).fail(function (xhr) {
     var err = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : ('HTTP ' + xhr.status);
     showToast('Album laden fehlgeschlagen: ' + err, false);
+  });
+}
+
+function deleteAlbum(path) {
+  if (!confirm('Album-Config wirklich loschen?\n' + path)) { return; }
+  $.ajax({
+    url: '/api/album/delete?path=' + encodeURIComponent(path), type: 'POST',
+    success: function () {
+      state.albums = $.grep(state.albums, function (a) { return a.path !== path; });
+      renderAlbenList();
+      showToast('Album-Config geloscht.', true);
+    },
+    error: function (xhr) { showToast('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status), false); }
   });
 }
 

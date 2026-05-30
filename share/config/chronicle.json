@@ -19,6 +19,12 @@
       "tags": [
         "stadtbücherei",
         "repaircafe"
+      ],
+      "description": "12 Geräte und 62€ Spenden. Ein Dank an alle Helfer und Spender! Mit diesem Repair Café haben wir neue Haftungsbegrenzungen mit Datenschutz Regeln und Laufzettel eingeführt welche etwas mehr Statistik bringen. Schaut gerne auf unsere Repair Café Statistik Seite.",
+      "link_ids": [
+        "urn:uuid:0e679c29-8592-4bc8-903d-ed305b53bf6f",
+        "urn:uuid:7df12b72-ec03-46ed-8f00-bff4e028725a",
+        "urn:uuid:7f8d3200-11de-4e37-bffe-a9488d346377"
       ]
     },
     {
@@ -30,7 +36,8 @@
       "tags": [
         "awo",
         "stammtisch"
-      ]
+      ],
+      "description": "Mit Mehreren Mitgliedern nett Geplaudert. Es Gab Pizza Brötchen, Mini Pizza später ein paar nette Runden Kartenspiele."
     },
     {
       "@type": "Event",
@@ -132,11 +139,10 @@
     {
       "@type": "Event",
       "@id": "urn:uuid:3f8c2d1a-7e4b-4a9f-8c3e-1d5b6a2f9e7c",
-      "title": "Repair Café",
+      "title": "Repair Café #23",
       "date": "2026-04-25",
       "location": "Erfindergeist Werkstatt",
-      "description": "Repair Café in der Erfindergeist Werkstatt. 12 Geräte waren vor Ort.",
-      "consent_collected": true
+      "description": "Repair Café in der Erfindergeist Werkstatt. 12 Geräte waren vor Ort."
     },
     {
       "@type": "Event",
