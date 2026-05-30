@@ -449,20 +449,6 @@ function egFormatDate(iso) {
           .toggleClass('gallery-album-info-desc', !!desc)
           .text(desc);
 
-        var keywords = chronicleEntry && Array.isArray(chronicleEntry.tags) ? chronicleEntry.tags : [];
-        var $tags = $('#gallery-album-info-tags');
-        if (keywords.length) {
-          $tags.removeClass('d-none').empty();
-          keywords.forEach(function (kw) {
-            $tags.append($('<span class="badge rounded-pill me-1">').css({
-              background: 'var(--color-primary-light)',
-              color: 'var(--color-primary)',
-            }).text(kw));
-          });
-        } else {
-          $tags.addClass('d-none');
-        }
-
         var $links = $('#gallery-album-info-links');
         $links.empty();
         var chronicleTypeClass = {

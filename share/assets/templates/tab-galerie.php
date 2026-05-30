@@ -22,14 +22,9 @@ var LINKS_DATA = <?= json_encode($links_data ?? [], JSON_UNESCAPED_UNICODE | JSO
     </nav>
 
     <div id="gallery-album-info" class="d-none gallery-album-info mb-3" role="region" aria-label="Album-Informationen">
-      <div class="d-flex justify-content-between align-items-start gap-3">
-        <div class="flex-grow-1">
-          <div id="gallery-album-info-meta" class="text-muted small"></div>
-          <div id="gallery-album-info-desc" class="d-none mt-1"></div>
-          <div id="gallery-album-info-tags" class="d-none mt-2"></div>
-        </div>
-        <div id="gallery-album-info-links" class="d-none d-flex gap-2 flex-shrink-0 align-items-start"></div>
-      </div>
+      <div id="gallery-album-info-meta" class="text-muted small"></div>
+      <div id="gallery-album-info-desc" class="d-none mt-1"></div>
+      <div id="gallery-album-info-links" class="d-none d-flex gap-2 flex-wrap mt-2"></div>
     </div>
 
     <div id="gallery-grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>

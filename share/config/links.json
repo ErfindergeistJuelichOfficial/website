@@ -875,6 +875,16 @@
         "url": "https://share.erfindergeist.org/downloads/Angebote/Repaircafe/repaircafe_laufzettel.pdf",
         "type": "document"
       }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://docs.erfindergeist.org/s/wiki/doc/bucher-6M77VnQ770",
+        "title": "Wiki",
+        "type": "wiki",
+        "description": "Bücher Wiki",
+        "@id": "urn:uuid:14ff912b-4a2f-4fe0-a091-f84399244c35"
+      }
     }
   ]
 }

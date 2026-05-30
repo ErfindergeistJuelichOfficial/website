@@ -56,6 +56,7 @@ erDiagram
         string consent_collected
         string chronicle_id FK
         string preview
+        array link_ids FK
     }
 
     ALBUM_FILE_MASK {
@@ -103,6 +104,8 @@ erDiagram
     CHRONICLE_ENTRY ||--o{ CHRONICLE_TAG : tags
     TAG ||--o{ CHRONICLE_TAG : references
     ALBUM }o--o| CHRONICLE_ENTRY : chronicle_id
+    ALBUM ||--o{ ALBUM_LINK : link_ids
+    LINK ||--o{ ALBUM_LINK : references
     ALBUM ||--o{ ALBUM_FILE_MASK : masks
     ALBUM ||--o{ GALLERY_IMAGE : images
     DOWNLOAD_FOLDER ||--o{ DOWNLOAD_FILE : hasPart

@@ -166,7 +166,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         mime, _ = mimetypes.guess_type(str(path))
         data = path.read_bytes()
-        self._send(200, data, mime or 'application/octet-stream')
+        self.send_response(200)
+        self.send_header('Content-Type', mime or 'application/octet-stream')
+        self.send_header('Content-Length', str(len(data)))
+        self.send_header('Cache-Control', 'no-store')
+        self.end_headers()
+        self.wfile.write(data)
 
     # --- Routing ------------------------------------------------------------
 

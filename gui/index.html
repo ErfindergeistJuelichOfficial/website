@@ -307,6 +307,7 @@
                   </div>
                   <div class="col-md-6">
                     <select id="ef-nl-type" class="form-select form-select-sm">
+                      <option value="">Typ wählen...</option>
                       <option value="extern">extern</option>
                       <option value="blog">blog</option>
                       <option value="wiki">wiki</option>
@@ -368,6 +369,7 @@
           <div class="col-md-6">
             <label class="form-label" for="lm-type">Typ</label>
             <select id="lm-type" class="form-select">
+              <option value="">Typ wählen...</option>
               <option value="website">website</option>
               <option value="service">service</option>
               <option value="social">social</option>
@@ -504,6 +506,49 @@
             </div>
             <div class="chip-container" id="alb-noblur-chips">
               <input type="text" placeholder="Dateiname + Enter" aria-label="No-Blur-Dateiname hinzufugen">
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Links</label>
+            <div id="alb-link-ids" class="d-flex flex-wrap gap-1 mb-2"></div>
+            <div class="input-group input-group-sm mb-1">
+              <input type="text" id="alb-link-search" class="form-control" placeholder="Link suchen (Titel oder URL)..." autocomplete="off" aria-label="Link suchen">
+            </div>
+            <div id="alb-link-suggestions" class="list-group list-group-flush small mb-1" style="max-height:160px;overflow-y:auto;"></div>
+            <button type="button" id="btn-alb-new-link" class="btn btn-sm btn-outline-secondary">
+              <i data-lucide="plus" aria-hidden="true"></i> Neuen Link anlegen
+            </button>
+            <div id="alb-new-link-form" class="border rounded p-2 mt-2 d-none">
+              <div class="row g-2">
+                <div class="col-12">
+                  <input type="text" id="alb-nl-title" class="form-control form-control-sm" placeholder="Titel">
+                </div>
+                <div class="col-12">
+                  <input type="url" id="alb-nl-url" class="form-control form-control-sm" placeholder="https://...">
+                </div>
+                <div class="col-md-6">
+                  <select id="alb-nl-type" class="form-select form-select-sm">
+                    <option value="">Typ wählen...</option>
+                    <option value="extern">extern</option>
+                    <option value="blog">blog</option>
+                    <option value="wiki">wiki</option>
+                    <option value="cloud">cloud</option>
+                    <option value="raw">raw</option>
+                    <option value="document">document</option>
+                    <option value="social">social</option>
+                    <option value="galerie">galerie</option>
+                    <option value="website">website</option>
+                    <option value="service">service</option>
+                    <option value="github">github</option>
+                    <option value="api">api</option>
+                    <option value="sponsoring">sponsoring</option>
+                  </select>
+                </div>
+                <div class="col-md-6 d-flex gap-2 align-items-center">
+                  <button type="button" id="btn-alb-nl-save" class="btn btn-sm btn-eg">Anlegen</button>
+                  <button type="button" id="btn-alb-nl-cancel" class="btn btn-sm btn-outline-secondary">Abbrechen</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
