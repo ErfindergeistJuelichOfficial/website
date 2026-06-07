@@ -131,16 +131,56 @@ function eg_complex(): array { ... }
 
 Pipelines: `.github/workflows/`
 
-## gui/ - lokaler Config-Editor
+## gui/ - lokaler Config-Editor und Galerie-Pipeline
 
-Lokales Webinterface fuer die JSON-Config-Dateien in `share/config/` und optionale
-Galerie-Album-`_config.json`-Dateien aus einem konfigurierten Quellordner.
+Lokales Webinterface fuer die JSON-Config-Dateien in `share/config/`, Galerie-Album-`_config.json`-Dateien
+sowie die Bild-Verarbeitungs- und FTP-Upload-Skripte.
 
-- Stack: Python 3.11-slim (Standardbibliothek, kein pip), Bootstrap 5 + jQuery von share.erfindergeist.org
+- Stack: Python 3.12-slim (mit pip: Pillow, OpenCV, numpy, piexif), Bootstrap 5 + jQuery von share.erfindergeist.org
 - Port: **8082**
 - Nie deployed, nur lokale Entwicklung
+- Tabs: **Chronik**, **Links**, **Tags**, **Alben**, **Galerie**, **Downloads**
 
 Kein PHP, keine Qualitaetstools fuer diesen Ordner.
+
+### gui/ - Galerie-Pipeline
+
+`gui/process.py` und `gui/upload.py` sind die Bildverarbeitungs- und FTP-Upload-Skripte
+(nicht deployed). Output geht nach `share/galerie/`.
+
+| Service | Befehl (aus `gui/`) |
+| --- | --- |
+| Bilder verarbeiten | `podman compose run --rm process` |
+| Auf Server hochladen | `podman compose run --rm upload` |
+| Vom Server herunterladen | `podman compose run --rm download` |
+
+**`_config.json`-Schema** (eine pro Album-Ordner in SOURCE_DIR, nie auto-modifiziert):
+
+```json
+{
+  "title": "string, required - fehlt: Ordner wird ignoriert",
+  "description": "string, optional",
+  "consent_collected": true,
+  "preview": "DSC_0042.jpg",
+  "blur":    ["IMG_007.jpg"],
+  "no_blur": ["logo.jpg"],
+  "chronicle_id": "urn:uuid:..., optional"
+}
+```
+
+- `consent_collected` default: `false` (Gesichter werden immer gescannt)
+- `blur` / `no_blur`: Dateinamen der Quelldatei (Original), nicht des WebP-Outputs
+- `chronicle_id`: verknuepft Album mit Chronik-Eintrag fuer Datum, Tags und Links
+
+**Inkrementell:** Bilder werden per SHA256-Hash erkannt; bereits verarbeitete Bilder
+werden bei erneutem Aufruf uebersprungen. Aenderung von `consent_collected` loest
+Neuverarbeitung aller Bilder des Albums aus.
+
+**Vor jedem Commit pruefen:**
+
+- `share/galerie/_index.json` und `share/galerie/**/_meta.json` committed (JSON only)
+- WebP-Dateien NICHT committed (stehen in `.gitignore`)
+- Kein `.env` committed (nur `.env.example` ist tracked)
 
 ### gui Downloads - Design-Kopplung
 

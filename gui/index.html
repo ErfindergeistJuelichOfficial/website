@@ -44,6 +44,9 @@
       <button class="nav-link" id="tab-alben-btn" data-bs-toggle="tab" data-bs-target="#tab-alben" role="tab" aria-selected="false">Alben</button>
     </li>
     <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-galerie-btn" data-bs-toggle="tab" data-bs-target="#tab-galerie" role="tab" aria-selected="false">Galerie</button>
+    </li>
+    <li class="nav-item" role="presentation">
       <button class="nav-link" id="tab-downloads-btn" data-bs-toggle="tab" data-bs-target="#tab-downloads" role="tab" aria-selected="false">Downloads</button>
     </li>
   </ul>
@@ -230,8 +233,32 @@
         </table>
       </div>
       <div id="alben-empty" class="d-none text-muted small mt-2">
-        Keine Alben gefunden. <code>ALBUMS_DIR</code> in <code>gui/.env</code> eintragen.
+        Keine Alben gefunden. <code>SOURCE_DIR</code> in <code>gui/.env</code> eintragen.
       </div>
+    </div>
+
+    <!-- GALERIE TAB -->
+    <div class="tab-pane fade" id="tab-galerie" role="tabpanel" aria-labelledby="tab-galerie-btn">
+      <div class="toolbar mb-2">
+        <button id="btn-galerie-process" class="btn btn-sm btn-eg" disabled>
+          <i data-lucide="image" aria-hidden="true"></i> Verarbeiten
+        </button>
+        <button id="btn-galerie-upload" class="btn btn-sm btn-outline-secondary" disabled>
+          <i data-lucide="upload" aria-hidden="true"></i> Upload
+        </button>
+        <button id="btn-galerie-download" class="btn btn-sm btn-outline-secondary" disabled>
+          <i data-lucide="download" aria-hidden="true"></i> Download
+        </button>
+        <button id="btn-galerie-cancel" class="btn btn-sm btn-outline-danger ms-2" disabled>
+          <i data-lucide="square" aria-hidden="true"></i> Abbrechen
+        </button>
+        <span id="galerie-status-badge" class="badge bg-secondary ms-2" role="status">Bereit</span>
+      </div>
+      <pre id="galerie-output"
+           class="p-2 rounded small"
+           style="height:500px;overflow-y:auto;background:var(--bs-body-bg);border:1px solid var(--bs-border-color);white-space:pre-wrap;word-break:break-all;"
+           aria-live="polite"
+           aria-label="Galerie Ausgabe"></pre>
     </div>
 
     <!-- DOWNLOADS TAB -->

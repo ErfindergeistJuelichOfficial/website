@@ -7,13 +7,70 @@ import json
 import os
 import mimetypes
 import datetime
+import subprocess
 import tempfile
+import threading
+import time
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
 CONFIG_DIR    = Path('/config')
 ALBUMS_DIR    = Path('/albums')
 DOWNLOADS_DIR = Path('/downloads')
+
+# ---------------------------------------------------------------------------
+# Galerie job state
+# ---------------------------------------------------------------------------
+
+_job_lock = threading.Lock()
+_job: dict = {
+    'status': 'idle',   # 'idle' | 'running' | 'done' | 'error'
+    'action': None,
+    'lines':  [],
+    'rc':     None,
+    'proc':   None,     # subprocess.Popen while running
+}
+
+_GALERIE_CMDS = {
+    'process':  ['python', '/app/process.py'],
+    'upload':   ['python', '/app/upload.py', 'upload'],
+    'download': ['python', '/app/upload.py', 'download'],
+}
+
+
+def _run_galerie_job(cmd: list, env: dict) -> None:
+    with _job_lock:
+        _job['lines'] = []
+        _job['rc']    = None
+
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            env=env,
+        )
+        with _job_lock:
+            _job['proc'] = proc
+
+        for line in proc.stdout:
+            with _job_lock:
+                _job['lines'].append(line.rstrip('\n'))
+        proc.wait()
+        rc = proc.returncode
+    except Exception as exc:
+        with _job_lock:
+            _job['lines'].append(f'[ERROR] {exc}')
+            _job['status'] = 'error'
+            _job['rc']     = -1
+            _job['proc']   = None
+        return
+
+    with _job_lock:
+        _job['rc']     = rc
+        _job['status'] = 'done' if rc == 0 else 'error'
+        _job['proc']   = None
 
 ALLOWED_CONFIG = {'chronicle', 'links', 'tags'}
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.tif', '.tiff', '.bmp'}
@@ -146,7 +203,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header('Content-Type', content_type)
         self.send_header('Content-Length', str(len(body)))
         self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def _json(self, code: int, obj: object) -> None:
         self._send(code, json.dumps(obj, ensure_ascii=False).encode())
@@ -210,6 +270,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._api_download_meta_get(qs)
         elif p == '/api/download-files':
             self._api_download_files(qs)
+        elif p == '/api/galerie/status':
+            self._api_galerie_status()
+        elif p == '/api/galerie/stream':
+            self._api_galerie_stream()
         else:
             self._error(404, 'Not found')
 
@@ -232,6 +296,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._api_album_delete(qs)
         elif p == '/api/download-meta':
             self._api_download_meta_post(qs)
+        elif p == '/api/galerie/run':
+            self._api_galerie_run()
+        elif p == '/api/galerie/cancel':
+            self._api_galerie_cancel()
         else:
             self._error(404, 'Not found')
 
@@ -497,6 +565,88 @@ class Handler(http.server.BaseHTTPRequestHandler):
         _write_json(cfg_path, new_cfg)
         self._json(200, {'ok': True})
 
+    # --- Galerie job handlers ------------------------------------------------
+
+    def _api_galerie_status(self) -> None:
+        with _job_lock:
+            snap = {k: v for k, v in _job.items() if k != 'proc'}
+        self._json(200, snap)
+
+    def _api_galerie_run(self) -> None:
+        body = self._read_body()
+        try:
+            req = json.loads(body)
+        except json.JSONDecodeError as exc:
+            self._error(400, f'Invalid JSON: {exc}')
+            return
+        action = req.get('action', '')
+        if action not in _GALERIE_CMDS:
+            self._error(400, f'Unknown action: {action!r}')
+            return
+        with _job_lock:
+            if _job['status'] == 'running':
+                self._json(409, {'error': 'Job already running'})
+                return
+            _job['status'] = 'running'
+            _job['action'] = action
+        cmd = _GALERIE_CMDS[action]
+        env = dict(os.environ)
+        t = threading.Thread(target=_run_galerie_job, args=(cmd, env), daemon=True)
+        t.start()
+        self._json(202, {'ok': True, 'action': action})
+
+    def _api_galerie_cancel(self) -> None:
+        with _job_lock:
+            if _job['status'] != 'running':
+                self._json(409, {'error': 'No job running'})
+                return
+            proc = _job.get('proc')
+        if proc is not None:
+            try:
+                proc.kill()
+            except OSError:
+                pass
+        self._json(200, {'ok': True})
+
+    def _api_galerie_stream(self) -> None:
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/event-stream')
+        self.send_header('Cache-Control', 'no-cache')
+        self.send_header('X-Accel-Buffering', 'no')
+        self.end_headers()
+
+        sent = 0
+        try:
+            while True:
+                with _job_lock:
+                    status   = _job['status']
+                    lines    = _job['lines']
+                    new      = lines[sent:]
+                    rc       = _job['rc']
+
+                for line in new:
+                    self.wfile.write(f'data: {line}\n\n'.encode())
+                    sent += 1
+
+                if new:
+                    self.wfile.flush()
+
+                if status in ('done', 'error') and sent >= len(lines):
+                    payload = json.dumps({'rc': rc, 'status': status})
+                    self.wfile.write(f'event: done\ndata: {payload}\n\n'.encode())
+                    self.wfile.flush()
+                    return
+
+                if status == 'idle':
+                    payload = json.dumps({'rc': None, 'status': 'idle'})
+                    self.wfile.write(f'event: done\ndata: {payload}\n\n'.encode())
+                    self.wfile.flush()
+                    return
+
+                time.sleep(0.15)
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass
+
     def _api_album_delete(self, qs: dict) -> None:
         rel = (qs.get('path') or [''])[0]
         if not rel or '..' in rel or rel.startswith('/'):
@@ -519,6 +669,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8082))
-    server = http.server.HTTPServer(('0.0.0.0', port), Handler)
+    server = http.server.ThreadingHTTPServer(('0.0.0.0', port), Handler)
     print(f'GUI server running on http://localhost:{port}')
     server.serve_forever()

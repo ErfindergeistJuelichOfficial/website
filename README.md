@@ -8,11 +8,11 @@ Monorepo for all web projects of Erfindergeist Jülich e.V.
 
 Asset host and download page, deployed at [share.erfindergeist.org](https://share.erfindergeist.org/).
 
-Contains all shared libraries (Bootstrap, GSAP, Lucide, AOS, Caveat font) as well as tabs for downloads, gallery, presentations, logos, QR codes and configs. Gallery images are processed by `galerie/` and uploaded via FTP.
+Contains all shared libraries (Bootstrap, GSAP, Lucide, AOS, Caveat font) as well as tabs for downloads, gallery, presentations, logos, QR codes and configs. Gallery images are processed by `gui/` and uploaded via FTP.
 
 **`share/config/chronicle.json`** — Machine-readable club chronicle (JSON-LD `ItemList` of `Event` entries). Covers all activities since founding in March 2021, including events, milestones, and links (blog posts, Instagram, press coverage). Each entry has a UUID-based `@id`.
 
-Gallery albums can reference a chronicle entry via `chronicle_id` in their `_config.json`. `galerie/process.py` carries the ID forward into `_meta.json` and `_index.json` as `chronicleId`. The gallery UI then reads the corresponding links (blog, Instagram, press) from the chronicle and renders them in the album info box — no duplication of link data needed.
+Gallery albums can reference a chronicle entry via `chronicle_id` in their `_config.json`. `gui/process.py` carries the ID forward into `_meta.json` and `_index.json` as `chronicleId`. The gallery UI then reads the corresponding links (blog, Instagram, press) from the chronicle and renders them in the album info box — no duplication of link data needed.
 
 ### termine/
 
@@ -20,9 +20,9 @@ Single-page explainer for the technical infrastructure of the club, deployed at 
 
 Explains the data flow from NextCloud through the WordPress plugin to REST API, ICS calendar, GitHub PDF generator and share server. Target audience: children and adults.
 
-### galerie/
+### gui/ - Galerie-Pipeline
 
-Local image processing pipeline. Processes photos from a source directory, creates WebP thumbnails, detects and blurs faces, and optionally generates AI captions. Output goes to `share/galerie/`.
+Image processing pipeline (now part of `gui/`). Processes photos from a source directory, creates WebP thumbnails, detects and blurs faces. Output goes to `share/galerie/`. See gui/ section below.
 
 ### homepage/
 
@@ -34,9 +34,9 @@ redirect to share
 
 ### gui/
 
-Local web editor for `share/config/` JSON files and gallery album `_config.json` files, running at port 8082. Never deployed.
+Local web editor and gallery image pipeline, running at port 8082. Never deployed.
 
-Tabs: **Chronik** (form CRUD with full/undo log), **Alben** (gallery album configs, optional), **Raw JSON** (Monaco editor).
+Tabs: **Chronik** (form CRUD with full/undo log), **Links**, **Tags**, **Alben** (gallery album configs), **Galerie** (process/upload/download), **Downloads**.
 
 ---
 
@@ -89,20 +89,20 @@ podman compose up
 # http://localhost:8082
 ```
 
-#### Optional: Galerie-Album-Editing
+#### Galerie-Album-Editing und Bildverarbeitung
 
-Copy `.env.example` to `.env` and set `ALBUMS_DIR` to your local photo source folder
-(the same path used as `SOURCE_DIR` in `galerie/.env`):
+Copy `.env.example` to `.env` and set `SOURCE_DIR` to your local photo source folder:
 
 ```powershell
 # gui/.env
-ALBUMS_DIR=C:\Users\Lars\Fotos\Erfindergeist
+SOURCE_DIR=C:\Users\Lars\Fotos\Erfindergeist
 ```
 
-After saving album configs via the GUI, re-run `process.py` to update `_meta.json`:
+After saving album configs via the GUI, use the **Galerie** tab to run `process.py`,
+or use the command line:
 
 ```powershell
-cd galerie
+cd gui
 podman compose run --rm process
 ```
 
@@ -111,20 +111,17 @@ podman compose run --rm process
 Every edit/delete in the GUI appends a NDJSON line to:
 
 - `share/config/chronicle.log`, `links.log`, `tags.log` (tracked in git)
-- `<ALBUMS_DIR>/album.log` (local, outside repo)
+- `<SOURCE_DIR>/album.log` (local, outside repo)
 
 The Verlauf panel in the Chronik tab lets you undo individual changes.
 
-### galerie/ - Image processing
+### gui/ - Image processing
 
 ```powershell
-cd galerie
+cd gui
 
-# Build once
+# Build once (includes pip packages for image processing)
 podman compose build
-
-# With AI features (captions, AI blur) - only needed on first build
-podman compose build --build-arg INSTALL_AI=true
 
 # Process images (SOURCE_DIR must be set in .env)
 podman compose run --rm process

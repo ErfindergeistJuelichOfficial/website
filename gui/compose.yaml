@@ -1,15 +1,56 @@
 services:
   gui:
-    image: python:3.11-slim
+    build: .
     command: python /app/server.py
     ports:
       - "8082:8082"
     volumes:
       - ../share/config:/config:z
-      - ${ALBUMS_DIR:-/dev/null}:/albums:z
+      - ${SOURCE_DIR:-/dev/null}:/albums:z
       - ./server.py:/app/server.py:ro,z
       - ./index.html:/app/index.html:ro,z
       - ./style.css:/app/style.css:ro,z
       - ./app.js:/app/app.js:ro,z
       - ../share/downloads:/downloads:z
+      - ../share/galerie:/output:z
+      - ${SOURCE_DIR:-/dev/null}:/source:ro,z
+      - ./process.py:/app/process.py:ro,z
+      - ./upload.py:/app/upload.py:ro,z
+    env_file:
+      - path: .env
+        required: false
     restart: unless-stopped
+
+  process:
+    build: .
+    command: python /app/process.py
+    profiles: ["tools"]
+    volumes:
+      - ../share/galerie:/output:z
+      - ${SOURCE_DIR:-/dev/null}:/source:ro,z
+      - ./process.py:/app/process.py:ro,z
+    env_file:
+      - path: .env
+        required: false
+
+  upload:
+    build: .
+    command: python /app/upload.py upload
+    profiles: ["tools"]
+    volumes:
+      - ../share/galerie:/output:z
+      - ./upload.py:/app/upload.py:ro,z
+    env_file:
+      - path: .env
+        required: false
+
+  download:
+    build: .
+    command: python /app/upload.py download
+    profiles: ["tools"]
+    volumes:
+      - ../share/galerie:/output:z
+      - ./upload.py:/app/upload.py:ro,z
+    env_file:
+      - path: .env
+        required: false

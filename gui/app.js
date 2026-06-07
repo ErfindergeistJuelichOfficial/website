@@ -179,6 +179,7 @@ var TAB_HASHES = {
   links:     '#tab-links-btn',
   tags:      '#tab-tags-btn',
   alben:     '#tab-alben-btn',
+  galerie:   '#tab-galerie-btn',
   downloads: '#tab-downloads-btn',
 };
 
@@ -238,6 +239,7 @@ $(function () {
   initTagsTab();
   initVerlauf();
   initAlbenTab();
+  initGalerie();
   initDownloadsTab();
   initLinksFilter();
   initImagePicker();
@@ -266,6 +268,11 @@ $(function () {
     .on('click', '.btn-undo-entry', function () { undoEntry($(this).data('entry')); });
 
   $('#alben-filter-top').on('change', function () { renderAlbenList(); });
+
+  $('#btn-galerie-process').on('click', function () { startGalerieJob('process'); });
+  $('#btn-galerie-upload').on('click', function () { startGalerieJob('upload'); });
+  $('#btn-galerie-download').on('click', function () { startGalerieJob('download'); });
+  $('#btn-galerie-cancel').on('click', cancelGalerieJob);
 
   $('#alben-tbody')
     .on('click', '.album-title-link', function (e) { e.preventDefault(); openAlbumModal($(this).data('path')); })
@@ -1602,4 +1609,99 @@ function initDownloadsTab() {
   $('#btn-save-dl-new').on('click', saveDlNew);
 }
 
+/* ═══════════════════════════════════════════════
+   Galerie tab
+═══════════════════════════════════════════════ */
+var _galerieSource = null;
 
+function initGalerie() {
+  if (_galerieSource) { return; }
+  $.get('/api/galerie/status', function (data) {
+    if (data.status === 'running') {
+      _appendGalerieLines(data.lines || []);
+      _galerieSetState('running');
+      _openGalerieStream(data.lines.length);
+    } else {
+      _galerieSetState(data.status);
+      if (data.lines && data.lines.length) {
+        _appendGalerieLines(data.lines);
+        _galerieUpdateBadge(data.status, data.rc);
+      }
+    }
+  });
+}
+
+function startGalerieJob(action) {
+  _galerieSetState('running');
+  $('#galerie-output').text('');
+  $.ajax({
+    url: '/api/galerie/run', type: 'POST', contentType: 'application/json',
+    data: JSON.stringify({ action: action }),
+    success: function () { _openGalerieStream(0); },
+    error: function (xhr) {
+      var msg = (xhr.responseJSON && xhr.responseJSON.error) || 'HTTP ' + xhr.status;
+      $('#galerie-output').text('[Fehler] ' + msg);
+      _galerieSetState('error');
+    }
+  });
+}
+
+function cancelGalerieJob() {
+  $.post('/api/galerie/cancel');
+}
+
+function _openGalerieStream(skipLines) {
+  if (_galerieSource) { _galerieSource.close(); }
+  var src = new EventSource('/api/galerie/stream');
+  _galerieSource = src;
+  var count = 0;
+  src.onmessage = function (e) {
+    count++;
+    if (count <= skipLines) { return; }
+    var $pre = $('#galerie-output');
+    $pre.append((count > skipLines + 1 ? '\n' : '') + e.data);
+    $pre[0].scrollTop = $pre[0].scrollHeight;
+  };
+  src.addEventListener('done', function (e) {
+    src.close();
+    _galerieSource = null;
+    try {
+      var d = JSON.parse(e.data);
+      _galerieSetState(d.status);
+      _galerieUpdateBadge(d.status, d.rc);
+    } catch (_) {
+      _galerieSetState('error');
+    }
+  });
+  src.onerror = function () {
+    src.close();
+    _galerieSource = null;
+    _galerieSetState('error');
+  };
+}
+
+function _appendGalerieLines(lines) {
+  $('#galerie-output').text((lines || []).join('\n'));
+}
+
+function _galerieSetState(state) {
+  var running = (state === 'running');
+  $('#btn-galerie-process,#btn-galerie-upload,#btn-galerie-download').prop('disabled', running);
+  $('#btn-galerie-cancel').prop('disabled', !running);
+  _galerieUpdateBadge(state, null);
+}
+
+function _galerieUpdateBadge(status, rc) {
+  var m = {
+    idle:    ['bg-secondary', 'Bereit'],
+    running: ['bg-warning',   'Lauft...'],
+    done:    ['bg-success',   'Fertig'],
+    error:   ['bg-danger',    'Fehler'],
+  };
+  var entry = m[status] || m.idle;
+  var label = entry[1];
+  if ((status === 'done' || status === 'error') && rc !== null && rc !== 0) {
+    label = 'Fehler (rc=' + rc + ')';
+  }
+  $('#galerie-status-badge').attr('class', 'badge ms-2 ' + entry[0]).text(label);
+}
