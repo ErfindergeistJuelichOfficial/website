@@ -200,7 +200,7 @@ function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): ar
 /**
  * Load and validate _meta.json from a downloads folder.
  *
- * @return array{description:string, parts:array<string,array{description:string,wikiUrl:string,rawUrl:string,cloudUrl:string,blogUrl:string}>, errors:string[]}
+ * @return array{description:string, parts:array<string,array{description:string,link_ids:string[],tags:string[]}>, errors:string[]}
  */
 function eg_load_downloads_meta(string $abs_dir, string $rel_dir): array
 {

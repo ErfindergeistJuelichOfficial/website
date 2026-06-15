@@ -113,7 +113,9 @@ foreach (($links_data['itemListElement'] ?? []) as $__li) {
               <td class="dl-action-col">
                 <?php foreach ($entry['link_ids'] as $__lid) :
                   $__lnk = $__linksById[$__lid] ?? null;
-                  if ($__lnk === null || empty($__lnk['url'])) { continue; }
+                  if ($__lnk === null || empty($__lnk['url'])) {
+                    continue;
+                  }
                   $__cls      = EG_LINK_BUTTON_CLASS[$__lnk['type'] ?? ''] ?? 'btn-outline-secondary';
                   $__rawTitle = trim((string) ($__lnk['title'] ?? ''));
                   $__label    = $__rawTitle !== '' ? $__rawTitle : ucfirst((string) ($__lnk['type'] ?? ''));

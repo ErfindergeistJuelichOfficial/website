@@ -45,6 +45,11 @@
         </properties>
     </rule>
 
+    <!-- Pure-HTML PHP template includes have no PHP tokens; suppress the noise -->
+    <rule ref="Internal.NoCodeFound">
+        <severity>0</severity>
+    </rule>
+
     <!-- ── All: line length ── -->
     <rule ref="Generic.Files.LineLength">
         <properties>
