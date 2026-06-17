@@ -12,6 +12,16 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:595dc2e6-266b-4412-8ea7-6cd07f22ee8d",
+      "title": "Einführung Public Cloud",
+      "date": "2026-06-17",
+      "description": "Wir haben nun einen Public Bereich in unserer Cloud wo wir Dateien Allgemein freigeben können. Hier liegen z.B. Dokumente für unsere Geräte oder Konfigurationsdateien für unsere Webseite",
+      "link_ids": [
+        "urn:uuid:3ee13b38-bf68-495d-bea2-eb966641aeda"
+      ]
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:cc3e506f-6717-41ca-a733-4cffabc21285",
       "title": "Repair Café #24",
       "date": "2026-05-30",

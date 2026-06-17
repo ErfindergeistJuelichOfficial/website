@@ -885,6 +885,16 @@
         "description": "Bücher Wiki",
         "@id": "urn:uuid:14ff912b-4a2f-4fe0-a091-f84399244c35"
       }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://cloud.erfindergeist.org/s/wnTXZ6tpHCbNTDf",
+        "title": "Public Cloud",
+        "type": "cloud",
+        "description": "Frei Verfügbare Dokumente in unserer Cloud",
+        "@id": "urn:uuid:3ee13b38-bf68-495d-bea2-eb966641aeda"
+      }
     }
   ]
 }
