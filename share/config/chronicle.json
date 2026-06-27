@@ -12,6 +12,14 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:2f7185ca-0235-44e9-bed0-2c00de3bd5b8",
+      "title": "Repair Café #25",
+      "date": "2026-06-27",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Bei 38°C Außentemperatur war nicht allzu viel. Danke an alle Helfer und Gäste die bei der Hitze zu uns gefunden haben"
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:595dc2e6-266b-4412-8ea7-6cd07f22ee8d",
       "title": "Einführung Public Cloud",
       "date": "2026-06-17",

@@ -1,6 +1,9 @@
 services:
   gui:
-    build: .
+    build:
+      context: .
+      args:
+        - INSTALL_AI=${INSTALL_AI:-false}
     command: python /app/server.py
     ports:
       - "8082:8082"
@@ -22,7 +25,10 @@ services:
     restart: unless-stopped
 
   process:
-    build: .
+    build:
+      context: .
+      args:
+        - INSTALL_AI=${INSTALL_AI:-false}
     command: python /app/process.py
     profiles: ["tools"]
     volumes:

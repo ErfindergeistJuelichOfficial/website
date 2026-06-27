@@ -91,11 +91,13 @@ podman compose up
 
 #### Galerie-Album-Editing und Bildverarbeitung
 
-Copy `.env.example` to `.env` and set `SOURCE_DIR` to your local photo source folder:
+Copy `.env.example` to `.env` and fill in at minimum `SOURCE_DIR` and the FTP credentials:
 
 ```powershell
-# gui/.env
+# gui/.env (minimum)
 SOURCE_DIR=C:\Users\Lars\Fotos\Erfindergeist
+FTP_USER=your-ftp-user
+FTP_PASS=your-ftp-password
 ```
 
 After saving album configs via the GUI, use the **Galerie** tab to run `process.py`,
@@ -120,7 +122,12 @@ The Verlauf panel in the Chronik tab lets you undo individual changes.
 ```powershell
 cd gui
 
-# Build once (includes pip packages for image processing)
+# Standard build (Pillow, OpenCV — no AI models)
+podman compose build
+
+# Build with AI support (torch, transformers, facenet-pytorch)
+# Required for VISION_MODEL=florence-2 and BLUR_MODEL=owlvit or mtcnn
+# Set INSTALL_AI=true in gui/.env before building
 podman compose build
 
 # Process images (SOURCE_DIR must be set in .env)
@@ -132,3 +139,7 @@ podman compose run --rm download
 # Upload gallery data to server
 podman compose run --rm upload
 ```
+
+> **AI build:** set `INSTALL_AI=true` in `gui/.env`, then run `podman compose build`.
+> The flag is a build-time arg — changing it requires a rebuild, not just a restart.
+> `BLUR_MODEL=haar` works without AI; `owlvit` and `mtcnn` require `INSTALL_AI=true`.
