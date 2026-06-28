@@ -143,3 +143,14 @@ podman compose run --rm upload
 > **AI build:** set `INSTALL_AI=true` in `gui/.env`, then run `podman compose build`.
 > The flag is a build-time arg — changing it requires a rebuild, not just a restart.
 > `BLUR_MODEL=haar` works without AI; `owlvit` and `mtcnn` require `INSTALL_AI=true`.
+>
+> **GPU (CUDA):** with `INSTALL_AI=true` the image is built on the NVIDIA CUDA base.
+> To actually use the GPU set `DEVICE=cuda` **and** `GPU_DEVICE=nvidia.com/gpu=all`
+> in `gui/.env`. This needs the NVIDIA Container Toolkit with a current CDI spec on
+> the Podman machine. If the GPU isn't detected, regenerate the (often stale) spec:
+>
+> ```powershell
+> podman machine ssh "sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml"
+> ```
+>
+> Leave `GPU_DEVICE` unset (or `/dev/null`) and `DEVICE=cpu` for CPU-only inference.

@@ -22,6 +22,10 @@ services:
     env_file:
       - path: .env
         required: false
+    # GPU passthrough via CDI. Defaults to harmless /dev/null; set
+    # GPU_DEVICE=nvidia.com/gpu=all in .env for CUDA AI inference.
+    devices:
+      - ${GPU_DEVICE:-/dev/null}
     restart: unless-stopped
 
   process:
@@ -38,6 +42,8 @@ services:
     env_file:
       - path: .env
         required: false
+    devices:
+      - ${GPU_DEVICE:-/dev/null}
 
   upload:
     build: .

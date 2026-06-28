@@ -22,7 +22,9 @@ Environment variables (from .env):
     QUALITY_THUMB       - WebP quality for thumbnails (default: 80)
     QUALITY_NORM        - WebP quality for normalized images (default: 85)
     VISION_MODEL        - AI model for captions: disabled|florence-2
-    CAPTION_BATCH_SIZE  - images per caption inference call (default: 1; increase on CUDA)
+    CAPTION_BATCH_SIZE  - images loaded into RAM per caption chunk (default: 1).
+                          Florence-2 still infers one image at a time (its batched
+                          generation is broken), so this only bounds memory, not speed.
     BLUR_MODEL          - comma-separated face-detection models: haar|owlvit|mtcnn
     DEVICE              - AI inference device: cpu|cuda
 """
@@ -153,19 +155,21 @@ def _generate_captions_batch(imgs: list) -> list:
         import torch
         rgbs = [img.convert('RGB') for img in imgs]
         if VISION_MODEL == 'florence-2':
-            inputs = _vision_proc(
-                text=['<CAPTION>'] * len(rgbs),
-                images=rgbs,
-                return_tensors='pt',
-                padding=True,
-            ).to(DEVICE)
-            with torch.no_grad():
-                out = _vision_model.generate(**inputs, max_new_tokens=64)
-            raws    = _vision_proc.batch_decode(out, skip_special_tokens=False)
+            # Florence-2's remote modeling code mishandles the attention mask for
+            # batches > 1 (it stays at text length instead of expanding to cover the
+            # merged image+text sequence), so caption each image in its own call.
             results: list = []
-            for i, raw in enumerate(raws):
+            for rgb in rgbs:
+                inputs = _vision_proc(
+                    text='<CAPTION>',
+                    images=rgb,
+                    return_tensors='pt',
+                ).to(DEVICE)
+                with torch.no_grad():
+                    out = _vision_model.generate(**inputs, max_new_tokens=64)
+                raw    = _vision_proc.batch_decode(out, skip_special_tokens=False)[0]
                 parsed = _vision_proc.post_process_generation(
-                    raw, task='<CAPTION>', image_size=(rgbs[i].width, rgbs[i].height)
+                    raw, task='<CAPTION>', image_size=(rgb.width, rgb.height)
                 )
                 text = parsed.get('<CAPTION>', '').strip()
                 results.append(text if text else None)
@@ -569,8 +573,10 @@ def _phase2_captions(
 ) -> None:
     """
     Generate AI captions for images that have none.
-    Vision model is loaded once, all un-captioned images processed in batches, then unloaded.
-    CAPTION_BATCH_SIZE > 1 is only effective on CUDA; CPU always uses batch size 1.
+    Vision model is loaded once, all un-captioned images processed in chunks, then unloaded.
+    CAPTION_BATCH_SIZE bounds how many images are held in RAM per chunk (CUDA only;
+    CPU uses 1). Florence-2 infers one image per call regardless (batched generation
+    is broken), so this does not parallelise inference.
     """
     if VISION_MODEL == 'disabled':
         return
