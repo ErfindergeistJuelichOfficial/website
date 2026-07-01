@@ -895,6 +895,15 @@
         "description": "Frei Verfügbare Dokumente in unserer Cloud",
         "@id": "urn:uuid:3ee13b38-bf68-495d-bea2-eb966641aeda"
       }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "@id": "urn:uuid:02a78f07-9400-45d1-b5a2-e3d2581cc5f4",
+        "title": "startklar",
+        "url": "https://startklar-ab.de",
+        "type": "extern"
+      }
     }
   ]
 }

@@ -12,6 +12,50 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:950cc8cd-2e5a-4bff-9f32-ddb842d8f713",
+      "title": "Offene Werkstatt",
+      "date": "2026-06-30",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:26c0eaac-a6a8-47f2-97d7-6e6e0894e24a",
+      "title": "Erfindgeist Zukunftswerkstatt",
+      "date": "2026-06-29",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Zusammen mit startklar haben wir in die Zukunft der Werkstatt geblickt. Wir haben gemeinsam über Veränderungen geredet welche wir in naher Zukunft umsetzen möchten.",
+      "link_ids": [
+        "urn:uuid:02a78f07-9400-45d1-b5a2-e3d2581cc5f4"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:c5d823bd-21e3-46e7-a5ab-9eee21216cda",
+      "title": "Offene Werkstatt",
+      "date": "2026-06-16",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:46a9ba08-eb32-44e0-9ebb-d8b646a1c909",
+      "title": "Offene Werkstatt",
+      "date": "2026-06-02",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ]
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:2f7185ca-0235-44e9-bed0-2c00de3bd5b8",
       "title": "Repair Café #25",
       "date": "2026-06-27",
