@@ -12,6 +12,52 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:60fc1f28-b112-4eb1-93a9-cf630c887415",
+      "title": "Erfinder-Stammtisch",
+      "date": "2026-08-31",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "stammtisch"
+      ],
+      "description": "Mit sechs plus einem Gast gemeinsam Plenum abgehalten und anschließend gemeinsam Wikinger Schach gespielt"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:4bc167ca-70d2-4d7e-b8a4-f8120bb34f02",
+      "title": "Offene Werkstatt",
+      "date": "2026-08-28",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:1b9017a7-1fc8-4b63-bbd3-8d02b3295721",
+      "title": "Repair Café #26",
+      "date": "2026-08-15",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "repaircafe"
+      ],
+      "description": "An einem Heißen Abend nicht so viel los, nur 5 Geräte haben Ihren weg zu uns gefunden"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:c4716cef-b6dc-4ae3-a263-4f98fe8d991f",
+      "title": "Offene Werkstatt",
+      "date": "2026-07-14",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ]
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:950cc8cd-2e5a-4bff-9f32-ddb842d8f713",
       "title": "Offene Werkstatt",
       "date": "2026-06-30",
