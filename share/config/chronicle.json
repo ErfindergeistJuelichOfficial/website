@@ -14,7 +14,7 @@
       "@type": "Event",
       "@id": "urn:uuid:60fc1f28-b112-4eb1-93a9-cf630c887415",
       "title": "Erfinder-Stammtisch",
-      "date": "2026-08-31",
+      "date": "2026-07-31",
       "location": "Erfindergeist Werkstatt",
       "tags": [
         "awo",
@@ -26,7 +26,7 @@
       "@type": "Event",
       "@id": "urn:uuid:4bc167ca-70d2-4d7e-b8a4-f8120bb34f02",
       "title": "Offene Werkstatt",
-      "date": "2026-08-28",
+      "date": "2026-07-28",
       "location": "Erfindergeist Werkstatt",
       "tags": [
         "awo",
@@ -37,7 +37,7 @@
       "@type": "Event",
       "@id": "urn:uuid:1b9017a7-1fc8-4b63-bbd3-8d02b3295721",
       "title": "Repair Café #26",
-      "date": "2026-08-15",
+      "date": "2026-07-15",
       "location": "Erfindergeist Werkstatt",
       "tags": [
         "awo",
