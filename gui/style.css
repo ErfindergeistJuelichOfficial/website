@@ -5,7 +5,6 @@
 
 /* Search toolbar */
 .toolbar { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
-.toolbar .search-box { flex: 1; min-width: 180px; }
 
 /* Chip input */
 .chip-container {
@@ -33,10 +32,6 @@
   background: none; padding: 0 .1rem; color: inherit; font-size: 1rem;
 }
 
-/* Link rows in chronicle modal */
-.link-header { display: grid; grid-template-columns: 1fr 2fr 90px 32px; gap: .4rem; font-size: .75rem; color: var(--color-text-muted); padding-bottom: .2rem; border-bottom: 1px solid var(--color-border); margin-bottom: .3rem; }
-.link-row    { display: grid; grid-template-columns: 1fr 2fr 90px 32px; gap: .4rem; align-items: center; margin-bottom: .35rem; }
-
 /* Image picker */
 .img-thumb-wrap { position: relative; width: 120px; cursor: pointer; user-select: none; }
 .img-thumb { display: block; width: 120px; height: 90px; object-fit: cover; border-radius: 4px; border: 2px solid transparent; transition: border-color .15s; }
@@ -48,9 +43,6 @@
 .verlauf-ts { font-size: .75rem; color: var(--color-text-muted); white-space: nowrap; }
 .verlauf-action { width: 80px; }
 
-/* Album list */
-.album-item { cursor: pointer; }
-
 /* Tag card */
 .tag-card { border: 1px solid var(--color-border); border-radius: .5rem; padding: .75rem 1rem; margin-bottom: .5rem; background: var(--color-surface); }
 
@@ -58,17 +50,5 @@
 .btn-eg { background: var(--color-primary); color: #fff !important; border-color: var(--color-primary); }
 .btn-eg:hover, .btn-eg:focus-visible { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: #fff !important; }
 .btn-eg:active { background: var(--color-primary-dark); border-color: var(--color-primary-dark); }
-
-/* Section heading inside forms */
-.eg-section-title {
-  font-size: .75rem; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--color-text-muted); font-weight: 600;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: .4rem; margin-top: 1.5rem; margin-bottom: .75rem;
-}
-
-/* Fixed-position link-suggestion dropdown inside tables */
-.dl-link-suggestions { display: none; }
-.dl-link-suggestions.show { display: block; position: fixed; z-index: 1060; }
 
 @media (max-width: 767px) { .hide-sm { display: none !important; } }

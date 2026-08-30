@@ -1,7 +1,9 @@
 """
 GUI config editor - local HTTP server.
-Serves index.html + Monaco /vs/* + REST API for share/config/ and galerie albums.
+Serves index.html + REST API for share/config/ and galerie albums.
 """
+import email.utils
+import hashlib
 import http.server
 import json
 import os
@@ -18,6 +20,9 @@ CONFIG_DIR    = Path('/config')
 ALBUMS_DIR    = Path('/albums')
 DOWNLOADS_DIR = Path('/downloads')
 
+THUMB_CACHE_DIR = Path(tempfile.gettempdir()) / 'gui-thumb-cache'
+THUMB_MAX_PX    = 320  # picker grid shows 120 CSS px; 320 covers HiDPI displays
+
 # ---------------------------------------------------------------------------
 # Galerie job state
 # ---------------------------------------------------------------------------
@@ -31,10 +36,12 @@ _job: dict = {
     'proc':   None,     # subprocess.Popen while running
 }
 
+# -u: unbuffered stdout, so progress lines reach the SSE stream immediately
+# instead of arriving in 4-8 KB chunks minutes later
 _GALERIE_CMDS = {
-    'process':  ['python', '/app/process.py'],
-    'upload':   ['python', '/app/upload.py', 'upload'],
-    'download': ['python', '/app/upload.py', 'download'],
+    'process':  ['python', '-u', '/app/process.py'],
+    'upload':   ['python', '-u', '/app/upload.py', 'upload'],
+    'download': ['python', '-u', '/app/upload.py', 'download'],
 }
 
 
@@ -118,6 +125,23 @@ def _read_log_tail(log_path: Path, n: int = 100) -> list:
     return result
 
 
+def _safe_is_dir(p: Path) -> bool:
+    """is_dir() that treats unreadable entries (e.g. SELinux-denied files in a
+    synced source folder) as non-existent instead of raising."""
+    try:
+        return p.is_dir()
+    except OSError:
+        return False
+
+
+def _safe_is_file(p: Path) -> bool:
+    """is_file() that treats unreadable entries as non-existent instead of raising."""
+    try:
+        return p.is_file()
+    except OSError:
+        return False
+
+
 def _albums_available() -> bool:
     return ALBUMS_DIR.is_dir() and not str(ALBUMS_DIR) == '/dev/null'
 
@@ -129,7 +153,7 @@ def _validate_image_path(rel: str, filename: str) -> Path | None:
     if not filename or '..' in filename or '/' in filename or '\\' in filename:
         return None
     img = ALBUMS_DIR / rel / filename
-    if not img.is_file() or img.suffix.lower() not in IMAGE_EXTENSIONS:
+    if img.suffix.lower() not in IMAGE_EXTENSIONS or not _safe_is_file(img):
         return None
     return img
 
@@ -139,7 +163,7 @@ def _validate_album_path(rel: str) -> Path | None:
     if not rel or '..' in rel or rel.startswith('/'):
         return None
     cfg = ALBUMS_DIR / rel / '_config.json'
-    return cfg if cfg.is_file() else None
+    return cfg if _safe_is_file(cfg) else None
 
 
 def _downloads_available() -> bool:
@@ -152,6 +176,28 @@ def _validate_download_path(rel: str) -> Path | None:
         return None
     folder = DOWNLOADS_DIR / rel
     return folder if folder.is_dir() else None
+
+
+def _thumbnail_for(img_path: Path) -> Path | None:
+    """Return a cached WebP thumbnail for img_path, generating it on first use.
+    Cache key includes mtime + size, so edited source images refresh naturally."""
+    try:
+        stat = img_path.stat()
+        key  = hashlib.sha1(
+            f'{img_path}|{stat.st_mtime_ns}|{stat.st_size}'.encode()
+        ).hexdigest()
+        thumb = THUMB_CACHE_DIR / f'{key}.webp'
+        if thumb.is_file():
+            return thumb
+        from PIL import Image, ImageOps
+        THUMB_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        with Image.open(img_path) as img:
+            img = ImageOps.exif_transpose(img)
+            img.thumbnail((THUMB_MAX_PX, THUMB_MAX_PX))
+            img.convert('RGB').save(thumb, 'WEBP', quality=70)
+        return thumb
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -232,6 +278,34 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header('Cache-Control', 'no-store')
         self.end_headers()
         self.wfile.write(data)
+
+    def _serve_image(self, path: Path) -> None:
+        """Serve an album image with Last-Modified/If-Modified-Since caching,
+        so the picker does not re-download images on every open."""
+        try:
+            stat = path.stat()
+        except OSError:
+            self._error(404, 'Not found')
+            return
+        last_mod = email.utils.formatdate(stat.st_mtime, usegmt=True)
+        if self.headers.get('If-Modified-Since') == last_mod:
+            self.send_response(304)
+            self.send_header('Cache-Control', 'private, max-age=3600')
+            self.send_header('Last-Modified', last_mod)
+            self.end_headers()
+            return
+        mime, _ = mimetypes.guess_type(str(path))
+        data = path.read_bytes()
+        self.send_response(200)
+        self.send_header('Content-Type', mime or 'application/octet-stream')
+        self.send_header('Content-Length', str(len(data)))
+        self.send_header('Cache-Control', 'private, max-age=3600')
+        self.send_header('Last-Modified', last_mod)
+        self.end_headers()
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     # --- Routing ------------------------------------------------------------
 
@@ -386,7 +460,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             existing.add(rel)
         dirs = []
         for d in sorted(ALBUMS_DIR.rglob('*')):
-            if not d.is_dir():
+            if not _safe_is_dir(d):
                 continue
             rel = str(d.relative_to(ALBUMS_DIR)).replace('\\', '/')
             if rel and rel != '.' and rel not in existing:
@@ -424,7 +498,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         files = sorted(
             f.name for f in album_dir.iterdir()
-            if f.is_file() and f.suffix.lower() in IMAGE_EXTENSIONS
+            if f.suffix.lower() in IMAGE_EXTENSIONS and _safe_is_file(f)
         )
         self._json(200, files)
 
@@ -435,7 +509,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if img_path is None:
             self._error(404, 'Image not found')
             return
-        self._serve_file(img_path)
+        if (qs.get('thumb') or [''])[0] == '1':
+            thumb = _thumbnail_for(img_path)
+            if thumb is not None:
+                self._serve_image(thumb)
+                return
+        self._serve_image(img_path)
 
     def _api_album_get(self, qs: dict) -> None:
         rel = (qs.get('path') or [''])[0]
@@ -454,9 +533,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         folders = []
         for entry in sorted(DOWNLOADS_DIR.rglob('*')):
-            if entry.is_dir():
+            if _safe_is_dir(entry):
                 rel = str(entry.relative_to(DOWNLOADS_DIR)).replace('\\', '/')
-                folders.append({'path': rel, 'hasMeta': (entry / '_meta.json').is_file()})
+                folders.append({'path': rel, 'hasMeta': _safe_is_file(entry / '_meta.json')})
         self._json(200, folders)
 
     def _api_download_entries(self) -> None:
@@ -467,10 +546,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         entries = []
         for folder_path in sorted(DOWNLOADS_DIR.rglob('*')):
-            if not folder_path.is_dir():
+            if not _safe_is_dir(folder_path):
                 continue
             rel_folder = str(folder_path.relative_to(DOWNLOADS_DIR)).replace('\\', '/')
-            meta_parts: dict = {}
             meta_path = folder_path / '_meta.json'
             if meta_path.is_file():
                 try:
@@ -478,7 +556,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     for part in (meta.get('hasPart') or []):
                         title = part.get('title', '')
                         if title:
-                            meta_parts[title] = part
                             entries.append({
                                 'name': title,
                                 'folder': rel_folder,
@@ -541,7 +618,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         files = sorted(
             f.name for f in folder.iterdir()
-            if f.is_file() and not f.name.startswith('_') and not f.name.startswith('.')
+            if not f.name.startswith('_') and not f.name.startswith('.') and _safe_is_file(f)
         )
         self._json(200, files)
 

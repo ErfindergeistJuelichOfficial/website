@@ -904,6 +904,16 @@
         "url": "https://startklar-ab.de",
         "type": "extern"
       }
+    },
+    {
+      "@type": "ListItem",
+      "item": {
+        "url": "https://github.com/ErfindergeistJuelichOfficial/pdf-generator/blob/main/src/templates/videoueberwachung.html",
+        "title": "Raw",
+        "type": "raw",
+        "description": "Template für das Videoüberwachung Schild",
+        "@id": "urn:uuid:99f40d5a-61a3-48e1-b550-6f4105cb95fd"
+      }
     }
   ]
 }

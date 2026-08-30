@@ -12,6 +12,42 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:b19159d4-761d-47fa-9ea0-4342627bd7de",
+      "title": "Offene Werkstatt",
+      "date": "2026-08-11",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "offenewerkstatt"
+      ],
+      "description": "Keine Besucher. Wir haben fleißig an der CNC gearbeitet"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:904dbe65-eadb-4cd6-be76-959fe1de5686",
+      "title": "Erfindergeist-Stammtisch",
+      "date": "2026-08-28",
+      "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "stammtisch"
+      ],
+      "description": "zu Viert einen netten Abend gewhabt und das Brettspiel 7 Wonders gespielt."
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:35fa7d7e-ea03-46ec-81cd-23c606a96a12",
+      "title": "RepairCafé #27",
+      "date": "2026-08-29",
+      "location": "Stadtbücherei Jülich",
+      "tags": [
+        "stadtbücherei",
+        "repaircafe"
+      ],
+      "description": "17 Geräte waren heute Trotz Sommerferien vor Ort. wir Danken allen Besuchern, Helfern und Spendern!"
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:60fc1f28-b112-4eb1-93a9-cf630c887415",
       "title": "Erfinder-Stammtisch",
       "date": "2026-07-31",

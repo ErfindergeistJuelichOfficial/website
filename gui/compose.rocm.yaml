@@ -1,0 +1,50 @@
+# Overlay for AMD GPU inference (ROCm), e.g. Strix Halo (Ryzen AI MAX, gfx1151).
+#
+# Usage:
+#   podman compose -f compose.yaml -f compose.rocm.yaml up -d --build
+#   podman compose -f compose.yaml -f compose.rocm.yaml run --rm process
+# or create/extend .env with: COMPOSE_FILE=compose.yaml:compose.rocm.yaml
+#
+# Required .env settings:
+#   INSTALL_AI=true
+#   DEVICE=cuda          <- yes, "cuda": ROCm torch builds expose the GPU as "cuda"
+#   GPU_DEVICE=/dev/null <- keep the CDI default; this overlay adds /dev/kfd + /dev/dri
+#
+# NOTE: podman-compose (1.6.0) silently ignores the "ipc:" key -> the container
+# starts, but ROCm aborts while loading a model with "Memory critical error by
+# agent node-0 ... Reason: Memory in use". Use the "docker-compose" package as
+# the compose provider (then `podman compose ...` works as shown above).
+#
+# If ROCm does not detect the GPU, uncomment HSA_OVERRIDE_GFX_VERSION below.
+# Strix Halo (gfx1151) is detected natively by recent ROCm wheels.
+services:
+  gui:
+    build:
+      args:
+        - AI_BASE=plain
+        - TORCH_INDEX_URL=${TORCH_INDEX_URL:-https://download.pytorch.org/whl/rocm6.4}
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    # REQUIRED: without the host IPC namespace, ROCm aborts as soon as a model
+    # is loaded onto the GPU. shm_size is NOT a sufficient substitute under
+    # rootless Podman (tested with the ollama-compose stack on this machine).
+    ipc: host
+    security_opt:
+      - seccomp=unconfined
+    # environment:
+    #   HSA_OVERRIDE_GFX_VERSION: "11.5.1"
+
+  process:
+    build:
+      args:
+        - AI_BASE=plain
+        - TORCH_INDEX_URL=${TORCH_INDEX_URL:-https://download.pytorch.org/whl/rocm6.4}
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    ipc: host
+    security_opt:
+      - seccomp=unconfined
+    # environment:
+    #   HSA_OVERRIDE_GFX_VERSION: "11.5.1"

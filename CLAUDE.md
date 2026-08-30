@@ -140,6 +140,9 @@ sowie die Bild-Verarbeitungs- und FTP-Upload-Skripte.
 - Port: **8082**
 - Nie deployed, nur lokale Entwicklung
 - Tabs: **Chronik**, **Links**, **Tags**, **Alben**, **Galerie**, **Downloads**
+- GPU-Inferenz: NVIDIA per `GPU_DEVICE=nvidia.com/gpu=all` (CDI), AMD/ROCm per Overlay
+  `compose.rocm.yaml` (setzt `AI_BASE=plain` + ROCm-Torch-Wheels; `DEVICE=cuda` gilt auch
+  fuer ROCm). CPU ist der Default.
 
 Kein PHP, keine Qualitaetstools fuer diesen Ordner.
 

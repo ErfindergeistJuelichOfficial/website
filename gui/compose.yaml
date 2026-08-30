@@ -19,11 +19,13 @@ services:
       - ${SOURCE_DIR:-/dev/null}:/source:ro,z
       - ./process.py:/app/process.py:ro,z
       - ./upload.py:/app/upload.py:ro,z
+      - hf-cache:/root/.cache/huggingface
     env_file:
       - path: .env
         required: false
     # GPU passthrough via CDI. Defaults to harmless /dev/null; set
     # GPU_DEVICE=nvidia.com/gpu=all in .env for CUDA AI inference.
+    # AMD/ROCm: use the compose.rocm.yaml overlay instead.
     devices:
       - ${GPU_DEVICE:-/dev/null}
     restart: unless-stopped
@@ -39,6 +41,7 @@ services:
       - ../share/galerie:/output:z
       - ${SOURCE_DIR:-/dev/null}:/source:ro,z
       - ./process.py:/app/process.py:ro,z
+      - hf-cache:/root/.cache/huggingface
     env_file:
       - path: .env
         required: false
@@ -66,3 +69,7 @@ services:
     env_file:
       - path: .env
         required: false
+
+# Persists downloaded AI models (Florence-2, OWL-ViT) across container rebuilds
+volumes:
+  hf-cache:

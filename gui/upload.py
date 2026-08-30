@@ -77,12 +77,19 @@ def connect() -> ftplib.FTP_TLS:
         sys.exit(1)
 
 
-def ensure_remote_dirs(ftp: ftplib.FTP, remote_path: str) -> None:
-    """Create missing parent directories on the server."""
+BLOCKSIZE = 128 * 1024  # larger than ftplib's 8 KB default, fewer syscalls
+
+
+def ensure_remote_dirs(ftp: ftplib.FTP, remote_path: str, verified: set) -> None:
+    """Create missing parent directories on the server.
+    `verified` caches already-checked dirs - without it every upload pays
+    one CWD round trip per path segment."""
     parts = remote_path.lstrip('/').split('/')
     current = ''
     for part in parts[:-1]:
         current += '/' + part
+        if current in verified:
+            continue
         try:
             ftp.cwd(current)
         except ftplib.error_perm:
@@ -90,6 +97,7 @@ def ensure_remote_dirs(ftp: ftplib.FTP, remote_path: str) -> None:
                 ftp.mkd(current)
             except ftplib.error_perm:
                 pass  # already exists (race condition)
+        verified.add(current)
 
 
 def list_remote_recursive(ftp: ftplib.FTP, remote_dir: str) -> list[tuple[str, int]]:
@@ -97,6 +105,7 @@ def list_remote_recursive(ftp: ftplib.FTP, remote_dir: str) -> list[tuple[str, i
     results: list[tuple[str, int]] = []
 
     def _walk(directory: str) -> None:
+        print(f'  Listing {directory} ...')
         try:
             entries = list(ftp.mlsd(directory, facts=['type', 'size']))
         except ftplib.error_perm as exc:
@@ -136,36 +145,45 @@ def upload_main() -> None:
         sys.exit(1)
 
     sync = load_sync()
-    ftp  = connect()
-    log  = open_log('upload')
-    uploaded = skipped = errors = 0
+    uploaded = errors = 0
 
     local_files = sorted(
         p for p in OUTPUT_DIR.rglob('*')
         if p.is_file() and p != SYNC_FILE and 'log/' not in str(p.relative_to(OUTPUT_DIR)).replace('\\', '/')
     )
-    print(f'Found {len(local_files)} local file(s) to check.')
 
+    # Determine the transfer list locally first, so progress can show [i/N]
+    to_upload: list[tuple[Path, str, object, Optional[bytes]]] = []
+    skipped = 0
     for local_path in local_files:
-        rel         = str(local_path.relative_to(OUTPUT_DIR)).replace('\\', '/')
-        remote_path = FTP_REMOTE + '/' + rel
-
+        rel = str(local_path.relative_to(OUTPUT_DIR)).replace('\\', '/')
         if local_path.suffix == '.json':
             data      = rewrite_for_upload(local_path)
             sync_key: object = [len(data), local_path.stat().st_mtime]
         else:
             data      = None
             sync_key  = local_path.stat().st_size
-
         if sync.get(rel) == sync_key:
             skipped += 1
-            continue
+        else:
+            to_upload.append((local_path, rel, sync_key, data))
 
-        print(f'  -> {rel}')
+    print(f'Found {len(local_files)} local file(s): {len(to_upload)} to upload, {skipped} unchanged.')
+    if not to_upload:
+        print('\nDone. Uploaded: 0  Skipped: %d  Errors: 0' % skipped)
+        return
+
+    ftp = connect()
+    log = open_log('upload')
+    verified_dirs: set = set()
+
+    for i, (local_path, rel, sync_key, data) in enumerate(to_upload, 1):
+        remote_path = FTP_REMOTE + '/' + rel
+        print(f'  -> [{i}/{len(to_upload)}] {rel}')
         try:
-            ensure_remote_dirs(ftp, remote_path)
+            ensure_remote_dirs(ftp, remote_path, verified_dirs)
             payload = data if data is not None else local_path.read_bytes()
-            ftp.storbinary(f'STOR {remote_path}', io.BytesIO(payload))
+            ftp.storbinary(f'STOR {remote_path}', io.BytesIO(payload), blocksize=BLOCKSIZE)
             sync[rel] = sync_key
             log.write(f'UPLOAD   {rel}\n')
             uploaded += 1
@@ -196,27 +214,31 @@ def download_main() -> None:
     sync = load_sync()
     ftp  = connect()
     log  = open_log('download')
-    downloaded = skipped = errors = 0
+    downloaded = errors = 0
 
     print(f'Listing {FTP_REMOTE} ...')
     remote_files = list_remote_recursive(ftp, FTP_REMOTE)
-    print(f'Found {len(remote_files)} remote file(s).')
 
+    # Determine the transfer list first, so progress can show [i/N]
+    to_download: list[tuple[str, str, int]] = []
+    skipped = 0
     for remote_path, remote_size in remote_files:
-        rel        = remote_path[len(FTP_REMOTE):].lstrip('/')
+        rel = remote_path[len(FTP_REMOTE):].lstrip('/')
         if rel.startswith('log/'):
             continue
-        local_path = OUTPUT_DIR / rel
-
-        # Skip if sync confirms we already have this version
         if sync.get(rel) == remote_size:
             skipped += 1
-            continue
+        else:
+            to_download.append((remote_path, rel, remote_size))
 
-        print(f'  <- {rel}')
+    print(f'Found {len(remote_files)} remote file(s): {len(to_download)} to download, {skipped} unchanged.')
+
+    for i, (remote_path, rel, remote_size) in enumerate(to_download, 1):
+        local_path = OUTPUT_DIR / rel
+        print(f'  <- [{i}/{len(to_download)}] {rel}')
         try:
             buf = io.BytesIO()
-            ftp.retrbinary(f'RETR {remote_path}', buf.write)
+            ftp.retrbinary(f'RETR {remote_path}', buf.write, blocksize=BLOCKSIZE)
             data = buf.getvalue()
             if local_path.suffix == '.json':
                 data = rewrite_for_download(data)

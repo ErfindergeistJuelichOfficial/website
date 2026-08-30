@@ -14,6 +14,15 @@
         "urn:uuid:1ed9f2a7-d96c-4e4b-a27a-716bfb6b3497"
       ],
       "tags": []
+    },
+    {
+      "@type": "MediaObject",
+      "title": "videoueberwachung.pdf",
+      "link_ids": [
+        "urn:uuid:99f40d5a-61a3-48e1-b550-6f4105cb95fd"
+      ],
+      "tags": [],
+      "description": "Schild hängt vor der Werkstatt"
     }
   ]
 }

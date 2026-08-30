@@ -20,10 +20,6 @@ Single-page explainer for the technical infrastructure of the club, deployed at 
 
 Explains the data flow from NextCloud through the WordPress plugin to REST API, ICS calendar, GitHub PDF generator and share server. Target audience: children and adults.
 
-### gui/ - Galerie-Pipeline
-
-Image processing pipeline (now part of `gui/`). Processes photos from a source directory, creates WebP thumbnails, detects and blurs faces. Output goes to `share/galerie/`. See gui/ section below.
-
 ### homepage/
 
 Placeholder / landing page (no local dev server).
@@ -37,6 +33,8 @@ redirect to share
 Local web editor and gallery image pipeline, running at port 8082. Never deployed.
 
 Tabs: **Chronik** (form CRUD with full/undo log), **Links**, **Tags**, **Alben** (gallery album configs), **Galerie** (process/upload/download), **Downloads**.
+
+The gallery pipeline (`gui/process.py`) processes photos from a source directory, creates WebP thumbnails, detects and blurs faces. Output goes to `share/galerie/`. AI inference runs on CPU, NVIDIA (CDI via `GPU_DEVICE`) or AMD/ROCm (`compose.rocm.yaml` overlay).
 
 ---
 
