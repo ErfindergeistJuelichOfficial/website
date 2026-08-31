@@ -12,6 +12,13 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:4178d93e-2c9c-4874-bc4a-98425b585366",
+      "title": "Förderung Sparkasse Düren",
+      "date": "2026-08-25",
+      "description": "Der Erfindergeist Jülich e.V. wird von der Sparkasse Düren gefördert – darüber freuen wir uns sehr. Unter dem Motto „Wir stehen dahinter“ unterstützt die Sparkasse eine Vielzahl gemeinnütziger Projekte im Kreis Düren, von Sport über Bildung bis zu sozialen Initiativen."
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:b19159d4-761d-47fa-9ea0-4342627bd7de",
       "title": "Offene Werkstatt",
       "date": "2026-08-11",
