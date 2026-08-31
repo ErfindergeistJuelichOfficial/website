@@ -142,6 +142,10 @@
       "title": "Repair Café #25",
       "date": "2026-06-27",
       "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "repaircafe"
+      ],
       "description": "Bei 38°C Außentemperatur war nicht allzu viel los. Danke an alle Helfer und Gäste die bei der Hitze zu uns gefunden haben"
     },
     {
@@ -286,6 +290,10 @@
       "title": "Repair Café #23",
       "date": "2026-04-25",
       "location": "Erfindergeist Werkstatt",
+      "tags": [
+        "awo",
+        "repaircafe"
+      ],
       "description": "Repair Café in der Erfindergeist Werkstatt. 12 Geräte waren vor Ort."
     },
     {
