@@ -12,6 +12,28 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:92753719-42cc-4f08-a5c0-4e851c481036",
+      "title": "Erfindergeist-Stammtisch",
+      "date": "2026-09-25"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:e02bb9d6-ae4e-42e3-9527-c85f0651eecd",
+      "title": "Offene Werkstatt",
+      "date": "2026-09-22",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Aufbau der CNC"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:eacf1d59-958c-48ce-a596-e3e0e38dd611",
+      "title": "Offene Werkstatt",
+      "date": "2026-09-08",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Aufbau der CNC"
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:4178d93e-2c9c-4874-bc4a-98425b585366",
       "title": "Förderung Sparkasse Düren",
       "date": "2026-08-25",
