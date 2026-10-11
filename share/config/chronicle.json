@@ -12,6 +12,21 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:e36e90a4-a6b2-4a4b-aa8b-be5ab6a430a6",
+      "title": "Repair Café #28",
+      "date": "2026-10-10",
+      "location": "Erfindergeist Werkstatt",
+      "description": "14 Geräte an einem Herbst-Tag"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:97b4bd1f-ef39-4e21-84ef-8b3674a34e0e",
+      "title": "Offene Werkstatt",
+      "date": "2026-10-06",
+      "location": "Erfindergeist Werkstatt"
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:92753719-42cc-4f08-a5c0-4e851c481036",
       "title": "Erfindergeist-Stammtisch",
       "date": "2026-09-25"
