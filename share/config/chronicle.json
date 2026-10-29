@@ -12,6 +12,21 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:3c471730-3df9-41f3-9328-b3307d85fc58",
+      "title": "Einweisung CNC",
+      "date": "2026-10-24",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Mehrere Mitglieder wurden in die Bedienung unserer CNC eingewiesen und legen jetzt los. Du willst auch? Meld dich für die nächste Einweisung!"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:203992c3-f3f6-4191-9a1a-d1e89c08f323",
+      "title": "Offene Werkstatt",
+      "date": "2026-10-20",
+      "location": "Erfindergeist Werkstatt"
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:e36e90a4-a6b2-4a4b-aa8b-be5ab6a430a6",
       "title": "Repair Café #28",
       "date": "2026-10-10",
