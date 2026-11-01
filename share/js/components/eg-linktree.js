@@ -19,6 +19,9 @@
     repair:       '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
     dices:        '<rect width="12" height="12" x="2" y="10" rx="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/>',
     palette:      '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+    userPlus:     '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/>',
+    piggyBank:    '<path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/><path d="M2 9v1c0 1.1.9 2 2 2h1"/><path d="M16 11h.01"/>',
+    mapPin:       '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
     arrow:        '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>'
   };
 
@@ -40,7 +43,11 @@
         { title: 'Spenden via PayPal', sub: 'Schnell & unkompliziert helfen', icon: 'heart',
           href: 'http://paypal.erfindergeist.org/' },
         { title: 'Spenden via Überweisung', sub: 'Unsere Bankverbindung', icon: 'landmark',
-          href: 'https://erfindergeist.org/konto/' }
+          href: 'https://erfindergeist.org/konto/' },
+        { title: 'Fördermitglied werden', sub: 'Regelmäßige Unterstützung', icon: 'userPlus',
+          href: 'https://erfindergeist.org/mitglied-werden/' },
+        // No href: rendered as a non-clickable info tile
+        { title: 'Spendendose', sub: 'In unserer Werkstatt vor Ort', icon: 'piggyBank' }
       ]
     },
     {
@@ -123,15 +130,15 @@
     + 'content:"";flex:1;height:2px;border-radius:2px;'
     + 'background:linear-gradient(90deg,rgba(var(--lt-primary-rgb),.45),transparent);'
     + '}'
-    + '.eg-lt-grid{display:grid;gap:.9em;grid-template-columns:1fr;list-style:none;margin:0;padding:0;}'
-    + '.eg-lt-grid li{margin:0;padding:0;}'
-    + '@container (min-width:34em){.eg-lt-grid{grid-template-columns:repeat(2,1fr);}}'
-    + '@container (min-width:56em){.eg-lt-grid{grid-template-columns:repeat(3,1fr);}}'
-    + '@container (min-width:90em){.eg-lt-grid{grid-template-columns:repeat(4,1fr);}}'
-    + '@container (min-width:56em){.eg-lt-group-hero .eg-lt-grid{grid-template-columns:repeat(2,1fr);}}'
+    + '.eg-lt-grid{display:grid;gap:.9em;grid-template-columns:minmax(0,1fr);list-style:none;margin:0;padding:0;}'
+    + '.eg-lt-grid li{margin:0;padding:0;min-width:0;}'
+    + '@container (min-width:34em){.eg-lt-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}'
+    + '@container (min-width:56em){.eg-lt-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}'
+    + '@container (min-width:90em){.eg-lt-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}'
+    + '@container (min-width:56em){.eg-lt-group-hero .eg-lt-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}'
 
     // Button
-    + '.eg-lt a.eg-lt-btn{'
+    + '.eg-lt .eg-lt-btn{'
     + '--accent:var(--lt-primary);'
     + 'position:relative;isolation:isolate;overflow:hidden;'
     + 'display:flex;align-items:center;gap:.9em;height:100%;min-height:4.6em;padding:.85em 1em;'
@@ -142,7 +149,7 @@
     + 'animation:eg-lt-in .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i) * 45ms);'
     + '}'
     // Accent wash that sweeps in from the left on hover
-    + '.eg-lt a.eg-lt-btn::before{'
+    + '.eg-lt .eg-lt-btn::before{'
     + 'content:"";position:absolute;inset:0;z-index:-1;'
     + 'background:linear-gradient(110deg,color-mix(in srgb,var(--accent) 14%,transparent),transparent 70%);'
     + 'transform:translateX(-101%);transition:transform .45s cubic-bezier(.22,1,.36,1);'
@@ -183,14 +190,14 @@
     + '}'
 
     // Hero buttons (donations): gradient with a recurring shine
-    + '.eg-lt a.eg-lt-hero{'
+    + '.eg-lt .eg-lt-hero{'
     + '--accent:var(--lt-secondary);min-height:5.6em;border:0;color:#fff;'
     + 'background:linear-gradient(120deg,var(--lt-primary) 0%,color-mix(in srgb,var(--lt-primary) 60%,var(--lt-secondary)) 55%,var(--lt-secondary) 130%);'
     + 'background-size:160% 100%;background-position:0 0;'
     + 'box-shadow:0 .7em 1.6em -.7em rgba(var(--lt-primary-rgb),.7);'
     + 'transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,background-position .6s;'
     + '}'
-    + '.eg-lt a.eg-lt-hero::before{'
+    + '.eg-lt .eg-lt-hero::before{'
     + 'transform:none;width:40%;left:-60%;right:auto;'
     + 'background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);'
     + 'animation:eg-lt-shine 4.5s ease-in-out infinite;animation-delay:calc(var(--i) * .8s + 1s);'
@@ -201,7 +208,7 @@
     + '}'
     + '.eg-lt a.eg-lt-hero:hover::before,.eg-lt a.eg-lt-hero:focus-visible::before{transform:none;}'
     + '.eg-lt-hero .eg-lt-icon{width:3.2em;height:3.2em;background:rgba(255,255,255,.2);color:#fff;}'
-    + '.eg-lt-hero .eg-lt-label{font-size:1.18em;}'
+    + '.eg-lt-hero .eg-lt-label{font-size:1.18em;white-space:normal;}'
     + '.eg-lt-hero .eg-lt-sub,.eg-lt-hero .eg-lt-arrow{color:rgba(255,255,255,.9);opacity:1;}'
     + '.eg-lt a.eg-lt-hero:hover .eg-lt-icon,.eg-lt a.eg-lt-hero:focus-visible .eg-lt-icon{'
     + 'background:#fff;color:var(--lt-primary);'
@@ -213,7 +220,7 @@
     + '.eg-lt a.eg-lt-hero:focus-visible{outline-color:var(--lt-secondary);}'
 
     // Dark theme of share.css (data-theme="dark")
-    + '[data-theme="dark"] .eg-lt a.eg-lt-btn:not(.eg-lt-hero){box-shadow:none;}'
+    + '[data-theme="dark"] .eg-lt .eg-lt-btn:not(.eg-lt-hero){box-shadow:none;}'
     + '[data-theme="dark"] .eg-lt-logo{filter:brightness(1.3);}'
 
     + '@keyframes eg-lt-in{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}'
@@ -222,12 +229,14 @@
 
     // Small phones: tighter buttons
     + '@container (max-width:22em){'
-    + '.eg-lt a.eg-lt-btn{gap:.7em;padding:.7em .8em;min-height:4em;}'
-    + '.eg-lt-icon{width:2.4em;height:2.4em;}'
+    + '.eg-lt .eg-lt-btn{gap:.7em;padding:.7em .8em;min-height:4em;}'
+    + '.eg-lt-icon,.eg-lt-hero .eg-lt-icon{width:2.4em;height:2.4em;}'
+    + '.eg-lt .eg-lt-hero{min-height:4.6em;}'
+    + '.eg-lt-hero .eg-lt-label{font-size:1.05em;}'
     + '}'
 
     + '@media (prefers-reduced-motion:reduce){'
-    + '.eg-lt a.eg-lt-btn,.eg-lt a.eg-lt-btn::before,.eg-lt-icon,.eg-lt-arrow,.eg-lt-icon svg{'
+    + '.eg-lt .eg-lt-btn,.eg-lt .eg-lt-btn::before,.eg-lt-icon,.eg-lt-arrow,.eg-lt-icon svg{'
     + 'animation:none !important;transition:none !important;'
     + '}'
     + '.eg-lt a.eg-lt-btn:hover,.eg-lt a.eg-lt-btn:focus-visible{transform:none;}'
@@ -243,15 +252,26 @@
   function buildButton(link, hero, index) {
     var icon  = link.brand ? svg(BRANDS[link.brand], true) : svg(ICONS[link.icon], false);
     var style = '--i:' + index + (link.accent ? ';--accent:' + link.accent : '');
+    var cls   = 'eg-lt-btn' + (hero ? ' eg-lt-hero' : '');
+    var body  = '<span class="eg-lt-icon">' + icon + '</span>'
+      + '<span class="eg-lt-text">'
+      +   '<span class="eg-lt-label">' + link.title + '</span>'
+      +   '<span class="eg-lt-sub">' + link.sub + '</span>'
+      + '</span>';
+
+    if (!link.href) {
+      return '<li>'
+        + '<div class="' + cls + '" style="' + style + '">'
+        +   body
+        +   '<span class="eg-lt-arrow">' + svg(ICONS.mapPin, false) + '</span>'
+        + '</div>'
+        + '</li>';
+    }
 
     return '<li>'
-      + '<a class="eg-lt-btn' + (hero ? ' eg-lt-hero' : '') + '" href="' + link.href + '"'
+      + '<a class="' + cls + '" href="' + link.href + '"'
       +   ' target="_blank" rel="noopener noreferrer" style="' + style + '">'
-      +   '<span class="eg-lt-icon">' + icon + '</span>'
-      +   '<span class="eg-lt-text">'
-      +     '<span class="eg-lt-label">' + link.title + '</span>'
-      +     '<span class="eg-lt-sub">' + link.sub + '</span>'
-      +   '</span>'
+      +   body
       +   '<span class="eg-lt-arrow">' + svg(ICONS.arrow, false) + '</span>'
       +   '<span class="eg-lt-sr"> (öffnet in neuem Tab)</span>'
       + '</a>'

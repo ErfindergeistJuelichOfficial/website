@@ -49,6 +49,7 @@ The links are special linktree links and are maintained directly in `GROUPS` ins
 - `icon`: key from `ICONS` (stroke icons) - or `brand`: key from `BRANDS` (social logos)
 - `accent`: optional color for icon tile, border and glow on hover (default: primary)
 - A group with `hero: true` renders gradient buttons (used for donations)
+- Without `href` the entry is rendered as a non-clickable info tile with a map pin instead of the arrow (used for the donation box)
 
 ## Notes
 
