@@ -52,7 +52,7 @@
             <?php endif; ?>
 
             <?php if (count($pdfs) === 1) : ?>
-              <a href="presentations/<?= $safeUrl ?>/<?= rawurlencode($pdfs[0]) ?>" target="_blank"
+              <a href="presentations/<?= $safeUrl ?>/<?= implode('/', array_map('rawurlencode', explode('/', $pdfs[0]))) ?>" target="_blank"
                  rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">
                 <i data-lucide="file-text" style="width:13px;height:13px" aria-hidden="true"></i>
                 PDF
@@ -70,7 +70,7 @@
                   ?>
                     <li>
                       <a class="dropdown-item"
-                         href="presentations/<?= $safeUrl ?>/<?= rawurlencode($pdfFile) ?>"
+                         href="presentations/<?= $safeUrl ?>/<?= implode('/', array_map('rawurlencode', explode('/', $pdfFile))) ?>"
                          target="_blank" rel="noopener noreferrer">
                         <?= $safePdfLabel ?>
                       </a>

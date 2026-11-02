@@ -382,13 +382,15 @@ function eg_build_pres_entries(array $items): array
 {
   $result = [];
   foreach ($items as $item) {
-    $htmls = [];
-    $pdfs  = [];
+    $htmls  = [];
+    $pdfs   = [];
+    $prefix = 'presentations/' . (string) ($item['name'] ?? '') . '/';
     foreach ((array) ($item['hasPart'] ?? []) as $part) {
       if (!is_array($part)) {
         continue;
       }
-      $name = (string) ($part['name'] ?? '');
+      // Path relative to the presentation folder, e.g. "drucksachen/flyer-a5.pdf"
+      $name = substr((string) ($part['path'] ?? ''), strlen($prefix));
       $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
       if ($ext === 'html') {
         $htmls[] = $name;
@@ -397,7 +399,9 @@ function eg_build_pres_entries(array $items): array
       }
     }
     sort($htmls);
-    sort($pdfs);
+    // Top-level PDFs (the presentation itself) first, then subfolders
+    usort($pdfs, static fn (string $left, string $right): int =>
+      [substr_count($left, '/'), strtolower($left)] <=> [substr_count($right, '/'), strtolower($right)]);
     $result[(string) ($item['name'] ?? '')] = ['htmls' => $htmls, 'pdfs' => $pdfs];
   }
   return $result;
@@ -537,14 +541,15 @@ function eg_presentations_data(string $root): array
         if (!is_file("$dir/$presFile")) {
           continue;
         }
-        $ext = strtolower(pathinfo($presFile, PATHINFO_EXTENSION));
-        if ($ext !== 'pdf' && $ext !== 'html') {
+        if (strtolower(pathinfo($presFile, PATHINFO_EXTENSION)) !== 'html') {
           continue;
         }
         $item['hasPart'][] = eg_file_entry($presFile, "presentations/$entry/$presFile", "$dir/$presFile");
       }
       closedir($dirHandle);
     }
+    // PDFs may live in subfolders (e.g. ki2/drucksachen/), HTML stays top-level only
+    $item['hasPart'] = array_merge($item['hasPart'], eg_scan_recursive($root, "presentations/$entry", ['pdf']));
     $items[] = $item;
   }
   closedir($handle);
