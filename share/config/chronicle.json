@@ -12,6 +12,29 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:61749033-0cc9-4db1-9d2a-63047f29a095",
+      "title": "Plenum und Stammtisch",
+      "date": "2026-10-30",
+      "description": "Im Plenum haben wir uns über gemeinsame aufgaben und kommende Termine unterhalten. Gefolgt von lockeren Gesprächen."
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:32eacd0e-5605-4021-b467-2beecdfd0244",
+      "title": "Offene Werkstatt",
+      "date": "2026-11-03",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Defekten Plastik Stuhl kleben. Ein Gast ist da geblieben um zu Stricken und sich mit uns zu unterhalten. Resin-Drucker Doku erweitern"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:1cc95427-106f-438f-bb34-bcf74794ca7a",
+      "title": "Treffen mit Aiesec über mögliche Kooperation",
+      "date": "2026-11-08",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Drei Mitglieder von Aiesec haben sich in unserer Werkstatt mit dem Vorstand getroffen und über mögliche Kooperationen geredet. Es werden Unterkünfte für Ausländische ü18 Studenten gesucht welche in einem Zeitraum von vier Wochen einen Workshop aufbauen und diesen bei uns abhalten."
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:3c471730-3df9-41f3-9328-b3307d85fc58",
       "title": "Einweisung CNC",
       "date": "2026-10-24",
