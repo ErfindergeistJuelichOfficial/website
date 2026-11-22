@@ -12,6 +12,30 @@
   "itemListElement": [
     {
       "@type": "Event",
+      "@id": "urn:uuid:748db268-e1c7-415d-b5f7-3bcb5717abe3",
+      "title": "Offene Werkstatt",
+      "date": "2026-11-17",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Gestalltung, Druck und Montage von Spenden schild an Spendenbox für die Weihnachtsparade"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:0f848cd0-b180-4876-ab5d-66fb8834d30a",
+      "title": "Pruse Core One upgrade auf INDX",
+      "date": "2026-11-20",
+      "location": "Erfindergeist Werkstatt",
+      "description": "Drei Tage Umbau – und es hat sich gelohnt! Der Prusa Core One+ Gen2 ist jetzt mit INDX ausgestattet und hat 8 Druckköpfe an Bord. Bereit für bunte Multimaterial-Drucke!"
+    },
+    {
+      "@type": "Event",
+      "@id": "urn:uuid:b915788d-1142-4509-a6ab-4fa07c7de280",
+      "title": "KI to 3D",
+      "date": "2026-11-21",
+      "location": "AWO Jülich",
+      "description": "Mehr als 20 Interessierte waren beim Workshop „KI to 3D“ dabei und haben entdeckt, wie KI den Weg vom ersten Gedanken bis zum fertigen 3D-Druck-Modell leichter macht."
+    },
+    {
+      "@type": "Event",
       "@id": "urn:uuid:61749033-0cc9-4db1-9d2a-63047f29a095",
       "title": "Plenum und Stammtisch",
       "date": "2026-10-30",
