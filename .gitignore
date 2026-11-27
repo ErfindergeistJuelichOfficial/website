@@ -18,3 +18,13 @@ Thumbs.db
 
 # PhpStorm
 .idea/
+
+# Configs live in the Nextcloud (Public/Configs), fetched by deploy-share.yml
+share/config/*.json
+
+# Python
+__pycache__/
+
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache/

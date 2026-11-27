@@ -2,9 +2,10 @@
 """
 Gallery processor.
 
-Scans /source (SOURCE_DIR) for album folders containing _config.json.
-For each valid album, generates WebP thumbnails and normalized images,
-writes per-album _meta.json, and a root _index.json to /output (share/galerie/).
+Reads the album list from /configs/galerie.json (Public/Configs).
+For each album, reads the originals from /source/<path> (Mitglieder/Galerie),
+writes WebP thumbnails and normalized images to /output/<path> (Public/Galerie)
+and stores the slim image list back into galerie.json (once per phase, only on change).
 
 Processing is split into 4 sequential phases per album to minimise peak RAM:
   Phase 1 (Basics)     - hash, orient, normalise, save _n.webp  (no AI models)
@@ -16,7 +17,8 @@ Usage (via Podman Compose from the gui/ folder):
     podman compose run --rm process
 
 Environment variables (from .env):
-    SOURCE_DIR          - host path mounted as /source (read-only)
+    SOURCE_DIR          - Nextcloud root; compose mounts Mitglieder/Galerie as /source (read-only),
+                          Public/Galerie as /output and Public/Configs as /configs
     THUMBNAIL_WIDTH     - thumbnail width in px (default: 400)
     NORMALIZED_MAX      - max dimension for normalized images in px (default: 1920)
     QUALITY_THUMB       - WebP quality for thumbnails (default: 80)
@@ -34,7 +36,6 @@ import hashlib
 import json
 import os
 import resource
-import shutil
 import sys
 import time
 from datetime import datetime
@@ -48,8 +49,7 @@ from PIL import Image, ImageFilter, ImageOps
 
 SOURCE_DIR   = Path('/source')
 OUTPUT_DIR   = Path('/output')
-LOG_DIR      = OUTPUT_DIR / 'log'
-BASE_URL     = 'http://localhost:8080/galerie'
+GALERIE_JSON = Path('/configs') / 'galerie.json'
 
 THUMB_WIDTH        = int(os.getenv('THUMBNAIL_WIDTH',   '400'))
 NORM_MAX           = int(os.getenv('NORMALIZED_MAX',    '1920'))
@@ -390,39 +390,6 @@ def file_datetime(path: Path) -> tuple[str, str]:
     return mtime.strftime('%Y%m%d_%H%M%S'), mtime.isoformat()
 
 
-def file_exif(path: Path) -> dict:
-    """Extract useful EXIF fields: camera, focal length, exposure time, ISO."""
-    result: dict = {}
-    ext = path.suffix.lower()
-    if ext not in {'.jpg', '.jpeg', '.tiff', '.tif'}:
-        return result
-    try:
-        exif_data = piexif.load(str(path))
-        ifd0 = exif_data.get('0th', {})
-        exif = exif_data.get('Exif', {})
-
-        model = ifd0.get(piexif.ImageIFD.Model)
-        if model:
-            result['camera'] = (
-                model.decode('utf-8').strip('\x00') if isinstance(model, bytes) else str(model)
-            )
-
-        fl = exif.get(piexif.ExifIFD.FocalLength)
-        if isinstance(fl, tuple) and len(fl) == 2 and fl[1]:
-            result['focalLength'] = f'{fl[0] // fl[1]}mm'
-
-        exp = exif.get(piexif.ExifIFD.ExposureTime)
-        if isinstance(exp, tuple) and len(exp) == 2 and exp[1]:
-            result['exposureTime'] = f'{exp[0]}/{exp[1]}s'
-
-        iso = exif.get(piexif.ExifIFD.ISOSpeedRatings)
-        if iso is not None:
-            result['iso'] = int(iso) if isinstance(iso, int) else int(iso[0])
-    except Exception:
-        pass
-    return result
-
-
 def sha256_short(path: Path) -> str:
     """Return the first 8 hex chars of the SHA-256 hash of a file."""
     h = hashlib.sha256()
@@ -432,58 +399,80 @@ def sha256_short(path: Path) -> str:
     return h.hexdigest()[:8]
 
 
-# ── Config & metadata ─────────────────────────────────────────────────────────
+def hash_of(name: str) -> str:
+    """Source hash encoded in a normalised file name: YYYYMMDD_HHMMSS_<hash8>_n.webp."""
+    parts = name.split('_')
+    return parts[2] if len(parts) >= 4 else ''
 
-def load_config(folder: Path) -> Optional[dict]:
-    """
-    Load and validate _config.json.
-    Returns None if the file is missing, unreadable, or lacks required fields.
-    Required fields: title (str).
-    """
-    cfg_path = folder / '_config.json'
-    if not cfg_path.is_file():
-        return None
+
+def thumb_of(name: str) -> str:
+    """Thumbnail file name for a normalised file name."""
+    return name.replace('_n.webp', '_t.webp')
+
+
+# ── galerie.json ──────────────────────────────────────────────────────────────
+
+def load_galerie() -> dict:
+    """Read galerie.json; exits when missing or invalid."""
     try:
-        with open(cfg_path, 'r', encoding='utf-8-sig') as f:
+        with open(GALERIE_JSON, 'r', encoding='utf-8-sig') as f:
             data = json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return None
-    if not isinstance(data.get('title'), str):
-        return None
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f'Error: cannot read {GALERIE_JSON}: {exc}', file=sys.stderr)
+        sys.exit(1)
+    if not isinstance(data.get('hasPart'), list):
+        print(f'Error: {GALERIE_JSON} has no hasPart list.', file=sys.stderr)
+        sys.exit(1)
     return data
 
 
-def load_existing_by_hash(output_album: Path) -> dict:
+def write_galerie(data: dict) -> None:
+    """Write galerie.json atomically (compact) so the Nextcloud client never syncs a half file."""
+    tmp = GALERIE_JSON.with_name(GALERIE_JSON.name + '.tmp')
+    with open(tmp, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
+        f.write('\n')
+    os.replace(tmp, GALERIE_JSON)
+
+
+def slim_parts(parts: list) -> list:
+    """Stored image entries: name, caption (optional), blurred."""
+    result = []
+    for p in parts:
+        entry = {'name': p['name']}
+        if p.get('caption'):
+            entry['caption'] = p['caption']
+        entry['blurred'] = bool(p.get('blurred'))
+        result.append(entry)
+    return result
+
+
+def save_album(album_rel: str, parts: list, preview_thumb: Optional[str]) -> None:
     """
-    Read the existing _meta.json and return a dict of {sourceHash: ImageObject}
-    for incremental processing (skipping already-processed images).
+    Update the generated fields of one album in galerie.json.
+    Re-reads the file first so concurrent GUI edits of other fields survive;
+    writes only when something actually changed (avoids needless Nextcloud versions).
     """
-    meta_path = output_album / '_meta.json'
-    if not meta_path.is_file():
-        return {}
-    try:
-        with open(meta_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        return {
-            part['sourceHash']: part
-            for part in data.get('hasPart', [])
-            if isinstance(part, dict) and 'sourceHash' in part
-        }
-    except (json.JSONDecodeError, OSError, KeyError):
-        return {}
+    data = load_galerie()
+    album = next((a for a in data['hasPart'] if a.get('path') == album_rel), None)
+    if album is None:
+        print(f'  Warning: album "{album_rel}" was removed from galerie.json meanwhile, not saved.', file=sys.stderr)
+        return
+    new_fields: dict = {'imageCount': len(parts), 'hasPart': slim_parts(parts)}
+    thumb = preview_thumb or (thumb_of(parts[0]['name']) if parts else None)
+    if thumb:
+        new_fields['previewThumbnail'] = thumb
+    old_fields = {k: album.get(k) for k in ('imageCount', 'hasPart', 'previewThumbnail') if k in album}
+    if old_fields == new_fields:
+        return
+    album.pop('previewThumbnail', None)
+    album.update(new_fields)
+    write_galerie(data)
 
 
 # ── Phase 1: Basics ───────────────────────────────────────────────────────────
 
-def _phase1_basics(
-    source_album: Path,
-    output_album: Path,
-    config: dict,
-    existing_by_hash: dict,
-    album_rel: str,
-    on_progress: Optional[callable],
-    log: Optional[list],
-) -> tuple[list, dict]:
+def _phase1_basics(source_album: Path, output_album: Path, config: dict, existing_by_hash: dict) -> tuple[list, dict]:
     """
     For each source image: compute hash, skip if already normalised, else
     open/orient/normalise and save _n.webp. No AI models loaded.
@@ -503,6 +492,10 @@ def _phase1_basics(
 
     for src in image_files:
         hash8 = sha256_short(src)
+        if hash8 in needs_blur_flags:
+            # Identical file content (copy under another name) -> same output file, list it once
+            print(f'  {src.name} (duplicate of an image already in this album, skipped)')
+            continue
 
         img_needs_blur = needs_blur_default
         if src.name in always_blur:
@@ -513,24 +506,16 @@ def _phase1_basics(
 
         if hash8 in existing_by_hash:
             ep         = existing_by_hash[hash8]
-            norm_ok    = (output_album / ep.get('name', '')).is_file()
+            norm_ok    = (output_album / ep['name']).is_file()
             # Regenerate from source when consent changed from blurred -> unblurred
             unblurring = ep.get('blurred') is True and not img_needs_blur
             if norm_ok and not unblurring:
                 parts.append(ep)
                 continue
-            if unblurring:
-                print(f'  {src.name} (consent changed, unblurring)')
-                if log is not None:
-                    log.append(f'IMAGE_REPROCESS {album_rel}/{src.name}  consent changed: unblurring')
-            else:
-                print(f'  {src.name} (file missing, reprocessing)')
-                if log is not None:
-                    log.append(f'IMAGE_REPROCESS {album_rel}/{src.name}  file missing')
+            reason = 'consent changed, unblurring' if unblurring else 'file missing, reprocessing'
+            print(f'  {src.name} ({reason})')
         else:
             print(f'  {src.name}')
-            if log is not None:
-                log.append(f'IMAGE_NEW      {album_rel}/{src.name}')
 
         try:
             img = open_and_orient(src)
@@ -538,39 +523,26 @@ def _phase1_basics(
             print(f'  Warning: cannot open {src.name}: {exc}', file=sys.stderr)
             continue
 
-        dt_short, dt_iso = file_datetime(src)
+        dt_short, _ = file_datetime(src)
         norm_name = f'{dt_short}_{hash8}_n.webp'
         norm_img  = make_normalized(img, NORM_MAX)
 
         output_album.mkdir(parents=True, exist_ok=True)
         norm_img.convert('RGB').save(output_album / norm_name, 'WEBP', quality=QUALITY_N)
+        # Old thumbnail (if any) belongs to the previous version of this image
+        (output_album / thumb_of(norm_name)).unlink(missing_ok=True)
 
-        part: dict = {
-            '@type':       'ImageObject',
-            'name':        norm_name,
-            'sourceHash':  hash8,
-            'dateCreated': dt_iso,
-            'exif':        file_exif(src),
-            'blurred':     False,
-        }
+        part: dict = {'name': norm_name, 'blurred': False}
+        if hash8 in existing_by_hash and existing_by_hash[hash8].get('caption'):
+            part['caption'] = existing_by_hash[hash8]['caption']
         parts.append(part)
-        write_album_meta(output_album, album_rel, config, parts)
-        if on_progress:
-            on_progress(parts)
 
     return parts, needs_blur_flags
 
 
 # ── Phase 2: Captions ─────────────────────────────────────────────────────────
 
-def _phase2_captions(
-    output_album: Path,
-    album_rel: str,
-    config: dict,
-    parts: list,
-    on_progress: Optional[callable],
-    log: Optional[list],
-) -> None:
+def _phase2_captions(output_album: Path, parts: list) -> None:
     """
     Generate AI captions for images that have none.
     Vision model is loaded once, all un-captioned images processed in chunks, then unloaded.
@@ -580,7 +552,7 @@ def _phase2_captions(
     """
     if VISION_MODEL == 'disabled':
         return
-    to_caption = [e for e in parts if e.get('caption') is None]
+    to_caption = [e for e in parts if not e.get('caption')]
     if not to_caption:
         return
 
@@ -607,14 +579,8 @@ def _phase2_captions(
                 if caption:
                     entry['caption'] = caption
                     print(f'  Caption ({entry["name"]}): {caption}')
-                    if log is not None:
-                        log.append(f'CAPTION        {album_rel}/{entry["name"]}')
                 else:
                     print(f'  Caption ({entry["name"]}): (none generated, will retry)', file=sys.stderr)
-
-        write_album_meta(output_album, album_rel, config, parts)
-        if on_progress:
-            on_progress(parts)
         i += batch_size
 
     unload_vision_model()
@@ -622,24 +588,16 @@ def _phase2_captions(
 
 # ── Phase 3: Blur ─────────────────────────────────────────────────────────────
 
-def _phase3_blur(
-    output_album: Path,
-    album_rel: str,
-    config: dict,
-    parts: list,
-    needs_blur_flags: dict,
-    on_progress: Optional[callable],
-    log: Optional[list],
-) -> None:
+def _phase3_blur(output_album: Path, parts: list, needs_blur_flags: dict) -> None:
     """
     Apply face blur to images that need it, one model at a time.
     Each model is loaded, applied to all images needing blur, then unloaded before
-    the next model loads. blurred=True is written to meta only after all models finish,
+    the next model loads. blurred=True is saved only after all models finish,
     so an interrupted run re-applies all models cleanly on restart (safe double-blur).
     """
     to_blur = [
         e for e in parts
-        if needs_blur_flags.get(e['sourceHash'], False) and not e.get('blurred', False)
+        if needs_blur_flags.get(hash_of(e['name']), False) and not e.get('blurred', False)
     ]
     if not to_blur:
         return
@@ -661,144 +619,38 @@ def _phase3_blur(
 
         unload_blur_model(blur_model)
 
-    # Mark blurred and drop cached thumbnail - Phase 4 regenerates from the now-blurred _n.webp
+    # Mark blurred and drop the old thumbnail - Phase 4 regenerates it from the now-blurred _n.webp
     for entry in to_blur:
         entry['blurred'] = True
-        entry.pop('thumbnail', None)
-
-    write_album_meta(output_album, album_rel, config, parts)
-    if on_progress:
-        on_progress(parts)
+        (output_album / thumb_of(entry['name'])).unlink(missing_ok=True)
 
 
 # ── Phase 4: Thumbnails ───────────────────────────────────────────────────────
 
-def _phase4_thumbnails(
-    output_album: Path,
-    album_rel: str,
-    config: dict,
-    parts: list,
-    on_progress: Optional[callable],
-    log: Optional[list],
-) -> None:
-    """
-    Generate thumbnails from _n.webp (already blurred if applicable). No AI models loaded.
-    Entries without a thumbnail key (new or just blurred) are always processed.
-    """
+def _phase4_thumbnails(output_album: Path, parts: list) -> None:
+    """Generate missing thumbnails from _n.webp (already blurred if applicable). No AI models loaded."""
     for entry in parts:
-        thumb_name = entry.get('thumbnail', '')
-        if thumb_name and (output_album / thumb_name).is_file():
+        thumb_path = output_album / thumb_of(entry['name'])
+        if thumb_path.is_file():
             continue
 
-        norm_path = output_album / entry.get('name', '')
+        norm_path = output_album / entry['name']
         if not norm_path.is_file():
-            print(f'  Warning: normalised file missing, cannot generate thumbnail: {entry.get("name")}', file=sys.stderr)
+            print(f'  Warning: normalised file missing, cannot generate thumbnail: {entry["name"]}', file=sys.stderr)
             continue
 
-        thumb_name = entry['name'].replace('_n.webp', '_t.webp')
         try:
             img       = Image.open(norm_path)
             thumb_img = make_thumbnail(img, THUMB_WIDTH)
-            thumb_img.convert('RGB').save(output_album / thumb_name, 'WEBP', quality=QUALITY_T)
-            entry['thumbnail'] = thumb_name
+            thumb_img.convert('RGB').save(thumb_path, 'WEBP', quality=QUALITY_T)
         except Exception as exc:
-            print(f'  Warning: thumbnail generation failed for {entry.get("name")}: {exc}', file=sys.stderr)
-            continue
-
-        write_album_meta(output_album, album_rel, config, parts)
-        if on_progress:
-            on_progress(parts)
+            print(f'  Warning: thumbnail generation failed for {entry["name"]}: {exc}', file=sys.stderr)
 
 
 # ── Album processing ──────────────────────────────────────────────────────────
 
-def process_album(
-    source_album: Path,
-    output_album: Path,
-    config: dict,
-    album_rel: str,
-    existing_by_hash: dict,
-    on_progress: Optional[callable] = None,
-    log: Optional[list] = None,
-) -> list:
-    """
-    Process all images in source_album through 4 sequential phases.
-    Returns a list of ImageObject dicts for _meta.json hasPart.
-    """
-    t0 = time.perf_counter()
-    parts, needs_blur_flags = _phase1_basics(
-        source_album, output_album, config, existing_by_hash, album_rel, on_progress, log
-    )
-    _phase_times['Phase 1 (basics)'] += time.perf_counter() - t0
-
-    gc.collect()
-
-    t0 = time.perf_counter()
-    _phase2_captions(output_album, album_rel, config, parts, on_progress, log)
-    _phase_times['Phase 2 (captions)'] += time.perf_counter() - t0
-
-    t0 = time.perf_counter()
-    _phase3_blur(output_album, album_rel, config, parts, needs_blur_flags, on_progress, log)
-    _phase_times['Phase 3 (blur)'] += time.perf_counter() - t0
-
-    gc.collect()
-
-    t0 = time.perf_counter()
-    _phase4_thumbnails(output_album, album_rel, config, parts, on_progress, log)
-    _phase_times['Phase 4 (thumbnails)'] += time.perf_counter() - t0
-
-    return parts
-
-
-def write_album_meta(output_album: Path, album_rel: str, config: dict, parts: list) -> dict:
-    """Write _meta.json (JSON-LD ImageGallery) and return the dict."""
-    meta: dict = {
-        '@context': 'https://schema.org',
-        '@type':    'ImageGallery',
-        '@id':      f'{BASE_URL}/{album_rel}',
-        'name':     config['title'],
-        'hasPart':  parts,
-    }
-    if config.get('description'):
-        meta['description'] = config['description']
-    if config.get('chronicle_id'):
-        meta['chronicleId'] = config['chronicle_id']
-
-    output_album.mkdir(parents=True, exist_ok=True)
-    with open(output_album / '_meta.json', 'w', encoding='utf-8') as f:
-        json.dump(meta, f, ensure_ascii=False, indent=2)
-
-    return meta
-
-
-def album_summary(meta: dict, album_rel: str, parts: list, preview_thumb: Optional[str] = None) -> dict:
-    """
-    Compact album entry for the root _index.json.
-    Contains metadata only - no full image hasPart (kept in per-album _meta.json).
-    preview_thumb: resolved thumbnail filename override from config['preview']; falls back to parts[0].
-    """
-    summary: dict = {
-        '@type':      'ImageGallery',
-        '@id':        meta['@id'],
-        'path':       album_rel,
-        'name':       meta['name'],
-        'imageCount': len(parts),
-    }
-    if meta.get('description'):
-        summary['description'] = meta['description']
-    if meta.get('chronicleId'):
-        summary['chronicleId'] = meta['chronicleId']
-    thumb = preview_thumb or (parts[0].get('thumbnail') if parts else None)
-    if thumb:
-        summary['preview'] = album_rel + '/' + thumb
-    return summary
-
-
-def resolve_preview_thumbnail(config: dict, source_album: Path, parts: list) -> Optional[str]:
-    """
-    Resolve config['preview'] (source filename) to the matching thumbnail filename in parts.
-    Returns None if not configured, file not found, or image not yet processed.
-    """
+def preview_hash(config: dict, source_album: Path) -> Optional[str]:
+    """Source hash of config['preview'] (source filename); None if not configured or not found."""
     preview_src = config.get('preview')
     if not preview_src:
         return None
@@ -806,242 +658,100 @@ def resolve_preview_thumbnail(config: dict, source_album: Path, parts: list) -> 
     if not preview_path.is_file():
         print(f'  Warning: preview "{preview_src}" not found in source folder.', file=sys.stderr)
         return None
-    preview_hash = sha256_short(preview_path)
+    return sha256_short(preview_path)
+
+
+def resolve_preview_thumbnail(wanted_hash: Optional[str], parts: list) -> Optional[str]:
+    """Thumbnail filename of the preview image; None when not set or not yet processed (falls back to parts[0])."""
     for part in parts:
-        if part.get('sourceHash') == preview_hash:
-            return part.get('thumbnail')
-    return None  # image not yet processed; falls back to parts[0]
+        if wanted_hash and hash_of(part['name']) == wanted_hash:
+            return thumb_of(part['name'])
+    return None
 
 
-def write_index(output_root: Path, summaries: list) -> None:
-    """Write the root _index.json combining all album summaries."""
-    index = {
-        '@context':    'https://schema.org',
-        '@type':       'DataCatalog',
-        '@id':         BASE_URL,
-        'name':        'Galerie - Erfindergeist Julich e.V.',
-        'description': 'Foto-Galerie des Erfindergeist Julich e.V.',
-        'hasPart':     summaries,
+def process_album(album: dict) -> list:
+    """
+    Process all images of one album through 4 sequential phases.
+    galerie.json is saved after each phase, so an interrupted run keeps finished work.
+    Returns the list of image entries.
+    """
+    album_rel    = album['path']
+    source_album = SOURCE_DIR / album_rel
+    output_album = OUTPUT_DIR / album_rel
+
+    existing = {
+        hash_of(p['name']): dict(p)
+        for p in album.get('hasPart', [])
+        if isinstance(p, dict) and p.get('name') and hash_of(p['name'])
     }
-    with open(output_root / '_index.json', 'w', encoding='utf-8') as f:
-        json.dump(index, f, ensure_ascii=False, indent=2)
-    print(f'_index.json written ({len(summaries)} albums).')
+
+    wanted_preview = preview_hash(album, source_album)
+
+    def _save(parts: list) -> None:
+        save_album(album_rel, parts, resolve_preview_thumbnail(wanted_preview, parts))
+
+    t0 = time.perf_counter()
+    parts, needs_blur_flags = _phase1_basics(source_album, output_album, album, existing)
+    _phase_times['Phase 1 (basics)'] += time.perf_counter() - t0
+    _save(parts)
+
+    gc.collect()
+
+    t0 = time.perf_counter()
+    _phase2_captions(output_album, parts)
+    _phase_times['Phase 2 (captions)'] += time.perf_counter() - t0
+    _save(parts)
+
+    t0 = time.perf_counter()
+    _phase3_blur(output_album, parts, needs_blur_flags)
+    _phase_times['Phase 3 (blur)'] += time.perf_counter() - t0
+    _save(parts)
+
+    gc.collect()
+
+    t0 = time.perf_counter()
+    _phase4_thumbnails(output_album, parts)
+    _phase_times['Phase 4 (thumbnails)'] += time.perf_counter() - t0
+
+    cleanup_orphaned_images(output_album, parts, album_rel)
+    new_count = sum(1 for p in parts if hash_of(p['name']) not in existing)
+    print(f'  Done   : {len(parts)} images ({new_count} new)')
+    return parts
 
 
-# ── Config vs meta comparison ─────────────────────────────────────────────────
-
-def detect_config_changes(config: dict, output_album: Path) -> list[str]:
-    """
-    Compare current config values against existing _meta.json album-level fields.
-    Returns a list of human-readable change strings; empty when nothing changed or
-    no _meta.json exists yet (new album).
-    """
-    meta_path = output_album / '_meta.json'
-    if not meta_path.is_file():
-        return []
-    try:
-        with open(meta_path, 'r', encoding='utf-8') as f:
-            meta = json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return []
-
-    def norm(v: object) -> object:
-        return None if v in (None, '', []) else v
-
-    checks: list[tuple[str, object, object]] = [
-        ('title',       meta.get('name'),             norm(config.get('title'))),
-        ('description', norm(meta.get('description')), norm(config.get('description'))),
-    ]
-    return [f'{label}: {old!r} -> {new!r}' for label, old, new in checks if old != new]
-
-
-# ── Main ──────────────────────────────────────────────────────────────────────
-
-def scan_and_process(source_root: Path, output_root: Path, log: Optional[list] = None) -> list:
-    """
-    Recursively find all _config.json files, process valid albums,
-    and return a list of all known album summaries for _index.json.
-
-    Existing _index.json entries are preserved throughout the run so albums
-    processed later in the same run stay visible in the index.
-    """
-    # Seed known_summaries from the existing index so no entries are lost
-    known_summaries: dict[str, dict] = {}
-    index_path = output_root / '_index.json'
-    if index_path.is_file():
-        try:
-            with open(index_path, 'r', encoding='utf-8') as f:
-                idx = json.load(f)
-            for s in idx.get('hasPart', []):
-                if 'path' in s:
-                    known_summaries[s['path']] = s
-        except (json.JSONDecodeError, OSError):
-            pass
-
-    for cfg_path in sorted(source_root.rglob('_config.json')):
-        source_album = cfg_path.parent
-        album_rel    = str(source_album.relative_to(source_root)).replace('\\', '/')
-        output_album = output_root / album_rel
-
-        config = load_config(source_album)
-        if config is None:
-            print(f'Skip (incomplete config): {album_rel}')
-            continue
-
-        consent_label = 'consent collected' if config.get('consent_collected') else 'NO consent - faces will be blurred'
-        print(f'\nAlbum: {album_rel}')
-        print(f'  Title  : {config["title"]}')
-        print(f'  Privacy: {consent_label}')
-
-        existing = load_existing_by_hash(output_album)
-        if not (output_album / '_meta.json').is_file():
-            if log is not None:
-                log.append(f'ALBUM_NEW      {album_rel}')
-        else:
-            for change in detect_config_changes(config, output_album):
-                print(f'  Config change: {change}')
-                if log is not None:
-                    log.append(f'META_CHANGE    {album_rel}  {change}')
-
-        def _make_summary(parts: list, _rel: str = album_rel, _cfg: dict = config) -> dict:
-            meta: dict = {
-                '@id':  f'{BASE_URL}/{_rel}',
-                'name': _cfg['title'],
-            }
-            if _cfg.get('date'):
-                meta['dateCreated'] = _cfg['date']
-            if _cfg.get('description'):
-                meta['description'] = _cfg['description']
-            if _cfg.get('tags'):
-                meta['keywords'] = _cfg['tags']
-            preview_thumb = resolve_preview_thumbnail(_cfg, source_album, parts)
-            return album_summary(meta, _rel, parts, preview_thumb)
-
-        def _on_progress(parts: list, _rel: str = album_rel) -> None:
-            known_summaries[_rel] = _make_summary(parts)
-            write_index(output_root, list(known_summaries.values()))
-
-        # Write index before processing so the album is visible immediately
-        _on_progress(list(existing.values()))
-
-        parts = process_album(source_album, output_album, config, album_rel, existing, on_progress=_on_progress, log=log)
-        cleanup_orphaned_images(output_album, parts, album_rel, log=log)
-        meta  = write_album_meta(output_album, album_rel, config, parts)
-
-        preview_thumb = resolve_preview_thumbnail(config, source_album, parts)
-        known_summaries[album_rel] = album_summary(meta, album_rel, parts, preview_thumb)
-        write_index(output_root, list(known_summaries.values()))
-        new_count = sum(1 for p in parts if p.get('sourceHash') not in existing)
-        print(f'  Done   : {len(parts)} images ({new_count} new)')
-
-    return list(known_summaries.values())
-
-
-def reconcile_output(output_root: Path, log: Optional[list] = None) -> None:
-    """
-    Cross-check _index.json and per-album _meta.json against actual files on disk.
-    Removes stale album entries (no _meta.json) and missing image references.
-    Rewrites affected files only when changes are found.
-    """
-    index_path = output_root / '_index.json'
-    if not index_path.is_file():
-        return
-
-    try:
-        with open(index_path, 'r', encoding='utf-8') as f:
-            idx = json.load(f)
-    except (json.JSONDecodeError, OSError):
-        print('  Reconcile: cannot read _index.json.', file=sys.stderr)
-        return
-
-    valid_summaries = []
-    index_changed   = False
-
-    for summary in idx.get('hasPart', []):
-        album_rel    = summary.get('path', '')
-        output_album = output_root / album_rel
-        meta_path    = output_album / '_meta.json'
-
-        if not meta_path.is_file():
-            print(f'  Reconcile: dropping "{album_rel}" - no _meta.json on disk')
-            if log is not None:
-                log.append(f'STALE_ALBUM    {album_rel}')
-            index_changed = True
-            continue
-
-        try:
-            with open(meta_path, 'r', encoding='utf-8') as f:
-                meta = json.load(f)
-        except (json.JSONDecodeError, OSError):
-            print(f'  Reconcile: cannot read _meta.json for "{album_rel}", keeping entry')
-            valid_summaries.append(summary)
-            continue
-
-        parts       = meta.get('hasPart', [])
-        valid_parts = [p for p in parts if (output_album / p.get('name', '')).is_file()]
-
-        if len(valid_parts) != len(parts):
-            removed = len(parts) - len(valid_parts)
-            print(f'  Reconcile: {album_rel}: {removed} missing image(s) removed from _meta.json')
-            if log is not None:
-                stale = {p.get('name', '') for p in parts} - {p.get('name', '') for p in valid_parts}
-                for name in sorted(stale):
-                    log.append(f'STALE_IMAGE    {album_rel}/{name}')
-            meta['hasPart'] = valid_parts
-            with open(meta_path, 'w', encoding='utf-8') as f:
-                json.dump(meta, f, ensure_ascii=False, indent=2)
-            summary = dict(summary)
-            summary['imageCount'] = len(valid_parts)
-            index_changed = True
-
-        valid_summaries.append(summary)
-
-    if index_changed:
-        write_index(output_root, valid_summaries)
-        print(f'Reconcile: {len(valid_summaries)} valid album(s) after cleanup.')
-    else:
-        print(f'Reconcile: all {len(valid_summaries)} album(s) consistent.')
-
-
-def cleanup_orphaned_images(output_album: Path, parts: list, album_rel: str, log: Optional[list] = None) -> None:
+def cleanup_orphaned_images(output_album: Path, parts: list, album_rel: str) -> None:
     """Delete WebP files in output_album that are not referenced by any part in parts."""
     referenced = set()
     for p in parts:
-        if p.get('name'):      referenced.add(p['name'])
-        if p.get('thumbnail'): referenced.add(p['thumbnail'])
+        referenced.add(p['name'])
+        referenced.add(thumb_of(p['name']))
     for webp in sorted(output_album.glob('*.webp')):
         if webp.name not in referenced:
             print(f'  Delete (source gone): {album_rel}/{webp.name}')
             webp.unlink()
-            if log is not None:
-                log.append(f'DELETE_IMAGE   {album_rel}/{webp.name}')
 
 
-def cleanup_orphaned_albums(source_root: Path, output_root: Path, log: Optional[list] = None) -> None:
-    """Delete output album directories whose source folder no longer exists."""
+def cleanup_orphaned_albums(album_paths: set) -> None:
+    """
+    Delete WebP files in output folders that belong to no album in galerie.json.
+    Albums can be nested (Angebote/Werkstatt and Angebote/Werkstatt/Bohren), so only
+    the files of the orphaned folder itself are removed, never a whole subtree.
+    """
     print('\nCleaning up orphaned albums ...')
     removed = 0
-    for meta_path in sorted(output_root.rglob('_meta.json')):
-        album_dir = meta_path.parent
-        rel       = str(album_dir.relative_to(output_root)).replace('\\', '/')
-        if rel.startswith('log'):
+    for folder in sorted({p.parent for p in OUTPUT_DIR.rglob('*.webp')}):
+        rel = folder.relative_to(OUTPUT_DIR).as_posix()
+        if rel in album_paths:
             continue
-        source_album = source_root / rel
-        source_gone  = not source_album.is_dir()
-        config_gone  = not source_gone and load_config(source_album) is None
-        if source_gone or config_gone:
-            if not album_dir.is_dir():
-                continue  # already removed as part of a parent rmtree
-            reason = 'source gone' if source_gone else 'config removed/invalid'
-            print(f'  Delete ({reason}): {rel}/')
-            shutil.rmtree(album_dir)
-            if log is not None:
-                log.append(f'DELETE_ALBUM   {rel}')
-            removed += 1
-    if removed:
-        print(f'  Removed {removed} orphaned album(s).')
-    else:
-        print('  No orphaned albums found.')
+        print(f'  Delete (not in galerie.json): {rel}/*.webp')
+        for webp in folder.glob('*.webp'):
+            webp.unlink()
+        removed += 1
+    # Remove now-empty folders, deepest first
+    for folder in sorted((d for d in OUTPUT_DIR.rglob('*') if d.is_dir()), key=lambda d: len(d.parts), reverse=True):
+        if not any(folder.iterdir()):
+            folder.rmdir()
+    print(f'  Removed {removed} orphaned album folder(s).' if removed else '  No orphaned albums found.')
 
 
 def _fmt_time(seconds: float) -> str:
@@ -1057,31 +767,34 @@ def main() -> None:
     if not SOURCE_DIR.is_dir():
         print('Error: /source is not mounted. Check SOURCE_DIR in .env.', file=sys.stderr)
         sys.exit(1)
-
-    output_root = OUTPUT_DIR
-    output_root.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     print(f'Source : {SOURCE_DIR}')
-    print(f'Output : {output_root}')
+    print(f'Output : {OUTPUT_DIR}')
+    print(f'Config : {GALERIE_JSON}')
     print(f'AI     : {VISION_MODEL} on {DEVICE}')
     print(f'Blur   : {", ".join(BLUR_MODELS)}')
 
     _t_start = time.perf_counter()
-    run_log: list[str] = []
-    summaries = scan_and_process(SOURCE_DIR, output_root, log=run_log)
+    albums = [a for a in load_galerie()['hasPart'] if isinstance(a, dict) and a.get('path')]
+    processed = 0
 
-    cleanup_orphaned_albums(SOURCE_DIR, output_root, log=run_log)
+    for album in albums:
+        album_rel = album['path']
+        if not isinstance(album.get('title'), str):
+            print(f'Skip (no title): {album_rel}')
+            continue
+        if not (SOURCE_DIR / album_rel).is_dir():
+            print(f'Skip (source folder missing): {album_rel}', file=sys.stderr)
+            continue
+        consent_label = 'consent collected' if album.get('consent_collected') else 'NO consent - faces will be blurred'
+        print(f'\nAlbum: {album_rel}')
+        print(f'  Title  : {album["title"]}')
+        print(f'  Privacy: {consent_label}')
+        process_album(album)
+        processed += 1
 
-    print('\nReconciling output ...')
-    reconcile_output(output_root, log=run_log)
-
-    if run_log:
-        LOG_DIR.mkdir(exist_ok=True)
-        ts       = datetime.now().strftime('%Y%m%d_%H%M%S')
-        log_path = LOG_DIR / f'{ts}_process.txt'
-        with open(log_path, 'w', encoding='utf-8') as f:
-            f.write('\n'.join(run_log) + '\n')
-        print(f'\nChange log: {log_path.name} ({len(run_log)} entr(ies))')
+    cleanup_orphaned_albums({a['path'] for a in albums})
 
     total   = time.perf_counter() - _t_start
     peak_kb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
@@ -1092,7 +805,7 @@ def main() -> None:
         print(f'  {label:<26} {_fmt_time(elapsed)}')
     print(f'Peak RAM:    {peak_gb:.1f} GB')
 
-    print(f'\nFinished. {len(summaries)} known album(s).')
+    print(f'\nFinished. {processed} of {len(albums)} album(s) processed.')
 
 
 if __name__ == '__main__':

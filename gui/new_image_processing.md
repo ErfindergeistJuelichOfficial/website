@@ -1,5 +1,7 @@
 # process.py - New Flow Diagram (4-Phase Architecture)
 
+> Historischer Entwurf: Beschreibt den Stand mit `_config.json` / `_meta.json` / `_index.json`. Aktuell arbeitet `process.py` auf `galerie.json` (siehe CLAUDE.md, DATENMODELL.md).
+
 ## Motivation
 
 The original single-pass loop in `process_album()` loads all AI models upfront and keeps them

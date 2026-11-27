@@ -19,6 +19,9 @@
       <img src="https://share.erfindergeist.org/img/logo.svg" alt="Erfindergeist Julich" class="eg-nav-logo">
     </a>
     <span class="text-muted small">Config-Editor</span>
+    <button class="btn btn-sm btn-eg ms-auto" id="btn-publish" title="Configs und Bilder aus der Cloud auf share.erfindergeist.org veroeffentlichen">
+      <i data-lucide="send" aria-hidden="true"></i> Veroeffentlichen
+    </button>
     <button class="btn-icon" id="theme-toggle" aria-label="Dark/Light Mode umschalten">
       <i data-lucide="sun"  class="icon-dark-only"  aria-hidden="true"></i>
       <i data-lucide="moon" class="icon-light-only" aria-hidden="true"></i>
@@ -88,26 +91,6 @@
           </thead>
           <tbody id="chronik-tbody"></tbody>
         </table>
-      </div>
-      <!-- Verlauf accordion -->
-      <div class="accordion mt-4" id="verlauf-accordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#verlauf-body" aria-expanded="false" aria-controls="verlauf-body">
-              <i data-lucide="history" class="me-2" aria-hidden="true"></i> Verlauf (Chronik)
-            </button>
-          </h2>
-          <div id="verlauf-body" class="accordion-collapse collapse">
-            <div class="accordion-body p-2">
-              <div class="table-responsive">
-                <table class="table table-sm table-hover mb-0">
-                  <thead><tr><th class="verlauf-ts">Zeitstempel</th><th class="verlauf-action">Aktion</th><th>Titel</th><th><span class="visually-hidden">Wiederherstellen</span></th></tr></thead>
-                  <tbody id="verlauf-tbody"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -242,12 +225,6 @@
       <div class="toolbar mb-2">
         <button id="btn-galerie-process" class="btn btn-sm btn-eg" disabled>
           <i data-lucide="image" aria-hidden="true"></i> Verarbeiten
-        </button>
-        <button id="btn-galerie-upload" class="btn btn-sm btn-outline-secondary" disabled>
-          <i data-lucide="upload" aria-hidden="true"></i> Upload
-        </button>
-        <button id="btn-galerie-download" class="btn btn-sm btn-outline-secondary" disabled>
-          <i data-lucide="download" aria-hidden="true"></i> Download
         </button>
         <button id="btn-galerie-cancel" class="btn btn-sm btn-outline-danger ms-2" disabled>
           <i data-lucide="square" aria-hidden="true"></i> Abbrechen

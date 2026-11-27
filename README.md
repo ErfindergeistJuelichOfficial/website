@@ -8,11 +8,11 @@ Monorepo for all web projects of Erfindergeist Jülich e.V.
 
 Asset host and download page, deployed at [share.erfindergeist.org](https://share.erfindergeist.org/).
 
-Contains all shared libraries (Bootstrap, GSAP, Lucide, AOS, Caveat font) as well as tabs for downloads, gallery, presentations, logos, QR codes and configs. Gallery images are processed by `gui/` and uploaded via FTP.
+Contains all shared libraries (Bootstrap, GSAP, Lucide, AOS, Caveat font) as well as tabs for downloads, gallery, presentations, logos, QR codes and configs. Configs and gallery images live in the Nextcloud (`Public/Configs`, `Public/Galerie`) and are deployed by `.github/workflows/deploy-share.yml` - see [DATENMODELL.md](DATENMODELL.md).
 
-**`share/config/chronicle.json`** — Machine-readable club chronicle (JSON-LD `ItemList` of `Event` entries). Covers all activities since founding in March 2021, including events, milestones, and links (blog posts, Instagram, press coverage). Each entry has a UUID-based `@id`.
+**`config/chronicle.json`** (Nextcloud `Public/Configs`) — Machine-readable club chronicle (JSON-LD `ItemList` of `Event` entries). Covers all activities since founding in March 2021, including events, milestones, and links (blog posts, Instagram, press coverage). Each entry has a UUID-based `@id`.
 
-Gallery albums can reference a chronicle entry via `chronicle_id` in their `_config.json`. `gui/process.py` carries the ID forward into `_meta.json` and `_index.json` as `chronicleId`. The gallery UI then reads the corresponding links (blog, Instagram, press) from the chronicle and renders them in the album info box — no duplication of link data needed.
+Gallery albums can reference a chronicle entry via `chronicle_id` in `galerie.json`. The gallery UI then reads the corresponding links (blog, Instagram, press) from the chronicle and renders them in the album info box — no duplication of link data needed.
 
 ### termine/
 
@@ -89,14 +89,37 @@ podman compose up
 
 #### Galerie-Album-Editing und Bildverarbeitung
 
-Copy `.env.example` to `.env` and fill in at minimum `SOURCE_DIR` and the FTP credentials:
+Copy `.env.example` to `.env` and set `SOURCE_DIR` to the local Nextcloud root. No FTP credentials needed -
+the deploy pipeline uploads everything. `GITHUB_TOKEN` is only needed for the **Veroeffentlichen** button.
 
-```powershell
+```bash
 # gui/.env (minimum)
-SOURCE_DIR=C:\Users\Lars\Fotos\Erfindergeist
-FTP_USER=your-ftp-user
-FTP_PASS=your-ftp-password
+SOURCE_DIR=/home/lars/erfindergeist
+GITHUB_TOKEN=github_pat_...   # optional, fine-grained: this repo, Actions read/write
 ```
+
+##### GitHub-Token fuer den Button "Veroeffentlichen"
+
+Der Button startet den Workflow `deploy-share.yml` ueber die GitHub-API. Dafuer braucht die GUI einen
+**fine-grained personal access token**, der nur genau das darf:
+
+1. In GitHub oben rechts auf das Profilbild > **Settings** > ganz unten **Developer settings**
+   > **Personal access tokens** > **Fine-grained tokens** > **Generate new token**
+   (direkt: <https://github.com/settings/personal-access-tokens/new>).
+2. **Token name**: z.B. `egj-gui-publish`, **Expiration**: z.B. 1 Jahr (danach neu erzeugen).
+3. **Resource owner**: `ErfindergeistJuelichOfficial` (nicht das eigene Konto). Falls die Organisation
+   fine-grained Tokens erst freigeben muss, landet der Token als Anfrage bei den Org-Admins.
+4. **Repository access**: **Only select repositories** > `website`.
+5. **Permissions** > **Repository permissions** > **Actions**: **Read and write**
+   (`Metadata: Read-only` wird automatisch gesetzt). Sonst nichts.
+6. **Generate token**, den Wert (`github_pat_...`) sofort kopieren - er wird nur einmal angezeigt.
+7. In `gui/.env` eintragen: `GITHUB_TOKEN=github_pat_...`, dann die GUI neu starten
+   (`podman compose up -d gui`).
+
+Der Token kann nur Workflows starten - er kann keinen Code aendern und kennt kein FTP-Passwort.
+Jede Person (z.B. Marketing) sollte einen eigenen Token anlegen, damit er einzeln widerrufen werden kann.
+Ohne Token meldet der Button "GITHUB_TOKEN fehlt"; Veroeffentlichen geht dann manuell in GitHub unter
+**Actions** > **🚀 Deploy Share Index and Dependencies** > **Run workflow** (oder spaetestens im naechtlichen Lauf).
 
 After saving album configs via the GUI, use the **Galerie** tab to run `process.py`,
 or use the command line:
@@ -106,14 +129,9 @@ cd gui
 podman compose run --rm process
 ```
 
-#### Log files
+#### History
 
-Every edit/delete in the GUI appends a NDJSON line to:
-
-- `share/config/chronicle.log`, `links.log`, `tags.log` (tracked in git)
-- `<SOURCE_DIR>/album.log` (local, outside repo)
-
-The Verlauf panel in the Chronik tab lets you undo individual changes.
+The GUI keeps no logs - the Nextcloud versions every config file (restore via the Nextcloud web UI).
 
 ### gui/ - Image processing
 
@@ -131,11 +149,13 @@ podman compose build
 # Process images (SOURCE_DIR must be set in .env)
 podman compose run --rm process
 
-# Download gallery data from server
-podman compose run --rm download
+# Publishing: "Veroeffentlichen" button in the GUI, or run deploy-share.yml in GitHub Actions
 
-# Upload gallery data to server
-podman compose run --rm upload
+# Unit tests for process.py, server.py and validate_configs.py (also run in CI)
+podman compose run --rm test
+
+# Check configs + gallery files like the deploy pipeline does (read-only, uses SOURCE_DIR)
+podman compose run --rm validate
 ```
 
 > **AI build:** set `INSTALL_AI=true` in `gui/.env`, then run `podman compose build`.

@@ -8,6 +8,7 @@
     <file>termine/index.php</file>
     <file>termine/templates</file>
     <file>presentations/index.php</file>
+    <file>tests</file>
 
     <!-- ── JS (custom only) ── -->
     <file>share/assets/js</file>

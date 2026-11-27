@@ -8,17 +8,15 @@ services:
     ports:
       - "8082:8082"
     volumes:
-      - ../share/config:/config:z
-      - ${SOURCE_DIR:-/dev/null}:/albums:z
+      - ${SOURCE_DIR:?SOURCE_DIR fehlt in .env}/Public/Configs:/configs:z
+      - ${SOURCE_DIR}/Mitglieder/Galerie:/source:ro,z
+      - ${SOURCE_DIR}/Public/Galerie:/output:z
+      - ../share/downloads:/downloads:z
       - ./server.py:/app/server.py:ro,z
       - ./index.html:/app/index.html:ro,z
       - ./style.css:/app/style.css:ro,z
       - ./app.js:/app/app.js:ro,z
-      - ../share/downloads:/downloads:z
-      - ../share/galerie:/output:z
-      - ${SOURCE_DIR:-/dev/null}:/source:ro,z
       - ./process.py:/app/process.py:ro,z
-      - ./upload.py:/app/upload.py:ro,z
       - hf-cache:/root/.cache/huggingface
     env_file:
       - path: .env
@@ -38,8 +36,9 @@ services:
     command: python /app/process.py
     profiles: ["tools"]
     volumes:
-      - ../share/galerie:/output:z
-      - ${SOURCE_DIR:-/dev/null}:/source:ro,z
+      - ${SOURCE_DIR:?SOURCE_DIR fehlt in .env}/Public/Configs:/configs:z
+      - ${SOURCE_DIR}/Mitglieder/Galerie:/source:ro,z
+      - ${SOURCE_DIR}/Public/Galerie:/output:z
       - ./process.py:/app/process.py:ro,z
       - hf-cache:/root/.cache/huggingface
     env_file:
@@ -48,27 +47,42 @@ services:
     devices:
       - ${GPU_DEVICE:-/dev/null}
 
-  upload:
-    build: .
-    command: python /app/upload.py upload
+  # Local share dev server (http://localhost:8080) with the real configs and gallery
+  # from the Nextcloud - same SOURCE_DIR as the GUI. Start: podman compose up share
+  share:
+    image: docker.io/library/php:8.2-apache
     profiles: ["tools"]
+    ports:
+      - "8080:80"
     volumes:
-      - ../share/galerie:/output:z
-      - ./upload.py:/app/upload.py:ro,z
-    env_file:
-      - path: .env
-        required: false
+      - ../share:/var/www/html:z
+      - ${SOURCE_DIR:?SOURCE_DIR fehlt in .env}/Public/Configs:/var/www/html/config:ro,z
+      - ${SOURCE_DIR}/Public/Galerie:/var/www/html/galerie:ro,z
 
-  download:
+  # Check the configs like deploy-share.yml does (read-only): podman compose run --rm validate
+  validate:
     build: .
-    command: python /app/upload.py download
+    command: python /app/validate_configs.py /configs --galerie-dir /galerie
     profiles: ["tools"]
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
     volumes:
-      - ../share/galerie:/output:z
-      - ./upload.py:/app/upload.py:ro,z
-    env_file:
-      - path: .env
-        required: false
+      - ./validate_configs.py:/app/validate_configs.py:ro,z
+      - ${SOURCE_DIR:?SOURCE_DIR fehlt in .env}/Public/Configs:/configs:ro,z
+      - ${SOURCE_DIR}/Public/Galerie:/galerie:ro,z
+
+  # Unit tests for process.py and server.py (temp dirs only, no Nextcloud folders needed)
+  test:
+    build: .
+    command: python -m unittest discover -s /app/tests -v
+    profiles: ["tools"]
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes:
+      - ./process.py:/app/process.py:ro,z
+      - ./server.py:/app/server.py:ro,z
+      - ./validate_configs.py:/app/validate_configs.py:ro,z
+      - ./tests:/app/tests:ro,z
 
 # Persists downloaded AI models (Florence-2, OWL-ViT) across container rebuilds
 volumes:

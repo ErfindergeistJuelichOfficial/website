@@ -159,33 +159,33 @@ function eg_ext_allowed(string $filename, array $allowed_ext): bool
  * @param string[] $errors
  * @return string[]
  */
-function eg_validate_meta_jsonld(array $data, string $rel_dir, array $errors): array
+function eg_validate_meta_jsonld(array $data, string $label, array $errors): array
 {
   if (empty($data['@context'])) {
-    $errors[] = "$rel_dir/_meta.json: @context fehlt";
+    $errors[] = "$label: @context fehlt";
   }
   if (($data['@type'] ?? '') !== 'DataCatalog') {
-    $errors[] = "$rel_dir/_meta.json: @type muss 'DataCatalog' sein";
+    $errors[] = "$label: @type muss 'DataCatalog' sein";
   }
   if (empty($data['@id'])) {
-    $errors[] = "$rel_dir/_meta.json: @id fehlt";
+    $errors[] = "$label: @id fehlt";
   }
   return $errors;
 }
 
 /**
- * Parse hasPart items from _meta.json and append validation errors.
+ * Parse hasPart items of one downloads.json folder entry and append validation errors.
  *
  * @param array<mixed> $hasPart
  * @param string[] $errors
  * @return array{parts: array<string,array{description:string,link_ids:string[],tags:string[]}>, errors: string[]}
  */
-function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): array
+function eg_parse_meta_parts(array $hasPart, string $label, array $errors): array
 {
   $parts = [];
   foreach ($hasPart as $idx => $part) {
     if (!is_array($part) || !isset($part['title']) || !is_string($part['title'])) {
-      $errors[] = "$rel_dir/_meta.json: hasPart[$idx] hat kein 'title'-Feld";
+      $errors[] = "$label: hasPart[$idx] hat kein 'title'-Feld";
       continue;
     }
     $parts[$part['title']] = [
@@ -198,33 +198,67 @@ function eg_parse_meta_parts(array $hasPart, string $rel_dir, array $errors): ar
 }
 
 /**
- * Load and validate _meta.json from a downloads folder.
+ * Load <root>/config/downloads.json once per root: folder entries keyed by path ('' = downloads root).
  *
- * @return array{description:string, parts:array<string,array{description:string,link_ids:string[],tags:string[]}>, errors:string[]}
+ * @return array{folders: array<string,array<string,mixed>>, errors: string[]}
  */
-function eg_load_downloads_meta(string $abs_dir, string $rel_dir): array
+function eg_downloads_config(string $root): array
 {
-  $result = ['description' => '', 'parts' => [], 'errors' => []];
-  $path   = "$abs_dir/_meta.json";
+  static $cache = [];
+  if (!isset($cache[$root])) {
+    $cache[$root] = eg_read_downloads_config("$root/config/downloads.json");
+  }
+  return $cache[$root];
+}
+
+/**
+ * Parse downloads.json into folder entries keyed by path plus validation errors.
+ *
+ * @return array{folders: array<string,array<string,mixed>>, errors: string[]}
+ */
+function eg_read_downloads_config(string $path): array
+{
+  $result = ['folders' => [], 'errors' => []];
   if (!is_file($path)) {
     return $result;
   }
-  $raw = file_get_contents($path);
-  if ($raw === false) {
-    $result['errors'][] = "$rel_dir/_meta.json: Datei nicht lesbar";
-    return $result;
-  }
-  $data = json_decode($raw, true);
+  $raw  = file_get_contents($path);
+  $data = $raw === false ? null : json_decode($raw, true);
   if (!is_array($data)) {
-    $result['errors'][] = "$rel_dir/_meta.json: Kein valides JSON";
+    $result['errors'][] = 'config/downloads.json: Kein valides JSON';
     return $result;
   }
-  $result['errors'] = eg_validate_meta_jsonld($data, $rel_dir, $result['errors']);
-  if (isset($data['description']) && is_string($data['description'])) {
-    $result['description'] = $data['description'];
+  $result['errors'] = eg_validate_meta_jsonld($data, 'config/downloads.json', []);
+  foreach ((array) ($data['hasPart'] ?? []) as $folder) {
+    if (is_array($folder) && isset($folder['path']) && is_string($folder['path'])) {
+      $result['folders'][$folder['path']] = $folder;
+    }
   }
-  if (isset($data['hasPart']) && is_array($data['hasPart'])) {
-    $parsed           = eg_parse_meta_parts($data['hasPart'], $rel_dir, $result['errors']);
+  return $result;
+}
+
+/**
+ * Metadata of one downloads folder from config/downloads.json.
+ * $rel_dir is the scan path ('downloads' or 'downloads/<folder>').
+ *
+ * @return array{description:string, parts:array<string,array{description:string,link_ids:string[],tags:string[]}>, errors:string[]}
+ */
+function eg_load_downloads_meta(string $root, string $rel_dir): array
+{
+  $config = eg_downloads_config($root);
+  $key    = ltrim(substr($rel_dir, strlen('downloads')), '/');
+  // Global file errors are reported once, at the downloads root
+  $result = ['description' => '', 'parts' => [], 'errors' => $key === '' ? $config['errors'] : []];
+  $folder = $config['folders'][$key] ?? null;
+  if ($folder === null) {
+    return $result;
+  }
+  if (isset($folder['description']) && is_string($folder['description'])) {
+    $result['description'] = $folder['description'];
+  }
+  if (isset($folder['hasPart']) && is_array($folder['hasPart'])) {
+    $label            = 'config/downloads.json [' . ($key === '' ? '/' : $key) . ']';
+    $parsed           = eg_parse_meta_parts($folder['hasPart'], $label, $result['errors']);
     $result['parts']  = $parsed['parts'];
     $result['errors'] = $parsed['errors'];
   }
@@ -281,7 +315,7 @@ function eg_scan_downloads_node(string $base, string $rel, array $allowed_ext): 
   if (!is_dir($abs)) {
     return $node;
   }
-  $meta                = eg_load_downloads_meta($abs, $rel);
+  $meta                = eg_load_downloads_meta($base, $rel);
   $node['description'] = $meta['description'];
   $node['errors']      = $meta['errors'];
 
@@ -407,24 +441,70 @@ function eg_build_pres_entries(array $items): array
   return $result;
 }
 
+/** Non-empty string field of an array, or '' . */
+function eg_str(array $data, string $key): string
+{
+  return is_string($data[$key] ?? null) ? $data[$key] : '';
+}
+
 /**
- * Load share/galerie/_index.json as a decoded array.
+ * Album summary for the gallery tab (keys as before: name, preview, chronicleId);
+ * null for entries without path or title.
+ *
+ * @param array<mixed> $album
+ * @return array<string,mixed>|null
+ */
+function eg_gallery_summary(array $album): ?array
+{
+  $path  = eg_str($album, 'path');
+  $title = eg_str($album, 'title');
+  if ($path === '' || $title === '') {
+    return null;
+  }
+  $optional = [
+    'description' => eg_str($album, 'description'),
+    'chronicleId' => eg_str($album, 'chronicle_id'),
+    'preview'     => eg_str($album, 'previewThumbnail') !== '' ? $path . '/' . eg_str($album, 'previewThumbnail') : '',
+  ];
+  return [
+    '@type'      => 'ImageGallery',
+    '@id'        => EG_SHARE_BASE_URL . '/galerie/' . implode('/', array_map('rawurlencode', explode('/', $path))),
+    'path'       => $path,
+    'name'       => $title,
+    'imageCount' => (int) ($album['imageCount'] ?? 0),
+  ] + array_filter($optional, static fn (string $value): bool => $value !== '');
+}
+
+/**
+ * Album catalog from config/galerie.json without the per-image lists
+ * (those are loaded client-side from the same file when an album is opened).
  * Returns an empty array when the file is missing or invalid.
  *
  * @return array<string,mixed>
  */
 function eg_gallery_data(string $root): array
 {
-  $path = "$root/galerie/_index.json";
-  if (!is_file($path)) {
+  $path = "$root/config/galerie.json";
+  $raw  = is_file($path) ? file_get_contents($path) : false;
+  $data = $raw === false ? null : json_decode($raw, true);
+  if (!is_array($data)) {
     return [];
   }
-  $raw = file_get_contents($path);
-  if ($raw === false) {
-    return [];
+  $albums = [];
+  foreach ((array) ($data['hasPart'] ?? []) as $album) {
+    $summary = is_array($album) ? eg_gallery_summary($album) : null;
+    if ($summary !== null) {
+      $albums[] = $summary;
+    }
   }
-  $data = json_decode($raw, true);
-  return is_array($data) ? $data : [];
+  return [
+    '@context'    => 'https://schema.org',
+    '@type'       => 'DataCatalog',
+    '@id'         => EG_SHARE_BASE_URL . '/config/galerie.json',
+    'name'        => eg_str($data, 'name'),
+    'description' => eg_str($data, 'description'),
+    'hasPart'     => $albums,
+  ];
 }
 
 /**
@@ -502,6 +582,8 @@ function eg_config_data(string $root): array
     $content[pathinfo($name, PATHINFO_FILENAME)] = $parsed;
   }
   closedir($handle);
+  // Large catalogs are already exposed via the gallery/downloads sections
+  unset($content['galerie'], $content['downloads']);
   usort($files, static fn (array $left, array $right): int => strnatcasecmp($left['name'], $right['name']));
   ksort($content);
   return ['files' => $files, 'content' => $content];

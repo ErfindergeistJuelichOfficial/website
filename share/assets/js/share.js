@@ -188,6 +188,31 @@ function egFormatDate(iso) {
   var lbImages  = [];
   var lbIdx     = 0;
 
+  // Image lists of all albums live in config/galerie.json - fetched once, on first album open.
+  // Stored per image: name (YYYYMMDD_HHMMSS_<hash8>_n.webp), caption, blurred;
+  // thumbnail and sourceHash are derived from the name.
+  var galerieRequest = null;
+  function loadAlbumImages(path) {
+    if (!galerieRequest) {
+      galerieRequest = fetch('config/galerie.json').then(function (r) {
+        if (!r.ok) { throw new Error('HTTP ' + r.status); }
+        return r.json();
+      });
+      galerieRequest.catch(function () { galerieRequest = null; });
+    }
+    return galerieRequest.then(function (data) {
+      var album = (data.hasPart || []).filter(function (a) { return a.path === path; })[0];
+      return ((album && album.hasPart) || []).map(function (img) {
+        return {
+          name:       img.name,
+          caption:    img.caption || '',
+          thumbnail:  img.name.replace('_n.webp', '_t.webp'),
+          sourceHash: img.name.split('_')[2] || ''
+        };
+      });
+    });
+  }
+
   // Returns direct sub-folders and direct albums at the given folder path.
   // Intermediate paths that are also albums are placed in result.albums (not result.folders).
   function childrenOf(path) {
@@ -386,13 +411,9 @@ function egFormatDate(iso) {
         '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Laden...</span></div>'
       );
       $grid.append($loadingCol);
-      fetch('galerie/' + selfAlbum.path + '/_meta.json')
-        .then(function (r) {
-          if (!r.ok) { throw new Error('HTTP ' + r.status); }
-          return r.json();
-        })
-        .then(function (meta) {
-          lbImages = meta.hasPart || [];
+      loadAlbumImages(selfAlbum.path)
+        .then(function (images) {
+          lbImages = images;
           $loadingCol.remove();
           lbImages.forEach(function (img, i) {
             var $thumb = $('<div class="gallery-thumb" role="button" tabindex="0">');
@@ -426,16 +447,12 @@ function egFormatDate(iso) {
       '</div>'
     );
 
-    fetch('galerie/' + album.path + '/_meta.json')
-      .then(function (r) {
-        if (!r.ok) { throw new Error('HTTP ' + r.status); }
-        return r.json();
-      })
-      .then(function (meta) {
-        lbImages = meta.hasPart || [];
+    loadAlbumImages(album.path)
+      .then(function (images) {
+        lbImages = images;
 
         // ── Album info box ──────────────────────────────────────────────────
-        var chronicleEntry = meta.chronicleId ? chronicleMap[meta.chronicleId] : null;
+        var chronicleEntry = album.chronicleId ? chronicleMap[album.chronicleId] : null;
 
         var infoMetaParts = [];
         var albumDate = chronicleEntry ? chronicleEntry.date : null;
@@ -443,7 +460,7 @@ function egFormatDate(iso) {
         infoMetaParts.push(lbImages.length + ' Fotos');
         $('#gallery-album-info-meta').text(infoMetaParts.join(' · '));
 
-        var desc = meta.description || (chronicleEntry ? (chronicleEntry.description || '') : '');
+        var desc = album.description || (chronicleEntry ? (chronicleEntry.description || '') : '');
         $('#gallery-album-info-desc')
           .toggleClass('d-none', !desc)
           .toggleClass('gallery-album-info-desc', !!desc)
@@ -462,7 +479,8 @@ function egFormatDate(iso) {
             if (!lnk || !lnk.url || lnk.type === 'galerie') { return; }
             var cls = chronicleTypeClass[lnk.type] || 'btn-outline-secondary';
             $links.append($('<a>').attr({ href: lnk.url, target: '_blank', rel: 'noopener noreferrer' })
-              .addClass('btn btn-sm ' + cls).text(lnk.title));
+              // Empty title is intended: fall back to the type, like the downloads tab and eg-chronic
+              .addClass('btn btn-sm ' + cls).text(lnk.title || String(lnk.type || '').charAt(0).toUpperCase() + String(lnk.type || '').slice(1)));
           });
         }
         if ($links.children().length) {
