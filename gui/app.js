@@ -249,7 +249,6 @@ $(function () {
   initEntryModal();
   initLinkModal();
   initTagsTab();
-  initVerlauf();
   initAlbenTab();
   initGalerie();
   initDownloadsTab();
@@ -276,14 +275,10 @@ $(function () {
   $('#location-tags-list, #description-tags-list')
     .on('click', '.btn-delete-tag', function () { deleteTag($(this).data('group'), $(this).data('key')); });
 
-  $('#verlauf-tbody')
-    .on('click', '.btn-undo-entry', function () { undoEntry($(this).data('entry')); });
-
   $('#alben-filter-top').on('change', function () { renderAlbenList(); });
 
   $('#btn-galerie-process').on('click', function () { startGalerieJob('process'); });
-  $('#btn-galerie-upload').on('click', function () { startGalerieJob('upload'); });
-  $('#btn-galerie-download').on('click', function () { startGalerieJob('download'); });
+  $('#btn-publish').on('click', publish);
   $('#btn-galerie-cancel').on('click', cancelGalerieJob);
 
   $('#alben-tbody')
@@ -560,40 +555,20 @@ function saveEntryFromModal() {
 }
 
 /* ═══════════════════════════════════════════════
-   Verlauf
+   Veroeffentlichen (GitHub workflow deploy-share)
 ═══════════════════════════════════════════════ */
-function initVerlauf() {
-  $('#verlauf-body').on('show.bs.collapse', function () { loadVerlauf(); });
-}
-
-function loadVerlauf() {
-  $.get('/api/log/chronicle', function (entries) {
-    var rows = $.map(entries || [], function (e) {
-      var badge = { create:'primary', delete:'danger', undo:'warning', edit:'secondary' }[e.action] || 'secondary';
-      var title = (e.before && e.before.title) || (e.after && e.after.title) || e.id || '';
-      return '<tr>'
-        + '<td class="verlauf-ts">' + sanitize(e.ts || '') + '</td>'
-        + '<td class="verlauf-action"><span class="badge text-bg-' + badge + '">' + sanitize(e.action) + '</span></td>'
-        + '<td>' + sanitize(title) + '</td>'
-        + '<td><button class="btn btn-sm btn-outline-secondary py-0 btn-undo-entry" data-entry=\'' + JSON.stringify(e).replace(/'/g,'&#39;') + '\'>Wiederherstellen</button></td>'
-        + '</tr>';
-    }).join('');
-    $('#verlauf-tbody').html(rows || '<tr><td colspan="4" class="text-muted text-center py-2">Kein Verlauf.</td></tr>');
-  });
-}
-
-function undoEntry(logEntry) {
-  if (!confirm('Eintrag auf diesen Zustand zurücksetzen?')) { return; }
+function publish() {
+  if (!confirm('Configs und Bilder aus der Cloud jetzt auf share.erfindergeist.org veroeffentlichen?')) { return; }
+  var $btn = $('#btn-publish').prop('disabled', true);
   $.ajax({
-    url: '/api/undo', type: 'POST', contentType: 'application/json',
-    data: JSON.stringify({ file: 'chronicle', id: logEntry.id, before: logEntry.before, after: logEntry.after }),
-    success: function (resp) {
-      state.chronicle = resp.data || state.chronicle;
-      renderChronikTable();
-      loadVerlauf();
-      showToast('Wiederhergestellt.', true);
+    url: '/api/publish', type: 'POST',
+    success: function () {
+      showToast('Veroeffentlichung gestartet - in wenigen Minuten live.', true);
     },
-    error: function () { showToast('Fehler beim Wiederherstellen.', false); }
+    error: function (xhr) {
+      showToast('Fehler: ' + (xhr.responseJSON && xhr.responseJSON.error || xhr.status), false);
+    },
+    complete: function () { $btn.prop('disabled', false); }
   });
 }
 
@@ -1418,7 +1393,7 @@ function openDlNewModal() {
     var withMeta = $.grep(folders || [], function (f) { return f.hasMeta; });
     var $sel = $('#dl-new-folder').empty();
     if (!withMeta.length) {
-      $sel.append('<option value="">Keine Ordner mit _meta.json</option>');
+      $sel.append('<option value="">Keine Ordner in downloads.json</option>');
     } else {
       $sel.append('<option value="">-- Ordner wahlen --</option>');
       $.each(withMeta, function (_, f) {
@@ -1594,7 +1569,7 @@ function _appendGalerieLines(lines) {
 
 function _galerieSetState(state) {
   var running = (state === 'running');
-  $('#btn-galerie-process,#btn-galerie-upload,#btn-galerie-download').prop('disabled', running);
+  $('#btn-galerie-process').prop('disabled', running);
   $('#btn-galerie-cancel').prop('disabled', !running);
   _galerieUpdateBadge(state, null);
 }

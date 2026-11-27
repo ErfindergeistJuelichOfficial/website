@@ -1,182 +1,318 @@
 # Datenmodell - Erfindergeist Jülich
 
-Logisches relationales Modell der JSON-basierten Konfigurationsdaten, Galerie-Alben und der Share-API.
+Alle JSON-Daten (Chronik, Links, Tags, Downloads, Galerie, API) mit **Speicherort**:
+Wo liegt das Original, wer pflegt es, und wie kommt es auf den Server?
 
-## ER-Diagramm
+## Speicherort-Legende
+
+| Kürzel | Ort | Bedeutung |
+| --- | --- | --- |
+| 🟢 **GitHub** | Repository `website` | Code (PHP, JS, CSS, Templates). Kein Inhalt mehr. |
+| 🔵 **Cloud** | Nextcloud `Public/` (öffentliche Freigabe, nur lesbar) | **Quelle der Wahrheit** für alle Configs (`Public/Configs`) und die verpixelten Galerie-Bilder (`Public/Galerie`). Versioniert durch die Nextcloud. |
+| 🟠 **Privat** | Nextcloud `Mitglieder/Galerie` | Originalfotos, nur für Mitglieder. Verlassen nie die Nextcloud. |
+| 🔴 **Server** | Webspace `share.erfindergeist.org` | Deploy-Ziel und **einzige Quelle zur Laufzeit**: Share, termine, eg-chronic und WordPress lesen nur von hier, nie aus der Cloud. Wird von `deploy-share.yml` aus GitHub + Cloud befüllt, nie von Hand. |
+| 🟣 **Extern** | WordPress `erfindergeist.org` | Termine. Wird nur gelesen. |
+
+Lokale Pfade: `SOURCE_DIR` (in `gui/.env`) ist die Nextcloud-Wurzel, z.B. `/home/lars/erfindergeist`.
+
+---
+
+## Übersicht
+
+```mermaid
+flowchart LR
+    subgraph PRIVAT["🟠 Privat - Nextcloud Mitglieder/"]
+        SRC["Mitglieder/Galerie/&lt;album&gt;/*.jpg"]
+    end
+
+    subgraph CLOUD["🔵 Cloud - Nextcloud Public/ (Freigabe, nur lesbar)"]
+        direction TB
+        CFG["Public/Configs/<br/>chronicle · links · tags<br/>downloads · galerie .json"]
+        WEBP["Public/Galerie/&lt;album&gt;/<br/>*_n.webp · *_t.webp"]
+    end
+
+    subgraph LOKAL["Rechner (Lars, Marketing …)"]
+        GUI(["gui/ Config-Editor :8082"])
+        PROC(["gui/process.py"])
+    end
+
+    subgraph GITHUB["🟢 GitHub"]
+        CODE["share/ Code"]
+        GHA(["deploy-share.yml<br/>Push · manuell · nachts · GUI-Button"])
+    end
+
+    subgraph SERVER["🔴 Server - share.erfindergeist.org"]
+        direction TB
+        SCFG["config/*.json"]
+        SGAL["galerie/&lt;album&gt;/*.webp"]
+        API(["api/v1/assets"])
+        PAGE(["index.php"])
+    end
+
+    subgraph EXTERN["🟣 Extern"]
+        WP["WordPress wp-json/erfindergeist/v2"]
+    end
+
+    GUI -- bearbeitet --> CFG
+    GUI -- startet --> PROC
+    GUI -. Veröffentlichen .-> GHA
+    SRC --> PROC
+    PROC -- Bildliste --> CFG
+    PROC -- WebP --> WEBP
+
+    CODE --> GHA
+    CFG -- rclone copy --> GHA
+    GHA -- FTP-Deploy --> SCFG
+    WEBP -- rclone sync --> SGAL
+
+    SCFG --> API & PAGE
+    SGAL --> PAGE
+    SCFG -- tags.json --> TERM(["termine/"])
+    SCFG -- chronicle · links --> COMP(["eg-chronic"])
+    SCFG -- tags.json --> WPP(["WordPress-Plugin"])
+    WP --> TERM
+
+    classDef gh fill:#d4edda,stroke:#28a745,color:#000
+    classDef cl fill:#d6e9f8,stroke:#1f6fb2,color:#000
+    classDef pr fill:#fde8cc,stroke:#e08a1e,color:#000
+    classDef sv fill:#f8d7da,stroke:#c0392b,color:#000
+    classDef ex fill:#eadcf5,stroke:#7b3fa8,color:#000
+    class CODE,GHA gh
+    class CFG,WEBP cl
+    class SRC pr
+    class SCFG,SGAL,API,PAGE sv
+    class WP ex
+```
+
+### Dateitabelle
+
+| Datei | Speicherort | Format | Gepflegt von | Gelesen von |
+| --- | --- | --- | --- | --- |
+| `Public/Configs/chronicle.json` | 🔵 Cloud → 🔴 `config/` | JSON-LD `ItemList > Event[]` | GUI Chronik-Tab | API, Share-Galerie, `eg-chronic` |
+| `Public/Configs/links.json` | 🔵 Cloud → 🔴 `config/` | JSON-LD `ItemList > ListItem[]` | GUI Links-Tab | API, Share, `eg-chronic`, Linktree |
+| `Public/Configs/tags.json` | 🔵 Cloud → 🔴 `config/` | JSON-LD `DefinedTermSet` | GUI Tags-Tab | API, `termine/`, WordPress-Plugin |
+| `Public/Configs/downloads.json` | 🔵 Cloud → 🔴 `config/` | JSON-LD `DataCatalog` (Ordner → Dateien) | GUI Downloads-Tab | API, Downloads-Tab |
+| `Public/Configs/galerie.json` | 🔵 Cloud → 🔴 `config/` | JSON-LD `DataCatalog` (Alben → Bilder), kompakt, ca. 280 KB | GUI Alben-Tab + `process.py` | API (`gallery`), `share.js` |
+| `Public/Galerie/<album>/*.webp` | 🔵 Cloud → 🔴 `galerie/` | WebP (verpixelt) | `process.py` | Galerie-Tab |
+| `Mitglieder/Galerie/<album>/*.jpg` | 🟠 Privat | Original | Fotograf:innen | `process.py`, GUI-Bildauswahl |
+| `share/downloads/**/*.pdf …` | 🔴 Server (nur wenige SVGs in GitHub) | Binär | manuell per FTP | API (`downloads`) |
+| `share/presentations/<name>/…` | 🔴 Server | HTML / PDF | manuell per FTP | API (`presentations`) |
+| `GET /api/v1/assets` | 🔴 Server, zur Laufzeit erzeugt | JSON-LD `DataCatalog` | `share/api.php` | Homepage, externe Clients |
+| `wp-json/erfindergeist/v2/events` | 🟣 Extern | JSON | WordPress | `termine/` |
+
+---
+
+## ER-Diagramme
+
+Aufgeteilt nach Datei. Primärschlüssel sind die Werte, über die andere Dateien referenzieren.
+
+### 1. Chronik, Links, Tags
 
 ```mermaid
 erDiagram
     CHRONICLE_ENTRY {
-        string id PK
+        string id PK "@id urn:uuid"
         string title
         string date
         string location
         string description
+        bool consent_collected
+        array collaborators "Namen"
     }
-
-    CHRONICLE_COLLABORATOR {
-        int id PK
-        string entry_id FK
-        string name
-    }
-
     TAG {
-        string key PK
-        string type
+        string key PK "Schlüssel ohne #"
+        string type "Place | DefinedTerm"
         string label
-        string location
-        string description
+        string location "nur location_tags"
+        string description "nur description_tags"
     }
-
-
-    CHRONICLE_TAG {
-        string entry_id FK
-        string tag_key FK
-    }
-
-    CHRONICLE_ENTRY_LINK {
-        string entry_id FK
-        string link_id FK
-    }
-
     LINK {
-        string id PK
+        string id PK "@id urn:uuid"
         string title
         string url
         string description
-        string type
+        string type "website, wiki, blog, galerie ..."
         string httpMethod
         string encodingType
     }
+    CHRONICLE_ENTRY }o--o{ TAG : "tags[]"
+    CHRONICLE_ENTRY }o--o{ LINK : "link_ids[]"
+```
 
+### 2. Galerie (`galerie.json`)
+
+```mermaid
+erDiagram
     ALBUM {
-        string path PK
-        string title
-        string description
-        string consent_collected
-        string chronicle_id FK
-        string preview
-        array link_ids FK
+        string path PK "relativ zu Mitglieder/Galerie"
+        string title "GUI"
+        string description "GUI"
+        bool consent_collected "GUI"
+        string chronicle_id FK "GUI"
+        array link_ids FK "GUI"
+        string preview "GUI: Originaldatei"
+        array blur "GUI: Originaldateien"
+        array no_blur "GUI: Originaldateien"
+        int imageCount "process.py"
+        string previewThumbnail "process.py"
     }
-
-    ALBUM_FILE_MASK {
-        int id PK
-        string album_path FK
-        string filename
-        string type
+    IMAGE {
+        string name PK "YYYYMMDD_HHMMSS_hash8_n.webp"
+        string caption "KI-Beschreibung, optional"
+        bool blurred
     }
-
-    GALLERY_IMAGE {
-        int id PK
-        string album_path FK
-        string filename
-        string caption
-        string thumb_url
-        string image_url
+    CHRONICLE_ENTRY {
+        string id PK
+        string date "Datum des Albums"
     }
+    LINK {
+        string id PK
+    }
+    ALBUM ||--o{ IMAGE : "hasPart[]"
+    ALBUM }o--o| CHRONICLE_ENTRY : chronicle_id
+    ALBUM }o--o{ LINK : "link_ids[]"
+```
 
+Aus `IMAGE.name` abgeleitet, nicht gespeichert: `sourceHash` (3. Teil, Deep-Link `#gallery/<path>/<hash>`),
+`dateCreated` (1. + 2. Teil), Thumbnail (`_n.webp` → `_t.webp`), URL (`galerie/<path>/<name>`).
+Alben haben **keine Tags**. Datum und Tags kommen über `chronicle_id` aus der Chronik.
+
+### 3. Downloads (`downloads.json`)
+
+```mermaid
+erDiagram
     DOWNLOAD_FOLDER {
-        string path PK
+        string path PK "relativ zu share/downloads, leer = Wurzel"
         string name
         string description
     }
-
     DOWNLOAD_FILE {
-        int id PK
-        string folder_path FK
-        string title
+        string title PK "Dateiname im Ordner"
         string description
     }
-
-    DOWNLOAD_FILE_LINK {
-        string file_id FK
-        string link_id FK
+    TAG {
+        string key PK
     }
-
-    DOWNLOAD_FILE_TAG {
-        string file_id FK
-        string tag_key FK
+    LINK {
+        string id PK
     }
-
-    CHRONICLE_ENTRY ||--o{ CHRONICLE_ENTRY_LINK : link_ids
-    LINK ||--o{ CHRONICLE_ENTRY_LINK : references
-    CHRONICLE_ENTRY ||--o{ CHRONICLE_COLLABORATOR : collaborators
-    CHRONICLE_ENTRY ||--o{ CHRONICLE_TAG : tags
-    TAG ||--o{ CHRONICLE_TAG : references
-    ALBUM }o--o| CHRONICLE_ENTRY : chronicle_id
-    ALBUM ||--o{ ALBUM_LINK : link_ids
-    LINK ||--o{ ALBUM_LINK : references
-    ALBUM ||--o{ ALBUM_FILE_MASK : masks
-    ALBUM ||--o{ GALLERY_IMAGE : images
-    DOWNLOAD_FOLDER ||--o{ DOWNLOAD_FILE : hasPart
-    DOWNLOAD_FILE ||--o{ DOWNLOAD_FILE_LINK : link_ids
-    LINK ||--o{ DOWNLOAD_FILE_LINK : references
-    DOWNLOAD_FILE ||--o{ DOWNLOAD_FILE_TAG : tags
-    TAG ||--o{ DOWNLOAD_FILE_TAG : references
+    DOWNLOAD_FOLDER ||--o{ DOWNLOAD_FILE : "hasPart[]"
+    DOWNLOAD_FILE }o--o{ TAG : "tags[]"
+    DOWNLOAD_FILE }o--o{ LINK : "link_ids[]"
 ```
+
+Die Dateien selbst liegen auf dem 🔴 Server. `api.php` ergänzt Größe, MIME-Typ und URL (`MediaObject`).
+
+### 4. API und externe Daten
+
+```mermaid
+erDiagram
+    ASSET_CATALOG {
+        string id PK "api/v1/assets"
+        string dateModified
+    }
+    MEDIA_OBJECT {
+        string path PK
+        string name
+        string contentUrl
+        string encodingFormat
+        int contentSize
+    }
+    PRESENTATION {
+        string name PK "presentations/name/"
+        string url
+    }
+    GALLERY_SUMMARY {
+        string path PK "aus galerie.json, ohne Bilder"
+        string name
+        int imageCount
+        string preview
+        string chronicleId
+    }
+    WP_EVENT {
+        string id PK "WordPress"
+        array tags FK "Tag-Schlüssel"
+    }
+    TAG {
+        string key PK
+    }
+    ASSET_CATALOG ||--o{ MEDIA_OBJECT : "css, fonts, img, js, qr, downloads, config"
+    ASSET_CATALOG ||--o{ PRESENTATION : presentations
+    ASSET_CATALOG ||--o{ GALLERY_SUMMARY : gallery
+    PRESENTATION ||--o{ MEDIA_OBJECT : hasPart
+    WP_EVENT }o--o{ TAG : "termine/ löst Ort, Label, Beschreibung auf"
+```
+
+### Wo Tags genutzt werden
+
+| Nutzer | Wie |
+| --- | --- |
+| `termine/js/main.js` (termine.erfindergeist.org) | lädt `config/tags.json`, löst Tags der WordPress-Termine zu Ort, Label und Beschreibung auf |
+| WordPress-Plugin (nicht in diesem Repo) | liest `config/tags.json` |
+| Chronik-Einträge `tags[]` | Filter in der GUI, Anzeige auf share |
+| Download-Dateien `tags[]` | Filter im Downloads-Tab |
 
 ---
 
-## Speicherorte
+## Deploy-Ablauf
 
-| Entitat | Datei / Ort | Format |
-|---|---|---|
-| `CHRONICLE_ENTRY`, `CHRONICLE_COLLABORATOR`, `CHRONICLE_TAG`, `CHRONICLE_ENTRY_LINK` | `share/config/chronicle.json` | JSON-LD `ItemList > Event[]` |
-| `TAG` | `share/config/tags.json` | JSON-LD `DefinedTermSet` |
-| `LINK` | `share/config/links.json` | JSON-LD `ItemList > ListItem[]` |
-| `ALBUM`, `ALBUM_FILE_MASK` | `<SOURCE_DIR>/<path>/_config.json` | JSON, pro Album eine Datei |
-| `GALLERY_IMAGE` | `share/galerie/<path>/_meta.json` | JSON-LD `ImageGallery`, generiert |
-| `DOWNLOAD_FOLDER`, `DOWNLOAD_FILE`, `DOWNLOAD_FILE_LINK`, `DOWNLOAD_FILE_TAG` | `share/downloads/<path>/_meta.json` | JSON-LD `DataCatalog`, pro Ordner eine Datei |
+```mermaid
+sequenceDiagram
+    participant P as 🟠 Mitglieder/Galerie
+    participant G as gui/ + process.py
+    participant C as 🔵 Public/ (Nextcloud)
+    participant A as 🟢 GitHub Actions
+    participant S as 🔴 Server
 
----
-
-## Datenfluss
-
-```
-SOURCE_DIR/<album>/_config.json   share/config/chronicle.json
-          |                                    |
-          | chronicle_id (FK)                  |
-          +------------------------------------+
-                      |
-               galerie/process.py
-                      |
-          share/galerie/<album>/_meta.json
-          share/galerie/<album>/*_t.webp   (Thumbnails)
-          share/galerie/<album>/*_n.webp   (Normalized)
-                      |
-          share/galerie/_index.json        (Album-Katalog)
-                      |
-          Share-API  GET /api/v1/assets
+    G->>C: Configs bearbeiten (chronicle, links, tags, downloads, galerie)
+    P->>G: Originale lesen
+    G->>C: WebP nach Public/Galerie, Bildliste in galerie.json
+    Note over C: Nextcloud-Client synct, versioniert
+    G-->>A: Veröffentlichen (oder Push, manuell, nachts 02:00 UTC)
+    A->>C: rclone copy Configs + Dateiliste Galerie
+    Note over A: validate_configs.py - bei Fehler Abbruch,<br/>Server behält letzten guten Stand
+    A->>S: FTP-Deploy share/ + config/*.json
+    A->>C: rclone sync Galerie (nur Änderungen)
+    A->>S: neue/geänderte WebP hoch, verwaiste löschen (max-delete)
 ```
 
 ---
 
 ## API-Zugriff (Share)
 
-`GET https://share.erfindergeist.org/api/v1/assets`
+`GET https://share.erfindergeist.org/api/v1/assets` - wird bei jedem Aufruf aus dem Dateisystem des Servers erzeugt.
 
-Liefert ein einzelnes JSON-LD-Dokument (`DataCatalog`) das u. a. enthalt:
+| Abschnitt | Quelle | Ursprung |
+| --- | --- | --- |
+| `assets.css`, `fonts`, `img`, `js`, `qr` | Dateiscan | 🟢 GitHub |
+| `assets.config.files` | alle `config/*.json` | 🔵 Cloud |
+| `assets.config.content` | Inhalt von `chronicle`, `links`, `tags` | 🔵 Cloud |
+| `assets.downloads` | Dateiscan + `downloads.json` | Dateien 🔴 Server, Metadaten 🔵 Cloud |
+| `assets.presentations` | Unterordner von `presentations/` | 🔴 Server |
+| `assets.gallery` | Album-Zusammenfassungen aus `galerie.json` | 🔵 Cloud |
 
-| Abschnitt | Inhalt |
-|---|---|
-| `config` | Rohinhalt aller Dateien aus `share/config/` inkl. `chronicle.json`, `links.json`, `tags.json` |
-| `presentations` | Metadaten der Prasentation-Unterordner |
-| `downloads` | `MediaObject`-Eintrge aus `downloads/` inkl. `_meta.json`-Annotationen |
+Die vollständigen Bildlisten lädt die Share-Seite einmalig aus `config/galerie.json`.
 
 ---
 
 ## GUI-API (lokaler Config-Editor, Port 8082)
 
-| Methode | Pfad | Entitaten |
-|---|---|---|
-| `GET /api/all` | Alle drei Config-Dateien auf einmal | `CHRONICLE_ENTRY`, `TAG`, `LINK` |
-| `POST /api/save/chronicle` | Chronik schreiben | `CHRONICLE_ENTRY` + Unter-Entitaten |
-| `POST /api/save/links` | Links schreiben | `LINK` |
-| `POST /api/save/tags` | Tags schreiben | `TAG` |
-| `GET /api/log/*` | Anderverlauf (NDJSON) | - |
-| `POST /api/undo` | Eintrag wiederherstellen | `CHRONICLE_ENTRY` |
-| `GET /api/albums` | Album-Liste | `ALBUM` (Titel + Pfad) |
-| `GET /api/album?path=` | Album-Config lesen | `ALBUM` + `ALBUM_TAG` + `ALBUM_FILE_MASK` |
-| `POST /api/album?path=` | Album-Config schreiben | `ALBUM` + `ALBUM_TAG` + `ALBUM_FILE_MASK` |
-| `GET /api/album/images?path=` | Bilddatei-Liste eines Albums | `GALLERY_IMAGE` (Dateinamen) |
-| `GET /api/album/image?path=&file=` | Bilddatei ausliefern | `GALLERY_IMAGE` |
+| Methode | Pfad | Entitäten | Schreibt nach |
+| --- | --- | --- | --- |
+| `GET /api/all` | Chronik, Links, Tags | `CHRONICLE_ENTRY`, `TAG`, `LINK` | - |
+| `POST /api/save/chronicle` | Chronik schreiben | `CHRONICLE_ENTRY` | 🔵 `chronicle.json` |
+| `POST /api/save/links` | Links schreiben | `LINK` | 🔵 `links.json` |
+| `POST /api/save/tags` | Tags schreiben | `TAG` | 🔵 `tags.json` |
+| `GET /api/albums` | Album-Liste | `ALBUM` | - |
+| `GET /api/album/dirs` | Ordner in `Mitglieder/Galerie` ohne Album | - | - |
+| `GET /api/album?path=` | Config-Felder eines Albums | `ALBUM` | - |
+| `POST /api/album?path=` | Album anlegen/ändern (409 während Bildverarbeitung) | `ALBUM` | 🔵 `galerie.json` |
+| `POST /api/album/delete?path=` | Album entfernen (409 während Bildverarbeitung) | `ALBUM` | 🔵 `galerie.json` |
+| `GET /api/album/images?path=` | Originaldateien eines Albums | - | - |
+| `GET /api/album/image?path=&file=` | Original / Vorschau ausliefern | - | - |
+| `GET /api/downloads` | Ordnerliste | `DOWNLOAD_FOLDER` | - |
+| `GET /api/download-entries` | alle Datei-Einträge | `DOWNLOAD_FILE` | - |
+| `GET/POST /api/download-meta?path=` | Ordner-Eintrag lesen/schreiben | `DOWNLOAD_FOLDER`, `DOWNLOAD_FILE` | 🔵 `downloads.json` |
+| `GET /api/download-files?path=` | lokal vorhandene Dateien | - | - |
+| `POST /api/galerie/run`, `/cancel`, `GET /status`, `/stream` | `process.py` steuern | `ALBUM`, `IMAGE` | 🔵 `Public/Galerie`, `galerie.json` |
+| `POST /api/publish` | startet `deploy-share.yml` (GitHub-API, `GITHUB_TOKEN`) | - | - |

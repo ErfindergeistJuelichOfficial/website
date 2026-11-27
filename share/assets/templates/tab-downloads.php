@@ -143,7 +143,7 @@ foreach (($links_data['itemListElement'] ?? []) as $__li) {
 
   <?php if (!empty($dl_errors)) : ?>
     <div class="alert alert-warning mt-4 mb-0" role="alert">
-      <strong>_meta.json Fehler:</strong>
+      <strong>downloads.json Fehler:</strong>
       <ul class="mb-0 mt-1">
         <?php foreach ($dl_errors as $__err) : ?>
           <li><?= htmlspecialchars($__err, ENT_QUOTES, 'UTF-8') ?></li>

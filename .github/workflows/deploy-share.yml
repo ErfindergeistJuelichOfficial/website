@@ -1,11 +1,40 @@
 name: 🚀 Deploy Share Index and Dependencies
 
+# Code comes from the repo; configs and gallery images come from the Nextcloud
+# public share (Public/Configs, Public/Galerie) and are deployed to the webspace -
+# at runtime nothing reads from the Nextcloud. If the cloud is down or the data is
+# invalid, the job stops before any upload and the webspace keeps its last good state.
+# See DATENMODELL.md.
 on:
   push:
     branches:
       - 'main'
     paths:
       - 'share/**'
+      - '.github/workflows/deploy-share.yml'
+      - 'gui/validate_configs.py'
+  workflow_dispatch:
+    inputs:
+      max-delete:
+        description: Max. Anzahl Bilder, die auf dem Server geloescht werden duerfen (Schutz vor leerem Cloud-Ordner)
+        required: false
+        default: '200'
+  schedule:
+    - cron: '0 2 * * *'
+
+concurrency:
+  group: deploy-share
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  # Nextcloud public share "Public" (read-only link) via WebDAV
+  RCLONE_CONFIG_NC_TYPE: webdav
+  RCLONE_CONFIG_NC_URL: https://cloud.erfindergeist.org/public.php/webdav
+  RCLONE_CONFIG_NC_VENDOR: other
+  RCLONE_CONFIG_NC_USER: wnTXZ6tpHCbNTDf
 
 jobs:
   deploy:
@@ -15,7 +44,21 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v5
 
-      - name: 📂 Sync files
+      - name: 🧰 rclone installieren
+        run: sudo apt-get update -q && sudo apt-get install -y -q rclone
+
+      - name: ☁️ Configs und Galerie-Dateiliste aus der Cloud laden
+        run: |
+          rclone copy nc:Configs share/config --include "*.json" --verbose
+          rclone lsf -R --files-only nc:Galerie > "$RUNNER_TEMP/galerie-files.txt"
+          echo "Public/Galerie: $(wc -l < "$RUNNER_TEMP/galerie-files.txt") Dateien"
+
+      - name: 🔎 Configs pruefen
+        # Errors (missing file, invalid JSON/structure, missing WebP) stop the deploy;
+        # dangling references (unknown tag, link or chronicle id) are only warnings.
+        run: python3 gui/validate_configs.py share/config --galerie-files "$RUNNER_TEMP/galerie-files.txt"
+
+      - name: 📂 Code und Configs synchronisieren
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: erfindergeist.org
@@ -33,6 +76,26 @@ jobs:
             presentations/hallo-welt/**
             presentations/mock-multi/**
             downloads/mock-*
-            galerie/.gitignore
+            galerie/**
             stylebook.html
             **/A11Y.md
+
+      - name: 🖼️ Galerie-Bilder synchronisieren
+        # Same FTP account as the step above (its root is share/), gallery lives in galerie/.
+        # The all-inkl TLS certificate is issued for *.kasserver.com, not erfindergeist.org -
+        # the connection stays encrypted, only the host name check is skipped (deliberate decision).
+        env:
+          RCLONE_CONFIG_FTP_TYPE: ftp
+          RCLONE_CONFIG_FTP_HOST: erfindergeist.org
+          RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME_SHARE }}
+          RCLONE_CONFIG_FTP_EXPLICIT_TLS: 'true'
+          RCLONE_CONFIG_FTP_NO_CHECK_CERTIFICATE: 'true'
+          RCLONE_CONFIG_FTP_CONCURRENCY: '4'
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_SHARE }}
+          MAX_DELETE: ${{ inputs.max-delete || '200' }}
+        run: |
+          export RCLONE_CONFIG_FTP_PASS="$(rclone obscure "$FTP_PASSWORD")"
+          # Only new/changed files are transferred (size compare); files no longer
+          # in Public/Galerie are deleted on the server, at most MAX_DELETE per run.
+          rclone sync nc:Galerie ftp:/galerie --size-only --transfers 4 --checkers 8 \
+            --max-delete "$MAX_DELETE" --stats 30s --stats-one-line -v
