@@ -67,18 +67,23 @@ jobs:
           local-dir: ./share/
           protocol: ftps
           state-name: .ftp-deploy-share.json
+          # downloads/ and presentations/ are filled by other repos (pdf-generator,
+          # endof10-presentation, presentation-ki2) and by hand, with the same FTP account.
+          # This action must never touch them - an excluded path is neither uploaded nor deleted.
           exclude: |
             **/compose.yaml
             **/README.md
             **/CLAUDE.md
             **/galerie-plan.md
             **/.gitkeep
-            presentations/hallo-welt/**
-            presentations/mock-multi/**
-            downloads/mock-*
+            galerie
             galerie/**
             stylebook.html
             **/A11Y.md
+            downloads
+            downloads/**
+            presentations
+            presentations/**
 
       - name: 🖼️ Galerie-Bilder synchronisieren
         # Same FTP account as the step above (its root is share/), gallery lives in galerie/.

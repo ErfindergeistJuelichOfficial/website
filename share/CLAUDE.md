@@ -343,7 +343,20 @@ Target: WCAG 2.1 AA. Automated check via <https://wave.webaim.org/report#/share.
 `compose.yaml`, `README.md`, `CLAUDE.md`, `galerie-plan.md`, `stylebook.html` → excluded via `exclude` in the workflow.
 `galerie/**` → excluded from FTP-Deploy-Action; the images are synced from Nextcloud `Public/Galerie` by the rclone step in the same workflow.
 `config/*.json` → gitignored; fetched from Nextcloud `Public/Configs` by the workflow before the FTP sync.
-`downloads/mock-*` → mock files for local dev testing, excluded via `downloads/mock-*` pattern.
+
+**`downloads/**` and `presentations/**` are never deployed by this repo** (excluded in `deploy-share.yml`).
+They are filled by other repos with the same FTP account (own FTP-Deploy state file) and by hand; if this
+repo's FTP-Deploy-Action managed them, it would delete their files as soon as a folder disappears from git.
+
+| Path on the server | Filled by |
+| --- | --- |
+| `downloads/Verein/**`, `downloads/Angebote/**` | `pdf-generator` (weekly PDFs) |
+| `downloads/Marketing/**` and others | by hand via FTP |
+| `presentations/end-of-10/**` | `endof10-presentation` |
+| `presentations/ki2/**` | `presentation-ki2` |
+
+The files under `share/downloads/` and `share/presentations/` in this repo are local dev/mock data only
+(Bierdeckel SVGs: source for the "Raw" links on GitHub; changes go to the server by hand).
 
 ---
 
