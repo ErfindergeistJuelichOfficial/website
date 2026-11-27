@@ -147,6 +147,15 @@ FTP-Deploy-Action und synchronisiert `Public/Galerie` per `rclone sync` auf den 
 (Wurzel = `share/`), Host `erfindergeist.org`. Das all-inkl-Zertifikat lautet auf `*.kasserver.com`, daher
 prüft rclone den Hostnamen bewusst nicht (`NO_CHECK_CERTIFICATE`), die Verbindung bleibt verschlüsselt.
 
+**Fremde Repos auf demselben Webspace:** Mit demselben FTP-Zugang (`FTP_USERNAME_SHARE`) deployen auch
+`pdf-generator` (nach `share/downloads/Verein/`, `share/downloads/Angebote/`), `endof10-presentation`
+(`share/presentations/end-of-10/`) und `presentation-ki2` (`share/presentations/ki2/`) - jeweils mit eigener
+FTP-Deploy-State-Datei. Deshalb sind `downloads/**` und `presentations/**` in `deploy-share.yml` komplett
+ausgeschlossen. Diese Ausschluesse nie entfernen; bei jeder Aenderung an `deploy-share.yml`, an Ordnern unter
+`share/downloads/` oder `share/presentations/` pruefen, ob ein fremder Pfad betroffen ist (Tabelle in
+`share/CLAUDE.md`). Hintergrund: Ein Deploy hat einmal alle PDFs von `pdf-generator` geloescht, weil ein
+Ordner im Repo leer wurde und die FTP-Deploy-Action ihn samt Inhalt entfernt hat.
+
 **Laufzeit liest nie aus der Cloud:** Configs und Galerie liegen nach dem Deploy auf dem Webspace
 (`share/config/`, `share/galerie/`). Ist die Nextcloud beim Deploy down, bricht der Job ab und der
 Webspace behaelt den letzten guten Stand.
